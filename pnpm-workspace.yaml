@@ -1,0 +1,5 @@
+packages:
+  - 'apps/*'
+  # Custom io components written by the demo app itself, one package each.
+  - 'apps/demo/components/*'
+  - 'libs/*'

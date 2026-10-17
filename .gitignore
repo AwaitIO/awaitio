@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+# Build output (tsc + vite)
+dist/
+# Local secrets (ACCESS_TOKEN, PORT)
+.env
+# Upstream Interval clones, read-only reference
+reference/
+# Claude Code worktrees and personal settings
+.claude/worktrees/
+.claude/settings.local.json
+# macOS
+.DS_Store
+*.tsbuildinfo

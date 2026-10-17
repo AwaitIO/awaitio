@@ -1,0 +1,14 @@
+{
+  // The client entry and the kit as ESM, for bundlers (component builds and their types).
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "lib": ["es2022", "dom"],
+    "types": [],
+    "rootDir": "src",
+    "outDir": "dist/esm"
+  },
+  "include": ["src/client", "src/uikit"]
+}
