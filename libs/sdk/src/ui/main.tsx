@@ -6,13 +6,13 @@ import * as zod from 'zod';
 import { App } from './App';
 import { componentUiRegistry } from './componentUiRegistry';
 import { hostGlobalName } from '../client/hostGlobalName';
-import type { AwaitItHost } from '../client/types/AwaitItHost';
+import type { AwaitIOHost } from '../client/types/AwaitIOHost';
 import * as ui from '../uikit';
 import './index.css';
 
 // Component scripts do not bundle React, zod or the kit; they take these, so hooks share a single React instance.
-const host: AwaitItHost = { React, jsxRuntime, zod, ui, registerComponent: componentUiRegistry.register };
-(window as unknown as Record<string, AwaitItHost>)[hostGlobalName] = host;
+const host: AwaitIOHost = { React, jsxRuntime, zod, ui, registerComponent: componentUiRegistry.register };
+(window as unknown as Record<string, AwaitIOHost>)[hostGlobalName] = host;
 
 const root = document.getElementById('root');
 

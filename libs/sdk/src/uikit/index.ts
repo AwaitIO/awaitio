@@ -1,5 +1,5 @@
-// `awaitit/ui`: building blocks for io components. In the browser the SDK UI hands its own copy to every
-// component script (window.__AWAITIT__.ui), so components carry no styles of their own.
+// `awaitio/ui`: building blocks for io components. In the browser the SDK UI hands its own copy to every
+// component script (window.__AWAITIO__.ui), so components carry no styles of their own.
 export { Field } from './Field';
 export { Hint } from './Hint';
 export { Input } from './Input';

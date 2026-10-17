@@ -10,7 +10,7 @@ export class ComponentUiRegistry {
   private readonly loads = new Map<string, Promise<AnyComponentUi>>();
   private readonly waiters = new Map<string, (ui: AnyComponentUi) => void>();
 
-  // Arrow properties, because both are handed around unbound (window.__AWAITIT__.registerComponent, .map(load)).
+  // Arrow properties, because both are handed around unbound (window.__AWAITIO__.registerComponent, .map(load)).
   register = (type: string, ui: AnyComponentUi) => {
     this.uis.set(type, ui);
     this.waiters.get(type)?.(ui);

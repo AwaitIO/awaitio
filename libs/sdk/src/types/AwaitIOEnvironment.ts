@@ -1,4 +1,4 @@
-export type AwaitItEnvironment = {
+export type AwaitIOEnvironment = {
   title: string;
   // Any CSS color, e.g. '#dc2626' or 'orange'.
   color: string;

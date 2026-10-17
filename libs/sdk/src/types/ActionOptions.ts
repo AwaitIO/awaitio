@@ -1,8 +1,8 @@
-import type { AwaitItActionHandler } from './AwaitItActionHandler';
+import type { AwaitIOActionHandler } from './AwaitIOActionHandler';
 
 export type ActionOptions<TIO> = {
   // Shown in the action list. Defaults to the route key turned into words ("full_name" -> "Full name").
   name?: string;
   description?: string;
-  handler: AwaitItActionHandler<TIO>;
+  handler: AwaitIOActionHandler<TIO>;
 };

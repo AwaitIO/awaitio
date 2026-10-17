@@ -1,7 +1,7 @@
-import type { AwaitItEnvironment } from '../types/AwaitItEnvironment';
+import type { AwaitIOEnvironment } from '../types/AwaitIOEnvironment';
 
 export type ValidateEnvironmentsArgs = {
-  environments: AwaitItEnvironment[];
+  environments: AwaitIOEnvironment[];
 };
 
 // Throws on a URL that is not http(s), since it becomes a link in the header, and on two environments with one host,

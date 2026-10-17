@@ -9,13 +9,13 @@ import { createUiRouter } from './createUiRouter';
 import { rejectCrossSiteRequests } from './rejectCrossSiteRequests';
 import type { RunManager } from '../classes/RunManager';
 import type { Sessions } from '../classes/Sessions';
-import type { AwaitItEnvironment } from '../types/AwaitItEnvironment';
+import type { AwaitIOEnvironment } from '../types/AwaitIOEnvironment';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { RegisteredAction } from '../types/RegisteredAction';
 
 export type CreateAppArgs = {
   name: string;
-  environments: AwaitItEnvironment[];
+  environments: AwaitIOEnvironment[];
   sessions: Sessions;
   actions: Map<string, RegisteredAction>;
   manager: RunManager;

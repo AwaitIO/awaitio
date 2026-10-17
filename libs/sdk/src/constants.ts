@@ -1,7 +1,7 @@
 import { Duration } from 'luxon';
 
 export const constants = {
-  SESSION_COOKIE_NAME: 'awaitit_session',
+  SESSION_COOKIE_NAME: 'awaitio_session',
   SESSION_MAX_AGE: Duration.fromObject({ days: 7 }),
   MIN_SECRET_LENGTH: 32,
   // Only this machine can reach the server unless listen() is given another host (e.g. '0.0.0.0' in Docker).

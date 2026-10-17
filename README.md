@@ -1,4 +1,4 @@
-# AwaitIt
+# AwaitIO
 
 Internal tools in one Node process. Write each tool as an async TypeScript function; every `await` on `io` asks a person something in the browser and waits for the answer. The same server serves the UI, so there is nothing else to host.
 
@@ -16,9 +16,9 @@ export const refundOrder = app.action({
 });
 ```
 
-<img src="apps/docs/images/intro-form.png" alt="An AwaitIt action asking for a first and a last name" width="720" />
+<img src="apps/docs/images/intro-form.png" alt="An AwaitIO action asking for a first and a last name" width="720" />
 
-## Why AwaitIt
+## Why AwaitIO
 
 - **One process.** The actions, the server and the UI run inside your own app. No hosted service, no second server, no database of its own.
 - **Your codebase.** A handler is a plain function: use your Prisma client, services, utilities and environment variables as they are.
@@ -30,16 +30,16 @@ export const refundOrder = app.action({
 ## Quickstart
 
 ```bash
-npm install awaitit @awaitit/input-text
-npx awaitit hash-password   # prints a hash for your password
+npm install awaitio @awaitio/input-text
+npx awaitio hash-password   # prints a hash for your password
 ```
 
 ```ts
 // app.ts
-import { inputText } from '@awaitit/input-text';
-import { AwaitIt } from 'awaitit';
+import { inputText } from '@awaitio/input-text';
+import { AwaitIO } from 'awaitio';
 
-export const app = new AwaitIt({
+export const app = new AwaitIO({
   name: 'Internal tools',
   secret: process.env.SESSION_SECRET ?? '', // at least 32 characters
   users: [{ email: 'you@example.com', name: 'You', passwordHash: process.env.PASSWORD_HASH ?? '' }],
@@ -65,14 +65,14 @@ Open http://localhost:3000, log in and run **Greet**.
 
 | Package                   | What it is                                                                                             |
 | ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `awaitit`                 | The server, the action runtime, the prebuilt UI, `defineComponent` and the `awaitit hash-password` CLI |
-| `@awaitit/input-text`     | `io.input.text()`: one line of text                                                                    |
-| `@awaitit/input-textarea` | `io.input.textarea()`: longer text                                                                     |
-| `@awaitit/input-datetime` | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`                                 |
+| `awaitio`                 | The server, the action runtime, the prebuilt UI, `defineComponent` and the `awaitio hash-password` CLI |
+| `@awaitio/input-text`     | `io.input.text()`: one line of text                                                                    |
+| `@awaitio/input-textarea` | `io.input.textarea()`: longer text                                                                     |
+| `@awaitio/input-datetime` | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`                                 |
 
 ## Documentation
 
-The documentation lives in [`apps/docs`](apps/docs): introduction, quickstart, how it works and security, every setting, every `io` method and `ctx` field, custom components and deployment. Run it with `pnpm --filter @awaitit/docs dev`.
+The documentation lives in [`apps/docs`](apps/docs): introduction, quickstart, how it works and security, every setting, every `io` method and `ctx` field, custom components and deployment. Run it with `pnpm --filter @awaitio/docs dev`.
 
 ## Development
 
@@ -90,7 +90,7 @@ Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Every contrib
 
 ## License
 
-AwaitIt is source-available under the [AwaitIt License](LICENSE).
+AwaitIO is source-available under the [AwaitIO License](LICENSE).
 
 **Free, including commercial use,** with up to 3 users (the real people who use it, however many logins they share), for non-profits and educational institutions, and for evaluation. That covers production use and building tools for your clients. For-profit organizations with more users need a Company License:
 
@@ -102,19 +102,19 @@ AwaitIt is source-available under the [AwaitIt License](LICENSE).
 
 One flat price per organization, however many apps and environments you run. Need invoicing, custom terms or priority support? Let's talk.
 
-The free and the paid version are the same software: no paid features, no license keys, no limits and no telemetry. AwaitIt never checks your license; it works on trust.
+The free and the paid version are the same software: no paid features, no license keys, no limits and no telemetry. AwaitIO never checks your license; it works on trust.
 
-Users are the real people who use your AwaitIt apps, locally or deployed, however many logins they share. To get a Company License, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
+Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. To get a Company License, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
 
 Without a separate agreement, nobody may:
 
-- sell or license AwaitIt itself, or a fork or modified version of it;
-- offer a product or service that competes with AwaitIt;
-- offer a commercial hosted or managed service built on AwaitIt, such as a dashboard, cloud, monitoring or management service for AwaitIt apps;
-- sell or license components, plugins or extensions made for AwaitIt.
+- sell or license AwaitIO itself, or a fork or modified version of it;
+- offer a product or service that competes with AwaitIO;
+- offer a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for AwaitIO apps;
+- sell or license components, plugins or extensions made for AwaitIO.
 
 The license may change for future versions; each version keeps the license it was released with. If you disagree with a newer license, stay on the version you have.
 
 ## Inspiration
 
-I'm Petr Homoky ([homoky.cz](https://homoky.cz)), the author of AwaitIt. Before I started on it, I built internal tools with [Interval](https://github.com/interval), and the idea behind it won me over: a tool is just backend code, and every `await` asks a person in the browser. AwaitIt keeps that idea and puts the actions, the server and the UI into one process inside your own app, so there is nothing else to run.
+I'm Petr Homoky ([homoky.cz](https://homoky.cz)), the author of AwaitIO. Before I started on it, I built internal tools with [Interval](https://github.com/interval), and the idea behind it won me over: a tool is just backend code, and every `await` asks a person in the browser. AwaitIO keeps that idea and puts the actions, the server and the UI into one process inside your own app, so there is nothing else to run.

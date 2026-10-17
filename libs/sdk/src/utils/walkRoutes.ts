@@ -1,12 +1,12 @@
 import { slugToName } from './slugToName';
 import { Action } from '../classes/Action';
 import { constants } from '../constants';
-import type { AwaitItActionHandler } from '../types/AwaitItActionHandler';
-import type { AwaitItRoutes } from '../types/AwaitItRoutes';
+import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
+import type { AwaitIORoutes } from '../types/AwaitIORoutes';
 import type { RegisteredAction } from '../types/RegisteredAction';
 
 export type WalkRoutesArgs<TIO> = {
-  routes: AwaitItRoutes<TIO>;
+  routes: AwaitIORoutes<TIO>;
 };
 
 export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
@@ -19,7 +19,7 @@ export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
 
     const action = route instanceof Action ? route : new Action({ handler: route });
     // The typed io was checked where the action was defined; at run time io is built from the same registry.
-    const handler = action.handler as unknown as AwaitItActionHandler<unknown>;
+    const handler = action.handler as unknown as AwaitIOActionHandler<unknown>;
     actions.set(slug, { slug, name: action.name ?? slugToName({ slug }), description: action.description ?? null, handler });
   });
 

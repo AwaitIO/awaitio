@@ -1,13 +1,13 @@
 import { Router, type IRouter } from 'express';
 import type { Sessions } from '../classes/Sessions';
 import type { AppInfo } from '../shared/types/AppInfo';
-import type { AwaitItEnvironment } from '../types/AwaitItEnvironment';
+import type { AwaitIOEnvironment } from '../types/AwaitIOEnvironment';
 import { readSessionUser } from '../utils/readSessionUser';
 import { requestHost } from '../utils/requestHost';
 
 export type CreateAppInfoRouterArgs = {
   name: string;
-  environments: AwaitItEnvironment[];
+  environments: AwaitIOEnvironment[];
   sessions: Sessions;
 };
 

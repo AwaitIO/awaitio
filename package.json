@@ -1,18 +1,18 @@
 {
-  "name": "awaitit-monorepo",
+  "name": "awaitio-monorepo",
   "private": true,
   "version": "0.1.0",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "build": "pnpm -r run build",
-    "dev": "pnpm --filter './libs/**' run build && pnpm -r --parallel --filter '!@awaitit/docs' run dev",
-    "dev:ui": "pnpm --filter awaitit run dev:ui",
-    "start": "pnpm --filter @awaitit/demo run start",
-    "hash-password": "pnpm --filter awaitit run build >/dev/null && node libs/sdk/dist/cli/index.js hash-password",
+    "dev": "pnpm --filter './libs/**' run build && pnpm -r --parallel --filter '!@awaitio/docs' --filter '!@awaitio/site' run dev",
+    "dev:ui": "pnpm --filter awaitio run dev:ui",
+    "start": "pnpm --filter @awaitio/demo run start",
+    "hash-password": "pnpm --filter awaitio run build >/dev/null && node libs/sdk/dist/cli/index.js hash-password",
     "tsc": "pnpm --filter './libs/**' run build && pnpm -r run tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "pnpm --filter awaitit run build && pnpm -r run test"
+    "test": "pnpm --filter awaitio run build && pnpm -r run test"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.46.0",

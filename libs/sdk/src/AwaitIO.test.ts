@@ -3,7 +3,7 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterAll, beforeAll, expect, test } from 'vitest';
 import { z } from 'zod';
-import { AwaitIt } from './AwaitIt';
+import { AwaitIO } from './AwaitIO';
 import { defineComponent } from './defineComponent';
 import { runStateSchema } from './shared/schemas/runStateSchema';
 import type { RunState } from './shared/types/RunState';
@@ -17,14 +17,14 @@ const users = [
   { email: 'locked@example.com', name: 'Locked', passwordHash },
 ];
 // Stands in for the folder of a built component package: <folder>/ui/ui.js.
-const uiDirectory = mkdtempSync(join(tmpdir(), 'awaitit-'));
+const uiDirectory = mkdtempSync(join(tmpdir(), 'awaitio-'));
 mkdirSync(join(uiDirectory, 'ui'));
 writeFileSync(join(uiDirectory, 'ui', 'ui.js'), 'window.testComponentLoaded = true;');
 const noControl = () => {
   return null;
 };
 
-const app = new AwaitIt({
+const app = new AwaitIO({
   name: 'Test app',
   environments: [
     { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
@@ -91,7 +91,7 @@ type LogInArgs = {
 const requestLogIn = ({ email, password: candidate = password }: LogInArgs) => {
   return fetch(`${baseUrl}/api/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-AwaitIt-Request': '1' },
+    headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' },
     body: JSON.stringify({ email, password: candidate }),
   });
 };
@@ -103,7 +103,7 @@ const logIn = async (args: LogInArgs) => {
 
 // What the UI sends: the session cookie, its own header and a JSON body.
 const authorized = (init: RequestInit = {}, sessionCookie = cookie) => {
-  return { ...init, headers: { Cookie: sessionCookie, 'X-AwaitIt-Request': '1', 'Content-Type': 'application/json', ...init.headers } };
+  return { ...init, headers: { Cookie: sessionCookie, 'X-AwaitIO-Request': '1', 'Content-Type': 'application/json', ...init.headers } };
 };
 
 type CreateStateReaderArgs = {
@@ -171,11 +171,11 @@ test('Should list every environment with its URL to a logged-in user', async () 
 
 test('Should refuse an environment URL that is not http and two environments on one host', () => {
   expect(() => {
-    return new AwaitIt({ name: 'Test app', secret, users, environments: [{ title: 'Evil', color: 'red', url: 'javascript:alert(1)' }] });
+    return new AwaitIO({ name: 'Test app', secret, users, environments: [{ title: 'Evil', color: 'red', url: 'javascript:alert(1)' }] });
   }).toThrow('must be an http or https URL');
 
   expect(() => {
-    return new AwaitIt({
+    return new AwaitIO({
       name: 'Test app',
       secret,
       users,
@@ -194,7 +194,7 @@ test('Should refuse the API and the component scripts without a session', async 
 
   expect((await fetch(`${baseUrl}/components/input.text/ui.js`)).status).toBe(401);
 
-  expect((await fetch(`${baseUrl}/api/actions`, authorized({}, 'awaitit_session=forged.signature'))).status).toBe(401);
+  expect((await fetch(`${baseUrl}/api/actions`, authorized({}, 'awaitio_session=forged.signature'))).status).toBe(401);
 });
 
 test('Should log in with an email and a password', async () => {
@@ -204,7 +204,7 @@ test('Should log in with an email and a password', async () => {
 
   const setCookie = response.headers.get('set-cookie') ?? '';
 
-  expect(setCookie).toMatch(/^awaitit_session=[\w-]+\.[\w-]+; Max-Age=604800; Path=\/; Expires=.+; HttpOnly; SameSite=Strict$/);
+  expect(setCookie).toMatch(/^awaitio_session=[\w-]+\.[\w-]+; Max-Age=604800; Path=\/; Expires=.+; HttpOnly; SameSite=Strict$/);
 
   expect(setCookie).not.toContain(password);
 
@@ -230,7 +230,7 @@ test('Should lock an email after too many failed logins', async () => {
   expect((await requestLogIn({ email: 'eva@example.com' })).status).toBe(200);
 });
 
-test('Should refuse a login that does not come from the AwaitIt UI', async () => {
+test('Should refuse a login that does not come from the AwaitIO UI', async () => {
   const response = await fetch(`${baseUrl}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'petr@example.com', password }) });
 
   expect(response.status).toBe(403);
@@ -239,7 +239,7 @@ test('Should refuse a login that does not come from the AwaitIt UI', async () =>
 test('Should log out', async () => {
   const response = await fetch(`${baseUrl}/api/logout`, authorized({ method: 'POST', body: '{}' }, await logIn({ email: 'petr@example.com' })));
 
-  expect([response.status, response.headers.get('set-cookie')]).toEqual([204, 'awaitit_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict']);
+  expect([response.status, response.headers.get('set-cookie')]).toEqual([204, 'awaitio_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict']);
 });
 
 test('Should give the handler the user who started the run', async () => {
@@ -341,7 +341,7 @@ test('Should refuse an action start from another site that carries the session c
   expect((await fetch(`${baseUrl}/api/actions/hello/runs`, authorized({ method: 'POST', headers: { 'Sec-Fetch-Site': 'same-origin' } }))).status).toBe(201);
 });
 
-test('Should refuse a cookie-authenticated POST that does not come from the AwaitIt UI', async () => {
+test('Should refuse a cookie-authenticated POST that does not come from the AwaitIO UI', async () => {
   const url = `${baseUrl}/api/actions/hello/runs`;
 
   // A plain HTML form: no custom header, form or text body.
@@ -352,7 +352,7 @@ test('Should refuse a cookie-authenticated POST that does not come from the Awai
   // JSON without the UI header (a no-cors fetch cannot send either).
   expect((await fetch(url, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/json' }, body: '{}' })).status).toBe(403);
 
-  expect((await fetch(url, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/json', 'X-AwaitIt-Request': '1' }, body: '{}' })).status).toBe(201);
+  expect((await fetch(url, { method: 'POST', headers: { Cookie: cookie, 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' }, body: '{}' })).status).toBe(201);
 });
 
 test('Should forbid other pages to frame the UI', async () => {
@@ -362,7 +362,7 @@ test('Should forbid other pages to frame the UI', async () => {
 });
 
 test('Should listen only on this machine unless a host is given', async () => {
-  const local = new AwaitIt({ name: 'Test app', secret, users });
+  const local = new AwaitIO({ name: 'Test app', secret, users });
   const server = await local.listen({ routes: {}, port: 0 });
 
   expect((server.address() as AddressInfo).address).toBe('127.0.0.1');
@@ -399,18 +399,18 @@ test('Should reject a value that the component cannot parse', async () => {
 
 test('Should refuse an empty project name', () => {
   expect(() => {
-    return new AwaitIt({ name: ' ', secret, users });
+    return new AwaitIO({ name: ' ', secret, users });
   }).toThrow('The name must not be empty.');
 });
 
 test('Should refuse "group" as a component key', () => {
   expect(() => {
-    return new AwaitIt({ name: 'Test app', secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIO({ name: 'Test app', secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"group" is reserved');
 });
 
 test('Should allow listen() again after the port was taken', async () => {
-  const another = new AwaitIt({ name: 'Test app', secret, users });
+  const another = new AwaitIO({ name: 'Test app', secret, users });
   const takenPort = Number(new URL(baseUrl).port);
 
   await expect(another.listen({ routes: {}, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });

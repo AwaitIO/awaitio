@@ -5,9 +5,9 @@ import { Sessions } from './classes/Sessions';
 import { constants } from './constants';
 import { createApp } from './http/createApp';
 import type { ActionOptions } from './types/ActionOptions';
-import type { AwaitItEnvironment } from './types/AwaitItEnvironment';
-import type { AwaitItListenArgs } from './types/AwaitItListenArgs';
-import type { AwaitItOptions } from './types/AwaitItOptions';
+import type { AwaitIOEnvironment } from './types/AwaitIOEnvironment';
+import type { AwaitIOListenArgs } from './types/AwaitIOListenArgs';
+import type { AwaitIOOptions } from './types/AwaitIOOptions';
 import type { ComponentRegistry } from './types/ComponentRegistry';
 import type { ComponentTree } from './types/ComponentTree';
 import type { IO } from './types/IO';
@@ -18,14 +18,14 @@ import { walkRoutes } from './utils/walkRoutes';
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
 // Components are fixed here so action files can import the instance and get a typed io from app.action();
 // routes come at listen() time, after all action files are loaded.
-export class AwaitIt<T extends ComponentTree = Record<string, never>> {
+export class AwaitIO<T extends ComponentTree = Record<string, never>> {
   private readonly registry: ComponentRegistry;
   private readonly sessions: Sessions;
   private readonly name: string;
-  private readonly environments: AwaitItEnvironment[];
+  private readonly environments: AwaitIOEnvironment[];
   private running: { server: Server; manager: RunManager } | null = null;
 
-  constructor({ name, environments = [], secret, users, components }: AwaitItOptions<T>) {
+  constructor({ name, environments = [], secret, users, components }: AwaitIOOptions<T>) {
     if (name.trim().length === 0) {
       throw new Error('The name must not be empty.');
     }
@@ -42,9 +42,9 @@ export class AwaitIt<T extends ComponentTree = Record<string, never>> {
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  listen({ routes, port, host }: AwaitItListenArgs<IO<T>>) {
+  listen({ routes, port, host }: AwaitIOListenArgs<IO<T>>) {
     if (this.running) {
-      throw new Error('This AwaitIt app is already listening.');
+      throw new Error('This AwaitIO app is already listening.');
     }
 
     const manager = new RunManager({ registry: this.registry });

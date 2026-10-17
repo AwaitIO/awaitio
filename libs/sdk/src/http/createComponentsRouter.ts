@@ -7,7 +7,7 @@ export type CreateComponentsRouterArgs = {
   registry: ComponentRegistry;
 };
 
-// Serves the browser part of every registered component: <folder of its definition>/ui/ui.js, built by `awaitit/vite`.
+// Serves the browser part of every registered component: <folder of its definition>/ui/ui.js, built by `awaitio/vite`.
 // The UI injects these on demand, see componentUiRegistry.
 export const createComponentsRouter = ({ registry }: CreateComponentsRouterArgs): IRouter => {
   const router = Router();

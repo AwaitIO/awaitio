@@ -5,7 +5,7 @@ import { LoginLimiter } from './LoginLimiter';
 import { constants } from '../constants';
 import type { LoginRequest } from '../shared/types/LoginRequest';
 import type { SessionUser } from '../shared/types/SessionUser';
-import type { AwaitItUser } from '../types/AwaitItUser';
+import type { AwaitIOUser } from '../types/AwaitIOUser';
 import type { SessionsLoginResult } from '../types/SessionsLoginResult';
 import { parsePasswordHash } from '../utils/parsePasswordHash';
 import { signSessionPayload } from '../utils/signSessionPayload';
@@ -13,7 +13,7 @@ import { verifyPassword } from '../utils/verifyPassword';
 
 export type SessionsOptions = {
   secret: string;
-  users: AwaitItUser[];
+  users: AwaitIOUser[];
 };
 
 const payloadSchema = z.object({ email: z.string(), exp: z.number() });
@@ -22,7 +22,7 @@ const payloadSchema = z.object({ email: z.string(), exp: z.number() });
 // hash. Nothing is stored on the server, so a restart keeps everyone logged in.
 export class Sessions {
   private readonly secret: string;
-  private readonly users: Map<string, AwaitItUser>;
+  private readonly users: Map<string, AwaitIOUser>;
   private readonly limiter = new LoginLimiter();
 
   constructor({ secret, users }: SessionsOptions) {
@@ -41,7 +41,7 @@ export class Sessions {
       }
 
       if (!parsePasswordHash({ passwordHash: user.passwordHash })) {
-        throw new Error(`The password hash of ${email} is not from \`awaitit hash-password\`.`);
+        throw new Error(`The password hash of ${email} is not from \`awaitio hash-password\`.`);
       }
 
       this.users.set(email, { ...user, email });
@@ -91,7 +91,7 @@ export class Sessions {
     return candidate.length === expected.length && timingSafeEqual(candidate, expected) ? this.toSessionUser(user) : null;
   }
 
-  private toSessionUser({ email, name }: AwaitItUser): SessionUser {
+  private toSessionUser({ email, name }: AwaitIOUser): SessionUser {
     return { email, name };
   }
 

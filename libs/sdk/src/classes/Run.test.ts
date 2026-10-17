@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Run } from './Run';
 import { defineComponent } from '../defineComponent';
 import type { RunState } from '../shared/types/RunState';
-import type { AwaitItActionHandler } from '../types/AwaitItActionHandler';
+import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
 import type { IO } from '../types/IO';
 import { createComponentRegistry } from '../utils/createComponentRegistry';
 
@@ -27,13 +27,13 @@ const components = {
 };
 
 type StartRunArgs = {
-  handler: AwaitItActionHandler<IO<typeof components>>;
+  handler: AwaitIOActionHandler<IO<typeof components>>;
 };
 
 const startRun = ({ handler }: StartRunArgs) => {
   const run = new Run({
     id: 'run-1',
-    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitItActionHandler<unknown> },
+    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown> },
     user: { email: 'petr@example.com', name: 'Petr' },
     registry: createComponentRegistry({ tree: components }),
   });

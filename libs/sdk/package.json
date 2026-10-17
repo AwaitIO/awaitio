@@ -1,12 +1,12 @@
 {
-  "name": "awaitit",
+  "name": "awaitio",
   "version": "0.1.0",
   "description": "Internal tools in one process: actions in code await a human's answer, the same server serves the UI.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "awaitit": "dist/cli/index.js"
+    "awaitio": "dist/cli/index.js"
   },
   "exports": {
     ".": {
@@ -52,6 +52,7 @@
     "@types/react-dom": "^19.1.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "@vitejs/plugin-react": "^5.0.0",
+    "geist": "1.4.2",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
