@@ -56,6 +56,18 @@ const fullName = app.action({
     return `${firstName} ${lastName}`;
   },
 });
+const echoParams = app.action({
+  handler: async (_io, ctx) => {
+    return ctx.params;
+  },
+});
+const nextId = app.action({
+  params: z.object({ id: z.coerce.number().int() }),
+  handler: async (_io, ctx) => {
+    // ctx.params.id is a number here: the schema typed and parsed it.
+    return ctx.params.id + 1;
+  },
+});
 const whoAmI = app.action({
   handler: async (_io, ctx) => {
     return `${ctx.user.name} <${ctx.user.email}>`;
@@ -72,6 +84,8 @@ beforeAll(async () => {
       },
       full_name: fullName,
       who_am_i: whoAmI,
+      echo_params: echoParams,
+      next_id: nextId,
     },
     port: 0,
   });
@@ -255,6 +269,41 @@ test('Should give the handler the user who started the run', async () => {
   ).toEqual({ status: 'SUCCESS', data: 'Petr <petr@example.com>' });
 });
 
+test('Should open an action with params from the link and keep them in the run state', async () => {
+  const response = await fetch(`${baseUrl}/api/actions/echo_params/runs`, authorized({ method: 'POST', body: JSON.stringify({ params: { id: '42', tab: 'codes' } }) }));
+  const { runId } = await response.json();
+  const state = await createStateReader({ response: await fetch(`${baseUrl}/api/runs/${runId}/events`, authorized()) })((candidate) => {
+    return candidate.status !== 'RUNNING';
+  });
+
+  expect([state.params, state.result]).toEqual([
+    { id: '42', tab: 'codes' },
+    { status: 'SUCCESS', data: { id: '42', tab: 'codes' } },
+  ]);
+});
+
+test('Should refuse params that are not strings', async () => {
+  const response = await fetch(`${baseUrl}/api/actions/echo_params/runs`, authorized({ method: 'POST', body: JSON.stringify({ params: { id: 42 } }) }));
+
+  expect(response.status).toBe(400);
+});
+
+test('Should parse params with the schema of the action and refuse a link that does not fit', async () => {
+  const start = (params: Record<string, string>) => {
+    return fetch(`${baseUrl}/api/actions/next_id/runs`, authorized({ method: 'POST', body: JSON.stringify({ params }) }));
+  };
+  const { runId } = await (await start({ id: '41' })).json();
+  const state = await createStateReader({ response: await fetch(`${baseUrl}/api/runs/${runId}/events`, authorized()) })((candidate) => {
+    return candidate.status !== 'RUNNING';
+  });
+
+  expect([state.params, state.result]).toEqual([{ id: '41' }, { status: 'SUCCESS', data: 42 }]);
+
+  const refused = await start({ id: 'abc' });
+
+  expect([refused.status, await refused.json()]).toEqual([400, { error: 'INVALID_PARAMS', message: 'The link does not fit this action. id: Expected number, received nan.' }]);
+});
+
 test('Should hide a run from everyone but the user who started it', async () => {
   const { runId } = await (await fetch(`${baseUrl}/api/actions/full_name/runs`, authorized({ method: 'POST' }))).json();
   const eva = await logIn({ email: 'eva@example.com' });
@@ -286,6 +335,16 @@ test('Should list the actions in route order', async () => {
           "description": null,
           "name": "Who am i",
           "slug": "who_am_i",
+        },
+        {
+          "description": null,
+          "name": "Echo params",
+          "slug": "echo_params",
+        },
+        {
+          "description": null,
+          "name": "Next id",
+          "slug": "next_id",
         },
       ],
     }

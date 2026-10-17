@@ -1,6 +1,7 @@
 import { DateTime, Duration } from 'luxon';
 import { constants } from '../constants';
 import { Run } from './Run';
+import type { RunParams } from '../shared/types/RunParams';
 import type { SessionUser } from '../shared/types/SessionUser';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { RegisteredAction } from '../types/RegisteredAction';
@@ -14,6 +15,8 @@ export type RunManagerOptions = {
 export type RunManagerStartArgs = {
   action: RegisteredAction;
   user: SessionUser;
+  params?: RunParams;
+  ctxParams?: unknown;
 };
 
 export type RunManagerGetArgs = {
@@ -44,8 +47,8 @@ export class RunManager {
     this.sweepTimer.unref();
   }
 
-  start({ action, user }: RunManagerStartArgs) {
-    const run = new Run({ id: crypto.randomUUID(), action, user, registry: this.registry });
+  start({ action, user, params = {}, ctxParams = params }: RunManagerStartArgs) {
+    const run = new Run({ id: crypto.randomUUID(), action, user, params, ctxParams, registry: this.registry });
     this.runs.set(run.id, run);
     // Until a page subscribes, nobody can answer the handler, so the same grace period applies as for a closed page.
     this.scheduleCancel(run);

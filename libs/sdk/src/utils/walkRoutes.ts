@@ -19,8 +19,8 @@ export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
 
     const action = route instanceof Action ? route : new Action({ handler: route });
     // The typed io was checked where the action was defined; at run time io is built from the same registry.
-    const handler = action.handler as unknown as AwaitIOActionHandler<unknown>;
-    actions.set(slug, { slug, name: action.name ?? slugToName({ slug }), description: action.description ?? null, handler });
+    const handler = action.handler as unknown as AwaitIOActionHandler<unknown, unknown>;
+    actions.set(slug, { slug, name: action.name ?? slugToName({ slug }), description: action.description ?? null, handler, params: action.params });
   });
 
   return actions;

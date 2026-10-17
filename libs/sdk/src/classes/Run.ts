@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { IOError } from './IOError';
 import { createIO } from '../io/createIO';
+import type { RunParams } from '../shared/types/RunParams';
 import type { RunState } from '../shared/types/RunState';
 import type { SessionUser } from '../shared/types/SessionUser';
 import type { StepComponent } from '../shared/types/StepComponent';
@@ -18,6 +19,10 @@ export type RunOptions = {
   id: string;
   action: RegisteredAction;
   user: SessionUser;
+  // The query string as it came, kept in the state for "Run again".
+  params: RunParams;
+  // What the handler gets as ctx.params: the query string parsed by the action's params schema.
+  ctxParams?: unknown;
   registry: ComponentRegistry;
 };
 
@@ -27,6 +32,7 @@ export class Run {
   readonly id: string;
   // Only this user can follow, answer and cancel the run.
   readonly user: SessionUser;
+  private readonly ctxParams: unknown;
   private readonly action: RegisteredAction;
   private readonly registry: ComponentRegistry;
   private readonly listeners = new Set<RunListener>();
@@ -35,12 +41,13 @@ export class Run {
   private finishedAt: DateTime | null = null;
   private stepCount = 0;
 
-  constructor({ id, action, user, registry }: RunOptions) {
+  constructor({ id, action, user, params, ctxParams = params, registry }: RunOptions) {
     this.id = id;
     this.user = user;
+    this.ctxParams = ctxParams;
     this.action = action;
     this.registry = registry;
-    this.state = { id, actionSlug: action.slug, actionName: action.name, version: 0, status: 'RUNNING', step: null, loading: null, result: null };
+    this.state = { id, actionSlug: action.slug, actionName: action.name, params, version: 0, status: 'RUNNING', step: null, loading: null, result: null };
   }
 
   get current() {
@@ -67,6 +74,7 @@ export class Run {
         {
           runId: this.id,
           action: { slug: this.action.slug },
+          params: this.ctxParams,
           user: this.user,
           loading: {
             start: ({ label, description }) => {

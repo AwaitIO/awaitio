@@ -5,6 +5,7 @@ import { Sessions } from './classes/Sessions';
 import { constants } from './constants';
 import { createApp } from './http/createApp';
 import type { ActionOptions } from './types/ActionOptions';
+import type { ActionParamsSchema } from './types/ActionParamsSchema';
 import type { AwaitIOEnvironment } from './types/AwaitIOEnvironment';
 import type { AwaitIOListenArgs } from './types/AwaitIOListenArgs';
 import type { AwaitIOOptions } from './types/AwaitIOOptions';
@@ -37,8 +38,8 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>> {
     this.registry = createComponentRegistry({ tree: components ?? {} });
   }
 
-  action(options: ActionOptions<IO<T>>) {
-    return new Action(options);
+  action<TSchema extends ActionParamsSchema | undefined = undefined>(options: ActionOptions<IO<T>, TSchema>) {
+    return new Action<IO<T>>(options);
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).

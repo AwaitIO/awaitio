@@ -19,4 +19,5 @@ export type { AwaitIOUser } from './types/AwaitIOUser';
 export type { IO } from './types/IO';
 export type { IOErrorKind } from './types/IOErrorKind';
 export type { LoadingStartArgs } from './types/LoadingStartArgs';
+export type { RunParams } from './shared/types/RunParams';
 export type { SessionUser } from './shared/types/SessionUser';

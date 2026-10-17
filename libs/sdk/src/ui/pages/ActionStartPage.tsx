@@ -4,6 +4,7 @@ import { ApiError } from '../api/ApiError';
 import { startRun } from '../api/startRun';
 import { actionListPath } from '../utils/actionListPath';
 import { actionPath } from '../utils/actionPath';
+import { getSearchParams } from '../utils/getSearchParams';
 import { navigate } from '../utils/navigate';
 import { toErrorMessage } from '../utils/toErrorMessage';
 
@@ -11,8 +12,8 @@ export type ActionStartPageProps = {
   slug: string;
 };
 
-// Opening /actions/<slug> starts a run and swaps the URL for /actions/<slug>/<runId>, so a refresh joins that
-// run instead of starting another one.
+// Opening /actions/<slug>?… starts a run with the query string as ctx.params and swaps the URL for
+// /actions/<slug>/<runId>, so a refresh joins that run instead of starting another one.
 export const ActionStartPage: FC<ActionStartPageProps> = ({ slug }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // StrictMode runs effects twice in development; the ref keeps that from starting two runs.
@@ -24,7 +25,7 @@ export const ActionStartPage: FC<ActionStartPageProps> = ({ slug }) => {
     }
 
     hasStarted.current = true;
-    startRun(slug)
+    startRun({ slug, params: getSearchParams() })
       .then((runId) => {
         navigate(actionPath({ slug, runId }), { replace: true });
       })

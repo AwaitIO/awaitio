@@ -1,7 +1,9 @@
 import { Router, type IRouter } from 'express';
 import type { RunManager } from '../classes/RunManager';
+import { startRunRequestSchema } from '../shared/schemas/startRunRequestSchema';
 import type { ActionList } from '../shared/types/ActionList';
 import type { RegisteredAction } from '../types/RegisteredAction';
+import { formatZodError } from '../utils/formatZodError';
 import { getSessionUser } from '../utils/getSessionUser';
 
 export type CreateActionsRouterArgs = {
@@ -29,7 +31,19 @@ export const createActionsRouter = ({ actions, manager }: CreateActionsRouterArg
       return res.status(404).json({ error: 'ACTION_NOT_FOUND' });
     }
 
-    return res.status(201).json({ runId: manager.start({ action, user: getSessionUser({ res }) }).id });
+    const body = startRunRequestSchema.safeParse(req.body);
+
+    if (!body.success) {
+      return res.status(400).json({ error: 'BAD_REQUEST', message: body.error.message });
+    }
+
+    const parsed = action.params ? action.params.safeParse(body.data.params) : { success: true as const, data: body.data.params };
+
+    if (!parsed.success) {
+      return res.status(400).json({ error: 'INVALID_PARAMS', message: `The link does not fit this action. ${formatZodError({ error: parsed.error })}` });
+    }
+
+    return res.status(201).json({ runId: manager.start({ action, user: getSessionUser({ res }), params: body.data.params, ctxParams: parsed.data }).id });
   });
 
   return router;

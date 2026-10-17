@@ -33,8 +33,9 @@ type StartRunArgs = {
 const startRun = ({ handler }: StartRunArgs) => {
   const run = new Run({
     id: 'run-1',
-    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown> },
+    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null },
     user: { email: 'petr@example.com', name: 'Petr' },
+    params: { id: '42' },
     registry: createComponentRegistry({ tree: components }),
   });
   void run.execute();
@@ -290,4 +291,14 @@ test('Should fail the run when two io calls wait at the same time', async () => 
   });
 
   expect((await waitForFinish({ run })).result).toMatchObject({ status: 'FAILURE', error: 'IOError' });
+});
+
+test('Should give the handler the params the run was opened with', async () => {
+  const run = startRun({
+    handler: async (_io, ctx) => {
+      return ctx.params;
+    },
+  });
+
+  expect([run.current.params, (await waitForFinish({ run })).result]).toEqual([{ id: '42' }, { status: 'SUCCESS', data: { id: '42' } }]);
 });

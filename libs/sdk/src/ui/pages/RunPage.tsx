@@ -55,7 +55,7 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
     setIsStarting(true);
 
     try {
-      navigate(actionPath({ slug: runState.state.actionSlug, runId: await startRun(runState.state.actionSlug) }), { replace: true });
+      navigate(actionPath({ slug: runState.state.actionSlug, runId: await startRun({ slug: runState.state.actionSlug, params: runState.state.params }) }), { replace: true });
     } catch (error) {
       setErrorMessage(toErrorMessage(error));
       setIsStarting(false);

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { actionResultSchema } from './actionResultSchema';
 import { loadingStateSchema } from './loadingStateSchema';
+import { runParamsSchema } from './runParamsSchema';
 import { runStatusSchema } from './runStatusSchema';
 import { stepSchema } from './stepSchema';
 
@@ -8,6 +9,8 @@ export const runStateSchema = z.object({
   id: z.string(),
   actionSlug: z.string(),
   actionName: z.string(),
+  // What the run was opened with (ctx.params), so "Run again" can start the same.
+  params: runParamsSchema,
   // Bumped on every change, so a client can drop a state older than the one it already shows.
   version: z.number().int(),
   status: runStatusSchema,

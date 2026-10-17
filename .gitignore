@@ -4,7 +4,7 @@ node_modules/
 dist/
 # Local secrets (ACCESS_TOKEN, PORT)
 .env
-# Upstream Interval clones, read-only reference
+# Read-only clones of related open-source projects, used as reference
 reference/
 # Claude Code worktrees and personal settings
 .claude/worktrees/
