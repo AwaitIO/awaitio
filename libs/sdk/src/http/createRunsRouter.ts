@@ -3,6 +3,7 @@ import { match } from 'ts-pattern';
 import type { RunManager } from '../classes/RunManager';
 import { constants } from '../constants';
 import { stepResponseSchema } from '../shared/schemas/stepResponseSchema';
+import { getSessionUser } from '../utils/getSessionUser';
 import { writeSseEvent } from '../utils/writeSseEvent';
 
 export type CreateRunsRouterArgs = {
@@ -13,7 +14,7 @@ export const createRunsRouter = ({ manager }: CreateRunsRouterArgs): IRouter => 
   const router = Router();
 
   router.get('/runs/:id/events', (req, res) => {
-    const run = manager.get(req.params.id);
+    const run = manager.get({ id: req.params.id, user: getSessionUser({ res }) });
 
     if (!run) {
       return res.status(404).json({ error: 'RUN_NOT_FOUND' });
@@ -47,7 +48,7 @@ export const createRunsRouter = ({ manager }: CreateRunsRouterArgs): IRouter => 
   });
 
   router.post('/runs/:id/respond', (req, res) => {
-    const run = manager.get(req.params.id);
+    const run = manager.get({ id: req.params.id, user: getSessionUser({ res }) });
 
     if (!run) {
       return res.status(404).json({ error: 'RUN_NOT_FOUND' });
@@ -76,7 +77,7 @@ export const createRunsRouter = ({ manager }: CreateRunsRouterArgs): IRouter => 
   });
 
   router.post('/runs/:id/cancel', (req, res) => {
-    const run = manager.get(req.params.id);
+    const run = manager.get({ id: req.params.id, user: getSessionUser({ res }) });
 
     if (!run) {
       return res.status(404).json({ error: 'RUN_NOT_FOUND' });

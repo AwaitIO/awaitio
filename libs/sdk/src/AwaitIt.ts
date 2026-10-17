@@ -1,6 +1,7 @@
 import { createServer, type Server } from 'http';
 import { Action } from './classes/Action';
 import { RunManager } from './classes/RunManager';
+import { Sessions } from './classes/Sessions';
 import { constants } from './constants';
 import { createApp } from './http/createApp';
 import type { ActionOptions } from './types/ActionOptions';
@@ -17,9 +18,11 @@ import { walkRoutes } from './utils/walkRoutes';
 // routes come at listen() time, after all action files are loaded.
 export class AwaitIt<T extends ComponentTree = Record<string, never>> {
   private readonly registry: ComponentRegistry;
+  private readonly sessions: Sessions;
   private running: { server: Server; manager: RunManager } | null = null;
 
-  constructor({ components }: AwaitItOptions<T> = {}) {
+  constructor({ secret, users, components }: AwaitItOptions<T>) {
+    this.sessions = new Sessions({ secret, users });
     this.registry = createComponentRegistry({ tree: components ?? {} });
   }
 
@@ -28,17 +31,13 @@ export class AwaitIt<T extends ComponentTree = Record<string, never>> {
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  listen({ token, routes, port, host }: AwaitItListenArgs<IO<T>>) {
+  listen({ routes, port, host }: AwaitItListenArgs<IO<T>>) {
     if (this.running) {
       throw new Error('This AwaitIt app is already listening.');
     }
 
-    if (token.length < constants.MIN_TOKEN_LENGTH) {
-      throw new Error(`The token must be at least ${constants.MIN_TOKEN_LENGTH} characters long.`);
-    }
-
     const manager = new RunManager({ registry: this.registry });
-    const server = createServer(createApp({ token, actions: walkRoutes({ routes }), manager, registry: this.registry }));
+    const server = createServer(createApp({ sessions: this.sessions, actions: walkRoutes({ routes }), manager, registry: this.registry }));
     const running = { server, manager };
     this.running = running;
 

@@ -1,6 +1,7 @@
 import { ApiError } from './ApiError';
-import { constants } from '../../shared/constants';
+import { constants as sharedConstants } from '../../shared/constants';
 import { errorResponseSchema } from '../../shared/schemas/errorResponseSchema';
+import { constants } from '../constants';
 
 export type RequestJsonArgs = {
   path: string;
@@ -13,10 +14,14 @@ export type RequestJsonArgs = {
 export const requestJson = async ({ path, method = 'GET', body }: RequestJsonArgs) => {
   const response = await fetch(path, {
     method,
-    headers: method === 'POST' ? { [constants.REQUEST_HEADER_NAME]: '1', 'Content-Type': 'application/json' } : { [constants.REQUEST_HEADER_NAME]: '1' },
+    headers: method === 'POST' ? { [sharedConstants.REQUEST_HEADER_NAME]: '1', 'Content-Type': 'application/json' } : { [sharedConstants.REQUEST_HEADER_NAME]: '1' },
     body: method === 'POST' ? JSON.stringify(body ?? {}) : undefined,
   });
   const payload: unknown = response.status === 204 ? null : await response.json().catch(() => null);
+
+  if (response.status === 401 && path !== '/api/session' && path !== '/api/login') {
+    window.dispatchEvent(new Event(constants.UNAUTHORIZED_EVENT));
+  }
 
   if (!response.ok) {
     const error = errorResponseSchema.safeParse(payload);

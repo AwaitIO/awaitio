@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import { IOError } from './IOError';
 import { createIO } from '../io/createIO';
 import type { RunState } from '../shared/types/RunState';
+import type { SessionUser } from '../shared/types/SessionUser';
 import type { StepComponent } from '../shared/types/StepComponent';
 import type { StepResponse } from '../shared/types/StepResponse';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
@@ -16,6 +17,7 @@ import { toFailureResult } from '../utils/toFailureResult';
 export type RunOptions = {
   id: string;
   action: RegisteredAction;
+  user: SessionUser;
   registry: ComponentRegistry;
 };
 
@@ -23,6 +25,8 @@ export type RunOptions = {
 // promise stored in `pending` until the browser answers through respond().
 export class Run {
   readonly id: string;
+  // Only this user can follow, answer and cancel the run.
+  readonly user: SessionUser;
   private readonly action: RegisteredAction;
   private readonly registry: ComponentRegistry;
   private readonly listeners = new Set<RunListener>();
@@ -31,8 +35,9 @@ export class Run {
   private finishedAt: DateTime | null = null;
   private stepCount = 0;
 
-  constructor({ id, action, registry }: RunOptions) {
+  constructor({ id, action, user, registry }: RunOptions) {
     this.id = id;
+    this.user = user;
     this.action = action;
     this.registry = registry;
     this.state = { id, actionSlug: action.slug, actionName: action.name, version: 0, status: 'RUNNING', step: null, loading: null, result: null };
@@ -62,6 +67,7 @@ export class Run {
         {
           runId: this.id,
           action: { slug: this.action.slug },
+          user: this.user,
           loading: {
             start: ({ label, description }) => {
               if (this.state.status === 'RUNNING') {

@@ -1,6 +1,7 @@
 import { DateTime, Duration } from 'luxon';
 import { constants } from '../constants';
 import { Run } from './Run';
+import type { SessionUser } from '../shared/types/SessionUser';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { RegisteredAction } from '../types/RegisteredAction';
 import type { RunListener } from '../types/RunListener';
@@ -8,6 +9,16 @@ import type { RunListener } from '../types/RunListener';
 export type RunManagerOptions = {
   registry: ComponentRegistry;
   cancelAfterDisconnect?: Duration;
+};
+
+export type RunManagerStartArgs = {
+  action: RegisteredAction;
+  user: SessionUser;
+};
+
+export type RunManagerGetArgs = {
+  id: string;
+  user: SessionUser;
 };
 
 export type RunManagerSubscribeArgs = {
@@ -33,8 +44,8 @@ export class RunManager {
     this.sweepTimer.unref();
   }
 
-  start(action: RegisteredAction) {
-    const run = new Run({ id: crypto.randomUUID(), action, registry: this.registry });
+  start({ action, user }: RunManagerStartArgs) {
+    const run = new Run({ id: crypto.randomUUID(), action, user, registry: this.registry });
     this.runs.set(run.id, run);
     // Until a page subscribes, nobody can answer the handler, so the same grace period applies as for a closed page.
     this.scheduleCancel(run);
@@ -43,8 +54,11 @@ export class RunManager {
     return run;
   }
 
-  get(id: string) {
-    return this.runs.get(id) ?? null;
+  // Another user's run is reported as missing, so its id reveals nothing.
+  get({ id, user }: RunManagerGetArgs) {
+    const run = this.runs.get(id);
+
+    return run && run.user.email === user.email ? run : null;
   }
 
   subscribe({ run, listener }: RunManagerSubscribeArgs) {

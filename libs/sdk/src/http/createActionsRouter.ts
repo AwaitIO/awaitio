@@ -2,6 +2,7 @@ import { Router, type IRouter } from 'express';
 import type { RunManager } from '../classes/RunManager';
 import type { ActionList } from '../shared/types/ActionList';
 import type { RegisteredAction } from '../types/RegisteredAction';
+import { getSessionUser } from '../utils/getSessionUser';
 
 export type CreateActionsRouterArgs = {
   actions: Map<string, RegisteredAction>;
@@ -28,7 +29,7 @@ export const createActionsRouter = ({ actions, manager }: CreateActionsRouterArg
       return res.status(404).json({ error: 'ACTION_NOT_FOUND' });
     }
 
-    return res.status(201).json({ runId: manager.start(action).id });
+    return res.status(201).json({ runId: manager.start({ action, user: getSessionUser({ res }) }).id });
   });
 
   return router;

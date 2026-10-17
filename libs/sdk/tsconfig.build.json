@@ -3,5 +3,5 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  "exclude": ["src/ui", "src/client", "src/**/*.test.ts", "dist", "node_modules"]
+  "exclude": ["src/ui", "src/client", "src/**/*.test.ts", "src/testing", "dist", "node_modules"]
 }

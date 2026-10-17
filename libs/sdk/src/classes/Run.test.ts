@@ -34,6 +34,7 @@ const startRun = ({ handler }: StartRunArgs) => {
   const run = new Run({
     id: 'run-1',
     action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitItActionHandler<unknown> },
+    user: { email: 'petr@example.com', name: 'Petr' },
     registry: createComponentRegistry({ tree: components }),
   });
   void run.execute();

@@ -7,9 +7,15 @@ import { AwaitIt } from './AwaitIt';
 import { defineComponent } from './defineComponent';
 import { runStateSchema } from './shared/schemas/runStateSchema';
 import type { RunState } from './shared/types/RunState';
+import { testUser } from './testing/testUser';
 import type { AddressInfo } from 'net';
 
-const token = 'test-token-0123456789';
+const { secret, password, passwordHash } = testUser;
+const users = [
+  { email: 'petr@example.com', name: 'Petr', passwordHash },
+  { email: 'eva@example.com', name: 'Eva', passwordHash },
+  { email: 'locked@example.com', name: 'Locked', passwordHash },
+];
 // Stands in for the folder of a built component package: <folder>/ui/ui.js.
 const uiDirectory = mkdtempSync(join(tmpdir(), 'awaitit-'));
 mkdirSync(join(uiDirectory, 'ui'));
@@ -19,6 +25,8 @@ const noControl = () => {
 };
 
 const app = new AwaitIt({
+  secret,
+  users,
   components: {
     input: {
       text: {
@@ -43,28 +51,54 @@ const fullName = app.action({
     return `${firstName} ${lastName}`;
   },
 });
+const whoAmI = app.action({
+  handler: async (_io, ctx) => {
+    return `${ctx.user.name} <${ctx.user.email}>`;
+  },
+});
 let baseUrl = '';
+let cookie = '';
 
 beforeAll(async () => {
   const server = await app.listen({
-    token,
     routes: {
       hello: async () => {
         return 'Hello';
       },
       full_name: fullName,
+      who_am_i: whoAmI,
     },
     port: 0,
   });
   baseUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
+  cookie = await logIn({ email: 'petr@example.com' });
 });
 
 afterAll(async () => {
   await app.close();
 });
 
-const authorized = (init: RequestInit = {}) => {
-  return { ...init, headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', ...init.headers } };
+type LogInArgs = {
+  email: string;
+  password?: string;
+};
+
+const requestLogIn = ({ email, password: candidate = password }: LogInArgs) => {
+  return fetch(`${baseUrl}/api/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-AwaitIt-Request': '1' },
+    body: JSON.stringify({ email, password: candidate }),
+  });
+};
+
+// The `name=value` part of the session cookie.
+const logIn = async (args: LogInArgs) => {
+  return ((await requestLogIn(args)).headers.get('set-cookie') ?? '').split(';')[0];
+};
+
+// What the UI sends: the session cookie, its own header and a JSON body.
+const authorized = (init: RequestInit = {}, sessionCookie = cookie) => {
+  return { ...init, headers: { Cookie: sessionCookie, 'X-AwaitIt-Request': '1', 'Content-Type': 'application/json', ...init.headers } };
 };
 
 type CreateStateReaderArgs = {
@@ -109,32 +143,89 @@ const createStateReader = ({ response }: CreateStateReaderArgs) => {
   };
 };
 
-test('Should answer health checks without a token', async () => {
+test('Should answer health checks without a session', async () => {
   expect((await fetch(`${baseUrl}/health`)).status).toBe(200);
 });
 
-test('Should refuse the API and the UI without a token', async () => {
+test('Should refuse the API and the component scripts without a session', async () => {
   expect((await fetch(`${baseUrl}/api/actions`)).status).toBe(401);
 
-  expect((await fetch(`${baseUrl}/`)).status).toBe(401);
+  expect((await fetch(`${baseUrl}/api/session`)).status).toBe(401);
 
-  expect((await fetch(`${baseUrl}/?token=wrong-token-0123456789`)).status).toBe(401);
+  expect((await fetch(`${baseUrl}/components/input.text/ui.js`)).status).toBe(401);
+
+  expect((await fetch(`${baseUrl}/api/actions`, authorized({}, 'awaitit_session=forged.signature'))).status).toBe(401);
 });
 
-test('Should swap the token in the URL for a session cookie', async () => {
-  const response = await fetch(`${baseUrl}/runs/abc?token=${token}&x=1`, { redirect: 'manual' });
+test('Should log in with an email and a password', async () => {
+  const response = await requestLogIn({ email: ' Petr@Example.com ' });
 
-  expect(response.status).toBe(302);
+  expect([response.status, await response.json()]).toEqual([200, { email: 'petr@example.com', name: 'Petr' }]);
 
-  expect(response.headers.get('location')).toBe('/runs/abc?x=1');
+  const setCookie = response.headers.get('set-cookie') ?? '';
 
-  const cookie = response.headers.get('set-cookie') ?? '';
+  expect(setCookie).toMatch(/^awaitit_session=[\w-]+\.[\w-]+; Max-Age=604800; Path=\/; Expires=.+; HttpOnly; SameSite=Strict$/);
 
-  expect(cookie).toMatch(/^awaitit_session=[0-9a-f]{64}; Max-Age=2592000; Path=\/; Expires=.+; HttpOnly; SameSite=Strict$/);
+  expect(setCookie).not.toContain(password);
 
-  expect(cookie).not.toContain(token);
+  expect(await (await fetch(`${baseUrl}/api/session`, authorized({}, setCookie.split(';')[0]))).json()).toEqual({ email: 'petr@example.com', name: 'Petr' });
+});
 
-  expect((await fetch(`${baseUrl}/api/actions`, { headers: { Cookie: cookie.split(';')[0] } })).status).toBe(200);
+test('Should refuse a wrong password and an unknown email the same way', async () => {
+  const wrongPassword = await requestLogIn({ email: 'petr@example.com', password: 'wrong password' });
+  const unknownEmail = await requestLogIn({ email: 'nobody@example.com' });
+
+  expect([wrongPassword.status, await wrongPassword.json(), wrongPassword.headers.get('set-cookie')]).toEqual([401, { error: 'INVALID_CREDENTIALS', message: 'Wrong email or password.' }, null]);
+
+  expect([unknownEmail.status, await unknownEmail.json()]).toEqual([401, { error: 'INVALID_CREDENTIALS', message: 'Wrong email or password.' }]);
+});
+
+test('Should lock an email after too many failed logins', async () => {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    await requestLogIn({ email: 'locked@example.com', password: 'wrong password' });
+  }
+
+  expect((await requestLogIn({ email: 'locked@example.com' })).status).toBe(429);
+
+  expect((await requestLogIn({ email: 'eva@example.com' })).status).toBe(200);
+});
+
+test('Should refuse a login that does not come from the AwaitIt UI', async () => {
+  const response = await fetch(`${baseUrl}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'petr@example.com', password }) });
+
+  expect(response.status).toBe(403);
+});
+
+test('Should log out', async () => {
+  const response = await fetch(`${baseUrl}/api/logout`, authorized({ method: 'POST', body: '{}' }, await logIn({ email: 'petr@example.com' })));
+
+  expect([response.status, response.headers.get('set-cookie')]).toEqual([204, 'awaitit_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict']);
+});
+
+test('Should give the handler the user who started the run', async () => {
+  const { runId } = await (await fetch(`${baseUrl}/api/actions/who_am_i/runs`, authorized({ method: 'POST' }))).json();
+  const readState = createStateReader({ response: await fetch(`${baseUrl}/api/runs/${runId}/events`, authorized()) });
+
+  expect(
+    (
+      await readState((state) => {
+        return state.status !== 'RUNNING';
+      })
+    ).result,
+  ).toEqual({ status: 'SUCCESS', data: 'Petr <petr@example.com>' });
+});
+
+test('Should hide a run from everyone but the user who started it', async () => {
+  const { runId } = await (await fetch(`${baseUrl}/api/actions/full_name/runs`, authorized({ method: 'POST' }))).json();
+  const eva = await logIn({ email: 'eva@example.com' });
+
+  expect((await fetch(`${baseUrl}/api/runs/${runId}/events`, authorized({}, eva))).status).toBe(404);
+
+  expect((await fetch(`${baseUrl}/api/runs/${runId}/respond`, authorized({ method: 'POST', body: JSON.stringify({ stepId: 'any', values: [] }) }, eva))).status).toBe(404);
+
+  expect((await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST', body: '{}' }, eva))).status).toBe(404);
+
+  expect((await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST', body: '{}' }))).status).toBe(204);
 });
 
 test('Should list the actions in route order', async () => {
@@ -150,6 +241,11 @@ test('Should list the actions in route order', async () => {
           "description": "Two fields",
           "name": "Full name",
           "slug": "full_name",
+        },
+        {
+          "description": null,
+          "name": "Who am i",
+          "slug": "who_am_i",
         },
       ],
     }
@@ -206,7 +302,6 @@ test('Should refuse an action start from another site that carries the session c
 });
 
 test('Should refuse a cookie-authenticated POST that does not come from the AwaitIt UI', async () => {
-  const cookie = ((await fetch(`${baseUrl}/?token=${token}`, { redirect: 'manual' })).headers.get('set-cookie') ?? '').split(';')[0];
   const url = `${baseUrl}/api/actions/hello/runs`;
 
   // A plain HTML form: no custom header, form or text body.
@@ -227,17 +322,15 @@ test('Should forbid other pages to frame the UI', async () => {
 });
 
 test('Should listen only on this machine unless a host is given', async () => {
-  const local = new AwaitIt();
-  const server = await local.listen({ token, routes: {}, port: 0 });
+  const local = new AwaitIt({ secret, users });
+  const server = await local.listen({ routes: {}, port: 0 });
 
   expect((server.address() as AddressInfo).address).toBe('127.0.0.1');
 
   await local.close();
 });
 
-test('Should serve the UI script of a registered component behind the token', async () => {
-  expect((await fetch(`${baseUrl}/components/input.text/ui.js`)).status).toBe(401);
-
+test('Should serve the UI script of a registered component behind the login', async () => {
   const script = await fetch(`${baseUrl}/components/input.text/ui.js`, authorized());
 
   expect(script.headers.get('content-type')).toContain('javascript');
@@ -257,10 +350,7 @@ test('Should reject a value that the component cannot parse', async () => {
   const { step } = await readState((state) => {
     return state.step !== null;
   });
-  const response = await fetch(
-    `${baseUrl}/api/runs/${runId}/respond`,
-    authorized({ method: 'POST', body: JSON.stringify({ stepId: step?.stepId, values: ['Petr', 42] }) }),
-  );
+  const response = await fetch(`${baseUrl}/api/runs/${runId}/respond`, authorized({ method: 'POST', body: JSON.stringify({ stepId: step?.stepId, values: ['Petr', 42] }) }));
 
   expect([response.status, await response.json()]).toEqual([400, { error: 'VALIDATION_ERROR', message: 'Last name: Expected string, received number.' }]);
 
@@ -269,17 +359,17 @@ test('Should reject a value that the component cannot parse', async () => {
 
 test('Should refuse "group" as a component key', () => {
   expect(() => {
-    return new AwaitIt({ components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIt({ secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"group" is reserved');
 });
 
 test('Should allow listen() again after the port was taken', async () => {
-  const another = new AwaitIt();
+  const another = new AwaitIt({ secret, users });
   const takenPort = Number(new URL(baseUrl).port);
 
-  await expect(another.listen({ token, routes: {}, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
+  await expect(another.listen({ routes: {}, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
 
-  const server = await another.listen({ token, routes: {}, port: 0 });
+  const server = await another.listen({ routes: {}, port: 0 });
 
   expect(server.listening).toBe(true);
 
