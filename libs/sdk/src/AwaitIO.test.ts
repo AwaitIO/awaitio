@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from 'fs';
+import { mkdtempSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterAll, beforeAll, expect, test } from 'vitest';
@@ -7,86 +7,24 @@ import { AwaitIO } from './AwaitIO';
 import { defineComponent } from './defineComponent';
 import { runStateSchema } from './shared/schemas/runStateSchema';
 import type { RunState } from './shared/types/RunState';
+import { testApp } from './testing/testApp';
 import { testUser } from './testing/testUser';
 import type { AddressInfo } from 'net';
 
 const { secret, password, passwordHash } = testUser;
-const users = [
-  { email: 'petr@example.com', name: 'Petr', passwordHash },
-  { email: 'eva@example.com', name: 'Eva', passwordHash },
-  { email: 'locked@example.com', name: 'Locked', passwordHash },
-];
-// Stands in for the folder of a built component package: <folder>/ui/ui.js.
-const uiDirectory = mkdtempSync(join(tmpdir(), 'awaitio-'));
-mkdirSync(join(uiDirectory, 'ui'));
-writeFileSync(join(uiDirectory, 'ui', 'ui.js'), 'window.testComponentLoaded = true;');
+const users = [{ email: 'petr@example.com', name: 'Petr', passwordHash }];
 const noControl = () => {
   return null;
 };
-
-const app = new AwaitIO({
-  name: 'Test app',
-  environments: [
-    { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
-    { title: 'Staging', color: '#f59e0b', url: 'https://staging.example.com' },
-  ],
-  secret,
-  users,
-  components: {
-    input: {
-      text: {
-        ...defineComponent({
-          props: z.object({}),
-          returns: z.string(),
-          validate: ({ label, value }) => {
-            return value.trim().length === 0 ? `${label} is required.` : null;
-          },
-          component: noControl,
-        }),
-        uiDirectory,
-      },
-    },
-  },
-});
-const fullName = app.action({
-  description: 'Two fields',
-  handler: async (io) => {
-    const { firstName, lastName } = await io.group({ firstName: io.input.text('First name'), lastName: io.input.text('Last name') });
-
-    return `${firstName} ${lastName}`;
-  },
-});
-const echoParams = app.action({
-  handler: async (_io, ctx) => {
-    return ctx.params;
-  },
-});
-const nextId = app.action({
-  params: z.object({ id: z.coerce.number().int() }),
-  handler: async (_io, ctx) => {
-    // ctx.params.id is a number here: the schema typed and parsed it.
-    return ctx.params.id + 1;
-  },
-});
-const whoAmI = app.action({
-  handler: async (_io, ctx) => {
-    return `${ctx.user.name} <${ctx.user.email}>`;
-  },
-});
+const app = testApp;
+// A project with no actions yet.
+const emptyActionsDirectory = mkdtempSync(join(tmpdir(), 'awaitio-actions-'));
 let baseUrl = '';
 let cookie = '';
 
 beforeAll(async () => {
   const server = await app.listen({
-    routes: {
-      hello: async () => {
-        return 'Hello';
-      },
-      full_name: fullName,
-      who_am_i: whoAmI,
-      echo_params: echoParams,
-      next_id: nextId,
-    },
+    actionsDirectory: join(__dirname, 'testing', 'actions'),
     port: 0,
   });
   baseUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
@@ -317,14 +255,14 @@ test('Should hide a run from everyone but the user who started it', async () => 
   expect((await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST', body: '{}' }))).status).toBe(204);
 });
 
-test('Should list the actions in route order', async () => {
+test('Should list the actions in folder order, files before subfolders', async () => {
   expect(await (await fetch(`${baseUrl}/api/actions`, authorized())).json()).toMatchInlineSnapshot(`
     {
       "actions": [
         {
           "description": null,
-          "name": "Hello",
-          "slug": "hello",
+          "name": "Echo params",
+          "slug": "echo_params",
         },
         {
           "description": "Two fields",
@@ -333,18 +271,23 @@ test('Should list the actions in route order', async () => {
         },
         {
           "description": null,
-          "name": "Who am i",
-          "slug": "who_am_i",
-        },
-        {
-          "description": null,
-          "name": "Echo params",
-          "slug": "echo_params",
+          "name": "Hello",
+          "slug": "hello",
         },
         {
           "description": null,
           "name": "Next id",
           "slug": "next_id",
+        },
+        {
+          "description": null,
+          "name": "Who am i",
+          "slug": "who_am_i",
+        },
+        {
+          "description": null,
+          "name": "Send reminder",
+          "slug": "billing/invoices/send_reminder",
         },
       ],
     }
@@ -422,7 +365,7 @@ test('Should forbid other pages to frame the UI', async () => {
 
 test('Should listen only on this machine unless a host is given', async () => {
   const local = new AwaitIO({ name: 'Test app', secret, users });
-  const server = await local.listen({ routes: {}, port: 0 });
+  const server = await local.listen({ actionsDirectory: emptyActionsDirectory, port: 0 });
 
   expect((server.address() as AddressInfo).address).toBe('127.0.0.1');
 
@@ -472,13 +415,23 @@ test('Should allow listen() again after the port was taken', async () => {
   const another = new AwaitIO({ name: 'Test app', secret, users });
   const takenPort = Number(new URL(baseUrl).port);
 
-  await expect(another.listen({ routes: {}, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
+  await expect(another.listen({ actionsDirectory: emptyActionsDirectory, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
 
-  const server = await another.listen({ routes: {}, port: 0 });
+  const server = await another.listen({ actionsDirectory: emptyActionsDirectory, port: 0 });
 
   expect(server.listening).toBe(true);
 
   await another.close();
+});
+
+test('Should run an action from a nested folder by its encoded slug', async () => {
+  const started = await fetch(`${baseUrl}/api/actions/${encodeURIComponent('billing/invoices/send_reminder')}/runs`, authorized({ method: 'POST' }));
+  const { runId } = await started.json();
+  const state = await createStateReader({ response: await fetch(`${baseUrl}/api/runs/${runId}/events`, authorized()) })((candidate) => {
+    return candidate.status !== 'RUNNING';
+  });
+
+  expect([started.status, state.actionSlug, state.result]).toEqual([201, 'billing/invoices/send_reminder', { status: 'SUCCESS', data: 'Reminder sent' }]);
 });
 
 test('Should return 404 for an unknown action or run', async () => {

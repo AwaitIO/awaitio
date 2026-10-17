@@ -27,5 +27,8 @@ export const constants = {
   SWEEP_INTERVAL: Duration.fromObject({ minutes: 1 }),
   SSE_PING_INTERVAL: Duration.fromObject({ seconds: 15 }),
 
-  ACTION_SLUG_PATTERN: /^[A-Za-z0-9_-]+$/,
+  // One or more path segments: hello, billing/refund_order, billing/invoices/overdue/send_reminder.
+  ACTION_SLUG_PATTERN: /^[A-Za-z0-9_-]+(\/[A-Za-z0-9_-]+)*$/,
+  // Files in the actions directory that hold an action; tests, declarations and files starting with _ or . do not.
+  ACTION_FILE_PATTERN: /^(?![_.]).+(?<!\.d|\.test|\.spec)\.(ts|tsx|js|mjs|cjs)$/,
 };

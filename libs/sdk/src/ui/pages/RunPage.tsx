@@ -3,12 +3,12 @@ import { match, P } from 'ts-pattern';
 import { cancelRun } from '../api/cancelRun';
 import { startRun } from '../api/startRun';
 import { ActionResult } from '../components/ActionResult';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Button } from '../components/Button';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import { StepView } from '../components/StepView';
 import { useFaviconState } from '../hooks/useFaviconState';
 import { useRunState } from '../hooks/useRunState';
-import { actionListPath } from '../utils/actionListPath';
 import { actionPath } from '../utils/actionPath';
 import { navigate } from '../utils/navigate';
 import { toErrorMessage } from '../utils/toErrorMessage';
@@ -41,12 +41,13 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
     }
   };
 
-  const goBack = async () => {
+  // Leaving a running action cancels it, so no handler stays parked for a page nobody looks at.
+  const leaveTo = async (href: string) => {
     if (isRunning) {
       await cancel();
     }
 
-    navigate(actionListPath());
+    navigate(href);
   };
 
   const runAgain = async () => {
@@ -68,15 +69,12 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <button
-          type="button"
-          onClick={() => {
-            void goBack();
+        <Breadcrumbs
+          slug={runState.state?.actionSlug ?? slug}
+          onNavigate={(href) => {
+            void leaveTo(href);
           }}
-          className="self-start text-sm text-gray-500 hover:text-gray-900"
-        >
-          ← Actions
-        </button>
+        />
         <h1 className="text-2xl font-semibold">{runState.state?.actionName ?? ' '}</h1>
       </div>
       {match(runState)

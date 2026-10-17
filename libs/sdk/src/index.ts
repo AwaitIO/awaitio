@@ -13,7 +13,6 @@ export type { ComponentValidateArgs } from './types/ComponentValidateArgs';
 export type { AwaitIOActionHandler } from './types/AwaitIOActionHandler';
 export type { AwaitIOListenArgs } from './types/AwaitIOListenArgs';
 export type { AwaitIOOptions } from './types/AwaitIOOptions';
-export type { AwaitIORoutes } from './types/AwaitIORoutes';
 export type { AwaitIOEnvironment } from './types/AwaitIOEnvironment';
 export type { AwaitIOUser } from './types/AwaitIOUser';
 export type { IO } from './types/IO';

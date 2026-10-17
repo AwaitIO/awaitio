@@ -9,22 +9,31 @@ import type { ActionParamsSchema } from './types/ActionParamsSchema';
 import type { AwaitIOEnvironment } from './types/AwaitIOEnvironment';
 import type { AwaitIOListenArgs } from './types/AwaitIOListenArgs';
 import type { AwaitIOOptions } from './types/AwaitIOOptions';
+import type { AwaitIORoutes } from './types/AwaitIORoutes';
 import type { ComponentRegistry } from './types/ComponentRegistry';
 import type { ComponentTree } from './types/ComponentTree';
 import type { IO } from './types/IO';
 import { createComponentRegistry } from './utils/createComponentRegistry';
+import { loadActionsDirectory } from './utils/loadActionsDirectory';
 import { validateEnvironments } from './utils/validateEnvironments';
 import { walkRoutes } from './utils/walkRoutes';
 
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
 // Components are fixed here so action files can import the instance and get a typed io from app.action();
-// routes come at listen() time, after all action files are loaded.
+// actions are loaded from the actions directory at listen() time, after the components are known.
+type AwaitIOServeArgs = {
+  routes: AwaitIORoutes<unknown>;
+  port: number;
+  host?: string;
+};
+
 export class AwaitIO<T extends ComponentTree = Record<string, never>> {
   private readonly registry: ComponentRegistry;
   private readonly sessions: Sessions;
   private readonly name: string;
   private readonly environments: AwaitIOEnvironment[];
   private running: { server: Server; manager: RunManager } | null = null;
+  private isStarting = false;
 
   constructor({ name, environments = [], secret, users, components }: AwaitIOOptions<T>) {
     if (name.trim().length === 0) {
@@ -43,11 +52,21 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>> {
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  listen({ routes, port, host }: AwaitIOListenArgs<IO<T>>) {
-    if (this.running) {
+  async listen({ actionsDirectory, port, host }: AwaitIOListenArgs) {
+    if (this.running || this.isStarting) {
       throw new Error('This AwaitIO app is already listening.');
     }
 
+    this.isStarting = true;
+
+    try {
+      return await this.serve({ routes: await loadActionsDirectory({ directory: actionsDirectory }), port, host });
+    } finally {
+      this.isStarting = false;
+    }
+  }
+
+  private serve({ routes, port, host }: AwaitIOServeArgs) {
     const manager = new RunManager({ registry: this.registry });
     const server = createServer(createApp({ name: this.name, environments: this.environments, sessions: this.sessions, actions: walkRoutes({ routes }), manager, registry: this.registry }));
     const running = { server, manager };

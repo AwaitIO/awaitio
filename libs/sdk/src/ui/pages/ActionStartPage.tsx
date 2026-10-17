@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, type FC } from 'react';
 import { match, P } from 'ts-pattern';
 import { ApiError } from '../api/ApiError';
 import { startRun } from '../api/startRun';
+import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useFaviconState } from '../hooks/useFaviconState';
-import { actionListPath } from '../utils/actionListPath';
 import { actionPath } from '../utils/actionPath';
 import { getSearchParams } from '../utils/getSearchParams';
 import { navigate } from '../utils/navigate';
@@ -38,15 +38,7 @@ export const ActionStartPage: FC<ActionStartPageProps> = ({ slug }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <button
-        type="button"
-        onClick={() => {
-          navigate(actionListPath());
-        }}
-        className="self-start text-sm text-gray-500 hover:text-gray-900"
-      >
-        ← Actions
-      </button>
+      <Breadcrumbs slug={slug} />
       {match(errorMessage)
         .with(P.string, (message) => <p className="text-sm text-red-600">{message}</p>)
         .with(P.nullish, () => <p className="text-sm text-gray-500">Starting…</p>)

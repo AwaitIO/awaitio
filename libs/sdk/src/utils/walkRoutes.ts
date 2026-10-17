@@ -1,3 +1,4 @@
+import { isAction } from './isAction';
 import { slugToName } from './slugToName';
 import { Action } from '../classes/Action';
 import { constants } from '../constants';
@@ -14,13 +15,14 @@ export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
 
   Object.entries(routes).forEach(([slug, route]) => {
     if (!constants.ACTION_SLUG_PATTERN.test(slug)) {
-      throw new Error(`Invalid action slug "${slug}". Use letters, numbers, "_" and "-" only.`);
+      throw new Error(`Invalid action slug "${slug}". Use letters, numbers, "_" and "-", with "/" between folders.`);
     }
 
-    const action = route instanceof Action ? route : new Action({ handler: route });
+    // A folder in the slug says where the action sits, not what it is called: billing/send_reminder → Send reminder.
+    const action = isAction(route) ? (route as Action<TIO>) : new Action({ handler: route as AwaitIOActionHandler<TIO, never> });
     // The typed io was checked where the action was defined; at run time io is built from the same registry.
     const handler = action.handler as unknown as AwaitIOActionHandler<unknown, unknown>;
-    actions.set(slug, { slug, name: action.name ?? slugToName({ slug }), description: action.description ?? null, handler, params: action.params });
+    actions.set(slug, { slug, name: action.name ?? slugToName({ slug: slug.split('/').at(-1) ?? slug }), description: action.description ?? null, handler, params: action.params });
   });
 
   return actions;
