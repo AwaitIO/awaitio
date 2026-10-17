@@ -14,6 +14,7 @@ export type { AwaitItActionHandler } from './types/AwaitItActionHandler';
 export type { AwaitItListenArgs } from './types/AwaitItListenArgs';
 export type { AwaitItOptions } from './types/AwaitItOptions';
 export type { AwaitItRoutes } from './types/AwaitItRoutes';
+export type { AwaitItEnvironment } from './types/AwaitItEnvironment';
 export type { AwaitItUser } from './types/AwaitItUser';
 export type { IO } from './types/IO';
 export type { IOErrorKind } from './types/IOErrorKind';

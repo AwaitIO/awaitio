@@ -2,7 +2,7 @@
   "name": "awaitit",
   "version": "0.1.0",
   "description": "Internal tools in one process: actions in code await a human's answer, the same server serves the UI.",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {

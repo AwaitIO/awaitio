@@ -1,5 +1,6 @@
 import express, { type Express } from 'express';
 import { createActionsRouter } from './createActionsRouter';
+import { createAppInfoRouter } from './createAppInfoRouter';
 import { createAuthMiddleware } from './createAuthMiddleware';
 import { createComponentsRouter } from './createComponentsRouter';
 import { createRunsRouter } from './createRunsRouter';
@@ -8,17 +9,20 @@ import { createUiRouter } from './createUiRouter';
 import { rejectCrossSiteRequests } from './rejectCrossSiteRequests';
 import type { RunManager } from '../classes/RunManager';
 import type { Sessions } from '../classes/Sessions';
+import type { AwaitItEnvironment } from '../types/AwaitItEnvironment';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { RegisteredAction } from '../types/RegisteredAction';
 
 export type CreateAppArgs = {
+  name: string;
+  environments: AwaitItEnvironment[];
   sessions: Sessions;
   actions: Map<string, RegisteredAction>;
   manager: RunManager;
   registry: ComponentRegistry;
 };
 
-export const createApp = ({ sessions, actions, manager, registry }: CreateAppArgs): Express => {
+export const createApp = ({ name, environments, sessions, actions, manager, registry }: CreateAppArgs): Express => {
   return (
     express()
       .disable('x-powered-by')
@@ -41,6 +45,7 @@ export const createApp = ({ sessions, actions, manager, registry }: CreateAppArg
         },
         rejectCrossSiteRequests,
         express.json(),
+        createAppInfoRouter({ name, environments, sessions }),
         createSessionRouter({ sessions }),
         createAuthMiddleware({ sessions }),
         createActionsRouter({ actions, manager }),

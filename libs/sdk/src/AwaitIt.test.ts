@@ -25,6 +25,11 @@ const noControl = () => {
 };
 
 const app = new AwaitIt({
+  name: 'Test app',
+  environments: [
+    { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
+    { title: 'Staging', color: '#f59e0b', url: 'https://staging.example.com' },
+  ],
   secret,
   users,
   components: {
@@ -145,6 +150,41 @@ const createStateReader = ({ response }: CreateStateReaderArgs) => {
 
 test('Should answer health checks without a session', async () => {
   expect((await fetch(`${baseUrl}/health`)).status).toBe(200);
+});
+
+test('Should tell the login page the project and the environment of the host, without the other URLs', async () => {
+  const response = await fetch(`${baseUrl}/api/app`, { headers: { 'X-Forwarded-Host': 'tools.example.com' } });
+
+  expect(await response.json()).toEqual({ name: 'Test app', environment: { title: 'Production', color: '#dc2626' }, environments: [] });
+
+  expect(await (await fetch(`${baseUrl}/api/app`)).json()).toEqual({ name: 'Test app', environment: null, environments: [] });
+});
+
+test('Should list every environment with its URL to a logged-in user', async () => {
+  const response = await fetch(`${baseUrl}/api/app`, authorized({ headers: { 'X-Forwarded-Host': 'staging.example.com' } }));
+
+  expect((await response.json()).environments).toEqual([
+    { title: 'Production', color: '#dc2626', url: 'https://tools.example.com', isCurrent: false },
+    { title: 'Staging', color: '#f59e0b', url: 'https://staging.example.com', isCurrent: true },
+  ]);
+});
+
+test('Should refuse an environment URL that is not http and two environments on one host', () => {
+  expect(() => {
+    return new AwaitIt({ name: 'Test app', secret, users, environments: [{ title: 'Evil', color: 'red', url: 'javascript:alert(1)' }] });
+  }).toThrow('must be an http or https URL');
+
+  expect(() => {
+    return new AwaitIt({
+      name: 'Test app',
+      secret,
+      users,
+      environments: [
+        { title: 'A', color: 'red', url: 'https://tools.example.com' },
+        { title: 'B', color: 'blue', url: 'https://tools.example.com/b' },
+      ],
+    });
+  }).toThrow('Two environments use the host tools.example.com.');
 });
 
 test('Should refuse the API and the component scripts without a session', async () => {
@@ -322,7 +362,7 @@ test('Should forbid other pages to frame the UI', async () => {
 });
 
 test('Should listen only on this machine unless a host is given', async () => {
-  const local = new AwaitIt({ secret, users });
+  const local = new AwaitIt({ name: 'Test app', secret, users });
   const server = await local.listen({ routes: {}, port: 0 });
 
   expect((server.address() as AddressInfo).address).toBe('127.0.0.1');
@@ -357,14 +397,20 @@ test('Should reject a value that the component cannot parse', async () => {
   await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST' }));
 });
 
+test('Should refuse an empty project name', () => {
+  expect(() => {
+    return new AwaitIt({ name: ' ', secret, users });
+  }).toThrow('The name must not be empty.');
+});
+
 test('Should refuse "group" as a component key', () => {
   expect(() => {
-    return new AwaitIt({ secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIt({ name: 'Test app', secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"group" is reserved');
 });
 
 test('Should allow listen() again after the port was taken', async () => {
-  const another = new AwaitIt({ secret, users });
+  const another = new AwaitIt({ name: 'Test app', secret, users });
   const takenPort = Number(new URL(baseUrl).port);
 
   await expect(another.listen({ routes: {}, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });

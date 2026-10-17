@@ -1,18 +1,28 @@
 import { match } from 'ts-pattern';
 import { RoutedPage } from './components/RoutedPage';
 import { SessionHeader } from './components/SessionHeader';
+import { useAppInfo } from './hooks/useAppInfo';
 import { useSession } from './hooks/useSession';
 import { LoginPage } from './pages/LoginPage';
 import type { FC } from 'react';
 
 export const App: FC = () => {
   const { session, onLoggedIn, onLogOut } = useSession();
+  const info = useAppInfo({
+    userEmail: match(session)
+      .with({ status: 'AUTHENTICATED' }, ({ user }) => {
+        return user.email;
+      })
+      .otherwise(() => {
+        return null;
+      }),
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       {match(session)
         .with({ status: 'AUTHENTICATED' }, ({ user }) => {
-          return <SessionHeader user={user} onLogOut={onLogOut} />;
+          return <SessionHeader info={info} user={user} onLogOut={onLogOut} />;
         })
         .otherwise(() => {
           return null;
@@ -26,7 +36,7 @@ export const App: FC = () => {
             return <p className="text-sm text-red-600">{message}</p>;
           })
           .with({ status: 'ANONYMOUS' }, () => {
-            return <LoginPage onLoggedIn={onLoggedIn} />;
+            return <LoginPage info={info} onLoggedIn={onLoggedIn} />;
           })
           .with({ status: 'AUTHENTICATED' }, () => {
             return <RoutedPage />;
