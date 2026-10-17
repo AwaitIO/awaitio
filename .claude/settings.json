@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git status:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(lsof:*)",
+      "Bash(curl:*)"
+    ],
+    "deny": [
+      "Bash(npm:*)",
+      "Bash(yarn:*)"
+    ]
+  },
+  "worktree": {
+    "bgIsolation": "none"
+  }
+}
