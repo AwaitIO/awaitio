@@ -1,0 +1,64 @@
+# AwaitIt License
+
+Copyright © 2026 Petr Homoky (the "Author")
+
+The source code of AwaitIt is public. Whether you can use it for free depends on how many people use it: small teams use AwaitIt for free, including commercially, while for-profit organizations with more users need a Company License. This keeps AwaitIt free for most people and funds its development.
+
+This license covers everything in this repository, the package `awaitit` and every package published by the Author under the `@awaitit` scope on npm, now or in the future, such as `@awaitit/input-text`, `@awaitit/input-textarea` and `@awaitit/input-datetime` (together, "AwaitIt").
+
+## Users
+
+A "user" is a person who uses an application built with AwaitIt, whether it runs locally or is deployed: an employee, a contractor or anyone else who opens it, runs its actions or answers them. What counts is the number of real people, not the number of logins: several people sharing one login are several users. Count each person once across all of your organization's AwaitIt applications and environments.
+
+## Free License
+
+### Who is eligible
+
+You may use AwaitIt for free if you are:
+
+- an individual or a for-profit organization with up to 3 users;
+- a non-profit or not-for-profit organization, or an educational institution; or
+- evaluating whether AwaitIt fits your needs, and not yet using it commercially.
+
+### What you may do
+
+If you are eligible, you are granted permission, free of charge, to:
+
+- use AwaitIt, commercially or not, including in production;
+- build applications and internal tools with AwaitIt, for yourself and for your clients; and
+- modify AwaitIt for your own use, or to contribute fixes and improvements back to AwaitIt.
+
+## Company License
+
+A for-profit organization with more than 3 users needs a Company License to use AwaitIt, priced by the number of users (see the pricing in the README). It allows the same use as the Free License. To get one, write to p.homoky@gmail.com.
+
+Eligibility is decided by the organization that uses AwaitIt. If you build tools with AwaitIt for a client and the client runs them, the client's users count and the client needs a Company License unless it is eligible for the Free License itself.
+
+## Same software, honor system
+
+The Free License and the Company License cover exactly the same software. AwaitIt has no paid features, no license keys, no usage limits and no telemetry, and it never checks which license you have. The licensing works on trust: if your organization needs a Company License, get one.
+
+## What nobody may do
+
+Whatever your license, without a separate written agreement with the Author you may not:
+
+1. copy or modify AwaitIt in order to sell, rent, license, relicense or sublicense AwaitIt itself or your own derivative or fork of it;
+2. offer AwaitIt, or a derivative or fork of it, to third parties as a product or service that competes with AwaitIt;
+3. offer to third parties a commercial hosted or managed service built on AwaitIt, such as a dashboard, cloud, monitoring or management service for applications that use AwaitIt; or
+4. sell or license to third parties components, plugins or extensions made for AwaitIt.
+
+Building applications with AwaitIt, running them and handing them over to your clients is none of the above.
+
+## Changes to this license
+
+The Author may change this license, including its prices and eligibility, at any time. A change applies to the versions of AwaitIt released after it; each version is governed by the license included with that version.
+
+If you do not agree with the license of a newer version, you may keep using the versions you already have under the license they came with, but you may not upgrade to a version released under the license you do not agree with. Installing or using a newer version means you accept its license.
+
+## Warranty
+
+AwaitIt is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the Author or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with AwaitIt or the use of or other dealings in AwaitIt.
+
+## Support
+
+Support is provided on a best-effort basis through GitHub issues. Company License holders get priority.
