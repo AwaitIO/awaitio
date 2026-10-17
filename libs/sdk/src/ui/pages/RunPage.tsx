@@ -6,11 +6,13 @@ import { ActionResult } from '../components/ActionResult';
 import { Button } from '../components/Button';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import { StepView } from '../components/StepView';
+import { useFaviconState } from '../hooks/useFaviconState';
 import { useRunState } from '../hooks/useRunState';
 import { actionListPath } from '../utils/actionListPath';
 import { actionPath } from '../utils/actionPath';
 import { navigate } from '../utils/navigate';
 import { toErrorMessage } from '../utils/toErrorMessage';
+import { toFaviconState } from '../utils/toFaviconState';
 
 export type RunPageProps = {
   slug: string;
@@ -22,6 +24,7 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
   const isRunning = runState.state?.status === 'RUNNING' && !runState.isExpired;
+  useFaviconState(isStarting ? 'busy' : toFaviconState({ state: runState.state, isExpired: runState.isExpired }));
 
   // A link with a wrong or renamed slug still shows the run; the address bar gets the run's real slug.
   useEffect(() => {

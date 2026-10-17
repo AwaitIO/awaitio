@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FC } from 'react';
 import { match, P } from 'ts-pattern';
 import { ApiError } from '../api/ApiError';
 import { startRun } from '../api/startRun';
+import { useFaviconState } from '../hooks/useFaviconState';
 import { actionListPath } from '../utils/actionListPath';
 import { actionPath } from '../utils/actionPath';
 import { getSearchParams } from '../utils/getSearchParams';
@@ -18,6 +19,7 @@ export const ActionStartPage: FC<ActionStartPageProps> = ({ slug }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   // StrictMode runs effects twice in development; the ref keeps that from starting two runs.
   const hasStarted = useRef(false);
+  useFaviconState(errorMessage === null ? 'busy' : 'idle');
 
   useEffect(() => {
     if (hasStarted.current) {
