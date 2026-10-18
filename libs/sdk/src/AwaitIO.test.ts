@@ -289,6 +289,18 @@ test('Should list the actions in folder order, files before subfolders', async (
           "name": "Send reminder",
           "slug": "billing/invoices/send_reminder",
         },
+        {
+          "description": null,
+          "name": "Monthly",
+          "slug": "reports/monthly",
+        },
+      ],
+      "pages": [
+        {
+          "description": "Monthly numbers",
+          "name": "Reports",
+          "slug": "reports",
+        },
       ],
     }
   `);
@@ -405,10 +417,14 @@ test('Should refuse an empty project name', () => {
   }).toThrow('The name must not be empty.');
 });
 
-test('Should refuse "group" as a component key', () => {
+test('Should refuse "group" and "layout" as component keys', () => {
   expect(() => {
     return new AwaitIO({ name: 'Test app', secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"group" is reserved');
+
+  expect(() => {
+    return new AwaitIO({ name: 'Test app', secret, users, components: { layout: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+  }).toThrow('"layout" is reserved');
 });
 
 test('Should allow listen() again after the port was taken', async () => {
@@ -432,6 +448,50 @@ test('Should run an action from a nested folder by its encoded slug', async () =
   });
 
   expect([started.status, state.actionSlug, state.result]).toEqual([201, 'billing/invoices/send_reminder', { status: 'SUCCESS', data: 'Reminder sent' }]);
+});
+
+test('Should serve a folder page: display components in the basic layout, titled by the page', async () => {
+  const { pages } = await (await fetch(`${baseUrl}/api/actions`, authorized())).json();
+
+  expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers' }]);
+
+  const page = await (await fetch(`${baseUrl}/api/pages/reports?month=March`, authorized())).json();
+
+  expect(page).toEqual({
+    slug: 'reports',
+    name: 'Reports',
+    description: 'Monthly numbers',
+    layout: {
+      type: 'awaitio:basic',
+      props: { title: 'Reports', description: 'Monthly numbers' },
+      children: [
+        { type: 'display.list', label: 'Months', props: { items: ['January', 'February'], ordered: false } },
+        { type: 'display.list', label: 'For Petr', props: { items: ['March'], ordered: true } },
+      ],
+    },
+  });
+});
+
+test('Should put display components into a registered layout with its own props', async () => {
+  const { layout } = await (await fetch(`${baseUrl}/api/pages/reports?layout=columns`, authorized())).json();
+
+  expect(layout).toEqual({ type: 'columns', props: { count: 3 }, children: [{ type: 'display.list', label: 'Months', props: { items: ['January'], ordered: false } }] });
+});
+
+test('Should refuse display props that do not fit and an unknown page', async () => {
+  const response = await fetch(`${baseUrl}/api/pages/reports?fail=props`, authorized());
+
+  expect([response.status, await response.json()]).toEqual([500, { error: 'PAGE_FAILED', message: 'io.display.list: items.0: Expected string, received number.' }]);
+
+  expect((await fetch(`${baseUrl}/api/pages/missing`, authorized())).status).toBe(404);
+});
+
+test('Should serve the UI script of a registered layout behind the login', async () => {
+  expect(await (await fetch(`${baseUrl}/layouts/columns/ui.js`, authorized())).text()).toBe('window.testLayoutLoaded = true;');
+
+  expect((await fetch(`${baseUrl}/layouts/columns/ui.js`)).status).toBe(401);
+
+  expect(await (await fetch(`${baseUrl}/components/display.list/ui.js`, authorized())).text()).toBe('window.testComponentLoaded = true;');
 });
 
 test('Should return 404 for an unknown action or run', async () => {

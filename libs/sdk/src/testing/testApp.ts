@@ -5,11 +5,16 @@ import { z } from 'zod';
 import { testUser } from './testUser';
 import { AwaitIO } from '../AwaitIO';
 import { defineComponent } from '../defineComponent';
+import { defineDisplay } from '../defineDisplay';
+import { defineLayout } from '../defineLayout';
 
 // Stands in for the folder of a built component package: <folder>/ui/ui.js.
 const uiDirectory = mkdtempSync(join(tmpdir(), 'awaitio-'));
 mkdirSync(join(uiDirectory, 'ui'));
 writeFileSync(join(uiDirectory, 'ui', 'ui.js'), 'window.testComponentLoaded = true;');
+const layoutUiDirectory = mkdtempSync(join(tmpdir(), 'awaitio-layout-'));
+mkdirSync(join(layoutUiDirectory, 'ui'));
+writeFileSync(join(layoutUiDirectory, 'ui', 'ui.js'), 'window.testLayoutLoaded = true;');
 
 // The app the server tests run; its actions live in ./actions, one file each, like in a real project.
 export const testApp = new AwaitIO({
@@ -39,6 +44,28 @@ export const testApp = new AwaitIO({
         }),
         uiDirectory,
       },
+    },
+    display: {
+      list: {
+        ...defineDisplay({
+          props: z.object({ items: z.array(z.string()), ordered: z.boolean().default(false) }),
+          component: () => {
+            return null;
+          },
+        }),
+        uiDirectory,
+      },
+    },
+  },
+  layouts: {
+    columns: {
+      ...defineLayout({
+        props: z.object({ count: z.number().int().min(1).max(4).default(2) }),
+        component: () => {
+          return null;
+        },
+      }),
+      uiDirectory: layoutUiDirectory,
     },
   },
 });

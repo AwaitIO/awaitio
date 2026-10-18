@@ -3,4 +3,8 @@ export const constants = {
   // Sent by the AwaitIO UI on every API request. A page on another origin cannot add a custom header without a
   // CORS preflight, which the server never allows, so the header proves the request comes from the UI itself.
   REQUEST_HEADER_NAME: 'X-AwaitIO-Request',
+  // Dispatched on window after the UI changed the URL itself; links in layouts (awaitio/ui Link) fire it too.
+  NAVIGATE_EVENT: 'awaitio:navigate',
+  // Wire type of the built-in io.layout.basic; the UI ships its component, so no script is loaded for it.
+  BASIC_LAYOUT_TYPE: 'awaitio:basic',
 };

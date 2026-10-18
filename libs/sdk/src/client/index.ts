@@ -1,5 +1,11 @@
 export { hostGlobalName } from './hostGlobalName';
 export { registerComponentUi } from './registerComponentUi';
+export { registerDisplayUi } from './registerDisplayUi';
+export { registerLayoutUi } from './registerLayoutUi';
 export type { ComponentUi } from './types/ComponentUi';
 export type { ComponentUiProps } from './types/ComponentUiProps';
 export type { AwaitIOHost } from './types/AwaitIOHost';
+export type { DisplayUi } from './types/DisplayUi';
+export type { DisplayUiProps } from './types/DisplayUiProps';
+export type { LayoutUi } from './types/LayoutUi';
+export type { LayoutUiProps } from './types/LayoutUiProps';

@@ -27,7 +27,7 @@ export const App: FC = () => {
         .otherwise(() => {
           return null;
         })}
-      <main className="mx-auto max-w-3xl px-4 py-10">
+      <main className="mx-auto max-w-7xl px-4 py-10">
         {match(session)
           .with({ status: 'LOADING' }, () => {
             return <p className="text-sm text-gray-500">Loading…</p>;

@@ -3,20 +3,25 @@ import type { RunManager } from '../classes/RunManager';
 import { startRunRequestSchema } from '../shared/schemas/startRunRequestSchema';
 import type { ActionList } from '../shared/types/ActionList';
 import type { RegisteredAction } from '../types/RegisteredAction';
+import type { RegisteredPage } from '../types/RegisteredPage';
 import { formatZodError } from '../utils/formatZodError';
 import { getSessionUser } from '../utils/getSessionUser';
 
 export type CreateActionsRouterArgs = {
   actions: Map<string, RegisteredAction>;
+  pages: Map<string, RegisteredPage>;
   manager: RunManager;
 };
 
-export const createActionsRouter = ({ actions, manager }: CreateActionsRouterArgs): IRouter => {
+export const createActionsRouter = ({ actions, pages, manager }: CreateActionsRouterArgs): IRouter => {
   const router = Router();
 
   router.get('/actions', (_req, res) => {
     const body: ActionList = {
       actions: [...actions.values()].map(({ slug, name, description }) => {
+        return { slug, name, description };
+      }),
+      pages: [...pages.values()].map(({ slug, name, description }) => {
         return { slug, name, description };
       }),
     };

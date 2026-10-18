@@ -1,17 +1,23 @@
-import type { ComponentUi } from '../../client/types/ComponentUi';
+export type UiScriptRegistryArgs = {
+  // Where the scripts are served: /components/:type/ui.js or /layouts/:type/ui.js.
+  kind: 'components' | 'layouts';
+};
 
-type AnyComponentUi = ComponentUi<unknown, unknown>;
+// Component and layout UIs are not part of the SDK bundle: each one is a script served by its package
+// (/components/:type/ui.js, /layouts/:type/ui.js) that calls registerComponentUi() or registerLayoutUi() when it runs.
+// The <script> carries the type in data-type, which is how the script knows what it registers.
+export class UiScriptRegistry<TUi> {
+  private readonly kind: UiScriptRegistryArgs['kind'];
+  private readonly uis = new Map<string, TUi>();
+  private readonly loads = new Map<string, Promise<TUi>>();
+  private readonly waiters = new Map<string, (ui: TUi) => void>();
 
-// Component UIs are not part of the SDK bundle: each one is a script served by its package
-// (/components/:type/ui.js) that calls registerComponentUi() when it runs. The <script> carries the
-// type in data-type, which is how registerComponentUi() knows what it registers.
-export class ComponentUiRegistry {
-  private readonly uis = new Map<string, AnyComponentUi>();
-  private readonly loads = new Map<string, Promise<AnyComponentUi>>();
-  private readonly waiters = new Map<string, (ui: AnyComponentUi) => void>();
+  constructor({ kind }: UiScriptRegistryArgs) {
+    this.kind = kind;
+  }
 
   // Arrow properties, because both are handed around unbound (window.__AWAITIO__.registerComponent, .map(load)).
-  register = (type: string, ui: AnyComponentUi) => {
+  register = (type: string, ui: TUi) => {
     this.uis.set(type, ui);
     this.waiters.get(type)?.(ui);
     this.waiters.delete(type);
@@ -30,8 +36,8 @@ export class ComponentUiRegistry {
       return pending;
     }
 
-    const base = `/components/${encodeURIComponent(type)}`;
-    const load = new Promise<AnyComponentUi>((resolve, reject) => {
+    const base = `/${this.kind}/${encodeURIComponent(type)}`;
+    const load = new Promise<TUi>((resolve, reject) => {
       this.waiters.set(type, resolve);
 
       const style = document.createElement('link');
@@ -45,7 +51,7 @@ export class ComponentUiRegistry {
       script.addEventListener('load', () => {
         // A script that loads but does not register itself would leave the form waiting forever.
         if (!this.uis.has(type)) {
-          reject(new Error(`The UI script of ${type} did not register a component.`));
+          reject(new Error(`The UI script of ${type} did not register itself.`));
         }
       });
       script.addEventListener('error', () => {

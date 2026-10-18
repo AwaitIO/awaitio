@@ -2,7 +2,8 @@ import { match } from 'ts-pattern';
 import { LoadingIndicator } from './LoadingIndicator';
 import { StepForm } from './StepForm';
 import type { Step } from '../../shared/types/Step';
-import { useComponentUis } from '../hooks/useComponentUis';
+import { componentUiRegistry } from '../componentUiRegistry';
+import { useUiScripts } from '../hooks/useUiScripts';
 import type { FC } from 'react';
 
 export type StepViewProps = {
@@ -12,11 +13,12 @@ export type StepViewProps = {
 
 // Loads the UI scripts of the step's components first, then shows the form.
 export const StepView: FC<StepViewProps> = ({ runId, step }) => {
-  const componentUis = useComponentUis(
-    step.components.map((component) => {
+  const componentUis = useUiScripts({
+    registry: componentUiRegistry,
+    types: step.components.map((component) => {
       return component.type;
     }),
-  );
+  });
 
   return match(componentUis)
     .with({ status: 'loading' }, () => {

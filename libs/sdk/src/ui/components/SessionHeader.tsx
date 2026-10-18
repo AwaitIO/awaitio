@@ -1,5 +1,6 @@
 import { AppTitle } from './AppTitle';
 import { Button } from './Button';
+import { FolderNav } from './FolderNav';
 import type { AppInfo } from '../../shared/types/AppInfo';
 import type { SessionUser } from '../../shared/types/SessionUser';
 import { actionListPath } from '../utils/actionListPath';
@@ -14,7 +15,7 @@ export type SessionHeaderProps = {
 export const SessionHeader: FC<SessionHeaderProps> = ({ info, user, onLogOut }) => {
   return (
     <header className="border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-2 text-sm">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm">
         {info && <AppTitle info={info} homeHref={actionListPath()} />}
         <span className="flex-1" />
         <span className="text-gray-600" title={user.email}>
@@ -27,6 +28,9 @@ export const SessionHeader: FC<SessionHeaderProps> = ({ info, user, onLogOut }) 
             <path d="M16 10H7.5" />
           </svg>
         </Button>
+      </div>
+      <div className="mx-auto max-w-7xl px-4">
+        <FolderNav />
       </div>
     </header>
   );

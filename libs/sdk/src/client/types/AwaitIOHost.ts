@@ -1,4 +1,6 @@
 import type { ComponentUi } from './ComponentUi';
+import type { DisplayUi } from './DisplayUi';
+import type { LayoutUi } from './LayoutUi';
 import type * as Ui from '../../uikit';
 import type * as React from 'react';
 import type * as JsxRuntime from 'react/jsx-runtime';
@@ -12,4 +14,6 @@ export type AwaitIOHost = {
   zod: typeof Zod;
   ui: typeof Ui;
   registerComponent: (type: string, ui: ComponentUi<unknown, unknown>) => void;
+  registerDisplay: (type: string, ui: DisplayUi<unknown>) => void;
+  registerLayout: (type: string, ui: LayoutUi<unknown>) => void;
 };

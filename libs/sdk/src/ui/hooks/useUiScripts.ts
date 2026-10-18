@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
-import { componentUiRegistry } from '../componentUiRegistry';
-import type { ComponentUisState } from '../types/ComponentUisState';
+import type { UiScriptRegistry } from '../classes/UiScriptRegistry';
+import type { UiScriptsState } from '../types/UiScriptsState';
 import { toErrorMessage } from '../utils/toErrorMessage';
 
-export const useComponentUis = (types: string[]) => {
-  const [state, setState] = useState<ComponentUisState>({ status: 'loading' });
+export type UseUiScriptsArgs<TUi> = {
+  registry: UiScriptRegistry<TUi>;
+  types: string[];
+};
+
+// Loads the UI scripts of the given component or layout types and hands them over once all are registered.
+export const useUiScripts = <TUi>({ registry, types }: UseUiScriptsArgs<TUi>) => {
+  const [state, setState] = useState<UiScriptsState<TUi>>({ status: 'loading' });
   // A stable dependency: the array itself is new on every render.
   const key = [...new Set(types)].join(',');
 
@@ -14,7 +20,7 @@ export const useComponentUis = (types: string[]) => {
     const uniqueTypes = key ? key.split(',') : [];
 
     setState({ status: 'loading' });
-    Promise.all(uniqueTypes.map(componentUiRegistry.load))
+    Promise.all(uniqueTypes.map(registry.load))
       .then((loaded) => {
         if (isCurrent) {
           setState({
@@ -36,7 +42,7 @@ export const useComponentUis = (types: string[]) => {
     return () => {
       isCurrent = false;
     };
-  }, [key]);
+  }, [key, registry]);
 
   return state;
 };

@@ -12,6 +12,8 @@ export type FindActionFilesArgs = {
 export type ActionFile = {
   file: string;
   slug: string;
+  // index.* stands for its folder; only such a file may hold a page.
+  isIndex: boolean;
 };
 
 // Every action file under `directory`, any depth, in a stable order: files of a folder before its subfolders, each
@@ -37,9 +39,6 @@ export const findActionFiles = ({ directory, parents = [] }: FindActionFilesArgs
     // The folder's own page leads its list.
     .sort((a, b) => {
       return Number(b.isIndex) - Number(a.isIndex);
-    })
-    .map(({ file, slug }) => {
-      return { file, slug };
     });
   const nested = entries
     .filter((entry) => {

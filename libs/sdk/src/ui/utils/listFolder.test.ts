@@ -5,7 +5,7 @@ const actions = ['hello', 'forms/full_name', 'forms/text/word_count', 'users', '
   return { slug, name: slug, description: null };
 });
 const slugs = ({ folder }: { folder: string }) => {
-  const shown = listFolder({ actions, folder });
+  const shown = listFolder({ actions, pages: [], folder });
 
   return { actions: shown.actions.map((action) => action.slug), folders: shown.folders };
 };
@@ -24,4 +24,10 @@ test('Should show a folder with its index action first and its subfolders closed
   expect(slugs({ folder: 'users' })).toEqual({ actions: ['users'], folders: [{ path: 'users/messages', actionCount: 2 }] });
 
   expect(slugs({ folder: 'users/messages' })).toEqual({ actions: ['users/messages/multi_step'], folders: [{ path: 'users/messages/archive', actionCount: 1 }] });
+});
+
+test('Should show a folder that holds only its page', () => {
+  const shown = listFolder({ actions, pages: [{ slug: 'reports', name: 'Reports', description: null }], folder: '' });
+
+  expect(shown.folders.map((folder) => folder.path)).toEqual(['forms', 'users', 'reports']);
 });

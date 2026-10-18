@@ -1,8 +1,9 @@
 import type { AwaitIOEnvironment } from './AwaitIOEnvironment';
 import type { AwaitIOUser } from './AwaitIOUser';
 import type { ComponentTree } from './ComponentTree';
+import type { LayoutTree } from './LayoutTree';
 
-export type AwaitIOOptions<T extends ComponentTree> = {
+export type AwaitIOOptions<T extends ComponentTree, L extends LayoutTree> = {
   // The project's name, shown on the login page, in the header and in the browser tab.
   name: string;
   // Every environment (production, staging…) runs as its own server with its own options. List them all in each
@@ -14,4 +15,6 @@ export type AwaitIOOptions<T extends ComponentTree> = {
   users: AwaitIOUser[];
   // io components available to every action, e.g. { input: { text: inputText } } for io.input.text().
   components?: T;
+  // Layouts pages can show, e.g. { table: layoutTable } for layout.table() in app.page().
+  layouts?: L;
 };

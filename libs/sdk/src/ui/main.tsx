@@ -5,13 +5,15 @@ import { createRoot } from 'react-dom/client';
 import * as zod from 'zod';
 import { App } from './App';
 import { componentUiRegistry } from './componentUiRegistry';
+import { displayUiRegistry } from './displayUiRegistry';
+import { layoutUiRegistry } from './layoutUiRegistry';
 import { hostGlobalName } from '../client/hostGlobalName';
 import type { AwaitIOHost } from '../client/types/AwaitIOHost';
 import * as ui from '../uikit';
 import './index.css';
 
 // Component scripts do not bundle React, zod or the kit; they take these, so hooks share a single React instance.
-const host: AwaitIOHost = { React, jsxRuntime, zod, ui, registerComponent: componentUiRegistry.register };
+const host: AwaitIOHost = { React, jsxRuntime, zod, ui, registerComponent: componentUiRegistry.register, registerDisplay: displayUiRegistry.register, registerLayout: layoutUiRegistry.register };
 (window as unknown as Record<string, AwaitIOHost>)[hostGlobalName] = host;
 
 const root = document.getElementById('root');

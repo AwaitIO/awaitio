@@ -77,3 +77,11 @@ test('Should warn about a top-level file next to folders, not about a folder ind
 
   warn.mockRestore();
 });
+
+test('Should accept a page only as a folder index file', async () => {
+  const pageSource = "export default { kind: 'awaitio-page', name: null, description: null, handler: async () => [] };";
+
+  expect(Object.keys(await loadActionsDirectory({ directory: createDirectory({ 'users/index.mjs': pageSource, 'users/list.mjs': actionSource }) }))).toEqual(['users', 'users/list']);
+
+  await expect(loadActionsDirectory({ directory: createDirectory({ 'users/report.mjs': pageSource }) })).rejects.toThrow("belongs in a folder's index file");
+});

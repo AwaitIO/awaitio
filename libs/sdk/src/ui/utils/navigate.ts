@@ -1,4 +1,4 @@
-import { constants } from '../constants';
+import { constants as sharedConstants } from '../../shared/constants';
 
 export type NavigateOptions = {
   replace?: boolean;
@@ -12,5 +12,5 @@ export const navigate = (path: string, { replace = false }: NavigateOptions = {}
     window.history.pushState(null, '', path);
   }
 
-  window.dispatchEvent(new Event(constants.NAVIGATE_EVENT));
+  window.dispatchEvent(new Event(sharedConstants.NAVIGATE_EVENT));
 };

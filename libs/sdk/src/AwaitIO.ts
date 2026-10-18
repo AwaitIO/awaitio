@@ -1,5 +1,6 @@
 import { createServer, type Server } from 'http';
 import { Action } from './classes/Action';
+import { Page } from './classes/Page';
 import { RunManager } from './classes/RunManager';
 import { Sessions } from './classes/Sessions';
 import { constants } from './constants';
@@ -13,29 +14,37 @@ import type { AwaitIORoutes } from './types/AwaitIORoutes';
 import type { ComponentRegistry } from './types/ComponentRegistry';
 import type { ComponentTree } from './types/ComponentTree';
 import type { IO } from './types/IO';
+import type { LayoutRegistry } from './types/LayoutRegistry';
+import type { LayoutTree } from './types/LayoutTree';
+import type { PageIO } from './types/PageIO';
+import type { PageOptions } from './types/PageOptions';
 import { createComponentRegistry } from './utils/createComponentRegistry';
+import { createLayoutRegistry } from './utils/createLayoutRegistry';
+import { isPage } from './utils/isPage';
 import { loadActionsDirectory } from './utils/loadActionsDirectory';
 import { validateEnvironments } from './utils/validateEnvironments';
+import { walkPages } from './utils/walkPages';
 import { walkRoutes } from './utils/walkRoutes';
 
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
 // Components are fixed here so action files can import the instance and get a typed io from app.action();
 // actions are loaded from the actions directory at listen() time, after the components are known.
 type AwaitIOServeArgs = {
-  routes: AwaitIORoutes<unknown>;
+  routes: Record<string, AwaitIORoutes<unknown>[string] | Page<unknown>>;
   port: number;
   host?: string;
 };
 
-export class AwaitIO<T extends ComponentTree = Record<string, never>> {
+export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends LayoutTree = Record<string, never>> {
   private readonly registry: ComponentRegistry;
+  private readonly layoutRegistry: LayoutRegistry;
   private readonly sessions: Sessions;
   private readonly name: string;
   private readonly environments: AwaitIOEnvironment[];
   private running: { server: Server; manager: RunManager } | null = null;
   private isStarting = false;
 
-  constructor({ name, environments = [], secret, users, components }: AwaitIOOptions<T>) {
+  constructor({ name, environments = [], secret, users, components, layouts }: AwaitIOOptions<T, L>) {
     if (name.trim().length === 0) {
       throw new Error('The name must not be empty.');
     }
@@ -45,10 +54,18 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>> {
     this.environments = environments;
     this.sessions = new Sessions({ secret, users });
     this.registry = createComponentRegistry({ tree: components ?? {} });
+    this.layoutRegistry = createLayoutRegistry({ tree: layouts ?? {} });
   }
 
   action<TSchema extends ActionParamsSchema | undefined = undefined>(options: ActionOptions<IO<T>, TSchema>) {
     return new Action<IO<T>>(options);
+  }
+
+  // What a folder shows next to its actions; export it from the folder's index file. The handler returns a layout with
+  // display components in it, io.layout.basic({ children: [io.display.table('Users', { rows })] }), or just the
+  // display components; nothing is asked.
+  page(options: PageOptions<PageIO<T, L>>) {
+    return new Page<PageIO<T, L>>(options);
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
@@ -68,7 +85,23 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>> {
 
   private serve({ routes, port, host }: AwaitIOServeArgs) {
     const manager = new RunManager({ registry: this.registry });
-    const server = createServer(createApp({ name: this.name, environments: this.environments, sessions: this.sessions, actions: walkRoutes({ routes }), manager, registry: this.registry }));
+    const actionRoutes = Object.fromEntries(
+      Object.entries(routes).filter(([, route]) => {
+        return !isPage(route);
+      }),
+    ) as AwaitIORoutes<unknown>;
+    const server = createServer(
+      createApp({
+        name: this.name,
+        environments: this.environments,
+        sessions: this.sessions,
+        actions: walkRoutes({ routes: actionRoutes }),
+        pages: walkPages({ routes }),
+        manager,
+        registry: this.registry,
+        layoutRegistry: this.layoutRegistry,
+      }),
+    );
     const running = { server, manager };
     this.running = running;
 
