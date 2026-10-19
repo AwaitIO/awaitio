@@ -1,0 +1,129 @@
+---
+title: 'Users'
+icon: 'users'
+---
+
+AwaitIO has no database and no sign-up. The people who can log in are listed in code when you create the app, each with an email and a password hash. They log in on the AwaitIO login page with that email and password, and the server keeps them logged in with a signed cookie.
+
+## Setup
+
+Pass a `secret` and a list of `users` to `new AwaitIO()`:
+
+```ts app.ts
+import { defaultTheme } from '@awaitio/theme-default';
+import { AwaitIO } from 'awaitio';
+import { join } from 'path';
+
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  actionsDirectory: join(__dirname, 'actions'),
+  theme: defaultTheme,
+  secret: process.env.SESSION_SECRET!,
+  users: [
+    { email: 'alice@example.com', name: 'Alice', passwordHash: 'scrypt$…' },
+    { email: 'bob@example.com', name: 'Bob', passwordHash: 'scrypt$…' },
+  ],
+  components: {
+    // ...
+  },
+});
+```
+
+| Option                 | Type            | Required | Description                                                                       |
+| ---------------------- | --------------- | -------- | --------------------------------------------------------------------------------- |
+| `secret`               | `string`        | Required | Signs the session cookies. At least 32 characters; changing it logs everyone out. |
+| `users`                | `AwaitIOUser[]` | Required | Who can log in. May be empty.                                                     |
+| `users[].email`        | `string`        | Required | What the person logs in with. Case and spaces around it are ignored.              |
+| `users[].name`         | `string`        | Required | Shown in the header and as `ctx.user.name`.                                       |
+| `users[].passwordHash` | `string`        | Required | From **Create new account**, never the password itself.                           |
+
+The app refuses to start when the secret is too short, an email is listed twice or a hash is not one from **Create new account**.
+
+<Note>
+  The hashes belong in your code, next to the users they log in: a hash cannot be turned back into the password. The secret does not: keep it in an environment variable or your secret manager, never
+  in the repository.
+</Note>
+
+## Generate a secret
+
+Any random string of at least 32 characters works. This prints one:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+```
+
+Put it in `SESSION_SECRET` (or wherever your app reads it from).
+
+## Create a password hash
+
+The login page has a **Create new account** link (`/access`). Someone who should get access fills in their email, name and a password of at least 10 characters, and gets one line to copy:
+
+```ts
+{ email: 'ada@example.com', name: 'Ada', passwordHash: 'scrypt$32768$8$1$…' },
+```
+
+They send it to you and you paste it into `users`. The line holds only a hash, so it can go by email or chat; their password never reaches you and AwaitIO stores nothing. The page works without a login, and the server allows a few requests per address before it asks to wait.
+
+## Manage users
+
+Users live in your code, so every change is an edit and a restart.
+
+<AccordionGroup>
+  <Accordion title="Add a user" icon="user-plus">
+    1. The new user clicks **Create new account** on the login page and sends you the line it gives them.
+    2. Paste it into `users`.
+    3. Restart the server. The user can log in.
+  </Accordion>
+  <Accordion title="Change a password" icon="key">
+    1. The user makes a new line with **Create new account**, using their new password.
+    2. Replace their `passwordHash` with the one from the line and restart.
+
+    Every session of that user ends: the cookies were signed together with the old hash, so they stop working everywhere. Other users stay logged in.
+
+  </Accordion>
+  <Accordion title="Remove a user" icon="user-minus">
+    Remove the user from `users` and restart. Their cookie no longer matches anyone, so the next request returns them to the login page.
+  </Accordion>
+  <Accordion title="Log everyone out" icon="right-from-bracket">
+    Generate a new secret, replace `secret` and restart. Every existing cookie stops working. Use this when you suspect a cookie or the secret has leaked.
+  </Accordion>
+</AccordionGroup>
+
+## How login works
+
+<Steps>
+  <Step title="Login page">Without a valid session, the UI shows the login page and every API call except login returns `401`.</Step>
+  <Step title="Password check">
+    The server hashes the submitted password with the salt and parameters stored in the user's hash and compares the result in constant time. An unknown email is checked against a dummy hash, so it
+    takes as long as a wrong password and does not reveal which emails exist.
+  </Step>
+  <Step title="Session cookie">
+    On success the server sets the `awaitio_session` cookie: the email and an expiry, signed with the secret and the user's password hash. It is valid for 7 days, then the user logs in again.
+  </Step>
+  <Step title="Every request">The server checks the signature, the expiry and that the user is still listed. If any of it fails, the user is back on the login page.</Step>
+  <Step title="Log out">The **Log out** button in the header deletes the cookie in that browser.</Step>
+</Steps>
+
+### Nothing is stored on the server
+
+Sessions are stateless: the cookie carries everything the server needs. A restart or a deploy keeps everyone logged in, and there is nothing to clean up. The flip side is that a single session cannot be revoked on its own. To end sessions early, change the user's password (ends that user's sessions) or the secret (ends all of them).
+
+### Password hashes
+
+Hashes use scrypt with a random 16-byte salt. One hash takes about 100 ms, so guessing passwords from a leaked hash is slow too. The format is `scrypt$N$r$p$salt$hash`: the cost parameters travel with each hash, so they can be raised in a later version without breaking the hashes already in your configuration.
+
+### Too many failed attempts
+
+After 10 failed logins for one email within 15 minutes, that email is locked until the 15 minutes run out and the login page shows _Too many failed attempts_. A successful login resets the count. The count is kept in memory, so a restart clears it.
+
+### Cookie and requests from other sites
+
+The cookie is `HttpOnly`, so scripts on the page cannot read it, and `SameSite=Strict`, so the browser does not send it with requests that another site starts. It is marked `Secure` when the request came over HTTPS, directly or through a proxy that sets `X-Forwarded-Proto`. Every API request that changes something, the login included, must come from the AwaitIO UI itself; requests started by another origin get `403`. So another site cannot act as a logged-in user, nor log the browser into its own account.
+
+## The user in an action
+
+The handler gets the user who started the run in `ctx.user`, see [User](/ctx/user).
+
+## Exposing the server
+
+By default [`app.listen()`](/core/listen) binds to `127.0.0.1`, so only the machine the server runs on can reach it. To serve other people, put it behind a reverse proxy with HTTPS and pass `host: '0.0.0.0'` to `listen()` when the proxy runs on another machine or container. Without HTTPS the password and the cookie travel in plain text.

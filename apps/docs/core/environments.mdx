@@ -1,0 +1,68 @@
+---
+title: 'Environments'
+icon: 'layer-group'
+---
+
+Most projects run the same tools more than once: production, staging, a local copy. `environments` is optional. List them all, so everyone sees which one they are on and can switch to another one from the header.
+
+```ts app.ts
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  environments: [
+    { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
+    { title: 'Staging', color: '#f59e0b', url: 'https://staging.tools.example.com' },
+    { title: 'Local', color: '#16a34a', url: 'http://localhost:3000' },
+  ],
+  // actionsDirectory, theme, secret, users, components…
+});
+```
+
+| Field   | Type     | Required | Description                                                                             |
+| ------- | -------- | -------- | --------------------------------------------------------------------------------------- |
+| `title` | `string` | Required | The environment's name in the badge and in the list.                                    |
+| `color` | `string` | Required | Any CSS color, e.g. `'#dc2626'` or `'orange'`, for the dot and the border of the badge. |
+| `url`   | `string` | Required | Where that environment's server is reached, `http` or `https`.                          |
+
+Two environments cannot share a host. The badge text stays dark, so any color stays readable.
+
+## Each environment is a separate server
+
+An environment is not a mode of one server: every environment runs its own AwaitIO server, with its own process, its own runs and its own options, so production can have a different `secret` and other users than staging. `environments` only tells each of them about the others. Give every server the same list; usually it lives in code next to `new AwaitIO()`.
+
+Logins do not carry over. A browser logged into production is not logged into staging, since each host gets its own cookie. Ports do not separate cookies: two servers on `localhost:3000` and `localhost:3001` share one, which only works when they also share the `secret`.
+
+## Each environment has its own secrets
+
+Because every environment is its own server, each one reads its own configuration: the session `secret`, the users' password hashes, and everything your actions use — the database URL, API keys, feature flags. Staging tools work with staging data and production tools with production data, with no switch in the code.
+
+So AwaitIO deploys together with the rest of your application. The actions live in the same repository, go through the same pipeline and read the same environment variables your app already has per environment:
+
+```ts app.ts
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  // actionsDirectory, theme…
+  secret: process.env.SESSION_SECRET!, // a different value in each environment
+  users: [{ email: 'alice@example.com', name: 'Alice', passwordHash: 'scrypt$…' }],
+  environments, // the same list everywhere
+  components: { input: { text: inputText } },
+});
+```
+
+```ts actions/refundOrder.ts
+import { prisma } from '../prisma'; // connects to DATABASE_URL of the environment it runs in
+```
+
+There is no separate AwaitIO deployment to keep in sync: when staging gets a new version of your app, it gets the new version of its tools too.
+
+## Which one is current
+
+A server does not need to be told which environment it is: it compares the host of each request with the hosts in `environments`, and the matching one is current. Behind a reverse proxy the host comes from `X-Forwarded-Host` when the proxy sets it. When no URL matches the host, for example when you open `127.0.0.1` but the list says `localhost`, no badge is shown.
+
+## What people see
+
+- **Login page:** the name and the badge of the current environment. The other environments and their URLs are not shown to anyone who is not logged in.
+- **Header:** the badge opens the list of all environments; the current one is marked. A link leads to the other environment's action list, not to the action that is open, because opening an action starts a run and switching to production must not start one by accident.
+
+## Without environments
+
+Leave `environments` out and AwaitIO shows no badge and no switcher; nothing else changes.
