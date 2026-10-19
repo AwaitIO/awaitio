@@ -1,0 +1,19 @@
+---
+title: 'Listen'
+icon: 'plug'
+---
+
+`app.listen()` loads every action from the [`actionsDirectory`](/core/routing) given to `new AwaitIO()` and starts the server; a missing folder stops it. Call it once.
+
+```ts server.ts
+import { app } from './app';
+
+void app.listen({ port: 3000 });
+```
+
+| Option | Description                                                                                                                                                                    |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `port` | The port to listen on. `0` picks a free one (read it from `server.address()`).                                                                                                 |
+| `host` | Optional. The interface to listen on. Defaults to `127.0.0.1`, so only this machine can reach the server; use `'0.0.0.0'` in a container or behind a proxy on another machine. |
+
+`listen()` returns a promise of the Node `http.Server`, resolved once the port is open. If the port is taken, the promise rejects and `listen()` can be called again. `app.close()` stops the server and cancels every running action.

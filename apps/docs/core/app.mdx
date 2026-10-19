@@ -1,0 +1,45 @@
+---
+title: 'Create the app'
+icon: 'gear'
+---
+
+Everything AwaitIO needs is set in one place, `new AwaitIO()`. Keep it in its own file, `app.ts`: action files import the instance for their typed `io`, and the server file starts it with [`listen()`](/core/listen).
+
+```ts app.ts
+import { inputText } from '@awaitio/input-text';
+import { defaultTheme } from '@awaitio/theme-default';
+import { AwaitIO } from 'awaitio';
+import { join } from 'path';
+
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  actionsDirectory: join(__dirname, 'actions'),
+  theme: defaultTheme,
+  secret: process.env.SESSION_SECRET!,
+  users: [{ email: 'jana@example.com', name: 'Jana', passwordHash: 'scrypt$…' }],
+  components: {
+    input: {
+      text: inputText,
+    },
+  },
+  environments: [
+    { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
+    { title: 'Local', color: '#16a34a', url: 'http://localhost:3000' },
+  ],
+});
+```
+
+## Options
+
+| Option             | Type                   | Required | Description                                                                         |
+| ------------------ | ---------------------- | -------- | ----------------------------------------------------------------------------------- |
+| `name`             | `string`               | Required | Shown on the login page, in the header and in the tab.                              |
+| `actionsDirectory` | `string`               | Required | Absolute path of the actions folder, see [Routing](/core/routing).                  |
+| `theme`            | `Theme`                | Required | How the UI looks, e.g. `defaultTheme`.                                              |
+| `secret`           | `string`               | Required | Signs the login cookies, see [Users](/core/users).              |
+| `users`            | `AwaitIOUser[]`        | Required | Who can log in, see [Users](/core/users).                       |
+| `components`       | `object`               | Optional | What `io` offers, see [Components](/core/components).                               |
+| `environments`     | `AwaitIOEnvironment[]` | Optional | Your production, staging and local servers, see [Environments](/core/environments). |
+| `layouts`          | `object`               | Optional | Your own layouts for folder pages.                                                  |
+
+The app checks the options when it is created and throws with a message naming the one that is wrong, so a typo stops the server before anyone logs in.

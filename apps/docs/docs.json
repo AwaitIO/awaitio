@@ -1,0 +1,44 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "AwaitIO",
+  "colors": {
+    "primary": "#2563EB",
+    "light": "#60A5FA",
+    "dark": "#1D4ED8"
+  },
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "AwaitIO homepage",
+          "icon": "house",
+          "href": "https://awaitio.com"
+        },
+        {
+          "anchor": "Changelog",
+          "icon": "clock-rotate-left",
+          "href": "https://awaitio.com/changelog"
+        }
+      ]
+    },
+    "groups": [
+      {
+        "group": "Getting started",
+        "pages": ["index", "quickstart"]
+      },
+      {
+        "group": "SDK",
+        "pages": ["core/app", "core/routing", "core/listen", "core/users", "core/environments", "core/components"]
+      },
+      {
+        "group": "Components",
+        "pages": ["io/input-text"]
+      },
+      {
+        "group": "Context",
+        "pages": ["ctx/user"]
+      }
+    ]
+  }
+}

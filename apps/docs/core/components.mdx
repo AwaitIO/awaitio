@@ -1,0 +1,210 @@
+---
+title: 'Components'
+icon: 'puzzle-piece'
+---
+
+`io` offers exactly the components you register. Each one is its own package, named after its method: `io.select.table()` comes from `@awaitio/select-table`.
+
+Install the ones you use, or [write your own](#write-your-own), and register them in `components` when you create the app:
+
+```ts app.ts
+import { inputText } from '@awaitio/input-text';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: {
+    input: {
+      text: inputText,
+    },
+  },
+});
+```
+
+## Available components
+
+Each card is one package and opens its page: all its props, what it returns and how the server checks the answer.
+
+<Columns cols={2}>
+  <Card title="Input Text" href="/io/input-text" img="/images/components/input-text.png">
+    `io.input.text()` asks for one line of text and returns a `string`.
+  </Card>
+</Columns>
+
+## The key is the name
+
+The path of keys to a component becomes its method on `io`: `input: { text: inputText }` gives `io.input.text()`. Nothing in the component decides its name, so the same component can sit under any key, and the tree can be as deep or as flat as you like:
+
+```ts
+components: {
+  text: inputText, // io.text()
+  forms: { long: inputTextarea }, // io.forms.long()
+}
+```
+
+The same path, joined with dots (`input.text`), is the component's type: the server and the UI use it to tell components apart.
+
+<Info>`group` and `layout` are reserved for `io.group()` and the layouts of pages. Neither can be a top-level key; the app refuses to start with them.</Info>
+
+## Typed `io`
+
+Actions get `io` typed from this tree. Create actions with `app.action()` on the same instance, and every method, its props and what it returns are checked:
+
+```ts actions/accounts/createAccount.ts
+import { app } from '../../app';
+
+export const createAccount = app.action({
+  name: 'Create account',
+  handler: async (io) => {
+    const company = await io.input.text('Company name', { placeholder: 'Acme Inc.' }); // string
+
+    return `${company} has an account.`;
+  },
+});
+```
+
+A method of a component that is not registered does not exist on `io`, and a wrong prop is a type error. The server checks the props and every answer again, so nothing from the browser gets past them.
+
+<Tip>Keep `new AwaitIO()` in its own file (`app.ts`) and import the instance in action files. Creating it in the file that calls `listen()` would make every action import that file back.</Tip>
+
+## Write your own
+
+A component is one `.tsx` file: zod schemas for its props and its answer, a check the server runs, and the React control. This is the star rating from the demo app:
+
+```tsx components/rating/src/rating.tsx
+import { defineComponent } from 'awaitio';
+import { z } from 'zod';
+
+export const rating = defineComponent({
+  props: z.object({ max: z.number().int().min(2).max(10).default(5) }),
+  returns: z.number().int(),
+  initialValue: () => {
+    return 0;
+  },
+  // Runs on the server, so the browser cannot skip it.
+  validate: ({ label, value }) => {
+    return value < 1 ? `${label}: pick at least one star.` : null;
+  },
+  component: ({ props, value, onChange }) => {
+    return (
+      <div role="radiogroup">
+        {Array.from({ length: props.max }, (_, index) => {
+          return (
+            <button key={index} type="button" onClick={() => onChange(index + 1)}>
+              {index < value ? '★' : '☆'}
+            </button>
+          );
+        })}
+      </div>
+    );
+  },
+});
+```
+
+`defineComponent()` takes:
+
+| Option         | Type            | Required | Description                                                                          |
+| -------------- | --------------- | -------- | ------------------------------------------------------------------------------------ |
+| `props`        | zod schema      | Required | The props after the label, checked on the server.                                    |
+| `returns`      | zod schema      | Required | The answer. May transform it, e.g. into a `DateTime`.                                |
+| `component`    | React component | Required | The control. Gets the props below.                                                   |
+| `validate`     | function        | Optional | Server check of the answer: a message or `null`.                                     |
+| `initialValue` | function        | Optional | The starting value. Runs in the browser too.                                         |
+| `wrap`         | `boolean`       | Optional | `false` leaves out the label, the help text and the error: you draw the whole field. |
+
+`component` gets:
+
+| Prop        | Type              | Description                                |
+| ----------- | ----------------- | ------------------------------------------ |
+| `label`     | `string`          | The first argument of the io call.         |
+| `props`     | object            | The parsed props, with defaults filled in. |
+| `value`     | answer            | The current answer.                        |
+| `onChange`  | `(value) => void` | Call it with the new answer.               |
+| `disabled`  | `boolean`         | `true` while the answer is being sent.     |
+| `autoFocus` | `boolean`         | `true` for the first field of a step.      |
+| `error`     | `string \| null`  | What the server found wrong.               |
+
+`validate` runs only on the server, so the browser cannot skip it. `component` draws only the control; AwaitIO adds the label, the help text and the error around it, unless the component is [unwrapped](#unwrapped-components).
+
+The browser half is built into the package with the Vite config from `awaitio/vite`:
+
+```ts components/rating/vite.config.mts
+import { componentBuildConfig } from 'awaitio/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig(componentBuildConfig({ root: import.meta.url, entry: 'src/rating.tsx', exportName: 'rating' }));
+```
+
+Register it like any other component, and its key is its name:
+
+```ts app.ts
+components: {
+  input: {
+    text: inputText,
+    rating, // io.input.rating('How did the call go?', { max: 5 }) returns a number
+  },
+}
+```
+
+<Frame>
+  <img src="/images/custom-component-rating.png" alt="A star rating with four of five stars selected, above a text area" />
+</Frame>
+
+Register your component under a key that already exists, `input: { text: myText }`, and it replaces the built-in one in every action, as long as its props and its answer fit.
+
+## Building blocks
+
+`awaitio/ui` has the pieces the built-in components are made of. They have no look of their own: each one draws the block of the theme your app was created with, the `theme` in `new AwaitIO()`. A component built from them looks like the rest of the app, changes with the theme and needs no CSS.
+
+| Block        | Draws                                                                                                 |
+| ------------ | ----------------------------------------------------------------------------------------------------- |
+| `Input`      | A one-line text field. `value` and `onChange` work with a `string`.                                   |
+| `Textarea`   | A text field over several lines.                                                                      |
+| `Select`     | A drop-down for one of many `choices`.                                                                |
+| `ChoiceList` | Choices as cards, `mode: 'single'` or `'multiple'`.                                                   |
+| `Button`     | A button, `variant: 'primary'` or `'secondary'`.                                                      |
+| `Field`      | Label, control, help text and error of one field, in an [unwrapped](#unwrapped-components) component. |
+| `Label`      | The label of a field, in an unwrapped component.                                                      |
+| `Hint`       | Small text under a control.                                                                           |
+
+## Unwrapped components
+
+By default AwaitIO puts your control into a `Field`: the label above it, the help text and the server's error under it. With `wrap: false` the component is unwrapped: none of that is added, and it lays out the whole field itself from the `label` and `error` it gets. Use it when the label or the error belong somewhere else, or when the field needs more than one control.
+
+This is the rating unwrapped, drawn with `Field` and `Hint` from `awaitio/ui`, with the score under the stars:
+
+```tsx components/rating/src/rating.tsx
+import { defineComponent } from 'awaitio';
+import { Field, Hint } from 'awaitio/ui';
+import { z } from 'zod';
+
+export const rating = defineComponent({
+  props: z.object({ max: z.number().int().min(2).max(10).default(5) }),
+  returns: z.number().int(),
+  initialValue: () => {
+    return 0;
+  },
+  validate: ({ label, value }) => {
+    return value < 1 ? `${label}: pick at least one star.` : null;
+  },
+  // The whole field is yours: label, the stars, a hint with the score and the error from the server.
+  wrap: false,
+  component: ({ label, props, value, onChange, error }) => {
+    return (
+      <Field label={label} error={error}>
+        <div role="radiogroup">
+          {Array.from({ length: props.max }, (_, index) => {
+            return (
+              <button key={index} type="button" onClick={() => onChange(index + 1)}>
+                {index < value ? '★' : '☆'}
+              </button>
+            );
+          })}
+        </div>
+        <Hint>
+          {value} of {props.max} stars
+        </Hint>
+      </Field>
+    );
+  },
+});
+```

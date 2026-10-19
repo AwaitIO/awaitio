@@ -1,0 +1,35 @@
+---
+title: 'User'
+description: 'Who started the run.'
+icon: 'user'
+---
+
+Every run knows who started it: the handler gets that user in `ctx.user`.
+
+## Usage
+
+```ts
+export const hello = app.action({
+  name: 'Hello',
+  handler: async (io, ctx) => {
+    const message = await io.input.text(`Hi ${ctx.user.name}, what should we log?`);
+
+    console.info(`${ctx.user.email} wrote: ${message}`);
+
+    return { message };
+  },
+});
+```
+
+## Value
+
+| Field   | Type     | Description                                        |
+| ------- | -------- | -------------------------------------------------- |
+| `email` | `string` | The user's email, lowercase, as listed in `users`. |
+| `name`  | `string` | The user's name from `users`.                      |
+
+The password hash is never part of it.
+
+## Who can see a run
+
+A run belongs to the user who started it. Its page, its answers and canceling it are open only to that user; anyone else gets `404`, as if the run did not exist. Every user listed in [`users`](/core/users) sees and can start every action.

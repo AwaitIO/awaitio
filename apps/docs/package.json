@@ -1,0 +1,12 @@
+{
+  "name": "@awaitio/docs",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "mint dev --port 8070",
+    "broken-links": "mint broken-links"
+  },
+  "devDependencies": {
+    "mint": "^4.2.687"
+  }
+}

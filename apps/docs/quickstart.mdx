@@ -1,0 +1,129 @@
+---
+title: 'Quickstart'
+icon: 'rocket'
+---
+
+Build a server with one action that asks for a name and greets back, then log in and run it.
+
+<Steps>
+  <Step title="Install">
+    ```bash
+    npm install awaitio @awaitio/theme-default @awaitio/input-text
+    ```
+
+    **What's happening here**
+
+    - `awaitio` is the server, the action runtime and the UI.
+    - `@awaitio/theme-default` is how the UI looks.
+    - `@awaitio/input-text` is the text field the action will ask with.
+
+  </Step>
+  <Step title="Create a session secret">
+    Run this:
+
+    ```bash
+    node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+    ```
+
+    and put its output into `.env`:
+
+    ```bash .env
+    SESSION_SECRET=<the output>
+    ```
+
+    **What's happening here**
+
+    - The secret is a random string that signs the login cookies.
+    - It goes into `.env`, never into the repository; changing it logs everyone out.
+
+  </Step>
+  <Step title="Create the app">
+    ```ts app.ts
+    import { inputText } from '@awaitio/input-text';
+    import { defaultTheme } from '@awaitio/theme-default';
+    import { AwaitIO } from 'awaitio';
+    import { join } from 'path';
+
+    export const app = new AwaitIO({
+      name: 'Internal tools',
+      actionsDirectory: join(__dirname, 'actions'),
+      theme: defaultTheme,
+      secret: process.env.SESSION_SECRET!,
+      // Empty for now: you create your account once the server runs.
+      users: [],
+      components: {
+        input: {
+          text: inputText,
+        },
+      },
+    });
+    ```
+
+    **What's happening here**
+
+    - `name` is shown on the login page, in the header and in the browser tab.
+    - `actionsDirectory` is the folder with your actions: every file in it is one action.
+    - `theme` decides how everything looks.
+    - `users` is who can log in: each person with an email, a name and a hash of their password. AwaitIO has no sign-up and no user database; the list lives in your code.
+    - `components` decides what `io` offers: `input: { text: inputText }` gives `io.input.text()`.
+
+  </Step>
+  <Step title="Write an action">
+    ```ts actions/greet.ts
+    import { app } from '../app';
+
+    export const greet = app.action({
+      description: 'Asks for a name and greets back.',
+      handler: async (io) => {
+        const name = await io.input.text('Your name');
+
+        return `Hello, ${name}!`;
+      },
+    });
+    ```
+
+    **What's happening here**
+
+    - Every file in `actions/` is one action; `app.action()` gives it an `io` typed by the components you registered.
+    - The handler stops at `await io.input.text()` until someone answers in the browser, then goes on.
+    - What it returns is shown as the result.
+
+  </Step>
+  <Step title="Start the server">
+    ```ts server.ts
+    import { app } from './app';
+
+    void app.listen({ port: 3000 });
+    ```
+
+    ```bash
+    npx tsx watch --env-file=.env server.ts
+    ```
+
+    **What's happening here**
+
+    - `listen()` loads every file in `actionsDirectory` and opens the port; the file's path is the action's URL: `actions/greet.ts` is at `/actions/greet`.
+    - `watch` restarts the server whenever you save a file; `--env-file=.env` passes the session secret.
+    - The server listens on `127.0.0.1` only, so nobody else on the network can reach it yet.
+
+  </Step>
+  <Step title="Create your account">
+    Open [http://localhost:3000](http://localhost:3000), click **Create new account** and fill in your email, name and a password of at least 10 characters. It gives you one line; paste it into `users` in `app.ts`:
+
+    ```ts app.ts
+    users: [
+      { email: 'you@example.com', name: 'You', passwordHash: 'scrypt$…' },
+    ],
+    ```
+
+    **What's happening here**
+
+    - The line holds only a hash of your password; the password itself is not stored anywhere.
+    - Saving `app.ts` restarts the server, and the new user can log in.
+    - Everyone else gets in the same way: they click **Create new account** and send you their line, so their password never reaches you.
+
+  </Step>
+  <Step title="Log in and run it">
+    Open [http://localhost:3000](http://localhost:3000), log in with your email and password, pick **Greet**, type a name and press **Continue**.
+  </Step>
+</Steps>
