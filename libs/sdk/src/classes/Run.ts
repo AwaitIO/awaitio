@@ -47,7 +47,7 @@ export class Run {
     this.ctxParams = ctxParams;
     this.action = action;
     this.registry = registry;
-    this.state = { id, actionSlug: action.slug, actionName: action.name, params, version: 0, status: 'RUNNING', step: null, loading: null, result: null };
+    this.state = { id, actionSlug: action.slug, actionName: action.name, params, version: 0, status: 'RUNNING', step: null, loading: null, result: null, finishedAt: null };
   }
 
   get current() {
@@ -144,7 +144,7 @@ export class Run {
     const pending = this.pending;
     this.pending = null;
     this.finishedAt = DateTime.now();
-    this.update({ status: 'CANCELED', step: null, loading: null, result: null });
+    this.update({ status: 'CANCELED', step: null, loading: null, result: null, finishedAt: this.finishedAt.toISO() });
     pending?.reject(new IOError('CANCELED'));
   }
 
@@ -182,10 +182,10 @@ export class Run {
 
     this.pending = null;
     this.finishedAt = DateTime.now();
-    this.update({ status: result.status, step: null, loading: null, result });
+    this.update({ status: result.status, step: null, loading: null, result, finishedAt: this.finishedAt.toISO() });
   }
 
-  private update(changes: Partial<Pick<RunState, 'status' | 'step' | 'loading' | 'result'>>) {
+  private update(changes: Partial<Pick<RunState, 'status' | 'step' | 'loading' | 'result' | 'finishedAt'>>) {
     this.state = { ...this.state, ...changes, version: this.state.version + 1 };
 
     this.listeners.forEach((listener) => {

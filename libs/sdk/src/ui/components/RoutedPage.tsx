@@ -6,22 +6,14 @@ import { RunPage } from '../pages/RunPage';
 import { parseRoute } from '../utils/parseRoute';
 import type { FC } from 'react';
 
-// Forms and lists stay a readable column; only a folder with a page uses the full width.
+// Every page uses the full width of the UI, so lists, pages and runs line up under the header.
 export const RoutedPage: FC = () => {
   return match(parseRoute({ pathname: usePathname() }))
     .with({ kind: 'action', runId: null }, ({ slug }) => {
-      return (
-        <div className="mx-auto max-w-3xl">
-          <ActionStartPage key={slug} slug={slug} />
-        </div>
-      );
+      return <ActionStartPage key={slug} slug={slug} />;
     })
     .with({ kind: 'action' }, ({ slug, runId }) => {
-      return (
-        <div className="mx-auto max-w-3xl">
-          <RunPage key={runId} slug={slug} runId={runId ?? ''} />
-        </div>
-      );
+      return <RunPage key={runId} slug={slug} runId={runId ?? ''} />;
     })
     .with({ kind: 'list' }, ({ group }) => {
       return <ActionListPage key={group ?? ''} group={group} />;

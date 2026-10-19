@@ -18,4 +18,6 @@ export const runStateSchema = z.object({
   // Set by ctx.loading while the handler works between io calls; cleared by the next io call or the end.
   loading: loadingStateSchema.nullable(),
   result: actionResultSchema.nullable(),
+  // When the run succeeded, failed or was canceled (ISO); null while it runs.
+  finishedAt: z.string().nullable(),
 });
