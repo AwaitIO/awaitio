@@ -1,0 +1,69 @@
+---
+title: 'Input Text'
+description: 'Asks for a single line of text.'
+icon: 'i-cursor'
+---
+
+`io.input.text()` requests a string value. Provided by the `@awaitio/input-text` package.
+
+<Frame>
+  <img src="/images/io-input-text.png" alt="A Search for text field filled with refund, with help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-text
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Components](/core/components):
+
+```ts app.ts
+import { inputText } from '@awaitio/input-text';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { text: inputText } },
+});
+```
+
+## Usage
+
+```ts
+const query = await io.input.text('Search for', {
+  placeholder: 'refund',
+  helpText: 'A user or what they did',
+});
+```
+
+## Props
+
+| Prop           | Type     | Required | Description                                                   |
+| -------------- | -------- | -------- | ------------------------------------------------------------- |
+| `placeholder`  | `string` | Optional | Text shown in the empty field.                                |
+| `helpText`     | `string` | Optional | Secondary text under the field.                               |
+| `defaultValue` | `string` | Optional | The value the field starts with. Defaults to an empty string. |
+| `minLength`    | `number` | Optional | Minimum number of characters. A whole number, 0 or more.      |
+| `maxLength`    | `number` | Optional | Maximum number of characters. A whole number, 1 or more.      |
+
+Props are checked when the io call is made: a prop of the wrong type throws in the handler.
+
+## Returns
+
+`string`, exactly as typed, including surrounding spaces.
+
+## Validation
+
+The field is always required. The server checks every answer, so these messages come back even when the browser's own checks are bypassed:
+
+| When                              | Message                                                 |
+| --------------------------------- | ------------------------------------------------------- |
+| The value is empty or only spaces | `<label> is required.`                                  |
+| Shorter than `minLength`          | `<label> must be at least <minLength> characters long.` |
+| Longer than `maxLength`           | `<label> must be at most <maxLength> characters long.`  |
+
+<Frame>
+  <img src="/images/io-input-text-error.png" alt="The Name field with the message Name is required. under it" />
+</Frame>

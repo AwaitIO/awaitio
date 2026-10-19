@@ -1,0 +1,36 @@
+{
+  "name": "@awaitio/input-text",
+  "version": "0.1.0",
+  "description": "Single-line text input for AwaitIO: io.input.text().",
+  "license": "SEE LICENSE IN LICENSE",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && vite build",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput & vite build --watch",
+    "tsc": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "awaitio": "workspace:^"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "zod": "3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.1.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "@vitejs/plugin-react": "^5.0.0",
+    "awaitio": "workspace:*",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vite": "^7.1.0",
+    "vitest": "^3.2.0"
+  }
+}
