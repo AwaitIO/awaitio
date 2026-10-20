@@ -4,7 +4,7 @@ description: 'Shows formatted text written in markdown.'
 icon: 'markdown'
 ---
 
-`io.display.markdown()` shows formatted text in a folder's page or in a step of an action: headings, paragraphs, lists, links and code. It only displays and returns nothing. Provided by the `@awaitio/display-markdown` package.
+`io.display.markdown()` shows formatted text in a [page](/core/pages) or in a step of an action: headings, paragraphs, lists, links and code. It only displays and returns nothing. Provided by the `@awaitio/display-markdown` package.
 
 <Frame>
   <img src="/images/io-display-markdown.png" alt="A Before you start heading, a paragraph with bold text, a bulleted list and a line with a link and inline code" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-markdown
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayMarkdown } from '@awaitio/display-markdown';

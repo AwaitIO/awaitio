@@ -61,16 +61,16 @@ The options stay on the server; the browser gets only their labels and answers w
 
 ## Props
 
-| Prop            | Type                           | Required | Description                                                                                                                                                              |
-| --------------- | ------------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `options`       | `TOption[]`                    | Required | What to choose from: strings, numbers, `{ value, label }` objects or any records. The drop-down offers those not chosen yet.                                             |
-| `key`           | `(option) => string \| number` | Optional | What identifies an option. Required for records without `value`; defaults to the string, number or `value`.                                                              |
-| `label`         | `(option) => string`           | Optional | What the drop-down shows. Required for records without `label`; defaults to the string, number or `label`.                                                               |
-| `defaultValue`  | keys or `TOption[]`            | Optional | The options chosen at the start: their keys (ids are enough) or the options themselves. Keys that are not among the options are left out and reported in the server log. |
-| `minSelections` | `number`                       | Optional | At least this many must be chosen. By default none.                                                                                                                      |
-| `maxSelections` | `number`                       | Optional | At most this many may be chosen; the drop-down stops offering more.                                                                                                      |
-| `helpText`      | `string`                       | Optional | Secondary text under the field.                                                                                                                                          |
-| `disabled`      | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                                                              |
+| Prop            | Type                 | Required | Description                                                                                                 |
+| --------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `options`       | `TOption[]`          | Required | What to choose from: strings, numbers, `{ value, label }` objects or any records. The drop-down offers those not chosen yet. |
+| `key`           | `(option) => string \| number` | Optional | What identifies an option. Required for records without `value`; defaults to the string, number or `value`. |
+| `label`         | `(option) => string` | Optional | What the drop-down shows. Required for records without `label`; defaults to the string, number or `label`. |
+| `defaultValue`  | keys or `TOption[]`  | Optional | The options chosen at the start: their keys (ids are enough) or the options themselves. Keys that are not among the options are left out and reported in the server log. |
+| `minSelections` | `number`             | Optional | At least this many must be chosen. By default none.                                                         |
+| `maxSelections` | `number`             | Optional | At most this many may be chosen; the drop-down stops offering more.                                         |
+| `helpText`      | `string`             | Optional | Secondary text under the field.                                                                             |
+| `disabled`      | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 ## Optional
 

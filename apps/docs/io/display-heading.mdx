@@ -4,7 +4,7 @@ description: 'Shows a section title with an optional line under it.'
 icon: 'heading'
 ---
 
-`io.display.heading()` shows a title in a folder's page or in a step of an action, to split a long form or page into sections. It only displays and returns nothing. Provided by the `@awaitio/display-heading` package.
+`io.display.heading()` shows a title in a [page](/core/pages) or in a step of an action, to split a long form or page into sections. It only displays and returns nothing. Provided by the `@awaitio/display-heading` package.
 
 <Frame>
   <img src="/images/io-display-heading.png" alt="A Review heading with a line of description under it, above two tiles and a text field" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-heading
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayHeading } from '@awaitio/display-heading';

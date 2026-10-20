@@ -7,18 +7,19 @@ AwaitIO runs internal tools in one Node process. You write each tool as an async
 
 ## What you write
 
-```ts actions/fullNameAction.ts
-import { app } from '../app';
+```ts actions/accounts/createAccountAction.ts
+import { app } from '../../app';
 
-export const fullNameAction = app.defineAction({
-  description: 'Asks for two text fields on one screen.',
+export const createAccountAction = app.defineAction({
+  name: 'Create account',
+  description: 'Opens a trial account for a new company and invites its owner.',
   handler: async ({ io }) => {
-    const { firstName, lastName } = await io.group({
-      firstName: io.input.text('First name'),
-      lastName: io.input.text('Last name', { helpText: 'Family name' }),
+    const { company, ownerEmail } = await io.group({
+      company: io.input.text('Company name'),
+      ownerEmail: io.input.text('Owner email', { helpText: 'Gets the invitation' }),
     });
 
-    return { firstName, lastName, fullName: `${firstName} ${lastName}` };
+    return { company, ownerEmail, plan: 'Trial' };
   },
 });
 ```
@@ -28,13 +29,13 @@ export const fullNameAction = app.defineAction({
 The form shows what `io.group` asked for:
 
 <Frame>
-  <img src="/images/intro-form.png" alt="The Full name action: First name and Last name fields with a Continue button" />
+  <img src="/images/intro-form.png" alt="The Create account action: Company name and Owner email fields with a Continue button" />
 </Frame>
 
 **Continue** sends the answers to the server, which validates them and resumes the handler. Its return value is the result:
 
 <Frame>
-  <img src="/images/intro-result.png" alt="The result of Full name: firstName, lastName and fullName" />
+  <img src="/images/intro-result.png" alt="The result of Create account: company, ownerEmail and plan" />
 </Frame>
 
 ## Bring your codebase
@@ -54,6 +55,7 @@ import { prisma } from '../prisma';
 import { formatMoney } from '../utils/formatMoney';
 
 export const refundOrderAction = app.defineAction({
+  name: 'Refund order',
   handler: async ({ io, ctx }) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });

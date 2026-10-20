@@ -1,0 +1,23 @@
+---
+title: 'Name'
+icon: 'signature'
+---
+
+Every app has a name: it tells people which tools they are logging into.
+
+```ts app.ts
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  // secret, users, components…
+});
+```
+
+`name` is required. The app refuses to start with an empty one (spaces around it are trimmed).
+
+## Where it shows
+
+- On the login page, above the form.
+- On the left of the header, next to the [environment](/core/environments) badge when there is one.
+- In the browser tab, as `Internal tools` or, with an environment, `Internal tools (Production)`.
+
+The login page loads it from `GET /api/app`, which answers without a session; the name is the only thing about the project shown before logging in, together with the current environment's badge.

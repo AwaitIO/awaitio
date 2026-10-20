@@ -1,0 +1,101 @@
+---
+title: 'Deployment'
+icon: 'cloud-arrow-up'
+---
+
+An AwaitIO app is a normal Node server: build it, run one process per environment and put it behind a reverse proxy with HTTPS.
+
+## One process per environment
+
+All runs live in the memory of the process that started them. That shapes the deployment:
+
+- **Exactly one instance per environment.** Do not run several replicas behind a load balancer: a run started on one instance does not exist on another, so its page and its answers would land on the wrong process. Production and staging are separate servers, see [Environments](/core/environments).
+- **A deploy or restart ends running actions.** Handlers that are waiting for an answer are gone. Deploy when nobody is in the middle of a run, or accept that they start again.
+- **Logins survive a restart.** Session cookies are signed, not stored, so everyone stays logged in as long as the `secret` and their password hash stay the same.
+
+## Build and run
+
+Compile your TypeScript and start the compiled server with Node 22:
+
+```bash
+npx tsc
+node dist/server.js
+```
+
+AwaitIO loads the action files at start from `actionsDirectory`, so `dist/actions/` must be deployed next to `dist/server.js`. `tsc` keeps the folder layout; a bundler that produces one file drops it.
+
+The server needs its configuration from the environment, for example:
+
+```bash .env
+SESSION_SECRET=<at least 32 random characters>
+PORT=3000
+```
+
+Read these in your `app.ts` and `server.ts`; AwaitIO itself reads no environment variables. Keep the secret in your platform's secret store, not in the image or the repository; the users' password hashes stay in your code.
+
+## Listen on the right interface
+
+`app.listen()` binds to `127.0.0.1` by default, so only the same machine can connect. That is right when the proxy runs on the same host. In a container, or when the proxy is on another machine, pass `host`:
+
+```ts server.ts
+import { app } from './app';
+
+void app.listen({ port: Number(process.env.PORT), host: '0.0.0.0' });
+```
+
+See [listen](/core/listen) for all options.
+
+## Reverse proxy with HTTPS
+
+Serve AwaitIO only over HTTPS: without it, passwords and session cookies travel in plain text. The session cookie is marked `Secure` when the request came over HTTPS, either directly or through a proxy that sets `X-Forwarded-Proto: https`. The current environment is recognised by host, taken from `X-Forwarded-Host` when the proxy sets it.
+
+Run pages follow their state over server-sent events, which must not be buffered. AwaitIO sends `X-Accel-Buffering: no` on the stream, which nginx honours.
+
+<CodeGroup>
+
+```caddy Caddyfile
+tools.example.com {
+  reverse_proxy 127.0.0.1:3000
+}
+```
+
+```nginx nginx.conf
+server {
+  listen 443 ssl;
+  server_name tools.example.com;
+  # ssl_certificate …; ssl_certificate_key …;
+
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_read_timeout 1h;
+  }
+}
+```
+
+</CodeGroup>
+
+Caddy sets `X-Forwarded-Proto` and keeps the `Host` header on its own. The long `proxy_read_timeout` keeps a quiet event stream open; AwaitIO also sends a keep-alive comment every 15 seconds.
+
+## Docker
+
+```dockerfile Dockerfile
+FROM node:22-slim
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+RUN npx tsc && npm prune --omit=dev
+ENV NODE_ENV=production
+EXPOSE 3000
+CMD ["node", "dist/server.js"]
+```
+
+Pass the secrets at run time (`docker run --env-file .env …`) and listen on `0.0.0.0` inside the container.
+
+## Health check
+
+`GET /health` answers `{"status":"ok"}` with `200` and needs no login. Point your platform's health check or uptime monitor at it.

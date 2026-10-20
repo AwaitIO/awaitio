@@ -4,7 +4,7 @@ description: 'Shows a link to a page in the app or outside it.'
 icon: 'link'
 ---
 
-`io.display.link()` shows a link in a folder's page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-link` package.
+`io.display.link()` shows a link in a [page](/core/pages) or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-link` package.
 
 <Frame>
   <img src="/images/io-display-link.png" alt="A Login link heading with https://example.com/login/7f3a9c under it as a blue link" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-link
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayLink } from '@awaitio/display-link';

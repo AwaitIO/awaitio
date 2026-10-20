@@ -4,6 +4,7 @@ Internal tools in one Node process. Write each tool as an async TypeScript funct
 
 ```ts
 export const refundOrderAction = app.defineAction({
+  name: 'Refund order',
   handler: async ({ io, ctx }) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });
@@ -16,7 +17,7 @@ export const refundOrderAction = app.defineAction({
 });
 ```
 
-<img src="apps/docs/images/intro-form.png" alt="An AwaitIO action asking for a first and a last name" width="720" />
+<img src="apps/docs/images/intro-form.png" alt="An AwaitIO action asking for a company name and an owner email" width="720" />
 
 ## Why AwaitIO
 
@@ -30,24 +31,28 @@ export const refundOrderAction = app.defineAction({
 ## Quickstart
 
 ```bash
-npm install awaitio @awaitio/input-text
-npx awaitio hash-password   # prints a hash for your password
+npm install awaitio @awaitio/theme-default @awaitio/input-text
 ```
 
 ```ts
 // app.ts
 import { inputText } from '@awaitio/input-text';
+import { defaultTheme } from '@awaitio/theme-default';
 import { AwaitIO } from 'awaitio';
+import { join } from 'path';
 
 export const app = new AwaitIO({
   name: 'Internal tools',
-  secret: process.env.SESSION_SECRET ?? '', // at least 32 characters
-  users: [{ email: 'you@example.com', name: 'You', passwordHash: process.env.PASSWORD_HASH ?? '' }],
+  actionsDirectory: join(__dirname, 'actions'), // every file in it is an action, its path is the URL (/actions/greet)
+  theme: defaultTheme,
+  secret: process.env.SESSION_SECRET!,
+  users: [{ email: 'you@example.com', name: 'You', passwordHash: 'scrypt$…' }], // from Create new account on the login page
   components: { input: { text: inputText } },
 });
 
 // actions/greetAction.ts
 export const greetAction = app.defineAction({
+  name: 'Greet',
   handler: async ({ io }) => {
     const name = await io.input.text('Your name');
 
@@ -56,40 +61,42 @@ export const greetAction = app.defineAction({
 });
 
 // server.ts
-void app.listen({ routes: { greet }, port: 3000 });
+void app.listen({ port: 3000 });
 ```
 
 Open http://localhost:3000, log in and run **Greet**.
 
 ## Packages
 
-| Package                     | What it is                                                                                             |
-| --------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `awaitio`                   | The server, the action runtime, the prebuilt UI, `defineComponent` and the `awaitio hash-password` CLI |
-| `@awaitio/input-text`       | `io.input.text()`: one line of text                                                                    |
-| `@awaitio/input-email`      | `io.input.email()`: an email address                                                                   |
-| `@awaitio/input-url`        | `io.input.url()`: a web address, returned as a `URL`                                                   |
-| `@awaitio/input-textarea`   | `io.input.textarea()`: longer text                                                                     |
-| `@awaitio/input-number`     | `io.input.number()`: a number, with min, max and decimal places                                        |
-| `@awaitio/input-boolean`    | `io.input.boolean()`: yes or no, with a checkbox                                                       |
-| `@awaitio/input-datetime`   | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`                                 |
-| `@awaitio/input-date`       | `io.input.date()`: a date, returned as a luxon `DateTime`                                              |
-| `@awaitio/select-single`    | `io.select.single()`: one of a list of options, from a drop-down                                       |
-| `@awaitio/select-multiple`  | `io.select.multiple()`: any number of options, listed under a drop-down                                |
-| `@awaitio/select-table`     | `io.select.table()`: rows picked from a table                                                          |
-| `@awaitio/confirm`          | `io.confirm()`: Confirm or Cancel before something irreversible                                        |
-| `@awaitio/display-table`    | `io.display.table()` in pages: rows with filter, paging, links and row menus                           |
-| `@awaitio/display-metadata` | `io.display.metadata()` in pages: label and value tiles                                                |
-| `@awaitio/display-link`     | `io.display.link()`: a link to a page in the app or outside it                                         |
-| `@awaitio/display-heading`  | `io.display.heading()`: a section title with an optional description                                   |
-| `@awaitio/display-image`    | `io.display.image()`: a picture, such as a chart or a file preview                                     |
-| `@awaitio/display-markdown` | `io.display.markdown()`: formatted text written in markdown                                            |
-| `@awaitio/display-object`   | `io.display.object()`: the keys and values of a record, nested data included                           |
-| `@awaitio/display-html`     | `io.display.html()`: HTML markup, sanitized first                                                      |
+| Package                     | What it is                                                                        |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| `awaitio`                   | The server, the action runtime, the prebuilt UI and `defineComponent`             |
+| `@awaitio/theme-default`    | The default look: every building block of `awaitio/ui`, with its styles           |
+| `@awaitio/input-text`       | `io.input.text()`: one line of text                                               |
+| `@awaitio/input-email`      | `io.input.email()`: an email address                                              |
+| `@awaitio/input-url`        | `io.input.url()`: a web address, returned as a `URL`                              |
+| `@awaitio/input-textarea`   | `io.input.textarea()`: longer text                                                |
+| `@awaitio/input-number`     | `io.input.number()`: a number, with min, max and decimal places                   |
+| `@awaitio/input-boolean`    | `io.input.boolean()`: yes or no, with a checkbox                                  |
+| `@awaitio/input-datetime`   | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`            |
+| `@awaitio/input-date`       | `io.input.date()`: a date, returned as a luxon `DateTime`                         |
+| `@awaitio/select-single`    | `io.select.single()`: one of a list of options                                    |
+| `@awaitio/select-multiple`  | `io.select.multiple()`: any number of options                                     |
+| `@awaitio/select-table`     | `io.select.table()`: rows picked from a table                                     |
+| `@awaitio/confirm`          | `io.confirm()`: Confirm or Cancel before something irreversible                   |
+| `@awaitio/display-table`    | `io.display.table()` in pages: rows with filter, paging, links and row menus      |
+| `@awaitio/display-metadata` | `io.display.metadata()` in pages: label and value tiles                           |
+| `@awaitio/display-link`     | `io.display.link()`: a link to a page in the app or outside it                    |
+| `@awaitio/display-heading`  | `io.display.heading()`: a section title with an optional description              |
+| `@awaitio/display-image`    | `io.display.image()`: a picture, such as a chart or a file preview                |
+| `@awaitio/display-markdown` | `io.display.markdown()`: formatted text written in markdown                       |
+| `@awaitio/display-object`   | `io.display.object()`: the keys and values of a record, nested data included      |
+| `@awaitio/display-html`     | `io.display.html()`: HTML markup, sanitized first                                 |
+| `@awaitio/layout-basic`     | `io.layout.basic()`: the frame of a page, with its title, description and buttons |
 
 ## Documentation
 
-The documentation lives in [`apps/docs`](apps/docs): introduction, quickstart, how it works and security, every setting, every `io` method and `ctx` field, custom components and deployment. Run it with `pnpm --filter @awaitio/docs dev`.
+The documentation is at **[docs.awaitio.com](https://docs.awaitio.com)**: introduction, quickstart, how it works and security, every setting, routing, pages and layouts, themes, every `io` method and `ctx` field, custom components and deployment. Its source is in [`apps/docs`](apps/docs); run it locally with `pnpm --filter @awaitio/docs dev`.
 
 ## Development
 
@@ -97,9 +104,8 @@ Requires Node 22.14 and pnpm.
 
 ```bash
 pnpm install
-cp .env.example .env   # SESSION_SECRET, DEMO_USER_EMAIL, DEMO_USER_PASSWORD_HASH
-pnpm hash-password     # hash for DEMO_USER_PASSWORD_HASH
-pnpm dev               # demo at http://localhost:3000
+cp .env.example .env   # SESSION_SECRET
+pnpm dev               # demo at http://localhost:3000; Create new account gives DEMO_USER_EMAIL and DEMO_USER_PASSWORD_HASH for .env
 pnpm test && pnpm lint && pnpm tsc
 ```
 
@@ -123,7 +129,7 @@ The free and the paid version are the same software: no paid features, no licens
 
 Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. To get a Company License, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
 
-Without a separate agreement, nobody may:
+Licenses are issued by Orukami s.r.o. (company ID 64049159, Prague). Without a separate agreement, nobody may:
 
 - sell or license AwaitIO itself, or a fork or modified version of it;
 - offer a product or service that competes with AwaitIO;

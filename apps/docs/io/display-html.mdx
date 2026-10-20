@@ -4,7 +4,7 @@ description: 'Shows HTML markup, sanitized first.'
 icon: 'code'
 ---
 
-`io.display.html()` shows HTML markup in a folder's page or in a step of an action, e.g. a preview of an email. Scripts, event handlers and other active content are removed before it is shown. It only displays and returns nothing. Provided by the `@awaitio/display-html` package.
+`io.display.html()` shows HTML markup in a [page](/core/pages) or in a step of an action, e.g. a preview of an email. Scripts, event handlers and other active content are removed before it is shown. It only displays and returns nothing. Provided by the `@awaitio/display-html` package.
 
 <Frame>
   <img src="/images/io-display-html.png" alt="An Email preview heading with two lines of formatted text and a blue link" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-html
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayHtml } from '@awaitio/display-html';

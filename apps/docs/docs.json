@@ -25,11 +25,11 @@
     "groups": [
       {
         "group": "Getting started",
-        "pages": ["index", "quickstart"]
+        "pages": ["index", "quickstart", "how-it-works", "deployment"]
       },
       {
         "group": "SDK",
-        "pages": ["core/app", "core/routing", "core/listen", "core/pages", "core/users", "core/environments", "core/theme"]
+        "pages": ["core/app", "core/name", "core/routing", "core/listen", "core/pages", "core/users", "core/environments", "core/theme"]
       },
       {
         "group": "Input components",
@@ -46,7 +46,8 @@
           "io/select-single",
           "io/select-multiple",
           "io/select-table",
-          "io/confirm"
+          "io/confirm",
+          "io/group"
         ]
       },
       {

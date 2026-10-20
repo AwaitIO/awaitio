@@ -92,7 +92,7 @@ const code = await io.input.text('Discount code').validate(async (code) => {
 - It runs on the server, so it can be async and use your database; the browser cannot skip it.
 - It runs only after the component's own checks pass, so `code` above is never empty. An optional field left empty and a disabled field skip it.
 - A function that throws fails the run, like an error thrown in the handler.
-- For a check across several fields, chain `.validate()` to `io.group`.
+- For a check across several fields, chain `.validate()` to [`io.group`](/io/group#custom-validation).
 
 ## Disabled fields
 

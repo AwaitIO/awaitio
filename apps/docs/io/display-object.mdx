@@ -4,7 +4,7 @@ description: 'Shows the keys and values of a record, nested data included.'
 icon: 'brackets-curly'
 ---
 
-`io.display.object()` shows the keys and values of a record in a folder's page or in a step of an action. Nested objects and lists are shown under their key. It only displays and returns nothing. Provided by the `@awaitio/display-object` package.
+`io.display.object()` shows the keys and values of a record in a [page](/core/pages) or in a step of an action. Nested objects and lists are shown under their key. It only displays and returns nothing. Provided by the `@awaitio/display-object` package.
 
 <Frame>
   <img src="/images/io-display-object.png" alt="An Account heading with a JSON tree: id, name, a nested plan, a list of owners and isTrial false" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-object
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayObject } from '@awaitio/display-object';

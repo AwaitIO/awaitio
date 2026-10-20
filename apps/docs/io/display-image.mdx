@@ -4,7 +4,7 @@ description: 'Shows a picture, such as a chart or a file preview.'
 icon: 'image'
 ---
 
-`io.display.image()` shows a picture in a folder's page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-image` package.
+`io.display.image()` shows a picture in a [page](/core/pages) or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-image` package.
 
 <Frame>
   <img src="/images/io-display-image.png" alt="An Uploaded photo heading with a photo of a misty cliff under it, kept to a medium height" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-image
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/display-components):
 
 ```ts app.ts {5}
 import { displayImage } from '@awaitio/display-image';
@@ -37,8 +37,6 @@ await io.display.image('Uploaded photo', {
   size: 'medium',
 });
 ```
-
-A chart works the same way: it is just an image URL, e.g. from [QuickChart](https://quickchart.io).
 
 The label is the heading above the image; pass `null` for none.
 

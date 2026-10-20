@@ -6,7 +6,7 @@ icon: 'route'
 
 AwaitIO has no route table. You pass a folder to `new AwaitIO()` as `actionsDirectory` and every file in it becomes an action, with its path as the URL and its folders as the navigation.
 
-```ts app.ts
+```ts app.ts {5}
 import { join } from 'path';
 
 export const app = new AwaitIO({
