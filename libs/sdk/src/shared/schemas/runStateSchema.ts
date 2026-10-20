@@ -18,6 +18,8 @@ export const runStateSchema = z.object({
   // Set by ctx.loading while the handler works between io calls; cleared by the next io call or the end.
   loading: loadingStateSchema.nullable(),
   result: actionResultSchema.nullable(),
-  // When the run succeeded, failed or was canceled (ISO); null while it runs.
+  // Where ctx.redirect() sent the browser (an /actions/… URL); set with the REDIRECTED status.
+  redirect: z.string().nullable(),
+  // When the run succeeded, failed, was canceled or redirected (ISO); null while it runs.
   finishedAt: z.string().nullable(),
 });

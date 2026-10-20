@@ -34,6 +34,13 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
     }
   }, [runState.state, slug, runId]);
 
+  // ctx.redirect() ended the run: open the action it named. Replace, so Back skips the finished run instead of looping.
+  useEffect(() => {
+    if (runState.state?.redirect) {
+      navigate(runState.state.redirect, { replace: true });
+    }
+  }, [runState.state?.redirect]);
+
   const cancel = async () => {
     try {
       await cancelRun(runId);
@@ -135,6 +142,9 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
               </div>
             </div>
           );
+        })
+        .with({ state: { status: 'REDIRECTED' } }, () => {
+          return <p className="text-sm text-gray-500">Opening the next action…</p>;
         })
         .with({ state: { status: 'CANCELED' } }, ({ state: { finishedAt } }) => {
           return <RunOutcome status="CANCELED" finishedAt={finishedAt} />;

@@ -43,6 +43,10 @@ export const loadActionsDirectory = async ({ directory }: LoadActionsDirectoryAr
       throw new Error(`${file}: the slug "${slug}" is already used by another action file.`);
     }
 
+    if (isAction(route)) {
+      route.slug = slug;
+    }
+
     routes[slug] = route;
   }
 

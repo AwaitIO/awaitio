@@ -1,11 +1,13 @@
 import { DateTime } from 'luxon';
 import { IOError } from './IOError';
 import { createIO } from '../io/createIO';
+import type { ActionRoute } from '../shared/types/ActionRoute';
 import type { RunParams } from '../shared/types/RunParams';
 import type { RunState } from '../shared/types/RunState';
 import type { SessionUser } from '../shared/types/SessionUser';
 import type { StepComponent } from '../shared/types/StepComponent';
 import type { StepResponse } from '../shared/types/StepResponse';
+import { actionHref } from '../shared/utils/actionHref';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { PendingStep } from '../types/PendingStep';
 import type { RegisteredAction } from '../types/RegisteredAction';
@@ -47,7 +49,7 @@ export class Run {
     this.ctxParams = ctxParams;
     this.action = action;
     this.registry = registry;
-    this.state = { id, actionSlug: action.slug, actionName: action.name, params, version: 0, status: 'RUNNING', step: null, loading: null, result: null, finishedAt: null };
+    this.state = { id, actionSlug: action.slug, actionName: action.name, params, version: 0, status: 'RUNNING', step: null, loading: null, result: null, redirect: null, finishedAt: null };
   }
 
   get current() {
@@ -82,6 +84,11 @@ export class Run {
                 this.update({ loading: { label, description: description ?? null } });
               }
             },
+          },
+          redirect: (route) => {
+            this.redirect(route);
+
+            return Promise.resolve();
           },
         },
       );
@@ -174,6 +181,19 @@ export class Run {
     });
   }
 
+  // Like a finish, but the browser opens the given action instead of showing a result.
+  private redirect(route: ActionRoute) {
+    if (this.state.status !== 'RUNNING') {
+      return;
+    }
+
+    const pending = this.pending;
+    this.pending = null;
+    this.finishedAt = DateTime.now();
+    this.update({ status: 'REDIRECTED', step: null, loading: null, result: null, redirect: actionHref(route), finishedAt: this.finishedAt.toISO() });
+    pending?.reject(new IOError('RUN_CLOSED'));
+  }
+
   // A canceled run already published its final state; whatever the handler does afterwards is ignored.
   private finish(result: NonNullable<RunState['result']>) {
     if (this.state.status !== 'RUNNING') {
@@ -185,7 +205,7 @@ export class Run {
     this.update({ status: result.status, step: null, loading: null, result, finishedAt: this.finishedAt.toISO() });
   }
 
-  private update(changes: Partial<Pick<RunState, 'status' | 'step' | 'loading' | 'result' | 'finishedAt'>>) {
+  private update(changes: Partial<Pick<RunState, 'status' | 'step' | 'loading' | 'result' | 'redirect' | 'finishedAt'>>) {
     this.state = { ...this.state, ...changes, version: this.state.version + 1 };
 
     this.listeners.forEach((listener) => {

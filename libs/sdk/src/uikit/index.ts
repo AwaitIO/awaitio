@@ -1,6 +1,8 @@
 // `awaitio/ui`: building blocks for io components, display components and layouts. The core defines only their props;
 // the active theme (e.g. @awaitio/theme-default) draws them, so components carry no styles of their own and a theme
 // can restyle every one of them.
+export { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
+export { actionHref } from '../shared/utils/actionHref';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Checkbox } from './Checkbox';
@@ -21,6 +23,7 @@ export { Table } from './Table';
 export { Textarea } from './Textarea';
 export { themeBlockNames } from './themeBlockNames';
 export { useFieldId } from './useFieldId';
+export type { ActionRoute } from '../shared/types/ActionRoute';
 export type { ButtonProps } from './Button';
 export type { CardProps } from './Card';
 export type { CheckboxProps } from './Checkbox';

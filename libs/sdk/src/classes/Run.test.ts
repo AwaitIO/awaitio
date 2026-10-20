@@ -302,3 +302,29 @@ test('Should give the handler the params the run was opened with', async () => {
 
   expect([run.current.params, (await waitForFinish({ run })).result]).toEqual([{ id: '42' }, { status: 'SUCCESS', data: { id: '42' } }]);
 });
+
+test('Should end the run and send the browser to the action ctx.redirect names', async () => {
+  let afterRedirect: unknown = null;
+  const run = startRun({
+    handler: async (io, ctx) => {
+      await ctx.redirect({ label: 'Change role', action: 'users/change_role', params: { id: '7' } });
+
+      try {
+        await io.input.text('Name');
+      } catch (error) {
+        afterRedirect = error;
+      }
+
+      return 'ignored';
+    },
+  });
+  const state = await waitForFinish({ run });
+
+  expect([state.status, state.redirect, state.result]).toEqual(['REDIRECTED', '/actions/users/change_role?id=7', null]);
+
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
+
+  expect(afterRedirect).toBeInstanceOf(Error);
+});

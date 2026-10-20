@@ -11,6 +11,8 @@ import { themeUiRegistry } from './themeUiRegistry';
 import { loadThemes } from './utils/loadThemes';
 import { hostGlobalName } from '../client/hostGlobalName';
 import type { AwaitIOHost } from '../client/types/AwaitIOHost';
+import { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
+import { actionHref } from '../shared/utils/actionHref';
 import { FieldContext } from '../uikit/FieldContext';
 import { formatCellValue } from '../uikit/formatCellValue';
 import { navigateTo } from '../uikit/navigateTo';
@@ -24,7 +26,7 @@ const host: AwaitIOHost = {
   React,
   jsxRuntime,
   zod,
-  ui: { FieldContext, formatCellValue, navigateTo, themeBlockNames, useFieldId },
+  ui: { actionHref, actionRouteSchema, FieldContext, formatCellValue, navigateTo, themeBlockNames, useFieldId },
   registerComponent: componentUiRegistry.register,
   registerDisplay: displayUiRegistry.register,
   registerLayout: layoutUiRegistry.register,

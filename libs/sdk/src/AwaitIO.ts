@@ -64,7 +64,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   }
 
   action<TSchema extends ActionParamsSchema | undefined = undefined>(options: ActionOptions<IO<T>, TSchema>) {
-    return new Action<IO<T>>(options);
+    return new Action<IO<T>, TSchema>(options);
   }
 
   // What a folder shows next to its actions; export it from the folder's index file. The handler returns a layout with
