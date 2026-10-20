@@ -79,9 +79,39 @@ export class Run {
           params: this.ctxParams,
           user: this.user,
           loading: {
-            start: ({ label, description }) => {
+            start: ({ label, description, itemsInQueue }) => {
               if (this.state.status === 'RUNNING') {
-                this.update({ loading: { label, description: description ?? null } });
+                this.update({ loading: { label, description: description ?? null, itemsInQueue: itemsInQueue ?? null, itemsCompleted: 0 } });
+              }
+            },
+            update: ({ label, description, itemsInQueue }) => {
+              const { loading } = this.state;
+
+              if (this.state.status !== 'RUNNING') {
+                return;
+              }
+
+              this.update({
+                loading: {
+                  label: label ?? loading?.label ?? 'Running…',
+                  description: description ?? loading?.description ?? null,
+                  itemsInQueue: itemsInQueue ?? loading?.itemsInQueue ?? null,
+                  itemsCompleted: loading?.itemsCompleted ?? 0,
+                },
+              });
+            },
+            completeAll: () => {
+              const { loading } = this.state;
+
+              if (this.state.status === 'RUNNING' && loading?.itemsInQueue) {
+                this.update({ loading: { ...loading, itemsCompleted: loading.itemsInQueue } });
+              }
+            },
+            completeOne: () => {
+              const { loading } = this.state;
+
+              if (this.state.status === 'RUNNING' && loading?.itemsInQueue) {
+                this.update({ loading: { ...loading, itemsCompleted: Math.min(loading.itemsCompleted + 1, loading.itemsInQueue) } });
               }
             },
           },

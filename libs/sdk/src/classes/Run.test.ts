@@ -267,11 +267,75 @@ test('Should show the loading label until the next io call', async () => {
     },
   });
 
-  expect(run.current.loading).toEqual({ label: 'Loading users…', description: null });
+  expect(run.current.loading).toEqual({ label: 'Loading users…', description: null, itemsInQueue: null, itemsCompleted: 0 });
 
   const state = await waitForStep({ run });
 
   expect(state.loading).toBeNull();
+});
+
+test('Should count completed items up to itemsInQueue', async () => {
+  const run = startRun({
+    handler: async (io, ctx) => {
+      ctx.loading.start({ label: 'Sending emails…', itemsInQueue: 2 });
+      ctx.loading.completeOne();
+      ctx.loading.completeOne();
+      ctx.loading.completeOne();
+
+      return io.input.text('Name');
+    },
+  });
+
+  expect(run.current.loading).toEqual({ label: 'Sending emails…', description: null, itemsInQueue: 2, itemsCompleted: 2 });
+
+  await waitForStep({ run });
+});
+
+test('Should change the label and keep the progress on update', async () => {
+  const run = startRun({
+    handler: async (io, ctx) => {
+      ctx.loading.start({ label: 'Loading invoices…', itemsInQueue: 3 });
+      ctx.loading.completeOne();
+      ctx.loading.update({ label: 'Sending invoices…' });
+
+      return io.input.text('Name');
+    },
+  });
+
+  expect(run.current.loading).toEqual({ label: 'Sending invoices…', description: null, itemsInQueue: 3, itemsCompleted: 1 });
+
+  await waitForStep({ run });
+});
+
+test('Should fill the progress bar on completeAll', async () => {
+  const run = startRun({
+    handler: async (io, ctx) => {
+      ctx.loading.start({ label: 'Sending invoices…', itemsInQueue: 12 });
+      ctx.loading.completeOne();
+      ctx.loading.completeAll();
+
+      return io.input.text('Name');
+    },
+  });
+
+  expect(run.current.loading?.itemsCompleted).toBe(12);
+
+  await waitForStep({ run });
+});
+
+test('Should ignore completeOne without itemsInQueue', async () => {
+  const run = startRun({
+    handler: async (io, ctx) => {
+      ctx.loading.start({ label: 'Working…' });
+      ctx.loading.completeOne();
+
+      return io.input.text('Name');
+    },
+  });
+
+  expect(run.current.loading?.itemsCompleted).toBe(0);
+
+  await waitForStep({ run });
 });
 
 test('Should fail the run when the handler throws', async () => {

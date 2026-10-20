@@ -49,6 +49,6 @@ export const PageElements: FC<PageElementsProps> = ({ layout }) => {
       return Layout ? <Layout props={layout.props} children={children} /> : null;
     })
     .otherwise(() => {
-      return <LoadingIndicator loading={{ label: 'Loading the page…', description: null }} />;
+      return <LoadingIndicator loading={{ label: 'Loading the page…', description: null, itemsInQueue: null, itemsCompleted: 0 }} />;
     });
 };

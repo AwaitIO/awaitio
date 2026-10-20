@@ -45,7 +45,7 @@
       },
       {
         "group": "Context",
-        "pages": ["ctx/user"]
+        "pages": ["ctx/user", "ctx/loading-start"]
       }
     ]
   }

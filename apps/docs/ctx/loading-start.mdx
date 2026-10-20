@@ -1,0 +1,64 @@
+---
+title: 'ctx.loading'
+sidebarTitle: 'Loading'
+description: 'Tells the person what the action is doing, with a progress bar when it goes through a list.'
+icon: 'spinner'
+---
+
+Shows a spinner with a label while the handler does something slow between two io calls, and a progress bar when it goes through a list of items.
+
+## Usage
+
+```ts
+export const sendInvoices = app.action({
+  name: 'Send invoices',
+  handler: async (io, ctx) => {
+    ctx.loading.start({ label: 'Loading invoices…' });
+    const invoices = await db.invoice.findMany({ where: { sentAt: null } });
+
+    ctx.loading.update({ label: 'Sending invoices…', itemsInQueue: invoices.length });
+
+    for (const invoice of invoices) {
+      await sendInvoice(invoice);
+      ctx.loading.completeOne();
+    }
+
+    return `${invoices.length} invoices sent.`;
+  },
+});
+```
+
+With `itemsInQueue` the page shows a progress bar that every [`ctx.loading.completeOne()`](#ctx-loading-completeone) moves on. There is nothing to call at the end: the loading state goes away by itself with the next io call or when the action returns.
+
+<Frame>
+  <img src="/images/ctx-loading-progress.png" alt="Sending invoices… with One email per invoice under it and a progress bar at 5 of 12" />
+</Frame>
+
+## ctx.loading.start()
+
+Starts the loading state.
+
+| Argument       | Type     | Required | Description                                                                               |
+| -------------- | -------- | -------- | ----------------------------------------------------------------------------------------- |
+| `label`        | `string` | Required | The main line next to the spinner.                                                        |
+| `description`  | `string` | Optional | A second, smaller line under the label.                                                   |
+| `itemsInQueue` | `number` | Optional | How many items the handler goes through; shows a progress bar that `completeOne()` fills. |
+
+## ctx.loading.update()
+
+Takes the same arguments as `start()`, all optional, and changes only what you pass: the count of completed items stays. Called before `start()`, it starts the loading state.
+
+## ctx.loading.completeOne()
+
+Marks one more item as done when `start()` or `update()` was given `itemsInQueue`; the progress bar shows how many are done, e.g. _5 of 12_. Without `itemsInQueue` it does nothing, and the count never goes past it.
+
+## ctx.loading.completeAll()
+
+Marks every item as done, so the progress bar shows _12 of 12_, e.g. when the loop stops early because the rest is already done. Like `completeOne()`, it does nothing without `itemsInQueue`.
+
+## Behaviour
+
+- The loading state lasts until the next io call shows its form, or until the action returns, fails or is canceled.
+- Calling `start()` again replaces the label and description and counts the completed items from zero; `update()` keeps the count.
+- Without it, a running action without a form shows _Running…_.
+- After the run has ended, the call does nothing.

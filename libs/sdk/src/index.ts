@@ -35,5 +35,6 @@ export type { ThemeBlockRef } from './types/ThemeBlockRef';
 export type { ThemeBlockRefs } from './types/ThemeBlockRefs';
 export type { ThemeBlocks } from './uikit/types/ThemeBlocks';
 export type { LoadingStartArgs } from './types/LoadingStartArgs';
+export type { LoadingUpdateArgs } from './types/LoadingUpdateArgs';
 export type { RunParams } from './shared/types/RunParams';
 export type { SessionUser } from './shared/types/SessionUser';

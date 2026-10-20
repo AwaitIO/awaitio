@@ -22,7 +22,7 @@ export const StepView: FC<StepViewProps> = ({ runId, step }) => {
 
   return match(componentUis)
     .with({ status: 'loading' }, () => {
-      return <LoadingIndicator loading={{ label: 'Loading the form…', description: null }} />;
+      return <LoadingIndicator loading={{ label: 'Loading the form…', description: null, itemsInQueue: null, itemsCompleted: 0 }} />;
     })
     .with({ status: 'error' }, ({ message }) => {
       return <p className="text-sm text-red-600">{message}</p>;
