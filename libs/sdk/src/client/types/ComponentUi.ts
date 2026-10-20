@@ -8,4 +8,6 @@ export type ComponentUi<TProps, TValue> = {
   initialValue?: (props: TProps) => TValue;
   // False when the component draws its own label and help text.
   wrap?: boolean;
+  // False when the component sends the step itself with submit(); the step shows no Continue button.
+  submitButton?: boolean;
 };

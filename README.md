@@ -74,6 +74,7 @@ Open http://localhost:3000, log in and run **Greet**.
 | `@awaitio/select-single`    | `io.select.single()`: one of a list of options, from a drop-down                                       |
 | `@awaitio/select-multiple`  | `io.select.multiple()`: any number of options, listed under a drop-down                                |
 | `@awaitio/select-table`     | `io.select.table()`: rows picked from a table                                                          |
+| `@awaitio/confirm`          | `io.confirm()`: Confirm or Cancel before something irreversible                                        |
 | `@awaitio/display-table`    | `io.display.table()` in pages: rows with filter, paging, links and row menus                           |
 | `@awaitio/display-metadata` | `io.display.metadata()` in pages: label and value tiles                                                |
 

@@ -26,14 +26,18 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  // A component with its own buttons (io.confirm) sends the step itself, so the form has no Continue button.
+  const hasSubmitButton = step.components.every((component) => {
+    return uis.get(component.type)?.submitButton !== false;
+  });
+
+  const send = async (sentValues: unknown[]) => {
     setIsSubmitting(true);
     setErrorMessage(null);
 
     try {
       // On success the server publishes the next state and this form unmounts.
-      await respondToStep({ runId, stepId: step.stepId, values });
+      await respondToStep({ runId, stepId: step.stepId, values: sentValues });
     } catch (error) {
       // A validation error comes back through the state stream as step.errors, shown under each field.
       if (!(error instanceof ApiError && error.code === 'VALIDATION_ERROR')) {
@@ -42,6 +46,11 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
 
       setIsSubmitting(false);
     }
+  };
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    void send(values);
   };
 
   return (
@@ -75,6 +84,13 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
                   });
                 });
               }}
+              submit={(value) => {
+                const sentValues = values.map((previousValue, valueIndex) => {
+                  return valueIndex === index ? value : previousValue;
+                });
+                setValues(sentValues);
+                void send(sentValues);
+              }}
             />
           );
 
@@ -90,14 +106,16 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
           );
         })}
         {(step.message ?? errorMessage) && <p className="text-sm text-red-600">{step.message ?? errorMessage}</p>}
-        <div>
-          <Button type="submit" disabled={isSubmitting}>
-            {match(isSubmitting)
-              .with(true, () => 'Submitting…')
-              .with(false, () => 'Continue')
-              .exhaustive()}
-          </Button>
-        </div>
+        {hasSubmitButton && (
+          <div>
+            <Button type="submit" disabled={isSubmitting}>
+              {match(isSubmitting)
+                .with(true, () => 'Submitting…')
+                .with(false, () => 'Continue')
+                .exhaustive()}
+            </Button>
+          </div>
+        )}
       </form>
     </Card>
   );

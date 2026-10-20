@@ -49,6 +49,9 @@ Each card is one package and opens its page: all its props, what it returns and 
   <Card title="Select Table" href="/io/select-table" img="/images/components/select-table.png">
     `io.select.table()` asks to pick rows of a table and returns them.
   </Card>
+  <Card title="Confirm" href="/io/confirm" img="/images/components/confirm.png">
+    `io.confirm()` asks before something irreversible and returns `true` for Confirm or `false` for Cancel.
+  </Card>
 </Columns>
 
 ## The key is the name
@@ -123,26 +126,28 @@ export const rating = defineComponent({
 
 `defineComponent()` takes:
 
-| Option         | Type            | Required | Description                                                                          |
-| -------------- | --------------- | -------- | ------------------------------------------------------------------------------------ |
-| `props`        | zod schema      | Required | The props after the label, checked on the server.                                    |
-| `returns`      | zod schema      | Required | The answer. May transform it, e.g. into a `DateTime`.                                |
-| `component`    | React component | Required | The control. Gets the props below.                                                   |
-| `validate`     | function        | Optional | Server check of the answer: a message or `null`.                                     |
-| `initialValue` | function        | Optional | The starting value. Runs in the browser too.                                         |
-| `wrap`         | `boolean`       | Optional | `false` leaves out the label, the help text and the error: you draw the whole field. |
+| Option         | Type            | Required | Description                                                                                            |
+| -------------- | --------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| `props`        | zod schema      | Required | The props after the label, checked on the server.                                                      |
+| `returns`      | zod schema      | Required | The answer. May transform it, e.g. into a `DateTime`.                                                  |
+| `component`    | React component | Required | The control. Gets the props below.                                                                     |
+| `validate`     | function        | Optional | Server check of the answer: a message or `null`.                                                       |
+| `initialValue` | function        | Optional | The starting value. Runs in the browser too.                                                           |
+| `wrap`         | `boolean`       | Optional | `false` leaves out the label, the help text and the error: you draw the whole field.                   |
+| `submitButton` | `boolean`       | Optional | `false` leaves out the Continue button: the component sends the step with `submit`, like `io.confirm`. |
 
 `component` gets:
 
-| Prop        | Type              | Description                                |
-| ----------- | ----------------- | ------------------------------------------ |
-| `label`     | `string`          | The first argument of the io call.         |
-| `props`     | object            | The parsed props, with defaults filled in. |
-| `value`     | answer            | The current answer.                        |
-| `onChange`  | `(value) => void` | Call it with the new answer.               |
-| `disabled`  | `boolean`         | `true` while the answer is being sent.     |
-| `autoFocus` | `boolean`         | `true` for the first field of a step.      |
-| `error`     | `string \| null`  | What the server found wrong.               |
+| Prop        | Type              | Description                                                                     |
+| ----------- | ----------------- | ------------------------------------------------------------------------------- |
+| `label`     | `string`          | The first argument of the io call.                                              |
+| `props`     | object            | The parsed props, with defaults filled in.                                      |
+| `value`     | answer            | The current answer.                                                             |
+| `onChange`  | `(value) => void` | Call it with the new answer.                                                    |
+| `submit`    | `(value) => void` | Sets the answer and sends the step, for a component with `submitButton: false`. |
+| `disabled`  | `boolean`         | `true` while the answer is being sent.                                          |
+| `autoFocus` | `boolean`         | `true` for the first field of a step.                                           |
+| `error`     | `string \| null`  | What the server found wrong.                                                    |
 
 `validate` runs only on the server, so the browser cannot skip it. `component` draws only the control; AwaitIO adds the label, the help text and the error around it, unless the component is [unwrapped](#unwrapped-components).
 
@@ -184,6 +189,7 @@ Register your component under a key that already exists, `input: { text: myText 
 | `MultiSelect` | A drop-down and the chosen options under it in one frame, each with a × that removes it.              |
 | `ChoiceList`  | Choices as cards, `mode: 'single'` or `'multiple'`.                                                   |
 | `Checkbox`    | A checkbox with its text to the right, for a yes or no answer.                                        |
+| `ButtonRow`   | Buttons side by side, e.g. Confirm and Cancel.                                                        |
 | `Button`      | A button, `variant: 'primary'` or `'secondary'`.                                                      |
 | `Field`       | Label, control, help text and error of one field, in an [unwrapped](#unwrapped-components) component. |
 | `Label`       | The label of a field, in an unwrapped component.                                                      |

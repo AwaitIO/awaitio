@@ -1,0 +1,54 @@
+---
+title: 'Confirm'
+description: 'Asks before something irreversible.'
+icon: 'circle-question'
+---
+
+`io.confirm()` asks a yes or no question with a Confirm and a Cancel button and returns `true` or `false`. Either button answers at once, so the step has no Continue button. Provided by the `@awaitio/confirm` package.
+
+<Frame>
+  <img src="/images/io-confirm.png" alt="The question Clear the whole cache? with help text under it and Confirm and Cancel buttons" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/confirm
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { confirm } from '@awaitio/confirm';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { confirm },
+});
+```
+
+## Usage
+
+```ts
+const isConfirmed = await io.confirm('Delete this user account?', {
+  helpText: 'All of their data will be deleted immediately.',
+});
+
+if (!isConfirmed) {
+  return 'Nothing was deleted.';
+}
+```
+
+Ask it on its own, not in `io.group`: its buttons send the whole step.
+
+## Props
+
+| Prop       | Type     | Required | Description                        |
+| ---------- | -------- | -------- | ---------------------------------- |
+| `helpText` | `string` | Optional | Secondary text under the question. |
+
+## Returns
+
+`boolean`: `true` for Confirm, `false` for Cancel.

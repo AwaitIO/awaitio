@@ -4,6 +4,7 @@
 export { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 export { actionHref } from '../shared/utils/actionHref';
 export { Button } from './Button';
+export { ButtonRow } from './ButtonRow';
 export { Card } from './Card';
 export { Checkbox } from './Checkbox';
 export { ChoiceList } from './ChoiceList';
@@ -26,6 +27,7 @@ export { themeBlockNames } from './themeBlockNames';
 export { useFieldId } from './useFieldId';
 export type { ActionRoute } from '../shared/types/ActionRoute';
 export type { ButtonProps } from './Button';
+export type { ButtonRowProps } from './ButtonRow';
 export type { CardProps } from './Card';
 export type { CheckboxProps } from './Checkbox';
 export type { Choice, ChoiceListProps } from './ChoiceList';

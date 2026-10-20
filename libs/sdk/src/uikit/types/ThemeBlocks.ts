@@ -1,4 +1,5 @@
 import type { ButtonProps } from '../Button';
+import type { ButtonRowProps } from '../ButtonRow';
 import type { CardProps } from '../Card';
 import type { CheckboxProps } from '../Checkbox';
 import type { ChoiceListProps } from '../ChoiceList';
@@ -19,6 +20,7 @@ import type { ComponentType } from 'react';
 // Everything a theme draws. The core only knows these props; a theme gives each block its look.
 export type ThemeBlocks = {
   Button: ComponentType<ButtonProps>;
+  ButtonRow: ComponentType<ButtonRowProps>;
   Card: ComponentType<CardProps>;
   Checkbox: ComponentType<CheckboxProps>;
   ChoiceList: ComponentType<ChoiceListProps>;

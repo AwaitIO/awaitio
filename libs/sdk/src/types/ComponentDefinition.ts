@@ -18,6 +18,9 @@ export type ComponentDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny, TRet
   // Only the control; the SDK wraps it in a Field (label, help text) unless `wrap` is false.
   component: ComponentType<ComponentUiProps<z.output<TProps>, z.input<TReturns>>>;
   wrap?: boolean;
+  // False when the component sends the step itself with submit(), e.g. Confirm and Cancel buttons; the step shows no
+  // Continue button then.
+  submitButton?: boolean;
   // Folder of the file that called defineComponent; `awaitio/vite` builds the browser script into <folder>/ui/ui.js.
   // Filled in by defineComponent on the server, null in the browser build.
   uiDirectory: string | null;
