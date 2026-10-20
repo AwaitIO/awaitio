@@ -1,0 +1,50 @@
+---
+title: 'Display HTML'
+description: 'Shows HTML markup, sanitized first.'
+icon: 'code'
+---
+
+`io.display.html()` shows HTML markup in a folder's page or in a step of an action, e.g. a preview of an email. Scripts, event handlers and other active content are removed before it is shown. It only displays and returns nothing. Provided by the `@awaitio/display-html` package.
+
+<Frame>
+  <img src="/images/io-display-html.png" alt="An Email preview heading with two lines of formatted text and a blue link" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-html
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayHtml } from '@awaitio/display-html';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { html: displayHtml } },
+});
+```
+
+## Usage
+
+```ts
+const email = await renderTrialEndingEmail(account);
+
+await io.display.html('Email preview', { html: email.html });
+```
+
+The label is the heading above the markup; pass `null` for none.
+
+## Props
+
+| Prop   | Type     | Required | Description         |
+| ------ | -------- | -------- | ------------------- |
+| `html` | `string` | Required | The markup to show. |
+
+## Sanitizing
+
+The markup can carry data from users, so it goes through [DOMPurify](https://github.com/cure53/DOMPurify) in the browser right before it is shown: `<script>`, `on…` attributes such as `onerror`, `javascript:` links and similar are removed, and what stays gets the same text styles as [`io.display.markdown`](/io/display-markdown). For text you write yourself, markdown is usually simpler.

@@ -85,6 +85,7 @@ Open http://localhost:3000, log in and run **Greet**.
 | `@awaitio/display-image`    | `io.display.image()`: a picture, such as a chart or a file preview                                     |
 | `@awaitio/display-markdown` | `io.display.markdown()`: formatted text written in markdown                                            |
 | `@awaitio/display-object`   | `io.display.object()`: the keys and values of a record, nested data included                           |
+| `@awaitio/display-html`     | `io.display.html()`: HTML markup, sanitized first                                                      |
 
 ## Documentation
 
