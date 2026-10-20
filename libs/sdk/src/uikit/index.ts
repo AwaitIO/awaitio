@@ -2,7 +2,10 @@
 // the active theme (e.g. @awaitio/theme-default) draws them, so components carry no styles of their own and a theme
 // can restyle every one of them.
 export { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
+export { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
+export { tableCellSchema } from '../shared/schemas/tableCellSchema';
 export { actionHref } from '../shared/utils/actionHref';
+export { Badge } from './Badge';
 export { Button } from './Button';
 export { ButtonRow } from './ButtonRow';
 export { Card } from './Card';
@@ -28,6 +31,9 @@ export { Textarea } from './Textarea';
 export { themeBlockNames } from './themeBlockNames';
 export { useFieldId } from './useFieldId';
 export type { ActionRoute } from '../shared/types/ActionRoute';
+export type { HighlightColor } from '../shared/types/HighlightColor';
+export type { TableCell } from '../shared/types/TableCell';
+export type { BadgeProps } from './Badge';
 export type { ButtonProps } from './Button';
 export type { ButtonRowProps } from './ButtonRow';
 export type { CardProps } from './Card';

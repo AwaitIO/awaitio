@@ -47,21 +47,35 @@ const [user] = await io.select.table('User', {
 
 | Prop            | Type                           | Required | Description                                                                                                                   |
 | --------------- | ------------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `rows`          | `Record<string, unknown>[]`    | Required | The records to pick from, at least one.                                                                                       |
-| `columns`       | `(string \| { key, label })[]` | Optional | Which keys to show and their headings. Defaults to every key.                                                                 |
+| `rows`          | `Record<string, unknown>[]`    | Required | The records to pick from; none shows `emptyText`, see [An empty table](#an-empty-table).                                      |
+| `columns`       | `(string \| { key, label })[]` | Required | Which keys to show and their headings.                                                                                        |
 | `defaultValue`  | `Record<string, unknown>[]`    | Optional | Rows picked at the start, taken from `rows`.                                                                                  |
-| `minSelections` | `number`                       | Optional | At least this many rows. Defaults to 1.                                                                                       |
+| `minSelections` | `number`                       | Optional | At least this many rows, or all of them when there are fewer. Defaults to 1.                                                  |
 | `maxSelections` | `number`                       | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
 | `pageSize`      | `number`                       | Optional | Rows per page. Defaults to 10.                                                                                                |
+| `emptyText`     | `string`                       | Optional | Shown instead of the table when there are no rows. Defaults to _Nothing to show._                                             |
 | `helpText`      | `string`                       | Optional | Secondary text under the table.                                                                                               |
 | `disabled`      | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
+
+## An empty table
+
+`rows` can be empty, e.g. for an account without devices. The person then sees `emptyText` instead of the table and continues with nothing picked: `minSelections` never asks for more rows than the table has, so the handler gets `[]`.
+
+```ts
+const devices = await io.select.table('Devices to restart', {
+  rows: account.devices,
+  columns: ['name', 'status'],
+  maxSelections: 50,
+  emptyText: 'This account has no devices.',
+});
+```
 
 ## Optional
 
 The field is required. Chain `.optional()` to let it stay empty; the handler then gets `Record<string, unknown>[] | undefined`, see [Optional fields](/core/components#optional-fields).
 
 ```ts
-const notified = await io.select.table('Users to notify', { rows: users, maxSelections: 5 }).optional();
+const notified = await io.select.table('Users to notify', { rows: users, columns: ['name', 'email'], maxSelections: 5 }).optional();
 ```
 
 ## Returns
@@ -84,7 +98,7 @@ The server checks every answer, so a crafted request cannot slip in another row:
 Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
 
 ```ts
-const [user] = await io.select.table('User to remove', { rows: users }).validate((rows) => {
+const [user] = await io.select.table('User to remove', { rows: users, columns: ['name', 'role'] }).validate((rows) => {
   return rows.some((row) => row.role === 'admin') ? 'Admins cannot be removed here.' : undefined;
 });
 ```

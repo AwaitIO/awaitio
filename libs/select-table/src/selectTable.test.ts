@@ -6,8 +6,9 @@ const rows = [
   { id: 2, name: 'Bo' },
   { id: 3, name: 'Cy' },
 ];
-const validate = (value: Record<string, unknown>[], limits = {}) => {
-  return selectTable.validate?.({ label: 'Users', props: selectTable.props.parse({ rows, ...limits }), value }) ?? null;
+const columns = ['id', 'name'];
+const validate = (value: Record<string, unknown>[], props = {}) => {
+  return selectTable.validate?.({ label: 'Users', props: selectTable.props.parse({ rows, columns, ...props }), value }) ?? null;
 };
 
 test('Should accept exactly one offered row by default', () => {
@@ -27,7 +28,17 @@ test('Should check custom limits and refuse a row that was not offered', () => {
 });
 
 test('Should start with the default rows picked', () => {
-  expect(selectTable.initialValue?.(selectTable.props.parse({ rows, defaultValue: [rows[1]] }))).toEqual([{ id: 2, name: 'Bo' }]);
+  expect(selectTable.initialValue?.(selectTable.props.parse({ rows, columns, defaultValue: [rows[1]] }))).toEqual([{ id: 2, name: 'Bo' }]);
 
-  expect(selectTable.initialValue?.(selectTable.props.parse({ rows }))).toEqual([]);
+  expect(selectTable.initialValue?.(selectTable.props.parse({ rows, columns }))).toEqual([]);
+});
+
+test('Should take an empty table and let it be answered with no row', () => {
+  expect(validate([], { rows: [] })).toBeNull();
+
+  expect(validate([rows[0]], { rows: [rows[0]], minSelections: 2, maxSelections: 3 })).toBeNull();
+});
+
+test('Should require the columns', () => {
+  expect(selectTable.props.safeParse({ rows }).success).toBe(false);
 });

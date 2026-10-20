@@ -1,4 +1,6 @@
 import type { actionRouteSchema } from '../../shared/schemas/actionRouteSchema';
+import type { highlightColorSchema } from '../../shared/schemas/highlightColorSchema';
+import type { tableCellSchema } from '../../shared/schemas/tableCellSchema';
 import type { actionHref } from '../../shared/utils/actionHref';
 import type { FieldContext } from '../../uikit/FieldContext';
 import type { formatCellValue } from '../../uikit/formatCellValue';
@@ -14,7 +16,9 @@ export type AwaitIOHostUi = Partial<ThemeBlocks> & {
   actionRouteSchema: typeof actionRouteSchema;
   FieldContext: typeof FieldContext;
   formatCellValue: typeof formatCellValue;
+  highlightColorSchema: typeof highlightColorSchema;
   navigateTo: typeof navigateTo;
+  tableCellSchema: typeof tableCellSchema;
   themeBlockNames: typeof themeBlockNames;
   useFieldId: typeof useFieldId;
 };

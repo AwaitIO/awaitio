@@ -40,7 +40,7 @@ export const users = app.page({
     return io.layout.basic({
       title: 'Users',
       description: 'Everyone who works with the back office.',
-      children: [io.display.table('All users', { rows: await prisma.user.findMany() })],
+      children: [io.display.table('All users', { rows: await prisma.user.findMany(), columns: ['name', 'email'] })],
     });
   },
 });

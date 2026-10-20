@@ -1,5 +1,5 @@
 import { defineDisplay } from 'awaitio';
-import { actionHref, actionRouteSchema, formatCellValue, Link, Table } from 'awaitio/ui';
+import { actionHref, actionRouteSchema, Badge, formatCellValue, Link, Table, tableCellSchema } from 'awaitio/ui';
 import { z } from 'zod';
 import { rowMenuItemSchema } from './schemas/rowMenuItemSchema';
 import { fillRouteParams } from './utils/fillRouteParams';
@@ -7,18 +7,32 @@ import { fillRouteParams } from './utils/fillRouteParams';
 export const displayTable = defineDisplay({
   props: z
     .object({
-      // Which keys to show and how to call them; by default every key of the rows, in the order they first appear.
-      columns: z
-        .array(
-          z.union([
-            z.string(),
-            // `route` makes the cells links; its params may use '{key}' for that key of the row: { id: '{id}' }.
-            z.object({ key: z.string(), label: z.string(), route: actionRouteSchema.optional() }),
-          ]),
-        )
-        .optional(),
+      // Which keys to show and how to call them. Required, because an empty table has no rows to read them from.
+      columns: z.array(
+        z.union([
+          z.string(),
+          // `route` makes the cells links; its params may use '{key}' for that key of the row: { id: '{id}' }.
+          z.object({ key: z.string(), label: z.string(), route: actionRouteSchema.optional() }),
+        ]),
+      ),
       // Records as they come from the database; keys not shown as columns can still fill a link's params.
-      rows: z.array(z.record(z.unknown())),
+      // A value can also be a cell object: { label, highlightColor } for a colored label, { label, url } for an outside link.
+      rows: z.array(z.record(z.unknown())).superRefine((rows, ctx) => {
+        rows.forEach((row, rowIndex) => {
+          Object.entries(row).forEach(([key, value]) => {
+            // Only objects that mean to be a cell are checked, so a typo such as highlightColor: 'lime' is an error, not JSON.
+            if (typeof value !== 'object' || value === null || !('label' in value)) {
+              return;
+            }
+
+            const cell = tableCellSchema.safeParse(value);
+
+            if (!cell.success) {
+              ctx.addIssue({ code: z.ZodIssueCode.custom, path: [rowIndex, key], message: cell.error.issues[0]?.message ?? 'invalid cell' });
+            }
+          });
+        });
+      }),
       // Links in the "…" menu at the end of every row: one menu for all rows, e.g. changeRole.route({ params: { id: '{id}' } }),
       // or a function that builds each row's own menu from the row, [] for none.
       rowMenu: z
@@ -58,7 +72,7 @@ export const displayTable = defineDisplay({
       return { ...props, rowMenu: undefined, rowMenus };
     }),
   component: ({ props }) => {
-    const columns = (props.columns ?? [...new Set(props.rows.flatMap((row) => Object.keys(row)))]).map((column) => {
+    const columns = props.columns.map((column) => {
       return typeof column === 'string' ? { key: column, label: column } : column;
     });
 
@@ -71,8 +85,20 @@ export const displayTable = defineDisplay({
         cells: Object.fromEntries(
           columns.map((column, index) => {
             const text = texts[index];
+            const cell = tableCellSchema.safeParse(row[column.key]);
+            const content = cell.success && cell.data.highlightColor ? <Badge color={cell.data.highlightColor}>{text}</Badge> : text;
 
-            return [column.key, 'route' in column && column.route ? <Link href={actionHref(fillRouteParams({ route: column.route, row }))}>{text}</Link> : text];
+            // A cell's own url leads outside AwaitIO and wins over the column's route.
+            if (cell.success && cell.data.url) {
+              return [
+                column.key,
+                <Link href={cell.data.url} external>
+                  {content}
+                </Link>,
+              ];
+            }
+
+            return [column.key, 'route' in column && column.route ? <Link href={actionHref(fillRouteParams({ route: column.route, row }))}>{content}</Link> : content];
           }),
         ),
         searchText: texts.join(' '),

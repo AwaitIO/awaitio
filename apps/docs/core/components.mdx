@@ -68,7 +68,7 @@ Each card is one package and opens its page: all its props, what it returns and 
 Display components, such as [`io.display.table`](/io/display-table), work in an action's `io` too. Awaited on their own, they are a step with a Continue button; in `io.group` they sit next to inputs. Either way they answer nothing, `undefined`:
 
 ```ts
-await io.display.table('Invoices to send', { rows: invoices });
+await io.display.table('Invoices to send', { rows: invoices, columns: ['number', 'customer', 'total'] });
 
 const { reason } = await io.group({
   summary: io.display.metadata(null, { items: [{ label: 'Total', value: total }] }),

@@ -1,11 +1,19 @@
+import { tableCellSchema } from '../shared/schemas/tableCellSchema';
+
 const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 // A value from a database row as people read it: dates as "Oct 16, 2026, 9:30 AM", numbers with separators,
-// booleans as Yes/No, nothing as "N/A". A Date arrives in the browser as an ISO string, so such strings are dates too.
-export const formatCellValue = (value: unknown) => {
+// booleans as Yes/No, nothing as "N/A", a { label, … } cell as its label. A Date arrives in the browser as an ISO string, so such strings are dates too.
+export const formatCellValue = (value: unknown): string => {
   if (value === null || value === undefined || value === '') {
     return 'N/A';
+  }
+
+  const cell = tableCellSchema.safeParse(value);
+
+  if (cell.success) {
+    return formatCellValue(cell.data.label);
   }
 
   if (typeof value === 'boolean') {

@@ -1,4 +1,5 @@
 import { defineTheme } from 'awaitio';
+import { Badge } from './blocks/Badge';
 import { Button } from './blocks/Button';
 import { ButtonRow } from './blocks/ButtonRow';
 import { Card } from './blocks/Card';
@@ -20,6 +21,7 @@ import { Table } from './blocks/Table';
 import { Textarea } from './blocks/Textarea';
 
 export const defaultTheme = defineTheme({
+  Badge,
   Button,
   ButtonRow,
   Card,

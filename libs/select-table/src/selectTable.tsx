@@ -5,16 +5,18 @@ import { toRowKey } from './utils/toRowKey';
 
 export const selectTable = defineComponent({
   props: z.object({
-    // Records as they come from the database.
-    rows: z.array(z.record(z.unknown())).min(1),
-    // Which keys to show and how to call them; by default every key of the rows.
-    columns: z.array(z.union([z.string(), z.object({ key: z.string(), label: z.string() })])).optional(),
+    // Records as they come from the database; none is fine, e.g. an account without devices.
+    rows: z.array(z.record(z.unknown())),
+    // Which keys to show and how to call them. Required, because an empty table has no rows to read them from.
+    columns: z.array(z.union([z.string(), z.object({ key: z.string(), label: z.string() })])),
     // Rows picked at the start, taken from `rows`; a row is recognised by its values.
     defaultValue: z.array(z.record(z.unknown())).optional(),
     // How many rows must and may be picked: by default exactly one.
     minSelections: z.number().int().nonnegative().default(1),
     maxSelections: z.number().int().positive().default(1),
     pageSize: z.number().int().positive().default(10),
+    // Shown instead of the table when there are no rows, e.g. 'No devices on this account.'
+    emptyText: z.string().optional(),
     helpText: z.string().optional(),
   }),
   // The picked rows, as they were sent to the browser: plain JSON values, dates as ISO strings.
@@ -37,8 +39,11 @@ export const selectTable = defineComponent({
       return `${label}: pick rows from the table only.`;
     }
 
-    if (value.length < props.minSelections) {
-      return props.minSelections === 1 ? `${label}: pick a row.` : `${label}: pick at least ${props.minSelections} rows.`;
+    // A table with fewer rows than the minimum cannot be answered otherwise, so all of them are enough, none for an empty one.
+    const minSelections = Math.min(props.minSelections, props.rows.length);
+
+    if (value.length < minSelections) {
+      return minSelections === 1 ? `${label}: pick a row.` : `${label}: pick at least ${minSelections} rows.`;
     }
 
     if (value.length > props.maxSelections) {
@@ -48,7 +53,7 @@ export const selectTable = defineComponent({
     return null;
   },
   component: ({ props, value, onChange, disabled }) => {
-    const columns = (props.columns ?? [...new Set(props.rows.flatMap((row) => Object.keys(row)))]).map((column) => {
+    const columns = props.columns.map((column) => {
       return typeof column === 'string' ? { key: column, label: column } : column;
     });
 
@@ -79,6 +84,7 @@ export const selectTable = defineComponent({
         columns={columns}
         rows={rows}
         pageSize={props.pageSize}
+        emptyText={props.emptyText}
         selection={{
           mode: props.maxSelections === 1 ? 'single' : 'multiple',
           selected: props.rows.flatMap((row, index) => {

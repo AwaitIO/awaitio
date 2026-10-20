@@ -1,3 +1,4 @@
+import type { BadgeProps } from '../Badge';
 import type { ButtonProps } from '../Button';
 import type { ButtonRowProps } from '../ButtonRow';
 import type { CardProps } from '../Card';
@@ -21,6 +22,7 @@ import type { ComponentType } from 'react';
 
 // Everything a theme draws. The core only knows these props; a theme gives each block its look.
 export type ThemeBlocks = {
+  Badge: ComponentType<BadgeProps>;
   Button: ComponentType<ButtonProps>;
   ButtonRow: ComponentType<ButtonRowProps>;
   Card: ComponentType<CardProps>;

@@ -50,7 +50,7 @@ The label is the heading above the table; pass `null` for none.
 | Prop         | Type                                      | Required | Description                                                                                                                     |
 | ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `rows`       | `Record<string, unknown>[]`               | Required | The records, e.g. straight from the database.                                                                                   |
-| `columns`    | `(string \| { key, label, route? })[]`    | Optional | Which keys to show and their headings. Defaults to every key.                                                                   |
+| `columns`    | `(string \| { key, label, route? })[]`    | Required | Which keys to show and their headings; required, as an empty table has no rows to read them from.                               |
 | `rowMenu`    | `ActionRoute[] \| (row) => ActionRoute[]` | Optional | Links in the _…_ menu at the end of every row, or a function that builds each row's own, see [A menu per row](#a-menu-per-row). |
 | `pageSize`   | `number`                                  | Optional | Rows per page. Defaults to 20; the pager shows only when there are more.                                                        |
 | `filterable` | `boolean`                                 | Optional | Shows the filter above the table. Defaults to `true`.                                                                           |
@@ -81,6 +81,7 @@ When the menu depends on the row, pass a function instead of the array. It gets 
 ```ts
 io.display.table('Versions', {
   rows: versions,
+  columns: ['name', 'createdAt'],
   rowMenu: (row) => {
     return row.isActive && module.frozenAt
       ? [unfreezeModule.route({ params: { id: module.id }, label: 'Unfreeze' })]
@@ -96,4 +97,29 @@ io.display.table('Versions', {
 
 ## How values look
 
-Dates read like _Oct 16, 2026, 9:30 AM_ (a `Date` from the database arrives as an ISO string and is formatted too), numbers get thousands separators, `true` and `false` read _Yes_ and _No_, an empty value _N/A_ and an object its JSON.
+Dates read like _Oct 16, 2026, 9:30 AM_ (a `Date` from the database arrives as an ISO string and is formatted too), numbers get thousands separators, `true` and `false` read _Yes_ and _No_, an empty value _N/A_, a cell object its label (see [Colored labels and outside links](#colored-labels-and-outside-links)) and any other object its JSON.
+
+## Colored labels and outside links
+
+A value can be a cell object instead of a plain value. `{ label, highlightColor }` shows the label in a colored badge, `{ label, url }` links it to a page outside AwaitIO, opened in a new tab; both can be combined:
+
+```ts
+io.display.table('Devices', {
+  rows: devices.map((device) => {
+    return {
+      ...device,
+      status: { label: device.isOnline ? 'Online' : 'Offline', highlightColor: device.isOnline ? 'green' : 'red' },
+      dashboard: { label: 'Open', url: `https://grafana.example.com/d/${device.id}` },
+    };
+  }),
+  columns: ['name', { key: 'status', label: 'Status' }, { key: 'dashboard', label: 'Dashboard' }],
+});
+```
+
+<Frame>
+  <img src="/images/display-table-cells.png" alt="A users table with roles in purple, blue and gray badges and a Gravatar link in each row" />
+</Frame>
+
+- `highlightColor` is one of `red`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink` and `gray`.
+- The server checks every object with a `label`: an unknown color or a `url` that is not a full address fails the page like other wrong props, instead of showing JSON.
+- The filter searches the label. A cell's `url` wins over the column's `route`.
