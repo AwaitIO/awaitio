@@ -47,14 +47,14 @@ The label is the heading above the table; pass `null` for none.
 
 ## Props
 
-| Prop         | Type                                   | Required | Description                                                              |
-| ------------ | -------------------------------------- | -------- | ------------------------------------------------------------------------ |
-| `rows`       | `Record<string, unknown>[]`            | Required | The records, e.g. straight from the database.                            |
-| `columns`    | `(string \| { key, label, route? })[]` | Optional | Which keys to show and their headings. Defaults to every key.            |
-| `rowMenu`    | `ActionRoute[]`                        | Optional | Links in the _…_ menu at the end of every row.                           |
-| `pageSize`   | `number`                               | Optional | Rows per page. Defaults to 20; the pager shows only when there are more. |
-| `filterable` | `boolean`                              | Optional | Shows the filter above the table. Defaults to `true`.                    |
-| `emptyText`  | `string`                               | Optional | Shown when there are no rows. Defaults to _Nothing to show._             |
+| Prop         | Type                                      | Required | Description                                                                                                                     |
+| ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `rows`       | `Record<string, unknown>[]`               | Required | The records, e.g. straight from the database.                                                                                   |
+| `columns`    | `(string \| { key, label, route? })[]`    | Optional | Which keys to show and their headings. Defaults to every key.                                                                   |
+| `rowMenu`    | `ActionRoute[] \| (row) => ActionRoute[]` | Optional | Links in the _…_ menu at the end of every row, or a function that builds each row's own, see [A menu per row](#a-menu-per-row). |
+| `pageSize`   | `number`                                  | Optional | Rows per page. Defaults to 20; the pager shows only when there are more.                                                        |
+| `filterable` | `boolean`                                 | Optional | Shows the filter above the table. Defaults to `true`.                                                                           |
+| `emptyText`  | `string`                                  | Optional | Shown when there are no rows. Defaults to _Nothing to show._                                                                    |
 
 Filtering and paging happen in the browser, on the rows the page sent: send the rows people need, not the whole table.
 
@@ -73,6 +73,26 @@ io.display.table('Accounts', {
 ```
 
 Templates are text, so `route()` takes `'{id}'` even where the action's schema wants a number, `z.coerce.number()`: the link carries text either way, and the action's schema turns it into a number when the link is opened.
+
+### A menu per row
+
+When the menu depends on the row, pass a function instead of the array. It gets each row and returns that row's links; an empty array leaves the row without the _…_ menu:
+
+```ts
+io.display.table('Versions', {
+  rows: versions,
+  rowMenu: (row) => {
+    return row.isActive && module.frozenAt
+      ? [unfreezeModule.route({ params: { id: module.id }, label: 'Unfreeze' })]
+      : [freezeToVersion.route({ params: { id: module.id, versionId: String(row.id) }, label: 'Freeze to this version' })];
+  },
+});
+```
+
+- The function runs on the server, once per row, and the browser gets only the finished menus.
+- It takes the values straight from `row`, so `{key}` templates in the links it returns are not replaced.
+- `row` is a `Record<string, unknown>`: turn a value into text with `String(row.id)` for a param.
+- A function that throws, or returns something that is not a link, fails like any other props that do not fit: the page shows an error, and an action fails at that step.
 
 ## How values look
 
