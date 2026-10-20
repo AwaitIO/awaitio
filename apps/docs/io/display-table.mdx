@@ -1,0 +1,79 @@
+---
+title: 'Display Table'
+description: 'Shows rows in a page, with filter, paging, links and row menus.'
+icon: 'table'
+---
+
+`io.display.table()` shows records as a table in a folder's page. It only displays and returns nothing. Provided by the `@awaitio/display-table` package.
+
+<Frame>
+  <img src="/images/io-display-table.png" alt="An All users table with linked names, emails, roles, dates and a … menu at the end of every row" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-table
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayTable } from '@awaitio/display-table';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { table: displayTable } },
+});
+```
+
+## Usage
+
+```ts
+io.display.table('All users', {
+  rows: await prisma.user.findMany(),
+  columns: [
+    { key: 'name', label: 'Name', route: sendWelcomeEmail.route({ params: { name: '{name}' } }) },
+    { key: 'email', label: 'Email' },
+    { key: 'createdAt', label: 'Created at' },
+  ],
+  rowMenu: [changeRole.route({ params: { id: '{id}' } })],
+});
+```
+
+The label is the heading above the table; pass `null` for none.
+
+## Props
+
+| Prop         | Type                                   | Required | Description                                                              |
+| ------------ | -------------------------------------- | -------- | ------------------------------------------------------------------------ |
+| `rows`       | `Record<string, unknown>[]`            | Required | The records, e.g. straight from the database.                            |
+| `columns`    | `(string \| { key, label, route? })[]` | Optional | Which keys to show and their headings. Defaults to every key.            |
+| `rowMenu`    | `ActionRoute[]`                        | Optional | Links in the _…_ menu at the end of every row.                           |
+| `pageSize`   | `number`                               | Optional | Rows per page. Defaults to 20; the pager shows only when there are more. |
+| `filterable` | `boolean`                              | Optional | Shows the filter above the table. Defaults to `true`.                    |
+| `emptyText`  | `string`                               | Optional | Shown when there are no rows. Defaults to _Nothing to show._             |
+
+Filtering and paging happen in the browser, on the rows the page sent: send the rows people need, not the whole table.
+
+## Links to actions
+
+A column with `route` turns its cells into links, and every `rowMenu` item is one. Get them from the action they open with `action.route()`, the same routes `ctx.redirect()` takes; a menu item shows the route's `label`, the action's name unless you pass one.
+
+`{key}` in a param is replaced by that key of the row, so a link can carry an id that is not shown as a column:
+
+```ts
+io.display.table('Accounts', {
+  rows: accounts,
+  columns: [{ key: 'name', label: 'Name', route: accountDetail.route({ params: { id: '{id}' } }) }, 'createdAt'],
+  rowMenu: [updateAccount.route({ params: { id: '{id}' }, label: 'Edit' }), deleteAccount.route({ params: { id: '{id}' }, label: 'Delete' })],
+});
+```
+
+Templates are text, so `route()` takes `'{id}'` even where the action's schema wants a number, `z.coerce.number()`: the link carries text either way, and the action's schema turns it into a number when the link is opened.
+
+## How values look
+
+Dates read like _Oct 16, 2026, 9:30 AM_ (a `Date` from the database arrives as an ISO string and is formatted too), numbers get thousands separators, `true` and `false` read _Yes_ and _No_, an empty value _—_ and an object its JSON.

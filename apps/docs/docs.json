@@ -37,7 +37,7 @@
       },
       {
         "group": "Display components",
-        "pages": ["io/display-metadata"]
+        "pages": ["io/display-table", "io/display-metadata"]
       },
       {
         "group": "Layout components",
