@@ -2,7 +2,10 @@ export type ToRowKeyArgs = {
   row: unknown;
 };
 
-// Rows travel to the browser and back as JSON, so a row is recognised by its JSON (a Date becomes its ISO string).
+// When a record of defaultValue is not one of `data` itself, it is matched by its values, so a copy from another query
+// is found too. A BigInt (a Prisma id) is compared as text, which JSON alone cannot do.
 export const toRowKey = ({ row }: ToRowKeyArgs) => {
-  return JSON.stringify(row);
+  return JSON.stringify(row, (_key, value: unknown) => {
+    return typeof value === 'bigint' ? value.toString() : value;
+  });
 };

@@ -13,4 +13,7 @@ export type DisplayDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny> = {
   wrap?: boolean;
   // Folder of the file that called defineDisplay; `awaitio/vite` builds the browser script into <folder>/ui/ui.js.
   uiDirectory: string | null;
+  // Type only, set by withSignature(): { action, page } methods for props a schema cannot type, e.g. a table whose row
+  // type comes from its `data`. Without them the methods are typed from `props`.
+  signature?: unknown;
 };

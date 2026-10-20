@@ -7,6 +7,8 @@ export type IOPromiseOptions = {
   render: StepRender;
   // Stored without its type: .optional() widens T, and the validator only ever sees answers, never undefined.
   validator?: IOValidator<unknown>;
+  // The component's toValue with the handler's props bound: the checked answer into what the handler gets.
+  toValue?: (value: unknown) => unknown;
 };
 
 // What io.input.text() returns. Creating it sends nothing; the component is rendered only when the handler
@@ -16,32 +18,40 @@ export class IOPromise<T> implements PromiseLike<T> {
   readonly component: StepComponent;
   private readonly render: StepRender;
   private readonly validator?: IOValidator<unknown>;
+  private readonly toValue?: (value: unknown) => unknown;
 
-  constructor({ component, render, validator }: IOPromiseOptions) {
+  constructor({ component, render, validator, toValue }: IOPromiseOptions) {
     this.component = component;
     this.render = render;
     this.validator = validator;
+    this.toValue = toValue;
   }
 
   // Lets the person leave the field empty: the handler gets undefined then, and the component's checks do not run.
   // Pass a condition to decide at run time: .optional(!user.isAdmin).
   optional(isOptional = true): IOPromise<T | undefined> {
-    return new IOPromise<T | undefined>({ component: { ...this.component, optional: isOptional }, render: this.render, validator: this.validator });
+    return new IOPromise<T | undefined>({ component: { ...this.component, optional: isOptional }, render: this.render, validator: this.validator, toValue: this.toValue });
   }
 
   // The handler's own check, on top of the component's: return a message to show under the field and ask again.
   // It runs on the server and may be async, e.g. to look the value up in the database.
   validate(validator: IOValidator<Exclude<T, undefined>>): IOPromise<T> {
-    return new IOPromise<T>({ component: this.component, render: this.render, validator: validator as IOValidator<unknown> });
+    return new IOPromise<T>({ component: this.component, render: this.render, validator: validator as IOValidator<unknown>, toValue: this.toValue });
+  }
+
+  // What the handler gets for the answer the components accepted; an optional field left empty stays undefined.
+  toHandlerValue(value: unknown): unknown {
+    return value === undefined || !this.toValue ? value : this.toValue(value);
   }
 
   // An optional field left empty, a disabled field and a display component give no answer, so there is nothing to check.
+  // The validator sees the value the handler would get.
   async check(value: unknown): Promise<string | null> {
     if (!this.validator || value === undefined || this.component.disabled || this.component.display) {
       return null;
     }
 
-    return (await this.validator(value)) ?? null;
+    return (await this.validator(this.toHandlerValue(value))) ?? null;
   }
 
   then<TResult1 = T, TResult2 = never>(
@@ -52,7 +62,7 @@ export class IOPromise<T> implements PromiseLike<T> {
       return { errors: [await this.check(value)], message: null };
     })
       .then(([value]) => {
-        return value as T;
+        return this.toHandlerValue(value) as T;
       })
       .then(onfulfilled, onrejected);
   }

@@ -14,10 +14,13 @@ import type { AwaitIOHost } from '../client/types/AwaitIOHost';
 import { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 import { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
+import { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
 import { actionHref } from '../shared/utils/actionHref';
 import { FieldContext } from '../uikit/FieldContext';
 import { formatCellValue } from '../uikit/formatCellValue';
 import { navigateTo } from '../uikit/navigateTo';
+import { renderTableRows } from '../uikit/renderTableRows';
+import { TableCellView } from '../uikit/TableCellView';
 import { themeBlockNames } from '../uikit/themeBlockNames';
 import { useFieldId } from '../uikit/useFieldId';
 import './index.css';
@@ -28,7 +31,20 @@ const host: AwaitIOHost = {
   React,
   jsxRuntime,
   zod,
-  ui: { actionHref, actionRouteSchema, FieldContext, formatCellValue, highlightColorSchema, navigateTo, tableCellSchema, themeBlockNames, useFieldId },
+  ui: {
+    actionHref,
+    actionRouteSchema,
+    FieldContext,
+    formatCellValue,
+    highlightColorSchema,
+    navigateTo,
+    renderTableRows,
+    tableCellSchema,
+    TableCellView,
+    tableColumnSchema,
+    themeBlockNames,
+    useFieldId,
+  },
   registerComponent: componentUiRegistry.register,
   registerDisplay: displayUiRegistry.register,
   registerLayout: layoutUiRegistry.register,

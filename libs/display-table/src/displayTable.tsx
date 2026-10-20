@@ -1,118 +1,80 @@
-import { defineDisplay } from 'awaitio';
-import { actionHref, actionRouteSchema, Badge, formatCellValue, Link, Table, tableCellSchema } from 'awaitio/ui';
+import { defineDisplay, withSignature } from 'awaitio';
+import { actionHref, formatCellValue, renderTableRows, Table, TableCellView, tableColumnSchema } from 'awaitio/ui';
 import { z } from 'zod';
 import { rowMenuItemSchema } from './schemas/rowMenuItemSchema';
-import { fillRouteParams } from './utils/fillRouteParams';
+import type { DisplayTableSignature } from './types/DisplayTableSignature';
 
-export const displayTable = defineDisplay({
-  props: z
-    .object({
-      // Which keys to show and how to call them. Required, because an empty table has no rows to read them from.
-      columns: z.array(
-        z.union([
-          z.string(),
-          // `route` makes the cells links; its params may use '{key}' for that key of the row: { id: '{id}' }.
-          z.object({ key: z.string(), label: z.string(), route: actionRouteSchema.optional() }),
-        ]),
-      ),
-      // Records as they come from the database; keys not shown as columns can still fill a link's params.
-      // A value can also be a cell object: { label, highlightColor } for a colored label, { label, url } for an outside link.
-      rows: z.array(z.record(z.unknown())).superRefine((rows, ctx) => {
-        rows.forEach((row, rowIndex) => {
-          Object.entries(row).forEach(([key, value]) => {
-            // Only objects that mean to be a cell are checked, so a typo such as highlightColor: 'lime' is an error, not JSON.
-            if (typeof value !== 'object' || value === null || !('label' in value)) {
-              return;
-            }
-
-            const cell = tableCellSchema.safeParse(value);
-
-            if (!cell.success) {
-              ctx.addIssue({ code: z.ZodIssueCode.custom, path: [rowIndex, key], message: cell.error.issues[0]?.message ?? 'invalid cell' });
-            }
-          });
-        });
-      }),
-      // Links in the "…" menu at the end of every row: one menu for all rows, e.g. changeRole.route({ params: { id: '{id}' } }),
-      // or a function that builds each row's own menu from the row, [] for none.
-      rowMenu: z
-        .union([
-          z.array(rowMenuItemSchema),
-          z.custom<(row: Record<string, unknown>) => z.input<typeof rowMenuItemSchema>[]>((value) => {
+// Typed by DisplayTableSignature: the schema checks the props, the signature gives renderCell and rowMenuItems the row type.
+export const displayTable = withSignature<DisplayTableSignature>()(
+  defineDisplay({
+    props: z
+      .object({
+        // Records as they come from the database; none is fine. They stay on the server, the browser gets only the cells.
+        data: z.array(z.record(z.unknown())),
+        // Required, because an empty table has no rows to read them from: a key, or { label, accessorKey?, renderCell? }.
+        columns: z.array(tableColumnSchema),
+        // Builds each row's "…" menu from the row, [] for none.
+        rowMenuItems: z
+          .custom<(row: Record<string, unknown>) => z.input<typeof rowMenuItemSchema>[]>((value) => {
             return typeof value === 'function';
-          }, 'Expected an array of links or a function of the row'),
-        ])
-        .optional(),
-      pageSize: z.number().int().positive().default(20),
-      filterable: z.boolean().default(true),
-      emptyText: z.string().optional(),
-    })
-    // A function cannot go to the browser, so it runs here, once per row, and the browser gets each row's finished menu.
-    .transform(({ rowMenu, ...props }, ctx) => {
-      if (typeof rowMenu !== 'function') {
-        return { ...props, rowMenu, rowMenus: undefined };
-      }
+          }, 'Expected a function of the row')
+          .optional(),
+        pageSize: z.number().int().positive().default(20),
+        filterable: z.boolean().default(true),
+        emptyText: z.string().optional(),
+      })
+      // renderCell and rowMenuItems cannot go to the browser, so they run here, once per row.
+      .transform(({ data, columns, rowMenuItems, ...props }, ctx) => {
+        const table = renderTableRows({ data, columns });
 
-      const rowMenus = props.rows.map((row, index) => {
-        try {
-          const items = z.array(rowMenuItemSchema).safeParse(rowMenu(row));
+        table.issues.forEach((message) => {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['columns'], message });
+        });
 
-          if (items.success) {
-            return items.data;
+        const rows = table.rows.map((cells, index) => {
+          const row = data[index] ?? {};
+
+          if (!rowMenuItems) {
+            return { cells, menu: [] };
           }
 
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenu'], message: `row ${index + 1}: ${items.error.issues[0]?.message ?? 'invalid menu'}` });
-        } catch (error) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenu'], message: `row ${index + 1}: ${error instanceof Error ? error.message : String(error)}` });
-        }
+          try {
+            const menu = z.array(rowMenuItemSchema).safeParse(rowMenuItems(row));
 
-        return [];
-      });
-
-      return { ...props, rowMenu: undefined, rowMenus };
-    }),
-  component: ({ props }) => {
-    const columns = props.columns.map((column) => {
-      return typeof column === 'string' ? { key: column, label: column } : column;
-    });
-
-    const rows = props.rows.map((row, rowIndex) => {
-      const texts = columns.map((column) => {
-        return formatCellValue(row[column.key]);
-      });
-
-      return {
-        cells: Object.fromEntries(
-          columns.map((column, index) => {
-            const text = texts[index];
-            const cell = tableCellSchema.safeParse(row[column.key]);
-            const content = cell.success && cell.data.highlightColor ? <Badge color={cell.data.highlightColor}>{text}</Badge> : text;
-
-            // A cell's own url leads outside AwaitIO and wins over the column's route.
-            if (cell.success && cell.data.url) {
-              return [
-                column.key,
-                <Link href={cell.data.url} external>
-                  {content}
-                </Link>,
-              ];
+            if (menu.success) {
+              return { cells, menu: menu.data };
             }
 
-            return [column.key, 'route' in column && column.route ? <Link href={actionHref(fillRouteParams({ route: column.route, row }))}>{content}</Link> : content];
-          }),
-        ),
-        searchText: texts.join(' '),
-        // A menu built by a function already holds the row's values; only the shared menu fills '{key}' templates.
-        menu: props.rowMenus
-          ? (props.rowMenus[rowIndex] ?? []).map((item) => {
-              return { label: item.label, href: actionHref(item) };
-            })
-          : (props.rowMenu ?? []).map((item) => {
-              return { label: item.label, href: actionHref(fillRouteParams({ route: item, row })) };
-            }),
-      };
-    });
+            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenuItems'], message: `row ${index + 1}: ${menu.error.issues[0]?.message ?? 'invalid menu'}` });
+          } catch (error) {
+            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenuItems'], message: `row ${index + 1}: ${error instanceof Error ? error.message : String(error)}` });
+          }
 
-    return <Table columns={columns} rows={rows} pageSize={props.pageSize} filterable={props.filterable} emptyText={props.emptyText} />;
-  },
-});
+          return { cells, menu: [] };
+        });
+
+        return { ...props, columns: table.columns, rows };
+      }),
+    component: ({ props }) => {
+      const rows = props.rows.map((row) => {
+        return {
+          cells: Object.fromEntries(
+            props.columns.map((column, index) => {
+              return [column.key, <TableCellView value={row.cells[index]} />];
+            }),
+          ),
+          searchText: row.cells
+            .map((cell) => {
+              return formatCellValue(cell);
+            })
+            .join(' '),
+          menu: row.menu.map((item) => {
+            return { label: item.label, href: actionHref(item) };
+          }),
+        };
+      });
+
+      return <Table columns={props.columns} rows={rows} pageSize={props.pageSize} filterable={props.filterable} emptyText={props.emptyText} />;
+    },
+  }),
+);

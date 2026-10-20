@@ -39,6 +39,8 @@ export const componentBuildConfig = async ({ root, entry, exportName, css }) => 
                 "export const defineDisplay = (definition) => ({ kind: 'awaitio-display', ...definition, uiDirectory: null });",
                 "export const defineLayout = (definition) => ({ kind: 'awaitio-layout', ...definition, uiDirectory: null });",
                 "export const defineTheme = (blocks) => Object.fromEntries(Object.entries(blocks).map(([name, component]) => [name, { kind: 'awaitio-theme-block', name, component, uiDirectory: null }]));",
+                // Types only on the server too: the definition passes through as it is.
+                'export const withSignature = () => (definition) => definition;',
               ].join('\n')
             : null;
         },

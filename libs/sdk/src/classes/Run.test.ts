@@ -535,3 +535,55 @@ test('Should fail the run when a validator throws', async () => {
 
   expect((await waitForFinish({ run })).status).toBe('FAILURE');
 });
+
+const pickTree = {
+  pick: defineComponent({
+    props: z.object({ data: z.array(z.record(z.unknown())) }),
+    // The browser answers with an index; toValue turns it into the record, as io.select.table does with rows.
+    returns: z.number().int(),
+    toValue: ({ props, value }) => {
+      return props.data[value];
+    },
+    component: () => {
+      return null;
+    },
+  }),
+};
+
+test('Should hand the handler and its validators the value from toValue, alone and in a group', async () => {
+  const records = [{ name: 'Ada' }, { name: 'Bo' }];
+  const checked: unknown[] = [];
+  const handler: AwaitIOActionHandler<IO<typeof pickTree>> = async (io) => {
+    const alone = await io.pick('Person', { data: records }).validate((value) => {
+      checked.push(value);
+
+      return undefined;
+    });
+    const grouped = await io.group({ person: io.pick('Person', { data: records }) }).validate(({ person }) => {
+      checked.push(person);
+
+      return undefined;
+    });
+
+    return { alone, grouped };
+  };
+  const run = new Run({
+    id: 'run-pick',
+    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null, unlisted: false },
+    user: { email: 'petr@example.com', name: 'Petr' },
+    params: {},
+    registry: createComponentRegistry({ tree: pickTree }),
+  });
+  void run.execute();
+  const first = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: first.step?.stepId ?? '', values: [1] })).toEqual({ status: 'OK' });
+
+  const second = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: second.step?.stepId ?? '', values: [0] })).toEqual({ status: 'OK' });
+
+  expect(checked).toEqual([records[1], records[0]]);
+
+  expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { alone: { name: 'Bo' }, grouped: { person: { name: 'Ada' } } } });
+});

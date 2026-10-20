@@ -1,104 +1,92 @@
 import { expect, test } from 'vitest';
 import { displayTable } from './displayTable';
-import type { z } from 'zod';
 
-test('Should accept rows of any values, plain and linked columns and a row menu', () => {
+const data = [
+  { id: 1, name: 'Ada', isActive: true, account: { name: 'Acme' } },
+  { id: 2, name: 'Bo', isActive: false, account: { name: 'Globex' } },
+];
+
+test('Should send only the cells, from accessorKey or renderCell, and default the options', () => {
   const parsed = displayTable.props.safeParse({
-    rows: [{ id: 1, name: 'Ada', createdAt: new Date(0), admin: true }],
-    columns: ['id', { key: 'name', label: 'Name', route: { action: 'accounts/detail', params: { id: '{id}' } } }],
-    rowMenu: [{ label: 'Edit', action: 'accounts/update_account', params: { id: '{id}' } }],
+    data,
+    columns: ['id', { label: 'Name', accessorKey: 'name' }, { label: 'Account', renderCell: (row: (typeof data)[number]) => row.account.name }],
   });
 
-  expect(parsed.success).toBe(true);
+  expect(parsed.success && parsed.data.columns).toEqual([
+    { key: '0', label: 'id' },
+    { key: '1', label: 'Name' },
+    { key: '2', label: 'Account' },
+  ]);
+
+  expect(parsed.success && parsed.data.rows).toEqual([
+    { cells: [1, 'Ada', 'Acme'], menu: [] },
+    { cells: [2, 'Bo', 'Globex'], menu: [] },
+  ]);
 
   expect(parsed.success && [parsed.data.pageSize, parsed.data.filterable]).toEqual([20, true]);
 });
 
-test('Should build each row its own menu from a function and send no function on', () => {
-  // Typed like the props of io.display.table, so `row` gets its type from the schema.
-  const props: z.input<typeof displayTable.props> = {
-    rows: [
-      { id: 1, isActive: true },
-      { id: 2, isActive: false },
-    ],
-    columns: ['id'],
-    rowMenu: (row) => {
-      return row.isActive
-        ? [{ label: 'Unfreeze', action: 'module/unfreeze_module', params: { id: '7' } }]
-        : [{ label: 'Freeze to this version', action: 'module/freeze_to_version', params: { id: '7', versionId: String(row.id) } }];
-    },
-  };
-  const parsed = displayTable.props.safeParse(props);
-
-  expect(parsed.success && parsed.data.rowMenus).toEqual([
-    [{ label: 'Unfreeze', action: 'module/unfreeze_module', params: { id: '7' } }],
-    [{ label: 'Freeze to this version', action: 'module/freeze_to_version', params: { id: '7', versionId: '2' } }],
-  ]);
-
-  expect(parsed.success && parsed.data.rowMenu).toBeUndefined();
-});
-
-test('Should leave a row without a menu when the function returns an empty array', () => {
+test('Should keep cell objects with a color, an outside link or an action route', () => {
   const parsed = displayTable.props.safeParse({
-    rows: [
-      { slug: 'eu', hasTable: true },
-      { slug: 'us', hasTable: false },
+    data,
+    columns: [
+      {
+        label: 'Status',
+        renderCell: (row: (typeof data)[number]) => {
+          return { label: row.isActive ? 'Active' : 'Frozen', highlightColor: row.isActive ? 'green' : 'gray', route: { action: 'users/detail', params: { id: String(row.id) } } };
+        },
+      },
+      { label: 'Docs', renderCell: () => ({ label: 'Docs', url: 'https://docs.awaitio.com' }) },
     ],
-    columns: ['slug'],
-    rowMenu: (row: Record<string, unknown>) => {
-      return row.hasTable ? [] : [{ label: 'Create table', action: 'proof_of_play/create_table', params: { slug: String(row.slug) } }];
+  });
+
+  expect(parsed.success && parsed.data.rows[0]?.cells).toEqual([
+    { label: 'Active', highlightColor: 'green', route: { action: 'users/detail', params: { id: '1' } } },
+    { label: 'Docs', url: 'https://docs.awaitio.com' },
+  ]);
+});
+
+test('Should build each row its own menu, [] for none', () => {
+  const parsed = displayTable.props.safeParse({
+    data,
+    columns: ['name'],
+    rowMenuItems: (row: (typeof data)[number]) => {
+      return row.isActive ? [{ label: 'Freeze', action: 'users/freeze', params: { id: String(row.id) } }] : [];
     },
   });
 
-  expect(parsed.success && parsed.data.rowMenus).toEqual([[], [{ label: 'Create table', action: 'proof_of_play/create_table', params: { slug: 'us' } }]]);
+  expect(
+    parsed.success &&
+      parsed.data.rows.map((row) => {
+        return row.menu;
+      }),
+  ).toEqual([[{ label: 'Freeze', action: 'users/freeze', params: { id: '1' } }], []]);
 });
 
-test('Should keep the shared menu with its templates as it was', () => {
-  const parsed = displayTable.props.safeParse({ rows: [{ id: 1 }], columns: ['id'], rowMenu: [{ label: 'Edit', action: 'accounts/update_account', params: { id: '{id}' } }] });
-
-  expect(parsed.success && [parsed.data.rowMenu, parsed.data.rowMenus]).toEqual([[{ label: 'Edit', action: 'accounts/update_account', params: { id: '{id}' } }], undefined]);
-});
-
-test('Should turn a function that throws or returns a bad link into a props error', () => {
+test('Should turn a function that throws, a bad cell or a bad menu item into a props error', () => {
   const throwing = displayTable.props.safeParse({
-    rows: [{ id: 1 }],
-    columns: ['id'],
-    rowMenu: () => {
-      throw new Error('Module not found');
-    },
+    data,
+    columns: [
+      {
+        label: 'Account',
+        renderCell: () => {
+          throw new Error('Account not found');
+        },
+      },
+    ],
   });
 
-  expect(throwing.success ? null : throwing.error.issues[0]?.message).toBe('row 1: Module not found');
+  expect(throwing.success ? null : throwing.error.issues[0]?.message).toBe('row 1, Account: Account not found');
 
-  const badLink = displayTable.props.safeParse({
-    rows: [{ id: 1 }],
-    columns: ['id'],
-    rowMenu: () => {
-      return [{ label: 'Edit' }];
-    },
-  });
+  expect(displayTable.props.safeParse({ data, columns: [{ label: 'Status', renderCell: () => ({ label: 'Active', highlightColor: 'lime' }) }] }).success).toBe(false);
 
-  expect(badLink.success).toBe(false);
+  expect(displayTable.props.safeParse({ data, columns: ['name'], rowMenuItems: () => [{ label: 'Edit' }] }).success).toBe(false);
 });
 
-test('Should refuse a page that passes no rows or a menu item without an action', () => {
-  expect(displayTable.props.safeParse({ pageSize: 10 }).success).toBe(false);
+test('Should take an empty table but require the columns, each with a key or a renderCell', () => {
+  expect(displayTable.props.safeParse({ data: [], columns: ['id', 'name'] }).success).toBe(true);
 
-  expect(displayTable.props.safeParse({ rows: [], columns: ['id'], rowMenu: [{ label: 'Edit' }] }).success).toBe(false);
-});
+  expect(displayTable.props.safeParse({ data }).success).toBe(false);
 
-test('Should take an empty table and require the columns', () => {
-  expect(displayTable.props.safeParse({ rows: [], columns: ['id', 'name'] }).success).toBe(true);
-
-  expect(displayTable.props.safeParse({ rows: [{ id: 1 }] }).success).toBe(false);
-});
-
-test('Should take cells with a colored label or an outside link and refuse an unknown color', () => {
-  const rows = [{ status: { label: 'Active', highlightColor: 'green' }, site: { label: 'Docs', url: 'https://docs.awaitio.com' }, meta: { tags: ['a'] } }];
-
-  expect(displayTable.props.safeParse({ rows, columns: ['status', 'site'] }).success).toBe(true);
-
-  const wrongColor = displayTable.props.safeParse({ rows: [{ status: { label: 'Active', highlightColor: 'lime' } }], columns: ['status'] });
-
-  expect(wrongColor.success ? null : wrongColor.error.issues[0]?.path).toEqual(['rows', 0, 'status']);
+  expect(displayTable.props.safeParse({ data, columns: [{ label: 'Nothing' }] }).success).toBe(false);
 });

@@ -37,7 +37,18 @@ export const createIONodes = ({ tree, prefix, render }: CreateIONodesArgs): Reco
           // `disabled` belongs to every input, so it is taken out before the component's own schema sees the props.
           const { disabled, ...componentProps } = props ?? {};
 
-          return new IOPromise({ component: { type, label, props: node.props.parse(componentProps), disabled: disabled === true }, render });
+          const toValue = node.toValue?.bind(node);
+
+          return new IOPromise({
+            component: { type, label, props: node.props.parse(componentProps), disabled: disabled === true },
+            render,
+            // The component sees the props as the handler passed them, e.g. the original rows of a table.
+            toValue: toValue
+              ? (value) => {
+                  return toValue({ props: componentProps, value });
+                }
+              : undefined,
+          });
         },
       ];
     }),

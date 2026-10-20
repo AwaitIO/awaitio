@@ -4,7 +4,7 @@ description: 'Asks to pick one of a list of options.'
 icon: 'circle-dot'
 ---
 
-`io.select.single()` asks to pick one option from a drop-down and returns its value. Provided by the `@awaitio/select-single` package.
+`io.select.single()` asks to pick one option from a drop-down and returns the chosen option itself: a `{ value, label }` object, an enum member or a record from your database. Provided by the `@awaitio/select-single` package.
 
 <Frame>
   <img src="/images/io-select-single.png" alt="A Single choice drop-down with Slack chosen, with help text under it" />
@@ -40,20 +40,44 @@ const role = await io.select.single('New role', {
   ],
   defaultValue: 'editor',
 });
+// role is { value: 'editor', label: 'Editor' }
 ```
+
+Options can be records as they come from the database. Say how to identify and name them with `key` and `label`; the handler gets the record back, relations and dates included:
+
+```ts
+const account = await io.select.single('Account', {
+  options: await prisma.account.findMany({ include: { integrator: true } }),
+  key: (account) => account.id,
+  label: (account) => account.name,
+  defaultValue: user.accountId, // a key is enough
+});
+// account is the Prisma record: account.integrator.name, account.createdAt as a Date
+```
+
+Strings and numbers, such as the members of an enum, name themselves:
+
+```ts
+const billingType = await io.select.single('Billing type', { options: Object.values(BillingType), defaultValue: account.billingType });
+// billingType is a BillingType
+```
+
+The options stay on the server. The browser gets only their labels and answers with the position of the chosen one, so values do not have to be strings and nothing that is not shown leaves the server.
 
 ## Props
 
-| Prop           | Type                 | Required | Description                                                                                                 |
-| -------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `options`      | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down shows `label`.                                             |
-| `defaultValue` | `string`             | Optional | The `value` chosen at the start. Nothing is chosen when left out.                                           |
-| `helpText`     | `string`             | Optional | Secondary text under the field.                                                                             |
-| `disabled`     | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
+| Prop           | Type                           | Required | Description                                                                                                                                                                  |
+| -------------- | ------------------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`      | `TOption[]`                    | Required | What to choose from: strings, numbers, `{ value, label }` objects or any records. May be empty.                                                                              |
+| `key`          | `(option) => string \| number` | Optional | What identifies an option. Required for records without `value`; defaults to the string, number or `value`. Two options with the same key are an error.                      |
+| `label`        | `(option) => string`           | Optional | What the drop-down shows. Required for records without `label`; defaults to the string, number or `label`.                                                                   |
+| `defaultValue` | key or `TOption`               | Optional | The option chosen at the start: its key (an id is enough) or the option itself. A key that is not among the options leaves nothing chosen and is reported in the server log. |
+| `helpText`     | `string`                       | Optional | Secondary text under the field.                                                                                                                                              |
+| `disabled`     | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                                                                  |
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets the option or `undefined`, see [Optional fields](/core/components#optional-fields).
 
 ```ts
 const team = await io.select.single('Team', { options: teams }).optional();
@@ -61,7 +85,7 @@ const team = await io.select.single('Team', { options: teams }).optional();
 
 ## Returns
 
-`string`: the chosen option's `value`.
+The chosen option itself, typed by `options`: the same object you passed, not a copy.
 
 ## Built-in validation
 
@@ -78,6 +102,6 @@ Chain `.validate()` for a check of your own. It runs on the server after the che
 
 ```ts
 const plan = await io.select.single('Plan', { options: plans }).validate((plan) => {
-  return plan === 'enterprise' && !account.hasContract ? 'Enterprise needs a signed contract first.' : undefined;
+  return plan.value === 'enterprise' && !account.hasContract ? 'Enterprise needs a signed contract first.' : undefined;
 });
 ```

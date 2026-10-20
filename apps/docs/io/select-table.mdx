@@ -35,35 +35,34 @@ export const app = new AwaitIO({
 
 ```ts
 const [user] = await io.select.table('User', {
-  rows: await prisma.user.findMany(),
-  columns: [
-    { key: 'name', label: 'Name' },
-    { key: 'email', label: 'Email' },
-  ],
+  data: await prisma.user.findMany({ include: { account: true } }),
+  columns: [{ label: 'Name', accessorKey: 'name' }, 'email', { label: 'Account', renderCell: (row) => row.account.name }],
 });
 ```
 
+`user` is the record itself, typed like the records in `data`. The columns are written as in [Display Table](/io/display-table#columns): a key, `{ label, accessorKey }` or `{ label, renderCell }`, and `renderCell` can return a colored label or a link the same way.
+
 ## Props
 
-| Prop            | Type                           | Required | Description                                                                                                                   |
-| --------------- | ------------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `rows`          | `Record<string, unknown>[]`    | Required | The records to pick from; none shows `emptyText`, see [An empty table](#an-empty-table).                                      |
-| `columns`       | `(string \| { key, label })[]` | Required | Which keys to show and their headings.                                                                                        |
-| `defaultValue`  | `Record<string, unknown>[]`    | Optional | Rows picked at the start, taken from `rows`.                                                                                  |
-| `minSelections` | `number`                       | Optional | At least this many rows, or all of them when there are fewer. Defaults to 1.                                                  |
-| `maxSelections` | `number`                       | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
-| `pageSize`      | `number`                       | Optional | Rows per page. Defaults to 10.                                                                                                |
-| `emptyText`     | `string`                       | Optional | Shown instead of the table when there are no rows. Defaults to _Nothing to show._                                             |
-| `helpText`      | `string`                       | Optional | Secondary text under the table.                                                                                               |
-| `disabled`      | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
+| Prop            | Type                                              | Required | Description                                                                                                                   |
+| --------------- | ------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `data`          | `TRow[]`                                          | Required | The records to pick from; none shows `emptyText`, see [An empty table](#an-empty-table).                                      |
+| `columns`       | `(key \| { label, accessorKey?, renderCell? })[]` | Required | The columns, see [Display Table](/io/display-table#columns).                                                                  |
+| `defaultValue`  | `TRow[]`                                          | Optional | Items of `data` picked at the start: the same objects, or copies with the same values.                                        |
+| `minSelections` | `number`                                          | Optional | At least this many rows, or all of them when there are fewer. Defaults to 1.                                                  |
+| `maxSelections` | `number`                                          | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
+| `pageSize`      | `number`                                          | Optional | Rows per page. Defaults to 10.                                                                                                |
+| `emptyText`     | `string`                                          | Optional | Shown instead of the table when there are no rows. Defaults to _Nothing to show._                                             |
+| `helpText`      | `string`                                          | Optional | Secondary text under the table.                                                                                               |
+| `disabled`      | `boolean`                                         | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
 
 ## An empty table
 
-`rows` can be empty, e.g. for an account without devices. The person then sees `emptyText` instead of the table and continues with nothing picked: `minSelections` never asks for more rows than the table has, so the handler gets `[]`.
+`data` can be empty, e.g. for an account without devices. The person then sees `emptyText` instead of the table and continues with nothing picked: `minSelections` never asks for more rows than the table has, so the handler gets `[]`.
 
 ```ts
 const devices = await io.select.table('Devices to restart', {
-  rows: account.devices,
+  data: account.devices,
   columns: ['name', 'status'],
   maxSelections: 50,
   emptyText: 'This account has no devices.',
@@ -72,15 +71,27 @@ const devices = await io.select.table('Devices to restart', {
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `Record<string, unknown>[] | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `TRow[] | undefined`, see [Optional fields](/core/components#optional-fields).
 
 ```ts
-const notified = await io.select.table('Users to notify', { rows: users, columns: ['name', 'email'], maxSelections: 5 }).optional();
+const notified = await io.select.table('Users to notify', { data: users, columns: ['name', 'email'], maxSelections: 5 }).optional();
 ```
 
 ## Returns
 
-`Record<string, unknown>[]`: the picked rows as they were sent to the browser. They travel as JSON, so a `Date` comes back as its ISO string; read the record again by its id when you need all of it.
+`TRow[]`: the picked items of `data` themselves, the same objects the handler passed in, in the order they were picked: every field, `Date`s and nested objects included. Only the cells go to the browser; it answers with the positions of the picked rows, the server checks them and hands over the items at those positions.
+
+```ts
+const devices = await io.select.table('Devices to delete', {
+  data: await prisma.device.findMany({ include: { account: true } }),
+  columns: ['name', { label: 'Account', renderCell: (device) => device.account.name }],
+  maxSelections: 50,
+});
+
+await prisma.device.deleteMany({ where: { id: { in: devices.map((device) => device.id) } } });
+
+return devices.map((device) => `${device.name} (${device.account.name})`);
+```
 
 ## Built-in validation
 
@@ -98,7 +109,7 @@ The server checks every answer, so a crafted request cannot slip in another row:
 Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
 
 ```ts
-const [user] = await io.select.table('User to remove', { rows: users, columns: ['name', 'role'] }).validate((rows) => {
+const [user] = await io.select.table('User to remove', { data: users, columns: ['name', 'role'] }).validate((rows) => {
   return rows.some((row) => row.role === 'admin') ? 'Admins cannot be removed here.' : undefined;
 });
 ```

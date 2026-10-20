@@ -37,7 +37,7 @@ export class IOGroupPromise<T> implements PromiseLike<T> {
     const toGroupValues = (values: unknown[]) => {
       return Object.fromEntries(
         keys.map((key, index) => {
-          return [key, values[index]];
+          return [key, promises[index]?.toHandlerValue(values[index])];
         }),
       ) as T;
     };

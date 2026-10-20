@@ -4,7 +4,7 @@ description: 'Shows rows, with filter, paging, links and row menus.'
 icon: 'table'
 ---
 
-`io.display.table()` shows records as a table in a folder's page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-table` package.
+`io.display.table()` shows records as a table in a page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-table` package.
 
 <Frame>
   <img src="/images/io-display-table.png" alt="An All users table with linked names, emails, roles, dates and a … menu at the end of every row" />
@@ -18,7 +18,7 @@ npm install @awaitio/display-table
 
 ## Setup
 
-Register it under the key you want in `io`:
+Register it under the key you want in `io`, see [Display components](/core/components):
 
 ```ts app.ts {5}
 import { displayTable } from '@awaitio/display-table';
@@ -33,86 +33,59 @@ export const app = new AwaitIO({
 
 ```ts
 io.display.table('All users', {
-  rows: await prisma.user.findMany(),
+  data: await prisma.user.findMany({ include: { account: true } }),
   columns: [
-    { key: 'name', label: 'Name', route: sendWelcomeEmail.route({ params: { name: '{name}' } }) },
-    { key: 'email', label: 'Email' },
-    { key: 'createdAt', label: 'Created at' },
+    { label: 'Name', renderCell: (row) => ({ label: row.name, route: sendWelcomeEmail.route({ params: { name: row.name } }) }) },
+    { label: 'Email', accessorKey: 'email' },
+    { label: 'Account', renderCell: (row) => row.account.name },
+    'createdAt',
   ],
-  rowMenu: [changeRole.route({ params: { id: '{id}' } })],
+  rowMenuItems: (row) => [changeRole.route({ params: { id: row.id } })],
 });
 ```
 
-The label is the heading above the table; pass `null` for none.
+The label is the heading above the table; pass `null` for none. `row` has the type of the records in `data`, so a typo in `accessorKey` or in `row.account.name` is a type error.
 
 ## Props
 
-| Prop         | Type                                      | Required | Description                                                                                                                     |
-| ------------ | ----------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `rows`       | `Record<string, unknown>[]`               | Required | The records, e.g. straight from the database.                                                                                   |
-| `columns`    | `(string \| { key, label, route? })[]`    | Required | Which keys to show and their headings; required, as an empty table has no rows to read them from.                               |
-| `rowMenu`    | `ActionRoute[] \| (row) => ActionRoute[]` | Optional | Links in the _…_ menu at the end of every row, or a function that builds each row's own, see [A menu per row](#a-menu-per-row). |
-| `pageSize`   | `number`                                  | Optional | Rows per page. Defaults to 20; the pager shows only when there are more.                                                        |
-| `filterable` | `boolean`                                 | Optional | Shows the filter above the table. Defaults to `true`.                                                                           |
-| `emptyText`  | `string`                                  | Optional | Shown when there are no rows. Defaults to _Nothing to show._                                                                    |
+| Prop           | Type                                              | Required | Description                                                                               |
+| -------------- | ------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------- |
+| `data`         | `TRow[]`                                          | Required | The records, e.g. straight from the database. None is fine.                               |
+| `columns`      | `(key \| { label, accessorKey?, renderCell? })[]` | Required | The columns, see [Columns](#columns). Required, as an empty table has no records to read. |
+| `rowMenuItems` | `(row) => ActionRoute[]`                          | Optional | The links in the _…_ menu at the end of a row, see [Row menu](#row-menu).                 |
+| `pageSize`     | `number`                                          | Optional | Rows per page. Defaults to 20; the pager shows only when there are more.                  |
+| `filterable`   | `boolean`                                         | Optional | Shows the filter above the table. Defaults to `true`.                                     |
+| `emptyText`    | `string`                                          | Optional | Shown when there are no rows. Defaults to _Nothing to show._                              |
 
-Filtering and paging happen in the browser, on the rows the page sent: send the rows people need, not the whole table.
+The records stay on the server: the browser gets only the finished cells and menus. Filtering and paging happen in the browser, on the rows the page sent, so send the rows people need, not the whole table.
 
-## Links to actions
+## Columns
 
-A column with `route` turns its cells into links, and every `rowMenu` item is one. Get them from the action they open with `action.route()`, the same routes `ctx.redirect()` takes; a menu item shows the route's `label`, the action's name unless you pass one.
+A column is written as in Interval:
 
-`{key}` in a param is replaced by that key of the row, so a link can carry an id that is not shown as a column:
+- `'email'`: the record's `email`, headed _email_.
+- `{ label: 'Email', accessorKey: 'email' }`: the same with your own heading.
+- `{ label: 'Account', renderCell: (row) => row.account.name }`: anything built from the whole record.
 
-```ts
-io.display.table('Accounts', {
-  rows: accounts,
-  columns: [{ key: 'name', label: 'Name', route: accountDetail.route({ params: { id: '{id}' } }) }, 'createdAt'],
-  rowMenu: [updateAccount.route({ params: { id: '{id}' }, label: 'Edit' }), deleteAccount.route({ params: { id: '{id}' }, label: 'Delete' })],
-});
-```
+`renderCell` runs on the server, once per row. It returns a plain value or a cell object:
 
-Templates are text, so `route()` takes `'{id}'` even where the action's schema wants a number, `z.coerce.number()`: the link carries text either way, and the action's schema turns it into a number when the link is opened.
+| Cell                        | Shows                                                  |
+| --------------------------- | ------------------------------------------------------ |
+| `{ label, highlightColor }` | The label in a colored badge.                          |
+| `{ label, url }`            | A link to a page outside AwaitIO, opened in a new tab. |
+| `{ label, route }`          | A link to an action, `route` from `action.route()`.    |
 
-### A menu per row
-
-When the menu depends on the row, pass a function instead of the array. It gets each row and returns that row's links; an empty array leaves the row without the _…_ menu:
-
-```ts
-io.display.table('Versions', {
-  rows: versions,
-  columns: ['name', 'createdAt'],
-  rowMenu: (row) => {
-    return row.isActive && module.frozenAt
-      ? [unfreezeModule.route({ params: { id: module.id }, label: 'Unfreeze' })]
-      : [freezeToVersion.route({ params: { id: module.id, versionId: String(row.id) }, label: 'Freeze to this version' })];
-  },
-});
-```
-
-- The function runs on the server, once per row, and the browser gets only the finished menus.
-- It takes the values straight from `row`, so `{key}` templates in the links it returns are not replaced.
-- `row` is a `Record<string, unknown>`: turn a value into text with `String(row.id)` for a param.
-- A function that throws, or returns something that is not a link, fails like any other props that do not fit: the page shows an error, and an action fails at that step.
-
-## How values look
-
-Dates read like _Oct 16, 2026, 9:30 AM_ (a `Date` from the database arrives as an ISO string and is formatted too), numbers get thousands separators, `true` and `false` read _Yes_ and _No_, an empty value _N/A_, a cell object its label (see [Colored labels and outside links](#colored-labels-and-outside-links)) and any other object its JSON.
-
-## Colored labels and outside links
-
-A value can be a cell object instead of a plain value. `{ label, highlightColor }` shows the label in a colored badge, `{ label, url }` links it to a page outside AwaitIO, opened in a new tab; both can be combined:
+They can be combined, e.g. a colored label that links to an action:
 
 ```ts
 io.display.table('Devices', {
-  rows: devices.map((device) => {
-    return {
-      ...device,
-      status: { label: device.isOnline ? 'Online' : 'Offline', highlightColor: device.isOnline ? 'green' : 'red' },
-      dashboard: { label: 'Open', url: `https://grafana.example.com/d/${device.id}` },
-    };
-  }),
-  columns: ['name', { key: 'status', label: 'Status' }, { key: 'dashboard', label: 'Dashboard' }],
+  data: devices,
+  columns: [
+    'name',
+    { label: 'Status', renderCell: (device) => ({ label: device.isOnline ? 'Online' : 'Offline', highlightColor: device.isOnline ? 'green' : 'red' }) },
+    { label: 'Dashboard', renderCell: (device) => ({ label: 'Open', url: `https://grafana.example.com/d/${device.id}` }) },
+    { label: 'Account', renderCell: (device) => ({ label: device.account.name, route: accountDetail.route({ params: { id: device.account.id } }) }) },
+  ],
 });
 ```
 
@@ -121,5 +94,27 @@ io.display.table('Devices', {
 </Frame>
 
 - `highlightColor` is one of `red`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink` and `gray`.
-- The server checks every object with a `label`: an unknown color or a `url` that is not a full address fails the page like other wrong props, instead of showing JSON.
-- The filter searches the label. A cell's `url` wins over the column's `route`.
+- The filter searches the label. With both `url` and `route`, the `url` wins.
+- A `renderCell` that throws, an unknown color or a `url` that is not a full address fails like any other props that do not fit: the page shows an error, and an action fails at that step.
+
+## Row menu
+
+`rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()`: the same routes `ctx.redirect()` takes, labelled with the action's name unless you pass one. An empty array leaves the row without a menu:
+
+```ts
+io.display.table('Versions', {
+  data: versions,
+  columns: ['name', 'createdAt'],
+  rowMenuItems: (row) => {
+    return row.isActive && module.frozenAt
+      ? [unfreezeModule.route({ params: { id: module.id }, label: 'Unfreeze' })]
+      : [freezeToVersion.route({ params: { id: module.id, versionId: row.id }, label: 'Freeze to this version' })];
+  },
+});
+```
+
+It runs on the server, once per row, like `renderCell`; a function that throws or returns something that is not a link fails the same way.
+
+## How values look
+
+Dates read like _Oct 16, 2026, 9:30 AM_ (a `Date` from the database arrives as an ISO string and is formatted too), numbers get thousands separators, `true` and `false` read _Yes_ and _No_, an empty value _N/A_, a cell object its label and any other object its JSON.
