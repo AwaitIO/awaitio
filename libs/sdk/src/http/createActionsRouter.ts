@@ -18,9 +18,14 @@ export const createActionsRouter = ({ actions, pages, manager }: CreateActionsRo
 
   router.get('/actions', (_req, res) => {
     const body: ActionList = {
-      actions: [...actions.values()].map(({ slug, name, description }) => {
-        return { slug, name, description };
-      }),
+      // An unlisted action is left out here only; it still starts from its URL.
+      actions: [...actions.values()]
+        .filter((action) => {
+          return !action.unlisted;
+        })
+        .map(({ slug, name, description }) => {
+          return { slug, name, description };
+        }),
       pages: [...pages.values()].map(({ slug, name, description }) => {
         return { slug, name, description };
       }),

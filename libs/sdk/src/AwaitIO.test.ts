@@ -377,6 +377,18 @@ test('Should forbid other pages to frame the UI', async () => {
   expect([headers.get('x-frame-options'), headers.get('content-security-policy'), headers.get('x-content-type-options')]).toEqual(['DENY', "frame-ancestors 'none'", 'nosniff']);
 });
 
+test('Should leave an unlisted action out of the list but still run it from its URL', async () => {
+  const list = (await (await fetch(`${baseUrl}/api/actions`, authorized())).json()) as { actions: { slug: string }[] };
+
+  expect(
+    list.actions.some((action) => {
+      return action.slug === 'hidden_edit';
+    }),
+  ).toBe(false);
+
+  expect((await fetch(`${baseUrl}/api/actions/hidden_edit/runs`, authorized({ method: 'POST', body: '{}' }))).status).toBe(201);
+});
+
 test('Should listen only on this machine unless a host is given', async () => {
   const local = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
   const server = await local.listen({ port: 0 });
@@ -459,11 +471,25 @@ test('Should refuse an empty project name', () => {
 
 test('Should refuse "group" and "layout" as component keys', () => {
   expect(() => {
-    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIO({
+      name: 'Test app',
+      actionsDirectory: emptyActionsDirectory,
+      theme: testTheme,
+      secret,
+      users,
+      components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } },
+    });
   }).toThrow('"group" is reserved');
 
   expect(() => {
-    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, components: { layout: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIO({
+      name: 'Test app',
+      actionsDirectory: emptyActionsDirectory,
+      theme: testTheme,
+      secret,
+      users,
+      components: { layout: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } },
+    });
   }).toThrow('"layout" is reserved');
 });
 

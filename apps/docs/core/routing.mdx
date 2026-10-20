@@ -116,6 +116,23 @@ The top level of `actions/` has no index file; an `index.ts` there stops the app
 - **Folders are named after themselves**, in words: `billing` reads _Billing_, `auditLogs` and `audit_logs` both read _Audit logs_.
 - **The order** is alphabetical by file name. In the list, a folder's subfolders come before its actions, and its `index.ts` leads the actions.
 
+## Unlisted actions
+
+An action that only makes sense for one record, such as editing a user picked in a table, can stay out of the list. Pass `unlisted: true`: it is not in the action list or in its folder's column, but it still runs from its URL, from `ctx.redirect()` and from a table's row menu:
+
+```ts actions/users/editUser.ts
+export const editUser = app.action({
+  name: 'Edit user',
+  unlisted: true,
+  params: z.object({ id: z.string() }),
+  handler: async (io, ctx) => {
+    // …
+  },
+});
+```
+
+It is not a permission: anyone who can log in can still open its URL.
+
 ## URLs of a run
 
 | URL                       | What it shows                                                                      |
