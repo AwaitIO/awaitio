@@ -14,3 +14,15 @@ test('Should mark the component optional, or not when the condition is false', (
 
   expect(promise.component.optional).toBeUndefined();
 });
+
+test('Should keep the validator through .optional()', async () => {
+  const promise = new IOPromise<string>({ component: { type: 'input.text', label: 'Note', props: {} }, render })
+    .validate(() => {
+      return 'Too short.';
+    })
+    .optional();
+
+  expect(await promise.check('a')).toBe('Too short.');
+
+  expect(await promise.check(undefined)).toBeNull();
+});

@@ -13,6 +13,8 @@ import type { PendingStep } from '../types/PendingStep';
 import type { RegisteredAction } from '../types/RegisteredAction';
 import type { RunListener } from '../types/RunListener';
 import type { RunRespondResult } from '../types/RunRespondResult';
+import type { StepCheck } from '../types/StepCheck';
+import type { StepCheckResult } from '../types/StepCheckResult';
 import { parseResponseValues } from '../utils/parseResponseValues';
 import { toActionResult } from '../utils/toActionResult';
 import { toFailureResult } from '../utils/toFailureResult';
@@ -26,6 +28,10 @@ export type RunOptions = {
   // What the handler gets as ctx.params: the query string parsed by the action's params schema.
   ctxParams?: unknown;
   registry: ComponentRegistry;
+};
+
+type ShowErrorsArgs = StepCheckResult & {
+  pending: PendingStep;
 };
 
 // One run of an action. The handler runs as a normal async function; every awaited io call parks it on a
@@ -69,8 +75,8 @@ export class Run {
       const value = await this.action.handler(
         createIO({
           registry: this.registry,
-          render: (components) => {
-            return this.render(components);
+          render: (components, check) => {
+            return this.render(components, check);
           },
         }),
         {
@@ -139,36 +145,54 @@ export class Run {
     };
   }
 
-  respond({ stepId, values }: StepResponse): RunRespondResult {
+  // Async because the handler's own checks (.validate()) may look things up before the step is accepted.
+  async respond({ stepId, values }: StepResponse): Promise<RunRespondResult> {
     if (this.state.status !== 'RUNNING') {
       return { status: 'RUN_CLOSED' };
     }
 
-    if (!this.pending || this.pending.stepId !== stepId) {
+    const pending = this.pending;
+
+    if (!pending || pending.stepId !== stepId) {
       return { status: 'STALE_STEP' };
     }
 
-    const parsed = parseResponseValues({ registry: this.registry, components: this.pending.components, values });
+    const parsed = parseResponseValues({ registry: this.registry, components: pending.components, values });
 
     if (parsed.status === 'INVALID') {
-      // Same step again with the problems under their fields. The form keeps what the user typed, it is keyed by stepId.
-      this.update({ step: { ...this.pending.step, errors: parsed.errors, message: parsed.message } });
-
-      return {
-        status: 'VALIDATION_ERROR',
-        message:
-          parsed.message ??
-          parsed.errors.find((error) => {
-            return error !== null;
-          }) ??
-          'Invalid values.',
-      };
+      return this.showErrors({ pending, errors: parsed.errors, message: parsed.message });
     }
 
-    const { resolve } = this.pending;
+    try {
+      const checked = await pending.check?.(parsed.values);
+
+      // While the check ran, the run may have been canceled or the step answered by another request.
+      if (this.pending !== pending) {
+        return this.state.status === 'RUNNING' ? { status: 'STALE_STEP' } : { status: 'RUN_CLOSED' };
+      }
+
+      if (
+        checked &&
+        (checked.message !== null ||
+          checked.errors.some((error) => {
+            return error !== null;
+          }))
+      ) {
+        return this.showErrors({ pending, errors: checked.errors, message: checked.message });
+      }
+    } catch (error) {
+      // A check that throws fails the run like the handler throwing at its await.
+      if (this.pending === pending) {
+        this.pending = null;
+        pending.reject(error);
+      }
+
+      return { status: 'OK' };
+    }
+
     this.pending = null;
     this.update({ step: null });
-    resolve(parsed.values);
+    pending.resolve(parsed.values);
 
     return { status: 'OK' };
   }
@@ -185,7 +209,22 @@ export class Run {
     pending?.reject(new IOError('CANCELED'));
   }
 
-  private render(components: StepComponent[]) {
+  // Same step again with the problems under their fields. The form keeps what the user typed, it is keyed by stepId.
+  private showErrors({ pending, errors, message }: ShowErrorsArgs): RunRespondResult {
+    this.update({ step: { ...pending.step, errors, message } });
+
+    return {
+      status: 'VALIDATION_ERROR',
+      message:
+        message ??
+        errors.find((error) => {
+          return error !== null;
+        }) ??
+        'Invalid values.',
+    };
+  }
+
+  private render(components: StepComponent[], check?: StepCheck) {
     if (this.state.status !== 'RUNNING') {
       // A handler that keeps working after a cancel learns why at its next io call.
       return Promise.reject(new IOError(this.state.status === 'CANCELED' ? 'CANCELED' : 'RUN_CLOSED'));
@@ -206,7 +245,7 @@ export class Run {
         }),
         message: null,
       };
-      this.pending = { stepId: step.stepId, components, step, resolve, reject };
+      this.pending = { stepId: step.stepId, components, step, check, resolve, reject };
       this.update({ step, loading: null });
     });
   }

@@ -68,7 +68,7 @@ const notified = await io.select.table('Users to notify', { rows: users, maxSele
 
 `Record<string, unknown>[]`: the picked rows as they were sent to the browser. They travel as JSON, so a `Date` comes back as its ISO string; read the record again by its id when you need all of it.
 
-## Validation
+## Built-in validation
 
 The server checks every answer, so a crafted request cannot slip in another row:
 
@@ -78,3 +78,13 @@ The server checks every answer, so a crafted request cannot slip in another row:
 | Fewer than `minSelections`      | `<label>: pick at least <minSelections> rows.` |
 | More than `maxSelections`       | `<label>: pick at most <maxSelections> rows.`  |
 | A row that was not in the table | `<label>: pick rows from the table only.`      |
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const [user] = await io.select.table('User to remove', { rows: users }).validate((rows) => {
+  return rows.some((row) => row.role === 'admin') ? 'Admins cannot be removed here.' : undefined;
+});
+```

@@ -67,7 +67,7 @@ const channels = await io.select.multiple('Channels', { options: allChannels }).
 
 `string[]`: the chosen options' values, in the order of the options, not the order they were picked.
 
-## Validation
+## Built-in validation
 
 The server checks every answer, so a crafted request cannot slip in other values:
 
@@ -76,3 +76,13 @@ The server checks every answer, so a crafted request cannot slip in other values
 | Fewer than `minSelections`                 | `<label>: choose at least <minSelections>.` |
 | More than `maxSelections`                  | `<label>: choose at most <maxSelections>.`  |
 | A value that was not offered, or one twice | `<label>: choose from the options only.`    |
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const channels = await io.select.multiple('Notify by', { options: channelOptions }).validate((channels) => {
+  return channels.includes('sms') && !user.phone ? 'Add a phone number before choosing SMS.' : undefined;
+});
+```

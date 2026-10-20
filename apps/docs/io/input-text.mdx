@@ -63,7 +63,7 @@ const nickname = await io.input.text('Nickname').optional();
 
 `string`, exactly as typed, including surrounding spaces.
 
-## Validation
+## Built-in validation
 
 The field is always required. The server checks every answer, so these messages come back even when the browser's own checks are bypassed:
 
@@ -76,3 +76,15 @@ The field is always required. The server checks every answer, so these messages 
 <Frame>
   <img src="/images/io-input-text-error.png" alt="The Name field with the message Name is required. under it" />
 </Frame>
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const username = await io.input.text('Username').validate(async (username) => {
+  const existing = await prisma.user.findUnique({ where: { username } });
+
+  return existing ? `${username} is already taken.` : undefined;
+});
+```

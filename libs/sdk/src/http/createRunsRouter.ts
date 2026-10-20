@@ -47,7 +47,7 @@ export const createRunsRouter = ({ manager }: CreateRunsRouterArgs): IRouter => 
     return undefined;
   });
 
-  router.post('/runs/:id/respond', (req, res) => {
+  router.post('/runs/:id/respond', async (req, res) => {
     const run = manager.get({ id: req.params.id, user: getSessionUser({ res }) });
 
     if (!run) {
@@ -60,7 +60,7 @@ export const createRunsRouter = ({ manager }: CreateRunsRouterArgs): IRouter => 
       return res.status(400).json({ error: 'BAD_REQUEST', message: body.error.message });
     }
 
-    return match(run.respond(body.data))
+    return match(await run.respond(body.data))
       .with({ status: 'OK' }, () => {
         return res.status(202).json({ status: 'OK' });
       })

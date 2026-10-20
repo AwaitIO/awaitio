@@ -63,7 +63,7 @@ const team = await io.select.single('Team', { options: teams }).optional();
 
 `string`: the chosen option's `value`.
 
-## Validation
+## Built-in validation
 
 The server checks every answer, so a crafted request cannot slip in another value:
 
@@ -71,3 +71,13 @@ The server checks every answer, so a crafted request cannot slip in another valu
 | -------------------------------------- | ------------------------------------- |
 | Nothing chosen                         | `Choose <label>.`                     |
 | A value that was not among the options | `<label>: choose one of the options.` |
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const plan = await io.select.single('Plan', { options: plans }).validate((plan) => {
+  return plan === 'enterprise' && !account.hasContract ? 'Enterprise needs a signed contract first.' : undefined;
+});
+```

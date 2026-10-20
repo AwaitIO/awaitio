@@ -66,7 +66,7 @@ const remindAt = await io.input.datetime('Remind me at').optional();
 
 A luxon `DateTime` in the UTC zone. Convert it with `.setZone(...)` when you need local time, or `.toISO()` to store it.
 
-## Validation
+## Built-in validation
 
 The field is always required. The input works in whole minutes, so `min` and `max` are compared at minute precision: `min: DateTime.now()` still accepts the current minute. The server checks every answer:
 
@@ -78,3 +78,13 @@ The field is always required. The input works in whole minutes, so `min` and `ma
 | Later than `max`           | `<label> must not be later than <max>.`      |
 
 `<min>` and `<max>` are printed in UTC.
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const startsAt = await io.input.datetime('Call starts at').validate((startsAt) => {
+  return startsAt.hour >= 9 && startsAt.hour < 17 ? undefined : 'Pick a time between 9 AM and 5 PM.';
+});
+```

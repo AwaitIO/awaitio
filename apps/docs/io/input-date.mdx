@@ -68,7 +68,7 @@ const birthday = await io.input.date('Birthday').optional();
 
 A luxon `DateTime` at the start of the picked day in the UTC zone. Use `.toISODate()` to store it as `'YYYY-MM-DD'`.
 
-## Validation
+## Built-in validation
 
 The browser checks the date before sending, and the server checks every answer again:
 
@@ -80,3 +80,13 @@ The browser checks the date before sending, and the server checks every answer a
 | Later than `max`           | `<label> must not be later than <max>.`   |
 
 `<min>` and `<max>` are printed as `YYYY-MM-DD`.
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const shipsOn = await io.input.date('Ships on').validate((date) => {
+  return date.weekday <= 5 ? undefined : 'Pick a working day.';
+});
+```

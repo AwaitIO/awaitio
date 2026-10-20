@@ -124,7 +124,7 @@ test('Should resume the handler with the submitted text', async () => {
     ]
   `);
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: ['Petr'] })).toEqual({ status: 'OK' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['Petr'] })).toEqual({ status: 'OK' });
 
   expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: 'Hello, Petr!' });
 });
@@ -139,7 +139,7 @@ test('Should render a group as one step and return the values under their keys',
 
   expect(step?.components.length).toBe(2);
 
-  run.respond({ stepId: step?.stepId ?? '', values: ['Petr', 'Homoky'] });
+  await run.respond({ stepId: step?.stepId ?? '', values: ['Petr', 'Homoky'] });
 
   expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { firstName: 'Petr', lastName: 'Homoky' } });
 });
@@ -152,7 +152,7 @@ test('Should show the same step again with the problem under its field when a va
   });
   const { step } = await waitForStep({ run });
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: ['abc'] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Text must be at least 5 characters long.' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['abc'] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Text must be at least 5 characters long.' });
 
   expect(run.current.step).toMatchObject({
     stepId: step?.stepId,
@@ -161,9 +161,9 @@ test('Should show the same step again with the problem under its field when a va
     components: [{ props: { minLength: 5 } }],
   });
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: ['   '] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Text is required.' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['   '] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Text is required.' });
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: ['abcdef'] })).toEqual({ status: 'OK' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['abcdef'] })).toEqual({ status: 'OK' });
 
   expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: 'abcdef' });
 });
@@ -176,7 +176,7 @@ test('Should report every invalid field of a group at once', async () => {
   });
   const { step } = await waitForStep({ run });
 
-  run.respond({ stepId: step?.stepId ?? '', values: ['', 'abc', 'fine'] });
+  await run.respond({ stepId: step?.stepId ?? '', values: ['', 'abc', 'fine'] });
 
   expect(run.current.step?.errors).toEqual(['First is required.', 'Second must be at least 5 characters long.', null]);
 });
@@ -193,7 +193,7 @@ test('Should number the steps of a run', async () => {
 
   expect(first.step?.index).toBe(1);
 
-  run.respond({ stepId: first.step?.stepId ?? '', values: ['a'] });
+  await run.respond({ stepId: first.step?.stepId ?? '', values: ['a'] });
   const second = await waitForStep({ run });
 
   expect(second.step?.index).toBe(2);
@@ -208,7 +208,7 @@ test('Should reject an answer to a step that is no longer shown', async () => {
 
   await waitForStep({ run });
 
-  expect(run.respond({ stepId: 'old-key', values: ['Petr'] })).toEqual({ status: 'STALE_STEP' });
+  expect(await run.respond({ stepId: 'old-key', values: ['Petr'] })).toEqual({ status: 'STALE_STEP' });
 });
 
 test('Should cancel a waiting action and refuse further answers', async () => {
@@ -229,7 +229,7 @@ test('Should cancel a waiting action and refuse further answers', async () => {
 
   expect(run.current).toMatchObject({ status: 'CANCELED', step: null, result: null });
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: ['Petr'] })).toEqual({ status: 'RUN_CLOSED' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['Petr'] })).toEqual({ status: 'RUN_CLOSED' });
 
   // The rejection travels through the IOPromise then-chain, which takes a few microtasks.
   await new Promise((resolve) => {
@@ -413,7 +413,7 @@ test('Should show a display component next to an input and give undefined for it
 
   expect(step?.components[0]).toEqual({ type: 'display.note', label: 'Before you start', props: { text: 'Read this first' }, display: true });
 
-  expect(run.respond({ stepId: step?.stepId ?? '', values: [null, 'Petr'] })).toEqual({ status: 'OK' });
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: [null, 'Petr'] })).toEqual({ status: 'OK' });
 
   expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { name: 'Petr' } });
 });
@@ -425,6 +425,113 @@ test('Should refuse display props that do not fit its schema', async () => {
       return io.display.note(null, { text: 1 });
     },
   });
+
+  expect((await waitForFinish({ run })).status).toBe('FAILURE');
+});
+
+test('Should show the message of a field validator under its field and ask again', async () => {
+  const run = startRun({
+    handler: async (io) => {
+      return io.input.text('Email').validate((value) => {
+        return value.endsWith('@example.com') ? undefined : 'Use a company address.';
+      });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['petr@gmail.com'] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Use a company address.' });
+
+  expect(run.current.step?.errors).toEqual(['Use a company address.']);
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['petr@example.com'] })).toEqual({ status: 'OK' });
+
+  expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: 'petr@example.com' });
+});
+
+test('Should run a field validator only after the component accepted the value', async () => {
+  let calls = 0;
+  const run = startRun({
+    handler: async (io) => {
+      return io.input.text('Name').validate(() => {
+        calls += 1;
+
+        return undefined;
+      });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: [''] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Name is required.' });
+
+  expect(calls).toBe(0);
+});
+
+test('Should wait for an async validator and skip it for an optional field left empty', async () => {
+  const run = startRun({
+    handler: async (io) => {
+      return io.group({
+        code: io.input.text('Code').validate(async (value) => {
+          await new Promise((resolve) => {
+            setTimeout(resolve, 5);
+          });
+
+          return value === 'taken' ? 'This code is taken.' : undefined;
+        }),
+        note: io.input
+          .text('Note')
+          .optional()
+          .validate(() => {
+            return 'Never shown for an empty note.';
+          }),
+      });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['taken', ''] })).toEqual({ status: 'VALIDATION_ERROR', message: 'This code is taken.' });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['free', ''] })).toEqual({ status: 'OK' });
+
+  expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { code: 'free' } });
+});
+
+test('Should show the message of a group validator for the whole step, once every field is fine', async () => {
+  let calls = 0;
+  const run = startRun({
+    handler: async (io) => {
+      return io.group({ password: io.input.text('Password'), again: io.input.text('Password again') }).validate(({ password, again }) => {
+        calls += 1;
+
+        return password === again ? undefined : 'The passwords do not match.';
+      });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['', 'secret'] })).toEqual({ status: 'VALIDATION_ERROR', message: 'Password is required.' });
+
+  expect(calls).toBe(0);
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['secret', 'secrets'] })).toEqual({ status: 'VALIDATION_ERROR', message: 'The passwords do not match.' });
+
+  expect(run.current.step).toMatchObject({ errors: [null, null], message: 'The passwords do not match.' });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['secret', 'secret'] })).toEqual({ status: 'OK' });
+
+  expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { password: 'secret', again: 'secret' } });
+});
+
+test('Should fail the run when a validator throws', async () => {
+  const run = startRun({
+    handler: async (io) => {
+      return io.input.text('Name').validate(() => {
+        throw new Error('Database is down');
+      });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(await run.respond({ stepId: step?.stepId ?? '', values: ['Petr'] })).toEqual({ status: 'OK' });
 
   expect((await waitForFinish({ run })).status).toBe('FAILURE');
 });

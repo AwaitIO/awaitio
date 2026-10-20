@@ -1,4 +1,4 @@
-import type { IOError } from '../classes/IOError';
+import type { StepCheck } from './StepCheck';
 import type { Step } from '../shared/types/Step';
 import type { StepComponent } from '../shared/types/StepComponent';
 
@@ -7,6 +7,8 @@ export type PendingStep = {
   stepId: string;
   components: StepComponent[];
   step: Step;
+  check?: StepCheck;
   resolve: (values: unknown[]) => void;
-  reject: (error: IOError) => void;
+  // An IOError, or whatever the handler's own check threw.
+  reject: (error: unknown) => void;
 };

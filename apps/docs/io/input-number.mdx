@@ -66,7 +66,7 @@ const discount = await io.input.number('Discount', { max: 50 }).optional();
 
 `number`, already checked against `min`, `max` and `decimals`: typing `49.90` gives `49.9`.
 
-## Validation
+## Built-in validation
 
 The field is always required. The browser stops values outside the limits before they are sent, and the server checks every answer again, so these messages come back even when the browser's own checks are bypassed:
 
@@ -76,3 +76,13 @@ The field is always required. The browser stops values outside the limits before
 | Smaller than `min`                 | `<label> must be at least <min>.`                                                                                     |
 | Larger than `max`                  | `<label> must be at most <max>.`                                                                                      |
 | More decimal places than allowed   | `<label> must be a whole number.` with `decimals: 0`, otherwise `<label> can have at most <decimals> decimal places.` |
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+const amount = await io.input.number('Refund amount', { decimals: 2 }).validate((amount) => {
+  return amount <= order.total ? undefined : `The order was only ${order.total}.`;
+});
+```

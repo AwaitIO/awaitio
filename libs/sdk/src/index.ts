@@ -1,6 +1,7 @@
 export { Action } from './classes/Action';
 export { Page } from './classes/Page';
 export { IOError } from './classes/IOError';
+export { IOGroupPromise } from './classes/IOGroupPromise';
 export { IOPromise } from './classes/IOPromise';
 export { defineComponent } from './defineComponent';
 export { defineDisplay } from './defineDisplay';
@@ -20,6 +21,7 @@ export type { AwaitIOOptions } from './types/AwaitIOOptions';
 export type { AwaitIOEnvironment } from './types/AwaitIOEnvironment';
 export type { AwaitIOUser } from './types/AwaitIOUser';
 export type { IO } from './types/IO';
+export type { IOValidator } from './types/IOValidator';
 export type { DisplayDefinition } from './types/DisplayDefinition';
 export type { DisplayElement } from './types/DisplayElement';
 export type { IOErrorKind } from './types/IOErrorKind';

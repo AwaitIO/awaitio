@@ -89,6 +89,40 @@ const { company, note } = await io.group({
 
 Pass a condition to decide at run time: `.optional(!user.isAdmin)`. Text with only spaces and nothing picked in a multiple select count as empty.
 
+## Custom validation
+
+Chain `.validate()` to any input for a check of your own on top of the component's. The function gets the value the handler would get and returns a message, or nothing when the value is fine. The message shows under the field and the person answers again; the handler continues only once it returns nothing:
+
+```ts
+const code = await io.input.text('Discount code').validate(async (code) => {
+  const existing = await prisma.discount.findUnique({ where: { code } });
+
+  return existing ? `${code} is already taken.` : undefined;
+});
+```
+
+- It runs on the server, so it can be async and use your database; the browser cannot skip it.
+- It runs only after the component's own checks pass, so `code` above is never empty. An optional field left empty and a disabled field skip it.
+- A function that throws fails the run, like an error thrown in the handler.
+
+For a check across several fields, chain `.validate()` to `io.group`. The function gets the values as the handler would get them; its message shows above **Continue**, not under one field, and it runs only once every field passed its own checks:
+
+```ts
+const { startsAt, endsAt } = await io
+  .group({
+    code: io.input.text('Discount code'),
+    startsAt: io.input.date('Starts on'),
+    endsAt: io.input.date('Ends on'),
+  })
+  .validate(({ startsAt, endsAt }) => {
+    return endsAt > startsAt ? undefined : 'The code must end after it starts.';
+  });
+```
+
+<Frame>
+  <img src="/images/io-group-validate.png" alt="A form with Discount code, Starts on and Ends on fields and the message The code must end after it starts. above the Continue button" />
+</Frame>
+
 ## Disabled fields
 
 Every input takes `disabled: true` next to its own props. The field shows its starting value, usually `defaultValue`, and cannot be changed, and the server hands the handler that value whatever the browser sends:

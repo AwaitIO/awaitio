@@ -49,3 +49,17 @@ const sendEmail = await io.input.boolean('Send a confirmation email', {
 ## Returns
 
 `boolean`: `true` when the box is checked, `false` when it is not.
+
+## Built-in validation
+
+Nothing is checked: an unchecked box gives `false`.
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+
+```ts
+await io.input.boolean('I have read the refund policy').validate((isChecked) => {
+  return isChecked ? undefined : 'Read the refund policy first.';
+});
+```
