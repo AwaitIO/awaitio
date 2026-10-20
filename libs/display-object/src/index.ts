@@ -1,0 +1,1 @@
+export { displayObject } from './displayObject';

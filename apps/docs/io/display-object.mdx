@@ -1,0 +1,50 @@
+---
+title: 'Display Object'
+description: 'Shows the keys and values of a record, nested data included.'
+icon: 'brackets-curly'
+---
+
+`io.display.object()` shows the keys and values of a record in a folder's page or in a step of an action. Nested objects and lists are shown under their key. It only displays and returns nothing. Provided by the `@awaitio/display-object` package.
+
+<Frame>
+  <img src="/images/io-display-object.png" alt="An Account heading with a JSON tree: id, name, a nested plan, a list of owners and isTrial false" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-object
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayObject } from '@awaitio/display-object';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { object: displayObject } },
+});
+```
+
+## Usage
+
+```ts
+const account = await prisma.account.findUniqueOrThrow({ where: { id }, include: { plan: true } });
+
+await io.display.object('Account', { data: account });
+```
+
+The label is the heading above the record; pass `null` for none.
+
+## Props
+
+| Prop   | Type                                   | Required | Description                                                              |
+| ------ | -------------------------------------- | -------- | ------------------------------------------------------------------------ |
+| `data` | `Record<string, unknown> \| unknown[]` | Required | The record to show. A list shows its items under their position: 0, 1, … |
+
+## How it looks
+
+The record is shown as a JSON tree: strings, numbers and booleans in their own colours, nested objects and lists open two levels deep and fold on a click, and every value can be copied. A `Date` arrives as its ISO string.
