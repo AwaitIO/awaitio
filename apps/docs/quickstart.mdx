@@ -69,10 +69,10 @@ Build a server with one action that asks for a name and greets back, then log in
 
   </Step>
   <Step title="Write an action">
-    ```ts actions/greet.ts
+    ```ts actions/greetAction.ts
     import { app } from '../app';
 
-    export const greet = app.defineAction({
+    export const greetAction = app.defineAction({
       name: 'Greet',
       description: 'Asks for a name and greets back.',
       handler: async ({ io }) => {
@@ -105,7 +105,7 @@ Build a server with one action that asks for a name and greets back, then log in
 
     **What's happening here**
 
-    - `listen()` loads every file in `actionsDirectory` and opens the port; the file's path is the action's URL: `actions/greet.ts` is at `/actions/greet`.
+    - `listen()` loads every file in `actionsDirectory` and opens the port; the file's path is the action's URL: `actions/greetAction.ts` is at `/actions/greet`.
     - `watch` restarts the server whenever you save a file; `--env-file=.env` passes the session secret.
     - The server listens on `127.0.0.1` only, so nobody else on the network can reach it yet.
 

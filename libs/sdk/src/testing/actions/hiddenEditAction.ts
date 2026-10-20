@@ -1,6 +1,6 @@
 import { testApp } from '../testApp';
 
-export const hiddenEdit = testApp.defineAction({
+export const hiddenEditAction = testApp.defineAction({
   name: 'Hidden edit',
   unlisted: true,
   handler: async () => {

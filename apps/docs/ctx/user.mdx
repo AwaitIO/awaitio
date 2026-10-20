@@ -9,7 +9,7 @@ Every run knows who started it: the handler gets that user in `ctx.user`.
 ## Usage
 
 ```ts
-export const hello = app.defineAction({
+export const helloAction = app.defineAction({
   name: 'Hello',
   handler: async ({ io, ctx }) => {
     const message = await io.input.text(`Hi ${ctx.user.name}, what should we log?`);

@@ -1,6 +1,6 @@
 import { testApp } from '../testApp';
 
-export const fullName = testApp.defineAction({
+export const fullNameAction = testApp.defineAction({
   name: 'Full name',
   description: 'Two fields',
   handler: async ({ io }) => {

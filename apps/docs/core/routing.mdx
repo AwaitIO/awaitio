@@ -26,9 +26,9 @@ Every action sits directly in `actions/`, as in the [Quickstart](/quickstart):
 
 ```text
 actions/
-├── greet.ts           → /actions/greet
-├── refundOrder.ts     → /actions/refund_order
-└── resetPassword.ts   → /actions/reset_password
+├── greetAction.ts         → /actions/greet
+├── refundOrderAction.ts   → /actions/refund_order
+└── resetPasswordAction.ts → /actions/reset_password
 ```
 
 The home page lists them as cards, without tabs. Enough for a handful of tools.
@@ -56,26 +56,27 @@ The slug of an action is its path in the folder, each part in snake_case. This i
 ```text
 actions/
 ├── accounts/
-│   ├── createAccount.ts         → /actions/accounts/create_account
-│   ├── extendTrial.ts           → /actions/accounts/extend_trial
+│   ├── createAccountAction.ts     → /actions/accounts/create_account
+│   ├── extendTrialAction.ts       → /actions/accounts/extend_trial
 │   └── billing/
-│       └── refundPayment.ts     → /actions/accounts/billing/refund_payment
+│       └── refundPaymentAction.ts → /actions/accounts/billing/refund_payment
 ├── logs/
-│   └── searchLogs.ts            → /actions/logs/search_logs
+│   └── searchLogsAction.ts        → /actions/logs/search_logs
 ├── support/
-│   └── rateSupportCall.ts       → /actions/support/rate_support_call
+│   └── rateSupportCallAction.ts   → /actions/support/rate_support_call
 ├── system/
-│   └── clearCache.ts            → /actions/system/clear_cache
+│   └── clearCacheAction.ts        → /actions/system/clear_cache
 └── users/
-    ├── index.ts                 → /groups/users (a page)
-    ├── changeRole.ts            → /actions/users/change_role
-    ├── exportUsers.ts           → /actions/users/export_users
-    ├── sendWelcomeEmail.ts      → /actions/users/send_welcome_email
+    ├── index.ts                   → /groups/users (a page)
+    ├── changeRoleAction.ts        → /actions/users/change_role
+    ├── exportUsersAction.ts       → /actions/users/export_users
+    ├── sendWelcomeEmailAction.ts  → /actions/users/send_welcome_email
     └── messages/
-        └── sendMessage.ts       → /actions/users/messages/send_message
+        └── sendMessageAction.ts   → /actions/users/messages/send_message
 ```
 
-- `createAccount.ts`, `create_account.ts` and `create-account.ts` all give the slug `create_account`, and folders follow the same rule. Two files that end up with the same slug stop the app at start.
+- Name an action's file after its const, which ends in `Action`: `export const createAccountAction` lives in `createAccountAction.ts`. The URL leaves the suffix out, so the slug is `create_account`.
+- `createAccountAction.ts`, `create_account.ts` and `create-account.ts` all give the slug `create_account`, and folders follow the same rule. Two files that end up with the same slug stop the app at start.
 - Folders go as deep as you need.
 - The handler reads the slug as `ctx.action.slug`: `accounts/create_account`.
 - The list shows names, not paths: the URL is what you link to, not something people read.
@@ -84,10 +85,10 @@ actions/
 
 Each file exports one `app.defineAction(...)`, as a named or a default export:
 
-```ts actions/accounts/createAccount.ts
+```ts actions/accounts/createAccountAction.ts
 import { app } from '../../app';
 
-export const createAccount = app.defineAction({
+export const createAccountAction = app.defineAction({
   name: 'Create account',
   handler: async ({ io }) => {
     const company = await io.input.text('Company name');
@@ -120,8 +121,8 @@ The top level of `actions/` has no index file; an `index.ts` there stops the app
 
 An action that only makes sense for one record, such as editing a user picked in a table, can stay out of the list. Pass `unlisted: true`: it is not in the action list or in its folder's column, but it still runs from its URL, from `ctx.redirect()` and from a table's row menu:
 
-```ts actions/users/editUser.ts
-export const editUser = app.defineAction({
+```ts actions/users/editUserAction.ts
+export const editUserAction = app.defineAction({
   name: 'Edit user',
   unlisted: true,
   params: z.object({ id: z.string() }),

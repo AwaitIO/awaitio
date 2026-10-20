@@ -153,10 +153,10 @@ The same path, joined with dots (`input.text`), is the component's type: the ser
 
 Actions get `io` typed from this tree. Create actions with `app.defineAction()` on the same instance, and every method, its props and what it returns are checked:
 
-```ts actions/accounts/createAccount.ts
+```ts actions/accounts/createAccountAction.ts
 import { app } from '../../app';
 
-export const createAccount = app.defineAction({
+export const createAccountAction = app.defineAction({
   name: 'Create account',
   handler: async ({ io }) => {
     const company = await io.input.text('Company name', { placeholder: 'Acme Inc.' }); // string

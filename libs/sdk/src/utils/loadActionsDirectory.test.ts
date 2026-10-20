@@ -28,6 +28,12 @@ test('Should map nested files to slugs, the index file to its folder', async () 
   expect(Object.keys(await loadActionsDirectory({ directory }))).toEqual(['hello', 'billing', 'billing/refund_order', 'billing/late_invoices/send_reminder']);
 });
 
+test('Should leave the Action suffix of a file name out of its slug', async () => {
+  const directory = createDirectory({ 'createAccountAction.mjs': actionSource, 'Action/refundAction.mjs': actionSource });
+
+  expect(Object.keys(await loadActionsDirectory({ directory }))).toEqual(['create_account', 'action/refund']);
+});
+
 test('Should skip tests, declarations and files or folders starting with _ or .', async () => {
   const directory = createDirectory({
     'hello.mjs': actionSource,

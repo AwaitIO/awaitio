@@ -34,7 +34,7 @@ Under `basic`, it also frames every page that returns just display components, t
 ## Usage
 
 ```ts actions/users/index.ts
-export const users = app.definePage({
+export const usersPage = app.definePage({
   description: 'Everyone who works with the back office.',
   handler: async ({ io }) => {
     return io.layout.basic({

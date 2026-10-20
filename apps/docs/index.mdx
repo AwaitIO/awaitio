@@ -7,10 +7,10 @@ AwaitIO runs internal tools in one Node process. You write each tool as an async
 
 ## What you write
 
-```ts actions/fullName.ts
+```ts actions/fullNameAction.ts
 import { app } from '../app';
 
-export const fullName = app.defineAction({
+export const fullNameAction = app.defineAction({
   description: 'Asks for two text fields on one screen.',
   handler: async ({ io }) => {
     const { firstName, lastName } = await io.group({
@@ -48,12 +48,12 @@ A handler is a plain async function that runs in your own Node process, so every
 
 AwaitIO only adds `io` to ask a person and `ctx` to know who it is.
 
-```ts actions/refundOrder.ts
+```ts actions/refundOrderAction.ts
 import { app } from '../app';
 import { prisma } from '../prisma';
 import { formatMoney } from '../utils/formatMoney';
 
-export const refundOrder = app.defineAction({
+export const refundOrderAction = app.defineAction({
   handler: async ({ io, ctx }) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });

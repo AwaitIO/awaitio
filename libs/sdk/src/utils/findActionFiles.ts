@@ -34,7 +34,10 @@ export const findActionFiles = ({ directory, parents = [] }: FindActionFilesArgs
         throw new Error(`${join(directory, entry.name)}: an index file needs a folder to stand for; name the action file instead.`);
       }
 
-      return { file: join(directory, entry.name), slug: (isIndex ? parents : [...parents, toSlugSegment({ name: entry.name })]).join('/'), isIndex };
+      // The file is named after its const, createAccountAction.ts; the URL leaves the kind out: create_account.
+      const name = entry.name.replace(/Action(\.[a-z]+)$/, '$1');
+
+      return { file: join(directory, entry.name), slug: (isIndex ? parents : [...parents, toSlugSegment({ name })]).join('/'), isIndex };
     })
     // The folder's own page leads its list.
     .sort((a, b) => {

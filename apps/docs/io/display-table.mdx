@@ -35,12 +35,12 @@ export const app = new AwaitIO({
 io.display.table('All users', {
   data: await prisma.user.findMany({ include: { account: true } }),
   columns: [
-    { label: 'Name', renderCell: (row) => ({ label: row.name, route: sendWelcomeEmail.route({ params: { name: row.name } }) }) },
+    { label: 'Name', renderCell: (row) => ({ label: row.name, route: sendWelcomeEmailAction.route({ params: { name: row.name } }) }) },
     { label: 'Email', accessorKey: 'email' },
     { label: 'Account', renderCell: (row) => row.account.name },
     'createdAt',
   ],
-  rowMenuItems: (row) => [changeRole.route({ params: { id: row.id } })],
+  rowMenuItems: (row) => [changeRoleAction.route({ params: { id: row.id } })],
 });
 ```
 
@@ -84,7 +84,7 @@ io.display.table('Devices', {
     'name',
     { label: 'Status', renderCell: (device) => ({ label: device.isOnline ? 'Online' : 'Offline', highlightColor: device.isOnline ? 'green' : 'red' }) },
     { label: 'Dashboard', renderCell: (device) => ({ label: 'Open', url: `https://grafana.example.com/d/${device.id}` }) },
-    { label: 'Account', renderCell: (device) => ({ label: device.account.name, route: accountDetail.route({ params: { id: device.account.id } }) }) },
+    { label: 'Account', renderCell: (device) => ({ label: device.account.name, route: accountDetailAction.route({ params: { id: device.account.id } }) }) },
   ],
 });
 ```
@@ -107,8 +107,8 @@ io.display.table('Versions', {
   columns: ['name', 'createdAt'],
   rowMenuItems: (row) => {
     return row.isActive && module.frozenAt
-      ? [unfreezeModule.route({ params: { id: module.id }, label: 'Unfreeze' })]
-      : [freezeToVersion.route({ params: { id: module.id, versionId: row.id }, label: 'Freeze to this version' })];
+      ? [unfreezeModuleAction.route({ params: { id: module.id }, label: 'Unfreeze' })]
+      : [freezeToVersionAction.route({ params: { id: module.id, versionId: row.id }, label: 'Freeze to this version' })];
   },
 });
 ```
