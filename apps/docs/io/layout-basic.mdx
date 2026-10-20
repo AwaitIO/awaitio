@@ -48,8 +48,33 @@ export const usersPage = app.definePage({
 
 ## Props
 
-| Prop          | Type                | Required | Description                            |
-| ------------- | ------------------- | -------- | -------------------------------------- |
-| `title`       | `string`            | Required | The heading of the page.               |
-| `description` | `string`            | Optional | One line under the title.              |
-| `children`    | `io.display.*(…)[]` | Required | The display components, top to bottom. |
+| Prop          | Type                | Required | Description                                                                   |
+| ------------- | ------------------- | -------- | ----------------------------------------------------------------------------- |
+| `title`       | `string`            | Required | The heading of the page.                                                      |
+| `description` | `string`            | Optional | One line under the title.                                                     |
+| `menuItems`   | `ActionRoute[]`     | Optional | Buttons next to the title that open an action, see [Menu items](#menu-items). |
+| `children`    | `io.display.*(…)[]` | Required | The display components, top to bottom.                                        |
+
+## Menu items
+
+`menuItems` puts buttons next to the title, each opening an action. Build them with the action's `route()`, the same link a table's [row menu](/io/display-table#row-menu) or `ctx.redirect` takes; the label is the action's name unless you pass one:
+
+```ts actions/integrators/index.ts
+import { upsertIntegratorAction } from './upsertIntegratorAction';
+
+export const integratorsPage = app.definePage({
+  handler: async ({ io }) => {
+    return io.layout.basic({
+      title: 'Integrators',
+      menuItems: [upsertIntegratorAction.route({ label: 'Create integrator' })],
+      children: [io.display.table('All integrators', { data: await prisma.integrator.findMany(), columns: ['name', 'country'] })],
+    });
+  },
+});
+```
+
+<Frame>
+  <img src="/images/layout-basic-menu-items.png" alt="The Users page header with the buttons Send welcome email and Export users next to the title" />
+</Frame>
+
+The first item is the page's main button; the rest are drawn as secondary ones.
