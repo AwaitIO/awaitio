@@ -40,10 +40,11 @@ const sendEmail = await io.input.boolean('Send a confirmation email', {
 
 ## Props
 
-| Prop           | Type      | Required | Description                                                 |
-| -------------- | --------- | -------- | ----------------------------------------------------------- |
-| `helpText`     | `string`  | Required | Shown to the right of the checkbox: what checking it means. |
-| `defaultValue` | `boolean` | Optional | Whether the box starts checked. Defaults to `false`.        |
+| Prop           | Type      | Required | Description                                                                                                 |
+| -------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `helpText`     | `string`  | Required | Shown to the right of the checkbox: what checking it means.                                                 |
+| `defaultValue` | `boolean` | Optional | Whether the box starts checked. Defaults to `false`.                                                        |
+| `disabled`     | `boolean` | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 ## Returns
 

@@ -53,6 +53,7 @@ const [user] = await io.select.table('User', {
 | `maxSelections` | `number`                       | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
 | `pageSize`      | `number`                       | Optional | Rows per page. Defaults to 10.                                                                                                |
 | `helpText`      | `string`                       | Optional | Secondary text under the table.                                                                                               |
+| `disabled`      | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
 
 ## Returns
 

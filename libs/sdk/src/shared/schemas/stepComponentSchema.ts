@@ -6,4 +6,6 @@ export const stepComponentSchema = z.object({
   type: z.string(),
   label: z.string(),
   props: z.record(z.unknown()),
+  // The io call's `disabled`: the field is locked and the server keeps its starting value.
+  disabled: z.boolean().optional(),
 });

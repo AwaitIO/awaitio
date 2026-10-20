@@ -42,14 +42,15 @@ const amount = await io.input.number('Refund amount', {
 
 ## Props
 
-| Prop           | Type     | Required | Description                                                               |
-| -------------- | -------- | -------- | ------------------------------------------------------------------------- |
-| `placeholder`  | `string` | Optional | Text shown in the empty field.                                            |
-| `helpText`     | `string` | Optional | Secondary text under the field.                                           |
-| `defaultValue` | `number` | Optional | The value the field starts with. Empty when left out.                     |
-| `min`          | `number` | Optional | The smallest number accepted.                                             |
-| `max`          | `number` | Optional | The largest number accepted.                                              |
-| `decimals`     | `number` | Optional | How many decimal places are allowed. Defaults to `0`: whole numbers only. |
+| Prop           | Type      | Required | Description                                                                                                 |
+| -------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `placeholder`  | `string`  | Optional | Text shown in the empty field.                                                                              |
+| `helpText`     | `string`  | Optional | Secondary text under the field.                                                                             |
+| `defaultValue` | `number`  | Optional | The value the field starts with. Empty when left out.                                                       |
+| `min`          | `number`  | Optional | The smallest number accepted.                                                                               |
+| `max`          | `number`  | Optional | The largest number accepted.                                                                                |
+| `decimals`     | `number`  | Optional | How many decimal places are allowed. Defaults to `0`: whole numbers only.                                   |
+| `disabled`     | `boolean` | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 Props are checked when the io call is made: a prop of the wrong type throws in the handler.
 

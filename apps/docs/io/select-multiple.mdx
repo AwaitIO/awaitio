@@ -46,13 +46,14 @@ const channels = await io.select.multiple('Tell them by', {
 
 ## Props
 
-| Prop            | Type                 | Required | Description                                                                   |
-| --------------- | -------------------- | -------- | ----------------------------------------------------------------------------- |
-| `options`       | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down offers those not chosen yet. |
-| `defaultValue`  | `string[]`           | Optional | The values chosen at the start. Nothing is chosen when left out.              |
-| `minSelections` | `number`             | Optional | At least this many must be chosen. By default none.                           |
-| `maxSelections` | `number`             | Optional | At most this many may be chosen; the drop-down stops offering more.           |
-| `helpText`      | `string`             | Optional | Secondary text under the field.                                               |
+| Prop            | Type                 | Required | Description                                                                                                 |
+| --------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `options`       | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down offers those not chosen yet.                               |
+| `defaultValue`  | `string[]`           | Optional | The values chosen at the start. Nothing is chosen when left out.                                            |
+| `minSelections` | `number`             | Optional | At least this many must be chosen. By default none.                                                         |
+| `maxSelections` | `number`             | Optional | At most this many may be chosen; the drop-down stops offering more.                                         |
+| `helpText`      | `string`             | Optional | Secondary text under the field.                                                                             |
+| `disabled`      | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 ## Returns
 

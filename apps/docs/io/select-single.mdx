@@ -44,11 +44,12 @@ const role = await io.select.single('New role', {
 
 ## Props
 
-| Prop           | Type                 | Required | Description                                                       |
-| -------------- | -------------------- | -------- | ----------------------------------------------------------------- |
-| `options`      | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down shows `label`.   |
-| `defaultValue` | `string`             | Optional | The `value` chosen at the start. Nothing is chosen when left out. |
-| `helpText`     | `string`             | Optional | Secondary text under the field.                                   |
+| Prop           | Type                 | Required | Description                                                                                                 |
+| -------------- | -------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `options`      | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down shows `label`.                                             |
+| `defaultValue` | `string`             | Optional | The `value` chosen at the start. Nothing is chosen when left out.                                           |
+| `helpText`     | `string`             | Optional | Secondary text under the field.                                                                             |
+| `disabled`     | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 ## Returns
 

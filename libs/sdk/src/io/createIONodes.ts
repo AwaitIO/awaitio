@@ -28,8 +28,11 @@ export const createIONodes = ({ tree, prefix, render }: CreateIONodesArgs): Reco
 
         return [
           key,
-          (label: string, props?: unknown) => {
-            return new IOPromise({ component: { type, label, props: node.props.parse(props ?? {}) }, render });
+          (label: string, props?: Record<string, unknown>) => {
+            // `disabled` belongs to every input, so it is taken out before the component's own schema sees the props.
+            const { disabled, ...componentProps } = props ?? {};
+
+            return new IOPromise({ component: { type, label, props: node.props.parse(componentProps), disabled: disabled === true }, render });
           },
         ];
       }),

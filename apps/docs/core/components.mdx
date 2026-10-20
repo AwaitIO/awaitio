@@ -54,6 +54,17 @@ Each card is one package and opens its page: all its props, what it returns and 
   </Card>
 </Columns>
 
+## Disabled fields
+
+Every input takes `disabled: true` next to its own props. The field shows its starting value, usually `defaultValue`, and cannot be changed, and the server hands the handler that value whatever the browser sends:
+
+```ts
+const { plan, note } = await io.group({
+  plan: io.input.text('Plan', { defaultValue: account.plan, disabled: true }),
+  note: io.input.textarea('Note'),
+});
+```
+
 ## The key is the name
 
 The path of keys to a component becomes its method on `io`: `input: { text: inputText }` gives `io.input.text()`. Nothing in the component decides its name, so the same component can sit under any key, and the tree can be as deep or as flat as you like:

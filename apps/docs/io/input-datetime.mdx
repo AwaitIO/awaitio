@@ -44,12 +44,13 @@ const endsAt = await io.input.datetime('Trial ends at', {
 
 ## Props
 
-| Prop           | Type                         | Required | Description                                           |
-| -------------- | ---------------------------- | -------- | ----------------------------------------------------- |
-| `helpText`     | `string`                     | Optional | Secondary text under the field.                       |
-| `defaultValue` | `DateTime \| Date \| string` | Optional | The value the field starts with. Empty when left out. |
-| `min`          | `DateTime \| Date \| string` | Optional | The earliest time that can be picked.                 |
-| `max`          | `DateTime \| Date \| string` | Optional | The latest time that can be picked.                   |
+| Prop           | Type                         | Required | Description                                                                                                 |
+| -------------- | ---------------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `helpText`     | `string`                     | Optional | Secondary text under the field.                                                                             |
+| `defaultValue` | `DateTime \| Date \| string` | Optional | The value the field starts with. Empty when left out.                                                       |
+| `min`          | `DateTime \| Date \| string` | Optional | The earliest time that can be picked.                                                                       |
+| `max`          | `DateTime \| Date \| string` | Optional | The latest time that can be picked.                                                                         |
+| `disabled`     | `boolean`                    | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
 `defaultValue`, `min` and `max` take a luxon `DateTime`, a JavaScript `Date` or an ISO 8601 string. An impossible date such as `2026-02-30` throws when the io call is made.
 

@@ -75,7 +75,7 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
               props={component.props}
               value={values[index]}
               autoFocus={index === 0}
-              disabled={isSubmitting}
+              disabled={isSubmitting || component.disabled === true}
               error={step.errors[index] ?? null}
               onChange={(value) => {
                 setValues((previous) => {

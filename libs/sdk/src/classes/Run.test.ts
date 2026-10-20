@@ -107,6 +107,7 @@ test('Should resume the handler with the submitted text', async () => {
   expect(step?.components).toMatchInlineSnapshot(`
     [
       {
+        "disabled": false,
         "label": "Name",
         "props": {},
         "type": "input.text",

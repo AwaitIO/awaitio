@@ -29,6 +29,13 @@ export const parseResponseValues = ({ registry, components, values }: ParseRespo
       return { error: `Unknown component ${component.type}.`, value: undefined };
     }
 
+    // A disabled field keeps its starting value; what the browser sent for it does not count, and there is nothing to check.
+    if (component.disabled) {
+      const kept = definition.returns.safeParse(definition.initialValue?.(component.props));
+
+      return kept.success ? { error: null, value: kept.data } : { error: `${component.label}: a disabled field needs a defaultValue.`, value: undefined };
+    }
+
     const parsed = definition.returns.safeParse(values[index]);
 
     if (!parsed.success) {
