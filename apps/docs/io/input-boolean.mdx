@@ -1,0 +1,50 @@
+---
+title: 'Input Boolean'
+description: 'Asks a yes or no question with a checkbox.'
+icon: 'square-check'
+---
+
+`io.input.boolean()` asks a yes or no question and returns `true` or `false`. Provided by the `@awaitio/input-boolean` package.
+
+<Frame>
+  <img src="/images/io-input-boolean.png" alt="The label Send a confirmation email above a checked checkbox with the help text to its right" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-boolean
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputBoolean } from '@awaitio/input-boolean';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { boolean: inputBoolean } },
+});
+```
+
+## Usage
+
+```ts
+const sendEmail = await io.input.boolean('Send a confirmation email', {
+  defaultValue: true,
+  helpText: 'The customer gets a copy of the change',
+});
+```
+
+## Props
+
+| Prop           | Type      | Required | Description                                                 |
+| -------------- | --------- | -------- | ----------------------------------------------------------- |
+| `helpText`     | `string`  | Required | Shown to the right of the checkbox: what checking it means. |
+| `defaultValue` | `boolean` | Optional | Whether the box starts checked. Defaults to `false`.        |
+
+## Returns
+
+`boolean`: `true` when the box is checked, `false` when it is not.

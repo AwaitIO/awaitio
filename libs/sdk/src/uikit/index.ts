@@ -3,6 +3,7 @@
 // can restyle every one of them.
 export { Button } from './Button';
 export { Card } from './Card';
+export { Checkbox } from './Checkbox';
 export { ChoiceList } from './ChoiceList';
 export { Field } from './Field';
 export { FieldContext } from './FieldContext';
@@ -22,6 +23,7 @@ export { themeBlockNames } from './themeBlockNames';
 export { useFieldId } from './useFieldId';
 export type { ButtonProps } from './Button';
 export type { CardProps } from './Card';
+export type { CheckboxProps } from './Checkbox';
 export type { Choice, ChoiceListProps } from './ChoiceList';
 export type { FieldProps } from './Field';
 export type { HeadingProps } from './Heading';

@@ -31,6 +31,9 @@ Each card is one package and opens its page: all its props, what it returns and 
   <Card title="Input Textarea" href="/io/input-textarea" img="/images/components/input-textarea.png">
     `io.input.textarea()` asks for longer text over a few lines and returns a `string`.
   </Card>
+  <Card title="Input Boolean" href="/io/input-boolean" img="/images/components/input-boolean.png">
+    `io.input.boolean()` asks a yes or no question with a checkbox and returns a `boolean`.
+  </Card>
 </Columns>
 
 ## The key is the name
@@ -164,6 +167,7 @@ Register your component under a key that already exists, `input: { text: myText 
 | `Textarea`   | A text field over several lines.                                                                      |
 | `Select`     | A drop-down for one of many `choices`.                                                                |
 | `ChoiceList` | Choices as cards, `mode: 'single'` or `'multiple'`.                                                   |
+| `Checkbox`   | A checkbox with its text to the right, for a yes or no answer.                                        |
 | `Button`     | A button, `variant: 'primary'` or `'secondary'`.                                                      |
 | `Field`      | Label, control, help text and error of one field, in an [unwrapped](#unwrapped-components) component. |
 | `Label`      | The label of a field, in an unwrapped component.                                                      |

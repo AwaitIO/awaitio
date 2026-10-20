@@ -1,5 +1,6 @@
 import type { ButtonProps } from '../Button';
 import type { CardProps } from '../Card';
+import type { CheckboxProps } from '../Checkbox';
 import type { ChoiceListProps } from '../ChoiceList';
 import type { FieldProps } from '../Field';
 import type { HeadingProps } from '../Heading';
@@ -18,6 +19,7 @@ import type { ComponentType } from 'react';
 export type ThemeBlocks = {
   Button: ComponentType<ButtonProps>;
   Card: ComponentType<CardProps>;
+  Checkbox: ComponentType<CheckboxProps>;
   ChoiceList: ComponentType<ChoiceListProps>;
   Field: ComponentType<FieldProps>;
   Heading: ComponentType<HeadingProps>;

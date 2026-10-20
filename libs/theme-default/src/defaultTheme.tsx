@@ -1,6 +1,7 @@
 import { defineTheme } from 'awaitio';
 import { Button } from './blocks/Button';
 import { Card } from './blocks/Card';
+import { Checkbox } from './blocks/Checkbox';
 import { ChoiceList } from './blocks/ChoiceList';
 import { Field } from './blocks/Field';
 import { Heading } from './blocks/Heading';
@@ -17,6 +18,7 @@ import { Textarea } from './blocks/Textarea';
 export const defaultTheme = defineTheme({
   Button,
   Card,
+  Checkbox,
   ChoiceList,
   Field,
   Heading,

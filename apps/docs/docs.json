@@ -33,7 +33,7 @@
       },
       {
         "group": "Components",
-        "pages": ["io/input-text", "io/input-textarea"]
+        "pages": ["io/input-text", "io/input-textarea", "io/input-boolean"]
       },
       {
         "group": "Display components",
