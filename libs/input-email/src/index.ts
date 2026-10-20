@@ -1,0 +1,1 @@
+export { inputEmail } from './inputEmail';

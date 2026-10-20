@@ -1,0 +1,68 @@
+---
+title: 'Input Email'
+description: 'Asks for an email address.'
+icon: 'at'
+---
+
+`io.input.email()` requests an email address and returns it as a string. Provided by the `@awaitio/input-email` package.
+
+<Frame>
+  <img src="/images/io-input-email.png" alt="An Email field filled with ada@example.com, with help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-email
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputEmail } from '@awaitio/input-email';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { email: inputEmail } },
+});
+```
+
+## Usage
+
+```ts
+const ownerEmail = await io.input.email('Owner email', {
+  placeholder: 'ada@example.com',
+  helpText: 'Gets the invitation',
+});
+```
+
+## Props
+
+| Prop           | Type      | Required | Description                                                                                                 |
+| -------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `placeholder`  | `string`  | Optional | Text shown in the empty field.                                                                              |
+| `helpText`     | `string`  | Optional | Secondary text under the field.                                                                             |
+| `defaultValue` | `string`  | Optional | The value the field starts with. Defaults to an empty string.                                               |
+| `disabled`     | `boolean` | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
+
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const backupEmail = await io.input.email('Backup email').optional();
+```
+
+## Returns
+
+`string`: the address without the spaces around it.
+
+## Validation
+
+The browser checks the format before sending, and the server checks every answer again:
+
+| When                                       | Message                            |
+| ------------------------------------------ | ---------------------------------- |
+| The field is empty or not an email address | `<label>: enter an email address.` |

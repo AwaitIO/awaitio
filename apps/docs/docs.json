@@ -33,7 +33,18 @@
       },
       {
         "group": "Components",
-        "pages": ["io/input-text", "io/input-textarea", "io/input-number", "io/input-boolean", "io/input-datetime", "io/select-single", "io/select-multiple", "io/select-table", "io/confirm"]
+        "pages": [
+          "io/input-text",
+          "io/input-email",
+          "io/input-textarea",
+          "io/input-number",
+          "io/input-boolean",
+          "io/input-datetime",
+          "io/select-single",
+          "io/select-multiple",
+          "io/select-table",
+          "io/confirm"
+        ]
       },
       {
         "group": "Display components",
