@@ -10,4 +10,6 @@ export const stepComponentSchema = z.object({
   disabled: z.boolean().optional(),
   // From .optional(): the field may stay empty and the handler gets undefined.
   optional: z.boolean().optional(),
+  // A display component (io.display.*): drawn with its label as a heading, no answer.
+  display: z.boolean().optional(),
 });

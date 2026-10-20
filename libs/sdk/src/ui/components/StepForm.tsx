@@ -1,10 +1,12 @@
 import { Fragment, useState, type FC, type FormEvent } from 'react';
 import { match } from 'ts-pattern';
 import type { ComponentUi } from '../../client/types/ComponentUi';
+import type { DisplayUi } from '../../client/types/DisplayUi';
 import type { Step } from '../../shared/types/Step';
 import { Button } from '../../uikit/Button';
 import { Card } from '../../uikit/Card';
 import { Field } from '../../uikit/Field';
+import { Heading } from '../../uikit/Heading';
 import { ApiError } from '../api/ApiError';
 import { respondToStep } from '../api/respondToStep';
 import { toErrorMessage } from '../utils/toErrorMessage';
@@ -13,11 +15,12 @@ export type StepFormProps = {
   runId: string;
   step: Step;
   uis: Map<string, ComponentUi<unknown, unknown>>;
+  displayUis: Map<string, DisplayUi<unknown>>;
 };
 
 // One step of a running action: every component the handler awaited at once (io.group) as one form.
 // Rendered with key = stepId, so a new step starts with fresh state.
-export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
+export const StepForm: FC<StepFormProps> = ({ runId, step, uis, displayUis }) => {
   const [values, setValues] = useState(() => {
     return step.components.map((component) => {
       return uis.get(component.type)?.initialValue?.(component.props);
@@ -59,6 +62,18 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
         {/* The first step needs no number; from the second one on it tells the user the action goes on. */}
         {step.index > 1 && <p className="text-xs font-medium tracking-wide text-gray-400 uppercase">Step {step.index}</p>}
         {step.components.map((component, index) => {
+          // A display component shows something under its label and has no answer, as on a page.
+          if (component.display) {
+            const Display = displayUis.get(component.type)?.component;
+
+            return (
+              <section key={index} className="flex min-w-0 flex-col gap-3">
+                {component.label && <Heading>{component.label}</Heading>}
+                {Display && <Display label={component.label || null} props={component.props} />}
+              </section>
+            );
+          }
+
           const ui = uis.get(component.type);
 
           if (!ui) {

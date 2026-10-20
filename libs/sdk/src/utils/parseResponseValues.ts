@@ -24,6 +24,11 @@ export const parseResponseValues = ({ registry, components, values }: ParseRespo
   }
 
   const results = components.map((component, index) => {
+    // A display component has nothing to answer.
+    if (component.display && registry.displayByType.has(component.type)) {
+      return { error: null, value: undefined };
+    }
+
     const definition = registry.byType.get(component.type);
 
     if (!definition) {

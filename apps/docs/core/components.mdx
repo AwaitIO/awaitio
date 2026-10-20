@@ -54,6 +54,19 @@ Each card is one package and opens its page: all its props, what it returns and 
   </Card>
 </Columns>
 
+## Display components in an action
+
+Display components, such as [`io.display.table`](/io/display-table), work in an action's `io` too. Awaited on their own, they are a step with a Continue button; in `io.group` they sit next to inputs. Either way they answer nothing, `undefined`:
+
+```ts
+await io.display.table('Invoices to send', { rows: invoices });
+
+const { reason } = await io.group({
+  summary: io.display.metadata(null, { items: [{ label: 'Total', value: total }] }),
+  reason: io.input.text('Why send them now?'),
+});
+```
+
 ## Optional fields
 
 Every input is required unless you chain `.optional()` to it. The field is marked _optional_ next to its label, can be left empty, and the handler gets `undefined` for it; the component's own checks, such as `minLength`, run only when something was filled in:

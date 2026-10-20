@@ -2,12 +2,21 @@ import { expect, test } from 'vitest';
 import { z } from 'zod';
 import { Run } from './Run';
 import { defineComponent } from '../defineComponent';
+import { defineDisplay } from '../defineDisplay';
 import type { RunState } from '../shared/types/RunState';
 import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
 import type { IO } from '../types/IO';
 import { createComponentRegistry } from '../utils/createComponentRegistry';
 
 const components = {
+  display: {
+    note: defineDisplay({
+      props: z.object({ text: z.string() }),
+      component: () => {
+        return null;
+      },
+    }),
+  },
   input: {
     text: defineComponent({
       props: z.object({ minLength: z.number().optional() }),
@@ -392,4 +401,30 @@ test('Should end the run and send the browser to the action ctx.redirect names',
   });
 
   expect(afterRedirect).toBeInstanceOf(Error);
+});
+
+test('Should show a display component next to an input and give undefined for it', async () => {
+  const run = startRun({
+    handler: async (io) => {
+      return io.group({ note: io.display.note('Before you start', { text: 'Read this first' }), name: io.input.text('Name') });
+    },
+  });
+  const { step } = await waitForStep({ run });
+
+  expect(step?.components[0]).toEqual({ type: 'display.note', label: 'Before you start', props: { text: 'Read this first' }, display: true });
+
+  expect(run.respond({ stepId: step?.stepId ?? '', values: [null, 'Petr'] })).toEqual({ status: 'OK' });
+
+  expect((await waitForFinish({ run })).result).toEqual({ status: 'SUCCESS', data: { name: 'Petr' } });
+});
+
+test('Should refuse display props that do not fit its schema', async () => {
+  const run = startRun({
+    handler: async (io) => {
+      // @ts-expect-error text must be a string
+      return io.display.note(null, { text: 1 });
+    },
+  });
+
+  expect((await waitForFinish({ run })).status).toBe('FAILURE');
 });
