@@ -1,3 +1,4 @@
+import { accessPath } from './accessPath';
 import type { Route } from '../types/Route';
 
 export type ParseRouteArgs = {
@@ -18,6 +19,10 @@ export const parseRoute = ({ pathname }: ParseRouteArgs): Route => {
 
   if (action?.[1]) {
     return { kind: 'action', slug: decodePath(action[1]), runId: action[2] ?? null };
+  }
+
+  if (pathname.replace(/\/$/, '') === accessPath()) {
+    return { kind: 'access' };
   }
 
   const group = pathname.match(/^\/groups\/(.+?)\/?$/);

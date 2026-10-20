@@ -9,6 +9,7 @@ import { runStateSchema } from './shared/schemas/runStateSchema';
 import type { RunState } from './shared/types/RunState';
 import { testApp } from './testing/testApp';
 import { testUser } from './testing/testUser';
+import { verifyPassword } from './utils/verifyPassword';
 import type { AddressInfo } from 'net';
 
 const { secret, password, passwordHash } = testUser;
@@ -498,4 +499,20 @@ test('Should return 404 for an unknown action or run', async () => {
   expect((await fetch(`${baseUrl}/api/actions/missing/runs`, authorized({ method: 'POST' }))).status).toBe(404);
 
   expect((await fetch(`${baseUrl}/api/runs/missing/events`, authorized())).status).toBe(404);
+});
+
+test('Should turn an access request into a users entry without logging anyone in', async () => {
+  const request = (body: object) => {
+    return fetch(`${baseUrl}/api/access-request`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' }, body: JSON.stringify(body) });
+  };
+  const response = await request({ email: ' Ada@Example.com ', name: 'Ada', password: 'correct horse battery' });
+  const { user } = await response.json();
+
+  expect([response.status, response.headers.get('set-cookie'), user.email, user.name]).toEqual([200, null, 'ada@example.com', 'Ada']);
+
+  expect(await verifyPassword({ password: 'correct horse battery', passwordHash: user.passwordHash })).toBe(true);
+
+  const short = await request({ email: 'ada@example.com', name: 'Ada', password: 'short' });
+
+  expect([short.status, (await short.json()).message]).toEqual([400, 'password: Use at least 10 characters.']);
 });

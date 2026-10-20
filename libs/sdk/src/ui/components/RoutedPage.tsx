@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import { usePathname } from '../hooks/usePathname';
+import { AccessRequestPage } from '../pages/AccessRequestPage';
 import { ActionListPage } from '../pages/ActionListPage';
 import { ActionStartPage } from '../pages/ActionStartPage';
 import { RunPage } from '../pages/RunPage';
@@ -14,6 +15,9 @@ export const RoutedPage: FC = () => {
     })
     .with({ kind: 'action' }, ({ slug, runId }) => {
       return <RunPage key={runId} slug={slug} runId={runId ?? ''} />;
+    })
+    .with({ kind: 'access' }, () => {
+      return <AccessRequestPage info={null} />;
     })
     .with({ kind: 'list' }, ({ group }) => {
       return <ActionListPage key={group ?? ''} group={group} />;

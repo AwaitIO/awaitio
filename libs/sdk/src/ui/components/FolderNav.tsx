@@ -21,6 +21,9 @@ export const FolderNav: FC = () => {
     .with({ kind: 'action' }, ({ slug }) => {
       return slug.split('/')[0];
     })
+    .with({ kind: 'access' }, () => {
+      return '';
+    })
     .exhaustive();
 
   if (folders.length === 0) {

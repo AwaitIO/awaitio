@@ -2,12 +2,16 @@ import { match } from 'ts-pattern';
 import { RoutedPage } from './components/RoutedPage';
 import { SessionHeader } from './components/SessionHeader';
 import { useAppInfo } from './hooks/useAppInfo';
+import { usePathname } from './hooks/usePathname';
 import { useSession } from './hooks/useSession';
+import { AccessRequestPage } from './pages/AccessRequestPage';
 import { LoginPage } from './pages/LoginPage';
+import { parseRoute } from './utils/parseRoute';
 import type { FC } from 'react';
 
 export const App: FC = () => {
   const { session, onLoggedIn, onLogOut } = useSession();
+  const pathname = usePathname();
   const info = useAppInfo({
     userEmail: match(session)
       .with({ status: 'AUTHENTICATED' }, ({ user }) => {
@@ -36,7 +40,13 @@ export const App: FC = () => {
             return <p className="text-sm text-red-600">{message}</p>;
           })
           .with({ status: 'ANONYMOUS' }, () => {
-            return <LoginPage info={info} onLoggedIn={onLoggedIn} />;
+            // Without a login only two pages exist: the login itself and the request for access.
+            return (
+              // Without the header the login stands alone, so it sits in the middle of the window.
+              <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center">
+                {parseRoute({ pathname }).kind === 'access' ? <AccessRequestPage info={info} /> : <LoginPage info={info} onLoggedIn={onLoggedIn} />}
+              </div>
+            );
           })
           .with({ status: 'AUTHENTICATED' }, () => {
             return <RoutedPage />;

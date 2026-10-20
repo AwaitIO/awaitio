@@ -1,4 +1,5 @@
 import express, { type Express } from 'express';
+import { createAccessRequestRouter } from './createAccessRequestRouter';
 import { createActionsRouter } from './createActionsRouter';
 import { createAppInfoRouter } from './createAppInfoRouter';
 import { createAuthMiddleware } from './createAuthMiddleware';
@@ -52,6 +53,7 @@ export const createApp = ({ name, environments, sessions, actions, pages, manage
         express.json(),
         createAppInfoRouter({ name, environments, sessions }),
         createSessionRouter({ sessions }),
+        createAccessRequestRouter(),
         createAuthMiddleware({ sessions }),
         createActionsRouter({ actions, pages, manager }),
         createPagesRouter({ pages, registry, layoutRegistry }),

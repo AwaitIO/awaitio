@@ -74,5 +74,5 @@ test('Should refuse a weak secret, a duplicate user and a plain password', () =>
 
   expect(() => {
     return new Sessions({ secret, users: [{ email: 'a@example.com', name: 'A', passwordHash: password }] });
-  }).toThrow('awaitio hash-password');
+  }).toThrow('Create new account');
 });

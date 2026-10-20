@@ -41,7 +41,7 @@ export class Sessions {
       }
 
       if (!parsePasswordHash({ passwordHash: user.passwordHash })) {
-        throw new Error(`The password hash of ${email} is not from \`awaitio hash-password\`.`);
+        throw new Error(`The password hash of ${email} is not one from Create new account on the login page.`);
       }
 
       this.users.set(email, { ...user, email });

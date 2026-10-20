@@ -7,4 +7,6 @@ export const constants = {
   NAVIGATE_EVENT: 'awaitio:navigate',
   // Wire type of the built-in io.layout.basic; the UI ships its component, so no script is loaded for it.
   BASIC_LAYOUT_TYPE: 'awaitio:basic',
+  // The shortest password Create new account makes a hash for.
+  MIN_PASSWORD_LENGTH: 10,
 };

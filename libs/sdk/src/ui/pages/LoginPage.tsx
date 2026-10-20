@@ -6,6 +6,8 @@ import { Input } from '../../uikit/Input';
 import { logIn } from '../api/logIn';
 import { AppTitle } from '../components/AppTitle';
 import { Button } from '../components/Button';
+import { NavLink } from '../components/NavLink';
+import { accessPath } from '../utils/accessPath';
 import { toErrorMessage } from '../utils/toErrorMessage';
 
 export type LoginPageProps = {
@@ -22,7 +24,7 @@ export const LoginPage: FC<LoginPageProps> = ({ info, onLoggedIn }) => {
 
   return (
     <form
-      className="mx-auto flex max-w-sm flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
+      className="flex w-full max-w-sm flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
       onSubmit={(event) => {
         event.preventDefault();
         setIsSubmitting(true);
@@ -46,6 +48,9 @@ export const LoginPage: FC<LoginPageProps> = ({ info, onLoggedIn }) => {
       <Button type="submit" disabled={isSubmitting}>
         Log in
       </Button>
+      <NavLink href={accessPath()} className="text-center text-sm text-gray-600 hover:text-gray-900">
+        Create new account
+      </NavLink>
     </form>
   );
 };
