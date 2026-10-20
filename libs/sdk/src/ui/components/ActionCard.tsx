@@ -1,6 +1,6 @@
 import { NavLink } from './NavLink';
 import type { ActionDefinition } from '../../shared/types/ActionDefinition';
-import { actionPath } from '../utils/actionPath';
+import { routes } from '../utils/routes';
 import type { FC } from 'react';
 
 export type ActionCardProps = {
@@ -8,7 +8,7 @@ export type ActionCardProps = {
 };
 
 export const ActionCard: FC<ActionCardProps> = ({ action }) => {
-  const href = actionPath({ slug: action.slug });
+  const href = routes.action({ slug: action.slug });
 
   return (
     <NavLink href={href} className="flex w-full items-center justify-between gap-4 rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-colors hover:border-gray-400">

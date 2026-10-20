@@ -1,8 +1,7 @@
 import { NavLink } from './NavLink';
 import type { ActionDefinition } from '../../shared/types/ActionDefinition';
 import type { FolderEntry } from '../types/FolderEntry';
-import { actionPath } from '../utils/actionPath';
-import { groupPath } from '../utils/groupPath';
+import { routes } from '../utils/routes';
 import { segmentToLabel } from '../utils/segmentToLabel';
 import type { FC } from 'react';
 
@@ -23,7 +22,7 @@ export const FolderSidebar: FC<FolderSidebarProps> = ({ folders, actions }) => {
     <nav aria-label="Folder" className="flex flex-col gap-0.5">
       {folders.map((folder) => {
         return (
-          <NavLink key={folder.path} href={groupPath({ group: folder.path })} className={linkClassName}>
+          <NavLink key={folder.path} href={routes.group({ group: folder.path })} className={linkClassName}>
             <svg aria-hidden="true" viewBox="0 0 20 20" className="h-5 w-5 shrink-0 fill-gray-400">
               <path d="M2 5.5A1.5 1.5 0 0 1 3.5 4h4.38a1.5 1.5 0 0 1 1.06.44L10.5 6h6A1.5 1.5 0 0 1 18 7.5v7a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 2 14.5v-9Z" />
             </svg>
@@ -33,7 +32,7 @@ export const FolderSidebar: FC<FolderSidebarProps> = ({ folders, actions }) => {
       })}
       {actions.map((action) => {
         return (
-          <NavLink key={action.slug} href={actionPath({ slug: action.slug })} className={linkClassName}>
+          <NavLink key={action.slug} href={routes.action({ slug: action.slug })} className={linkClassName}>
             <svg aria-hidden="true" viewBox="0 0 20 20" className="h-5 w-5 shrink-0 fill-gray-400">
               <path d="M11.3 1.05a.75.75 0 0 1 .44.82L10.9 7.5h4.35a.75.75 0 0 1 .58 1.23l-7 8.5a.75.75 0 0 1-1.32-.6l.84-5.13H4a.75.75 0 0 1-.58-1.23l7-8.5a.75.75 0 0 1 .88-.22Z" />
             </svg>

@@ -5,9 +5,9 @@ import { FolderCard } from '../components/FolderCard';
 import { FolderSidebar } from '../components/FolderSidebar';
 import { PageView } from '../components/PageView';
 import { useActionList } from '../hooks/useActionList';
-import { groupPath } from '../utils/groupPath';
 import { listFolder } from '../utils/listFolder';
 import { navigate } from '../utils/navigate';
+import { routes } from '../utils/routes';
 import { segmentToLabel } from '../utils/segmentToLabel';
 import { topLevelFolders } from '../utils/topLevelFolders';
 
@@ -26,7 +26,7 @@ export const ActionListPage: FC<ActionListPageProps> = ({ group }) => {
 
   useEffect(() => {
     if (group === null && firstFolder) {
-      navigate(groupPath({ group: firstFolder }), { replace: true });
+      navigate(routes.group({ group: firstFolder }), { replace: true });
     }
   }, [group, firstFolder]);
 

@@ -10,8 +10,8 @@ import { RunOutcome } from '../components/RunOutcome';
 import { StepView } from '../components/StepView';
 import { useFaviconState } from '../hooks/useFaviconState';
 import { useRunState } from '../hooks/useRunState';
-import { actionPath } from '../utils/actionPath';
 import { navigate } from '../utils/navigate';
+import { routes } from '../utils/routes';
 import { toErrorMessage } from '../utils/toErrorMessage';
 import { toFaviconState } from '../utils/toFaviconState';
 
@@ -30,7 +30,7 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
   // A link with a wrong or renamed slug still shows the run; the address bar gets the run's real slug.
   useEffect(() => {
     if (runState.state && runState.state.actionSlug !== slug) {
-      navigate(actionPath({ slug: runState.state.actionSlug, runId }), { replace: true });
+      navigate(routes.action({ slug: runState.state.actionSlug, runId }), { replace: true });
     }
   }, [runState.state, slug, runId]);
 
@@ -60,7 +60,7 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
     setIsStarting(true);
 
     try {
-      navigate(actionPath({ slug: runState.state.actionSlug, runId: await startRun({ slug: runState.state.actionSlug, params: runState.state.params }) }), { replace: true });
+      navigate(routes.action({ slug: runState.state.actionSlug, runId: await startRun({ slug: runState.state.actionSlug, params: runState.state.params }) }), { replace: true });
     } catch (error) {
       setErrorMessage(toErrorMessage(error));
       setIsStarting(false);

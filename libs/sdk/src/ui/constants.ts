@@ -1,4 +1,10 @@
 export const constants = {
+  // The URL prefixes of the UI; routes builds them and parses them back.
+  ACTIONS_PATH: '/actions',
+  GROUPS_PATH: '/groups',
+  ACCESS_PATH: '/access',
+  // A run id is a UUID, so /actions/<slug>/<runId> never reads as a folder of the slug.
+  RUN_ID_PATTERN: '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
   // Fired when the API answers 401: the session expired or the password changed, so the login form comes back.
   UNAUTHORIZED_EVENT: 'awaitio:unauthorized',
   // The favicon is logo 10 "Promise arc"; while busy its arc fills the ring like a progress bar, once per period.

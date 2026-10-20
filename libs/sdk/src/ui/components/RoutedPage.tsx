@@ -4,12 +4,12 @@ import { AccessRequestPage } from '../pages/AccessRequestPage';
 import { ActionListPage } from '../pages/ActionListPage';
 import { ActionStartPage } from '../pages/ActionStartPage';
 import { RunPage } from '../pages/RunPage';
-import { parseRoute } from '../utils/parseRoute';
+import { routes } from '../utils/routes';
 import type { FC } from 'react';
 
 // Every page uses the full width of the UI, so lists, pages and runs line up under the header.
 export const RoutedPage: FC = () => {
-  return match(parseRoute({ pathname: usePathname() }))
+  return match(routes.parse({ pathname: usePathname() }))
     .with({ kind: 'action', runId: null }, ({ slug }) => {
       return <ActionStartPage key={slug} slug={slug} />;
     })

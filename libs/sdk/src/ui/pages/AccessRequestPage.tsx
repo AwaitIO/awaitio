@@ -8,7 +8,7 @@ import { requestAccess } from '../api/requestAccess';
 import { AppTitle } from '../components/AppTitle';
 import { Button } from '../components/Button';
 import { NavLink } from '../components/NavLink';
-import { actionListPath } from '../utils/actionListPath';
+import { routes } from '../utils/routes';
 import { toErrorMessage } from '../utils/toErrorMessage';
 import { toUsersEntry } from '../utils/toUsersEntry';
 
@@ -48,7 +48,7 @@ export const AccessRequestPage: FC<AccessRequestPageProps> = ({ info }) => {
                   >
                     {isCopied ? 'Copied' : 'Copy'}
                   </Button>
-                  <NavLink href={actionListPath()} className="self-center text-sm text-gray-600 hover:text-gray-900">
+                  <NavLink href={routes.actionList()} className="self-center text-sm text-gray-600 hover:text-gray-900">
                     Back to log in
                   </NavLink>
                 </div>
@@ -100,7 +100,7 @@ export const AccessRequestPage: FC<AccessRequestPageProps> = ({ info }) => {
                   <Button type="submit" disabled={isSubmitting}>
                     Create account
                   </Button>
-                  <NavLink href={actionListPath()} className="text-sm text-gray-600 hover:text-gray-900">
+                  <NavLink href={routes.actionList()} className="text-sm text-gray-600 hover:text-gray-900">
                     Back to log in
                   </NavLink>
                 </div>

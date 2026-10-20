@@ -1,7 +1,6 @@
 import { NavLink } from './NavLink';
-import { actionListPath } from '../utils/actionListPath';
-import { groupPath } from '../utils/groupPath';
 import { parentOf } from '../utils/parentOf';
+import { routes } from '../utils/routes';
 import { segmentToLabel } from '../utils/segmentToLabel';
 import type { FC } from 'react';
 
@@ -16,14 +15,14 @@ export const Breadcrumbs: FC<BreadcrumbsProps> = ({ slug, onNavigate }) => {
 
   return (
     <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-1.5 text-sm text-gray-500">
-      <NavLink href={actionListPath()} onNavigate={onNavigate} className="hover:text-gray-900">
+      <NavLink href={routes.actionList()} onNavigate={onNavigate} className="hover:text-gray-900">
         ← Actions
       </NavLink>
       {folders.map((folder, index) => {
         return (
           <span key={folder + index} className="flex items-center gap-1.5">
             <span aria-hidden="true">›</span>
-            <NavLink href={groupPath({ group: folders.slice(0, index + 1).join('/') })} onNavigate={onNavigate} className="hover:text-gray-900">
+            <NavLink href={routes.group({ group: folders.slice(0, index + 1).join('/') })} onNavigate={onNavigate} className="hover:text-gray-900">
               {segmentToLabel({ segment: folder })}
             </NavLink>
           </span>

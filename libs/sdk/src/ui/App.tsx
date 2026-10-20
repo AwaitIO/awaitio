@@ -6,7 +6,7 @@ import { usePathname } from './hooks/usePathname';
 import { useSession } from './hooks/useSession';
 import { AccessRequestPage } from './pages/AccessRequestPage';
 import { LoginPage } from './pages/LoginPage';
-import { parseRoute } from './utils/parseRoute';
+import { routes } from './utils/routes';
 import type { FC } from 'react';
 
 export const App: FC = () => {
@@ -44,7 +44,7 @@ export const App: FC = () => {
             return (
               // Without the header the login stands alone, so it sits in the middle of the window.
               <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center">
-                {parseRoute({ pathname }).kind === 'access' ? <AccessRequestPage info={info} /> : <LoginPage info={info} onLoggedIn={onLoggedIn} />}
+                {routes.parse({ pathname }).kind === 'access' ? <AccessRequestPage info={info} /> : <LoginPage info={info} onLoggedIn={onLoggedIn} />}
               </div>
             );
           })

@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { FolderNav } from './FolderNav';
 import type { AppInfo } from '../../shared/types/AppInfo';
 import type { SessionUser } from '../../shared/types/SessionUser';
-import { actionListPath } from '../utils/actionListPath';
+import { routes } from '../utils/routes';
 import type { FC } from 'react';
 
 export type SessionHeaderProps = {
@@ -16,7 +16,7 @@ export const SessionHeader: FC<SessionHeaderProps> = ({ info, user, onLogOut }) 
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2 text-sm">
-        {info && <AppTitle info={info} homeHref={actionListPath()} />}
+        {info && <AppTitle info={info} homeHref={routes.actionList()} />}
         <span className="flex-1" />
         <span className="text-gray-600" title={user.email}>
           {user.name}

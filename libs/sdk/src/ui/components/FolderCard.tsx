@@ -1,6 +1,6 @@
 import { NavLink } from './NavLink';
 import type { FolderEntry } from '../types/FolderEntry';
-import { groupPath } from '../utils/groupPath';
+import { routes } from '../utils/routes';
 import { segmentToLabel } from '../utils/segmentToLabel';
 import type { FC } from 'react';
 
@@ -9,7 +9,7 @@ export type FolderCardProps = {
 };
 
 export const FolderCard: FC<FolderCardProps> = ({ folder }) => {
-  const href = groupPath({ group: folder.path });
+  const href = routes.group({ group: folder.path });
 
   return (
     <NavLink href={href} className="flex w-full items-center justify-between gap-4 rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-colors hover:border-gray-400">

@@ -4,9 +4,9 @@ import { ApiError } from '../api/ApiError';
 import { startRun } from '../api/startRun';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { useFaviconState } from '../hooks/useFaviconState';
-import { actionPath } from '../utils/actionPath';
 import { getSearchParams } from '../utils/getSearchParams';
 import { navigate } from '../utils/navigate';
+import { routes } from '../utils/routes';
 import { toErrorMessage } from '../utils/toErrorMessage';
 
 export type ActionStartPageProps = {
@@ -29,7 +29,7 @@ export const ActionStartPage: FC<ActionStartPageProps> = ({ slug }) => {
     hasStarted.current = true;
     startRun({ slug, params: getSearchParams() })
       .then((runId) => {
-        navigate(actionPath({ slug, runId }), { replace: true });
+        navigate(routes.action({ slug, runId }), { replace: true });
       })
       .catch((error) => {
         setErrorMessage(error instanceof ApiError && error.code === 'ACTION_NOT_FOUND' ? `There is no action "${slug}".` : toErrorMessage(error));
