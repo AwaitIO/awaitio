@@ -1,6 +1,6 @@
 {
   "name": "awaitio",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Internal tools in one process: actions in code await a human's answer, the same server serves the UI.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
@@ -31,7 +31,8 @@
     "tsc": "tsc --noEmit && tsc -p tsconfig.client.json --noEmit && tsc -p tsconfig.ui.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release": "pnpm build && pnpm publish --access public --no-git-checks"
   },
   "dependencies": {
     "express": "^4.21.2",
