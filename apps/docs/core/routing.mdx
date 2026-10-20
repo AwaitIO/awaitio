@@ -82,12 +82,12 @@ actions/
 
 ## One file, one action
 
-Each file exports one `app.action(...)`, as a named or a default export:
+Each file exports one `app.defineAction(...)`, as a named or a default export:
 
 ```ts actions/accounts/createAccount.ts
 import { app } from '../../app';
 
-export const createAccount = app.action({
+export const createAccount = app.defineAction({
   name: 'Create account',
   handler: async (io) => {
     const company = await io.input.text('Company name');
@@ -105,8 +105,8 @@ A file that exports no action, or more than one, stops the app at start with an 
 
 `index.ts` stands for its folder. It can export either:
 
-- **a page** with `app.page()`: the folder then shows its subfolders and actions in a column on the left and the page on the right, such as a table of all users. In the demo, `users/index.ts` is one.
-- **an action** with `app.action()`: it gets the folder's slug (`billing/index.ts` is at `/actions/billing`) and leads the folder's actions.
+- **a page** with `app.definePage()`: the folder then shows its subfolders and actions in a column on the left and the page on the right, such as a table of all users. In the demo, `users/index.ts` is one.
+- **an action** with `app.defineAction()`: it gets the folder's slug (`billing/index.ts` is at `/actions/billing`) and leads the folder's actions.
 
 The top level of `actions/` has no index file; an `index.ts` there stops the app at start.
 
@@ -121,7 +121,7 @@ The top level of `actions/` has no index file; an `index.ts` there stops the app
 An action that only makes sense for one record, such as editing a user picked in a table, can stay out of the list. Pass `unlisted: true`: it is not in the action list or in its folder's column, but it still runs from its URL, from `ctx.redirect()` and from a table's row menu:
 
 ```ts actions/users/editUser.ts
-export const editUser = app.action({
+export const editUser = app.defineAction({
   name: 'Edit user',
   unlisted: true,
   params: z.object({ id: z.string() }),

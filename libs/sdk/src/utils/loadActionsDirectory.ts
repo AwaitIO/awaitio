@@ -10,8 +10,8 @@ export type LoadActionsDirectoryArgs = {
   directory: string;
 };
 
-// Imports every action file and maps it to its slug. Each file must export exactly one app.action(...) — or, in a
-// folder's index file, one app.page(...) — as its default export or as the only one it exports; anything else stops
+// Imports every action file and maps it to its slug. Each file must export exactly one app.defineAction(...) — or, in a
+// folder's index file, one app.definePage(...) — as its default export or as the only one it exports; anything else stops
 // the start with an error naming the file.
 export const loadActionsDirectory = async ({ directory }: LoadActionsDirectoryArgs) => {
   if (!existsSync(directory) || !statSync(directory).isDirectory()) {
@@ -29,14 +29,14 @@ export const loadActionsDirectory = async ({ directory }: LoadActionsDirectoryAr
     const found = isRoute(exports.default) ? [exports.default] : Object.values(exports).filter(isRoute);
 
     if (found.length !== 1) {
-      throw new Error(`${file} must export exactly one app.action(...)${isIndex ? ' or app.page(...)' : ''}, found ${found.length}.`);
+      throw new Error(`${file} must export exactly one app.defineAction(...)${isIndex ? ' or app.definePage(...)' : ''}, found ${found.length}.`);
     }
 
     const route = found[0] as Action<unknown> | Page<unknown>;
 
     // A page is what a folder shows next to its actions, so it has a folder only as its index file.
     if (isPage(route) && !isIndex) {
-      throw new Error(`${file} exports app.page(...), which belongs in a folder's index file (e.g. users/index.ts).`);
+      throw new Error(`${file} exports app.definePage(...), which belongs in a folder's index file (e.g. users/index.ts).`);
     }
 
     if (routes[slug]) {

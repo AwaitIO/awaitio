@@ -10,7 +10,7 @@ Shows a spinner with a label while the handler does something slow between two i
 ## Usage
 
 ```ts
-export const sendInvoices = app.action({
+export const sendInvoices = app.defineAction({
   name: 'Send invoices',
   handler: async (io, ctx) => {
     ctx.loading.start({ label: 'Loading invoices…' });

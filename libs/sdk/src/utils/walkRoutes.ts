@@ -23,7 +23,7 @@ export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
 
     // The type requires a name; this catches plain JavaScript and an empty string.
     if (typeof action.name !== 'string' || action.name.trim().length === 0) {
-      throw new Error(`The action "${slug}" has no name. Give app.action() a name, e.g. name: 'Send reminder'.`);
+      throw new Error(`The action "${slug}" has no name. Give app.defineAction() a name, e.g. name: 'Send reminder'.`);
     }
 
     // The typed io was checked where the action was defined; at run time io is built from the same registry.

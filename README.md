@@ -3,7 +3,7 @@
 Internal tools in one Node process. Write each tool as an async TypeScript function; every `await` on `io` asks a person something in the browser and waits for the answer. The same server serves the UI, so there is nothing else to host.
 
 ```ts
-export const refundOrder = app.action({
+export const refundOrder = app.defineAction({
   handler: async (io, ctx) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });
@@ -47,7 +47,7 @@ export const app = new AwaitIO({
 });
 
 // actions/greet.ts
-export const greet = app.action({
+export const greet = app.defineAction({
   handler: async (io) => {
     const name = await io.input.text('Your name');
 

@@ -72,7 +72,7 @@ Build a server with one action that asks for a name and greets back, then log in
     ```ts actions/greet.ts
     import { app } from '../app';
 
-    export const greet = app.action({
+    export const greet = app.defineAction({
       name: 'Greet',
       description: 'Asks for a name and greets back.',
       handler: async (io) => {
@@ -85,7 +85,7 @@ Build a server with one action that asks for a name and greets back, then log in
 
     **What's happening here**
 
-    - Every file in `actions/` is one action; `app.action()` gives it an `io` typed by the components you registered.
+    - Every file in `actions/` is one action; `app.defineAction()` gives it an `io` typed by the components you registered.
     - `name` is what the action list shows; every action needs one.
     - The handler stops at `await io.input.text()` until someone answers in the browser, then goes on.
     - What it returns is shown as the result.

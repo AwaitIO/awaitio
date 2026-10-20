@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { testApp } from '../testApp';
 
-export const nextId = testApp.action({
+export const nextId = testApp.defineAction({
   name: 'Next ID',
   params: z.object({ id: z.coerce.number().int() }),
   handler: async (_io, ctx) => {

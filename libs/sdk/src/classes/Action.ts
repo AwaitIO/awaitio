@@ -4,7 +4,7 @@ import type { ActionParamsSchema } from '../types/ActionParamsSchema';
 import type { ActionRouteArgs } from '../types/ActionRouteArgs';
 import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
 
-// Created through app.action(), which fills in the io type from the registered components.
+// Created through app.defineAction(), which fills in the io type from the registered components.
 export class Action<TIO, TSchema extends ActionParamsSchema | undefined = ActionParamsSchema | undefined> {
   // Recognizes an action loaded from the actions directory even when it comes from another copy of the package.
   readonly kind = 'awaitio-action';

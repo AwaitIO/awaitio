@@ -29,7 +29,7 @@ import { walkPages } from './utils/walkPages';
 import { walkRoutes } from './utils/walkRoutes';
 
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
-// Components are fixed here so action files can import the instance and get a typed io from app.action();
+// Components are fixed here so action files can import the instance and get a typed io from app.defineAction();
 // the actions directory is loaded at listen() time, when the action files can import the finished instance.
 type AwaitIOServeArgs = {
   routes: Record<string, AwaitIORoutes<unknown>[string] | Page<unknown>>;
@@ -63,14 +63,15 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
     this.layoutRegistry = createLayoutRegistry({ tree: layouts ?? {} });
   }
 
-  action<TSchema extends ActionParamsSchema | undefined = undefined>(options: ActionOptions<IO<T>, TSchema>) {
+  // Defines an action; export it from its own file in the actions folder, the file's path is its URL.
+  defineAction<TSchema extends ActionParamsSchema | undefined = undefined>(options: ActionOptions<IO<T>, TSchema>) {
     return new Action<IO<T>, TSchema>(options);
   }
 
   // What a folder shows next to its actions; export it from the folder's index file. The handler returns a layout with
-  // display components in it, io.layout.basic({ children: [io.display.table('Users', { rows, columns })] }), or just the
+  // display components in it, io.layout.basic({ children: [io.display.table('Users', { data, columns })] }), or just the
   // display components; nothing is asked.
-  page(options: PageOptions<PageIO<T, L>>) {
+  definePage(options: PageOptions<PageIO<T, L>>) {
     return new Page<PageIO<T, L>>(options);
   }
 

@@ -1,7 +1,7 @@
 import { testApp } from '../../testApp';
 
 // A folder page: display components in a layout, built from the link's query string.
-export const reports = testApp.page({
+export const reports = testApp.definePage({
   description: 'Monthly numbers',
   handler: async (io, ctx) => {
     if (ctx.params.fail === 'props') {

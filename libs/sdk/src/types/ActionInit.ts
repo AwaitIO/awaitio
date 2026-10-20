@@ -6,6 +6,6 @@ export type ActionInit<TIO> = {
   description?: string;
   unlisted?: boolean;
   params?: ActionParamsSchema;
-  // ctx.params is typed where the action is defined (app.action); here the handler accepts whatever its schema produced.
+  // ctx.params is typed where the action is defined (app.defineAction); here the handler accepts whatever its schema produced.
   handler: AwaitIOActionHandler<TIO, never>;
 };

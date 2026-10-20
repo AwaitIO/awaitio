@@ -47,7 +47,7 @@ test('Should take the only exported action when there is no default export', asy
 });
 
 test('Should refuse a file without exactly one action', async () => {
-  await expect(loadActionsDirectory({ directory: createDirectory({ 'empty.mjs': 'export const value = 1;' }) })).rejects.toThrow('must export exactly one app.action(...), found 0');
+  await expect(loadActionsDirectory({ directory: createDirectory({ 'empty.mjs': 'export const value = 1;' }) })).rejects.toThrow('must export exactly one app.defineAction(...), found 0');
 
   const two = `${actionSource.replace('export default', 'export const a =')}\n${actionSource.replace('export default', 'export const b =')}`;
 
