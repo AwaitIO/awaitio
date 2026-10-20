@@ -36,6 +36,7 @@
         "pages": [
           "io/input-text",
           "io/input-email",
+          "io/input-url",
           "io/input-textarea",
           "io/input-number",
           "io/input-boolean",

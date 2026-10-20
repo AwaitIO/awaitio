@@ -1,0 +1,71 @@
+---
+title: 'Input URL'
+description: 'Asks for a web address.'
+icon: 'link'
+---
+
+`io.input.url()` requests a web address and returns it as a [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL). Provided by the `@awaitio/input-url` package.
+
+<Frame>
+  <img src="/images/io-input-url.png" alt="A Website field filled with https://example.com/pricing, with help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-url
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputUrl } from '@awaitio/input-url';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { url: inputUrl } },
+});
+```
+
+## Usage
+
+```ts
+const website = await io.input.url('Website', {
+  placeholder: 'https://example.com',
+});
+
+website.hostname; // 'example.com'
+```
+
+## Props
+
+| Prop               | Type            | Required | Description                                                                                                 |
+| ------------------ | --------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `placeholder`      | `string`        | Optional | Text shown in the empty field.                                                                              |
+| `helpText`         | `string`        | Optional | Secondary text under the field.                                                                             |
+| `defaultValue`     | `string \| URL` | Optional | The value the field starts with. Defaults to an empty string.                                               |
+| `allowedProtocols` | `string[]`      | Optional | Schemes the address may use, without the colon. Defaults to `['http', 'https']`.                            |
+| `disabled`         | `boolean`       | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
+
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `URL | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const homepage = await io.input.url('Homepage').optional();
+```
+
+## Returns
+
+A [`URL`](https://developer.mozilla.org/en-US/docs/Web/API/URL): read `hostname`, `pathname` or `searchParams` from it, or `href` for the text.
+
+## Validation
+
+The browser checks the format before sending, and the server checks every answer again:
+
+| When                                   | Message                                        |
+| -------------------------------------- | ---------------------------------------------- |
+| The field is empty or not a URL        | `<label>: enter a URL.`                        |
+| Another scheme than `allowedProtocols` | `<label> must start with http:// or https://.` |
