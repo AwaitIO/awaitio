@@ -4,7 +4,7 @@ Internal tools in one Node process. Write each tool as an async TypeScript funct
 
 ```ts
 export const refundOrder = app.defineAction({
-  handler: async (io, ctx) => {
+  handler: async ({ io, ctx }) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });
     const reason = await io.input.textarea(`Why refund ${formatMoney(order.total)}?`);
@@ -48,7 +48,7 @@ export const app = new AwaitIO({
 
 // actions/greet.ts
 export const greet = app.defineAction({
-  handler: async (io) => {
+  handler: async ({ io }) => {
     const name = await io.input.text('Your name');
 
     return `Hello, ${name}!`;

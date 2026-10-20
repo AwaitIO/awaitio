@@ -3,7 +3,7 @@ import { testApp } from '../../testApp';
 // A folder page: display components in a layout, built from the link's query string.
 export const reports = testApp.definePage({
   description: 'Monthly numbers',
-  handler: async (io, ctx) => {
+  handler: async ({ io, ctx }) => {
     if (ctx.params.fail === 'props') {
       // Wrong on purpose: the server must refuse props the display component cannot draw.
       return [io.display.list('Broken', { items: [42 as unknown as string] })];

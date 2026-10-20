@@ -41,7 +41,7 @@ export const createPagesRouter = ({ pages, registry, layoutRegistry }: CreatePag
     }
 
     try {
-      const result = await page.handler(io, { page: { slug: page.slug }, params: params.data, user: getSessionUser({ res }) });
+      const result = await page.handler({ io, ctx: { page: { slug: page.slug }, params: params.data, user: getSessionUser({ res }) } });
       const body: PageContent = toPageContent({ page, result, registry, layoutRegistry });
 
       return res.json(body);

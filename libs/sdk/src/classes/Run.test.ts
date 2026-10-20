@@ -107,7 +107,7 @@ test('Should finish with the returned value when the action asks nothing', async
 
 test('Should resume the handler with the submitted text', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return `Hello, ${await io.input.text('Name')}!`;
     },
   });
@@ -131,7 +131,7 @@ test('Should resume the handler with the submitted text', async () => {
 
 test('Should render a group as one step and return the values under their keys', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.group({ firstName: io.input.text('First name'), lastName: io.input.text('Last name') });
     },
   });
@@ -146,7 +146,7 @@ test('Should render a group as one step and return the values under their keys',
 
 test('Should show the same step again with the problem under its field when a value is invalid', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.input.text('Text', { minLength: 5 });
     },
   });
@@ -170,7 +170,7 @@ test('Should show the same step again with the problem under its field when a va
 
 test('Should report every invalid field of a group at once', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.group({ first: io.input.text('First'), second: io.input.text('Second', { minLength: 5 }), third: io.input.text('Third') });
     },
   });
@@ -183,7 +183,7 @@ test('Should report every invalid field of a group at once', async () => {
 
 test('Should number the steps of a run', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       const first = await io.input.text('First');
 
       return `${first} ${await io.input.text('Second')}`;
@@ -201,7 +201,7 @@ test('Should number the steps of a run', async () => {
 
 test('Should reject an answer to a step that is no longer shown', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.input.text('Name');
     },
   });
@@ -214,7 +214,7 @@ test('Should reject an answer to a step that is no longer shown', async () => {
 test('Should cancel a waiting action and refuse further answers', async () => {
   let handlerError: unknown = null;
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       try {
         return await io.input.text('Name');
       } catch (error) {
@@ -242,7 +242,7 @@ test('Should cancel a waiting action and refuse further answers', async () => {
 test('Should tell a handler that kept working after a cancel why its next io call fails', async () => {
   let handlerError: unknown = null;
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       await new Promise((resolve) => {
         setTimeout(resolve, 10);
       });
@@ -266,7 +266,7 @@ test('Should tell a handler that kept working after a cancel why its next io cal
 
 test('Should show the loading label until the next io call', async () => {
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       ctx.loading.start({ label: 'Loading users…' });
       await new Promise((resolve) => {
         setTimeout(resolve, 10);
@@ -285,7 +285,7 @@ test('Should show the loading label until the next io call', async () => {
 
 test('Should count completed items up to itemsInQueue', async () => {
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       ctx.loading.start({ label: 'Sending emails…', itemsInQueue: 2 });
       ctx.loading.completeOne();
       ctx.loading.completeOne();
@@ -302,7 +302,7 @@ test('Should count completed items up to itemsInQueue', async () => {
 
 test('Should change the label and keep the progress on update', async () => {
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       ctx.loading.start({ label: 'Loading invoices…', itemsInQueue: 3 });
       ctx.loading.completeOne();
       ctx.loading.update({ label: 'Sending invoices…' });
@@ -318,7 +318,7 @@ test('Should change the label and keep the progress on update', async () => {
 
 test('Should fill the progress bar on completeAll', async () => {
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       ctx.loading.start({ label: 'Sending invoices…', itemsInQueue: 12 });
       ctx.loading.completeOne();
       ctx.loading.completeAll();
@@ -334,7 +334,7 @@ test('Should fill the progress bar on completeAll', async () => {
 
 test('Should ignore completeOne without itemsInQueue', async () => {
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       ctx.loading.start({ label: 'Working…' });
       ctx.loading.completeOne();
 
@@ -359,7 +359,7 @@ test('Should fail the run when the handler throws', async () => {
 
 test('Should fail the run when two io calls wait at the same time', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return Promise.all([io.input.text('A'), io.input.text('B')]);
     },
   });
@@ -369,7 +369,7 @@ test('Should fail the run when two io calls wait at the same time', async () => 
 
 test('Should give the handler the params the run was opened with', async () => {
   const run = startRun({
-    handler: async (_io, ctx) => {
+    handler: async ({ ctx }) => {
       return ctx.params;
     },
   });
@@ -380,7 +380,7 @@ test('Should give the handler the params the run was opened with', async () => {
 test('Should end the run and send the browser to the action ctx.redirect names', async () => {
   let afterRedirect: unknown = null;
   const run = startRun({
-    handler: async (io, ctx) => {
+    handler: async ({ io, ctx }) => {
       await ctx.redirect({ label: 'Change role', action: 'users/change_role', params: { id: '7' } });
 
       try {
@@ -405,7 +405,7 @@ test('Should end the run and send the browser to the action ctx.redirect names',
 
 test('Should show a display component next to an input and give undefined for it', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.group({ note: io.display.note('Before you start', { text: 'Read this first' }), name: io.input.text('Name') });
     },
   });
@@ -420,7 +420,7 @@ test('Should show a display component next to an input and give undefined for it
 
 test('Should refuse display props that do not fit its schema', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       // @ts-expect-error text must be a string
       return io.display.note(null, { text: 1 });
     },
@@ -431,7 +431,7 @@ test('Should refuse display props that do not fit its schema', async () => {
 
 test('Should show the message of a field validator under its field and ask again', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.input.text('Email').validate((value) => {
         return value.endsWith('@example.com') ? undefined : 'Use a company address.';
       });
@@ -451,7 +451,7 @@ test('Should show the message of a field validator under its field and ask again
 test('Should run a field validator only after the component accepted the value', async () => {
   let calls = 0;
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.input.text('Name').validate(() => {
         calls += 1;
 
@@ -468,7 +468,7 @@ test('Should run a field validator only after the component accepted the value',
 
 test('Should wait for an async validator and skip it for an optional field left empty', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.group({
         code: io.input.text('Code').validate(async (value) => {
           await new Promise((resolve) => {
@@ -498,7 +498,7 @@ test('Should wait for an async validator and skip it for an optional field left 
 test('Should show the message of a group validator for the whole step, once every field is fine', async () => {
   let calls = 0;
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.group({ password: io.input.text('Password'), again: io.input.text('Password again') }).validate(({ password, again }) => {
         calls += 1;
 
@@ -523,7 +523,7 @@ test('Should show the message of a group validator for the whole step, once ever
 
 test('Should fail the run when a validator throws', async () => {
   const run = startRun({
-    handler: async (io) => {
+    handler: async ({ io }) => {
       return io.input.text('Name').validate(() => {
         throw new Error('Database is down');
       });
@@ -553,7 +553,7 @@ const pickTree = {
 test('Should hand the handler and its validators the value from toValue, alone and in a group', async () => {
   const records = [{ name: 'Ada' }, { name: 'Bo' }];
   const checked: unknown[] = [];
-  const handler: AwaitIOActionHandler<IO<typeof pickTree>> = async (io) => {
+  const handler: AwaitIOActionHandler<IO<typeof pickTree>> = async ({ io }) => {
     const alone = await io.pick('Person', { data: records }).validate((value) => {
       checked.push(value);
 

@@ -11,7 +11,7 @@ Every run knows who started it: the handler gets that user in `ctx.user`.
 ```ts
 export const hello = app.defineAction({
   name: 'Hello',
-  handler: async (io, ctx) => {
+  handler: async ({ io, ctx }) => {
     const message = await io.input.text(`Hi ${ctx.user.name}, what should we log?`);
 
     console.info(`${ctx.user.email} wrote: ${message}`);

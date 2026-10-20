@@ -89,7 +89,7 @@ import { app } from '../../app';
 
 export const createAccount = app.defineAction({
   name: 'Create account',
-  handler: async (io) => {
+  handler: async ({ io }) => {
     const company = await io.input.text('Company name');
 
     return `${company} has an account.`;
@@ -125,7 +125,7 @@ export const editUser = app.defineAction({
   name: 'Edit user',
   unlisted: true,
   params: z.object({ id: z.string() }),
-  handler: async (io, ctx) => {
+  handler: async ({ io, ctx }) => {
     // …
   },
 });

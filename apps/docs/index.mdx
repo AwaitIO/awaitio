@@ -12,7 +12,7 @@ import { app } from '../app';
 
 export const fullName = app.defineAction({
   description: 'Asks for two text fields on one screen.',
-  handler: async (io) => {
+  handler: async ({ io }) => {
     const { firstName, lastName } = await io.group({
       firstName: io.input.text('First name'),
       lastName: io.input.text('Last name', { helpText: 'Family name' }),
@@ -54,7 +54,7 @@ import { prisma } from '../prisma';
 import { formatMoney } from '../utils/formatMoney';
 
 export const refundOrder = app.defineAction({
-  handler: async (io, ctx) => {
+  handler: async ({ io, ctx }) => {
     const orderId = await io.input.text('Order ID');
     const order = await prisma.order.findUniqueOrThrow({ where: { id: orderId } });
     const reason = await io.input.textarea(`Why refund ${formatMoney(order.total)}?`);

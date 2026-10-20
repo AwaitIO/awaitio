@@ -158,7 +158,7 @@ import { app } from '../../app';
 
 export const createAccount = app.defineAction({
   name: 'Create account',
-  handler: async (io) => {
+  handler: async ({ io }) => {
     const company = await io.input.text('Company name', { placeholder: 'Acme Inc.' }); // string
 
     return `${company} has an account.`;

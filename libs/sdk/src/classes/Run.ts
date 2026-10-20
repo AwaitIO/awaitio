@@ -72,14 +72,14 @@ export class Run {
 
   async execute() {
     try {
-      const value = await this.action.handler(
-        createIO({
+      const value = await this.action.handler({
+        io: createIO({
           registry: this.registry,
           render: (components, check) => {
             return this.render(components, check);
           },
         }),
-        {
+        ctx: {
           runId: this.id,
           action: { slug: this.action.slug },
           params: this.ctxParams,
@@ -127,7 +127,7 @@ export class Run {
             return Promise.resolve();
           },
         },
-      );
+      });
 
       this.finish(toActionResult({ value }));
     } catch (error) {

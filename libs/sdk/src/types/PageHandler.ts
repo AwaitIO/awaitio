@@ -1,4 +1,4 @@
-import type { PageCtx } from './PageCtx';
+import type { PageHandlerArgs } from './PageHandlerArgs';
 import type { PageHandlerResult } from './PageHandlerResult';
 
-export type PageHandler<TIO> = (io: TIO, ctx: PageCtx) => PageHandlerResult | Promise<PageHandlerResult>;
+export type PageHandler<TIO> = (args: PageHandlerArgs<TIO>) => PageHandlerResult | Promise<PageHandlerResult>;
