@@ -1,0 +1,22 @@
+---
+title: 'ctx.runId'
+sidebarTitle: 'Run ID'
+description: 'The id of the current run.'
+icon: 'fingerprint'
+---
+
+A unique id of this run of the action, a random UUID. It is the last part of the run's URL, `/actions/<slug>/<runId>`.
+
+## Usage
+
+```ts
+export const importOrdersAction = app.defineAction({
+  name: 'Import orders',
+  handler: async ({ io, ctx }) => {
+    console.info(`[${ctx.runId}] import started by ${ctx.user.email}`);
+    // …
+  },
+});
+```
+
+Use it to tie your logs or records to one run. Runs live in memory only, so the id stops pointing anywhere after the run is cleaned up (15 minutes after it ends) or the server restarts.

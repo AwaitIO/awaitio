@@ -69,11 +69,11 @@ A column is written as in Interval:
 
 `renderCell` runs on the server, once per row. It returns a plain value or a cell object:
 
-| Cell                        | Shows                                                  |
-| --------------------------- | ------------------------------------------------------ |
-| `{ label, highlightColor }` | The label in a colored badge.                          |
-| `{ label, url }`            | A link to a page outside AwaitIO, opened in a new tab. |
-| `{ label, route }`          | A link to an action, `route` from `action.route()`.    |
+| Cell                        | Shows                                                                |
+| --------------------------- | -------------------------------------------------------------------- |
+| `{ label, highlightColor }` | The label in a colored badge.                                        |
+| `{ label, url }`            | A link to a page outside AwaitIO, opened in a new tab.               |
+| `{ label, route }`          | A link to an action, `route` from [`action.route()`](/ctx/redirect). |
 
 They can be combined, e.g. a colored label that links to an action:
 
@@ -99,7 +99,7 @@ io.display.table('Devices', {
 
 ## Row menu
 
-`rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()`: the same routes `ctx.redirect()` takes, labelled with the action's name unless you pass one. An empty array leaves the row without a menu:
+`rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()`: the same routes [`ctx.redirect()`](/ctx/redirect) takes, labelled with the action's name unless you pass one. An empty array leaves the row without a menu:
 
 ```ts
 io.display.table('Versions', {

@@ -57,7 +57,7 @@ export const usersPage = app.definePage({
 
 ## Menu items
 
-`menuItems` puts buttons next to the title, each opening an action. Build them with the action's `route()`, the same link a table's [row menu](/io/display-table#row-menu) or `ctx.redirect` takes; the label is the action's name unless you pass one:
+`menuItems` puts buttons next to the title, each opening an action. Build them with the action's `route()`, the same link a table's [row menu](/io/display-table#row-menu) or [`ctx.redirect`](/ctx/redirect) takes; the label is the action's name unless you pass one:
 
 ```ts actions/integrators/index.ts
 import { upsertIntegratorAction } from './upsertIntegratorAction';

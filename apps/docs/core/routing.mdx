@@ -119,7 +119,7 @@ The top level of `actions/` has no index file; an `index.ts` there stops the app
 
 ## Unlisted actions
 
-An action that only makes sense for one record, such as editing a user picked in a table, can stay out of the list. Pass `unlisted: true`: it is not in the action list or in its folder's column, but it still runs from its URL, from `ctx.redirect()` and from a table's row menu:
+An action that only makes sense for one record, such as editing a user picked in a table, can stay out of the list. Pass `unlisted: true`: it is not in the action list or in its folder's column, but it still runs from its URL, from [`ctx.redirect()`](/ctx/redirect) and from a table's row menu:
 
 ```ts actions/users/editUserAction.ts
 export const editUserAction = app.defineAction({

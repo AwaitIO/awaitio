@@ -1,0 +1,49 @@
+---
+title: 'ctx.params'
+sidebarTitle: 'Params'
+description: 'The values in the link that opened the action.'
+icon: 'link'
+---
+
+The query string of the link that started the run, as an object of strings. Opening `/actions/coupon_detail?id=42&tab=codes` gives `ctx.params` the value `{ id: '42', tab: 'codes' }`; opening the action without a query string gives `{}`.
+
+## Usage
+
+Describe the params the action expects with a zod schema in `params`. The server checks the link against it before the handler runs, and `ctx.params` gets the parsed, typed value:
+
+```ts
+import { z } from 'zod';
+
+export const couponDetailAction = app.defineAction({
+  name: 'Coupon detail',
+  params: z.object({ id: z.string().optional(), page: z.coerce.number().int().default(1) }),
+  handler: async ({ io, ctx }) => {
+    // ctx.params is { id?: string; page: number }
+    const id = ctx.params.id ?? (await io.input.text('Coupon ID'));
+
+    return prisma.coupon.findUniqueOrThrow({ where: { id } });
+  },
+});
+```
+
+Share or bookmark `/actions/coupon_detail?id=42`, put it in an email, a Slack message or your own admin, and the action opens straight on that coupon. Someone who is not logged in sees the login page first and lands on the same link afterwards.
+
+A link that does not fit the schema does not start the action: the page shows _The link does not fit this action_ with what is wrong, e.g. `page: Expected number, received nan.`
+
+## Values
+
+|                  |                                                                                                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| With `params`    | Whatever the schema returns. The query string comes in as strings, so use `z.coerce.number()`, `z.coerce.date()` or `z.enum()` to turn them into other types. |
+| Without `params` | `Readonly<Record<string, string>>`, every key of the query string as a string.                                                                                |
+| Repeated key     | `?tag=a&tag=b` keeps the last value, `b`.                                                                                                                     |
+| Limits           | At most 50 params, each value at most 2,000 characters; a run with more is refused.                                                                           |
+| Run again        | **Run again** after the result starts the action with the same link.                                                                                          |
+
+## Params are untrusted input
+
+Anyone can write a link with any params, and opening it starts the action for whoever clicks it. Treat `ctx.params` like a value typed into a form:
+
+- describe it precisely in `params`, e.g. `z.string().uuid()` rather than `z.string()`;
+- check that the user may see or change the record it points to;
+- ask with an `io` call before anything destructive, instead of deleting straight from a link.

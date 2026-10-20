@@ -1,0 +1,33 @@
+---
+title: 'ctx.action'
+sidebarTitle: 'Action'
+description: 'Which action is running.'
+icon: 'bolt'
+---
+
+Information about the action the handler belongs to.
+
+## Value
+
+| Field  | Type     | Description                                                               |
+| ------ | -------- | ------------------------------------------------------------------------- |
+| `slug` | `string` | The action's path in the actions folder, also its URL: `/actions/<slug>`. |
+
+## Usage
+
+Shared code can tell which action called it, for a log line or an audit record:
+
+```ts actions/_shared/audit.ts
+import type { ActionCtx } from 'awaitio';
+
+type AuditArgs = {
+  ctx: ActionCtx;
+  message: string;
+};
+
+export const audit = ({ ctx, message }: AuditArgs) => {
+  console.info(`[${ctx.action.slug}] ${ctx.user.email}: ${message}`);
+};
+```
+
+In `actions/billing/refundOrderAction.ts`, `ctx.action.slug` is `billing/refund_order`.

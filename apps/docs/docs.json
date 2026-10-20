@@ -69,7 +69,7 @@
       },
       {
         "group": "Context",
-        "pages": ["ctx/user", "ctx/loading-start"]
+        "pages": ["ctx/user", "ctx/params", "ctx/action", "ctx/run-id", "ctx/redirect", "ctx/loading-start"]
       }
     ]
   }

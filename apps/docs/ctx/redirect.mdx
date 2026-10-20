@@ -1,0 +1,51 @@
+---
+title: 'ctx.redirect'
+sidebarTitle: 'Redirect'
+description: 'Ends the run and opens another action.'
+icon: 'share'
+---
+
+Ends the run and opens another action in the same browser tab, e.g. the detail of the record the action just created.
+
+## Usage
+
+Import the action you want to open and ask it for its route. Its `params` are typed by that action's [params schema](/ctx/params):
+
+```ts actions/accounts/createAccountAction.ts
+import { extendTrialAction } from './extendTrialAction';
+import { app } from '../../app';
+
+export const createAccountAction = app.defineAction({
+  name: 'Create account',
+  handler: async ({ io, ctx }) => {
+    const company = await io.input.text('Company name');
+
+    await ctx.redirect(extendTrialAction.route({ params: { company } }));
+  },
+});
+```
+
+The browser opens `/actions/accounts/extend_trial?company=Acme+Inc.` and Extend trial starts with `ctx.params.company` filled in.
+
+## Routes
+
+`action.route()` returns the link to that action, an `ActionRoute`. The same object is what a table's [row menu](/io/display-table#row-menu) lists, so one action can be opened from a redirect and from a table alike:
+
+```ts
+changeRoleAction.route({ params: { id: user.id }, label: 'Change role' });
+// { label: 'Change role', action: 'users/change_role', params: { id: '7' } }
+```
+
+| Field    | Type                     | Description                                                                                         |
+| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- |
+| `label`  | `string`                 | What a link or menu item shows. Defaults to the action's `name`; `ctx.redirect()` does not use it.  |
+| `action` | `string`                 | The action's slug, its path in the actions folder, see [Routing](/core/routing).                    |
+| `params` | `Record<string, string>` | The query string, which becomes the action's `ctx.params`. Numbers and dates are turned to strings. |
+
+An action without a params schema takes no params: `clearCacheAction.route()`. When every param of its schema is optional, the params can be left out too: `createIntegratorAction.route({ label: 'Create integrator' })`. `route()` works once `listen()` has loaded the actions folder, so call it inside a handler, not at the top of a file.
+
+## Behaviour
+
+- The run ends with the redirect: the run page opens the other action instead of showing a result, and **Back** skips the finished run.
+- The handler goes on after `await ctx.redirect()`, but any io call after it throws, like after a cancel, and what it returns is ignored. Put the redirect last.
+- After the run has ended, the call does nothing.
