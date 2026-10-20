@@ -43,6 +43,9 @@ Each card is one package and opens its page: all its props, what it returns and 
   <Card title="Select Single" href="/io/select-single" img="/images/components/select-single.png">
     `io.select.single()` asks to pick one option from a drop-down and returns its `value`.
   </Card>
+  <Card title="Select Multiple" href="/io/select-multiple" img="/images/components/select-multiple.png">
+    `io.select.multiple()` asks to pick several options, listed under a drop-down, and returns their values.
+  </Card>
 </Columns>
 
 ## The key is the name
@@ -170,17 +173,18 @@ Register your component under a key that already exists, `input: { text: myText 
 
 `awaitio/ui` has the pieces the built-in components are made of. They have no look of their own: each one draws the block of the theme your app was created with, the `theme` in `new AwaitIO()`. A component built from them looks like the rest of the app, changes with the theme and needs no CSS.
 
-| Block        | Draws                                                                                                 |
-| ------------ | ----------------------------------------------------------------------------------------------------- |
-| `Input`      | A one-line text field. `value` and `onChange` work with a `string`.                                   |
-| `Textarea`   | A text field over several lines.                                                                      |
-| `Select`     | A drop-down for one of many `choices`.                                                                |
-| `ChoiceList` | Choices as cards, `mode: 'single'` or `'multiple'`.                                                   |
-| `Checkbox`   | A checkbox with its text to the right, for a yes or no answer.                                        |
-| `Button`     | A button, `variant: 'primary'` or `'secondary'`.                                                      |
-| `Field`      | Label, control, help text and error of one field, in an [unwrapped](#unwrapped-components) component. |
-| `Label`      | The label of a field, in an unwrapped component.                                                      |
-| `Hint`       | Small text under a control.                                                                           |
+| Block         | Draws                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| `Input`       | A one-line text field. `value` and `onChange` work with a `string`.                                   |
+| `Textarea`    | A text field over several lines.                                                                      |
+| `Select`      | A drop-down for one of many `choices`.                                                                |
+| `MultiSelect` | A drop-down and the chosen options under it in one frame, each with a × that removes it.              |
+| `ChoiceList`  | Choices as cards, `mode: 'single'` or `'multiple'`.                                                   |
+| `Checkbox`    | A checkbox with its text to the right, for a yes or no answer.                                        |
+| `Button`      | A button, `variant: 'primary'` or `'secondary'`.                                                      |
+| `Field`       | Label, control, help text and error of one field, in an [unwrapped](#unwrapped-components) component. |
+| `Label`       | The label of a field, in an unwrapped component.                                                      |
+| `Hint`        | Small text under a control.                                                                           |
 
 ## Unwrapped components
 

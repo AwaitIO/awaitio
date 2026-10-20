@@ -1,0 +1,1 @@
+export { selectMultiple } from './selectMultiple';

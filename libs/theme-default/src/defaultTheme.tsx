@@ -10,6 +10,7 @@ import { Input } from './blocks/Input';
 import { Label } from './blocks/Label';
 import { Link } from './blocks/Link';
 import { Metadata } from './blocks/Metadata';
+import { MultiSelect } from './blocks/MultiSelect';
 import { RowMenu } from './blocks/RowMenu';
 import { Select } from './blocks/Select';
 import { Table } from './blocks/Table';
@@ -27,6 +28,7 @@ export const defaultTheme = defineTheme({
   Label,
   Link,
   Metadata,
+  MultiSelect,
   RowMenu,
   Select,
   Table,

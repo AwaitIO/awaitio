@@ -1,0 +1,69 @@
+---
+title: 'Select Multiple'
+description: 'Asks to pick any number of options.'
+icon: 'square-check'
+---
+
+`io.select.multiple()` asks to pick several options and returns their values. The drop-down and the chosen options sit in one frame: each pick is listed under the drop-down, one per row, and the × on its right takes it back. Provided by the `@awaitio/select-multiple` package.
+
+<Frame>
+  <img src="/images/io-select-multiple.png" alt="A Multiple choice frame with the Add… drop-down on top and Email and SMS in rows under it, each with a × on the right" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/select-multiple
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { selectMultiple } from '@awaitio/select-multiple';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { select: { multiple: selectMultiple } },
+});
+```
+
+## Usage
+
+```ts
+const channels = await io.select.multiple('Tell them by', {
+  options: [
+    { value: 'email', label: 'Email' },
+    { value: 'slack', label: 'Slack' },
+    { value: 'sms', label: 'SMS' },
+  ],
+  defaultValue: ['email'],
+  maxSelections: 2,
+  helpText: 'Leave it empty to change the role quietly.',
+});
+```
+
+## Props
+
+| Prop            | Type                 | Required | Description                                                                   |
+| --------------- | -------------------- | -------- | ----------------------------------------------------------------------------- |
+| `options`       | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down offers those not chosen yet. |
+| `defaultValue`  | `string[]`           | Optional | The values chosen at the start. Nothing is chosen when left out.              |
+| `minSelections` | `number`             | Optional | At least this many must be chosen. By default none.                           |
+| `maxSelections` | `number`             | Optional | At most this many may be chosen; the drop-down stops offering more.           |
+| `helpText`      | `string`             | Optional | Secondary text under the field.                                               |
+
+## Returns
+
+`string[]`: the chosen options' values, in the order of the options, not the order they were picked.
+
+## Validation
+
+The server checks every answer, so a crafted request cannot slip in other values:
+
+| When                                       | Message                                     |
+| ------------------------------------------ | ------------------------------------------- |
+| Fewer than `minSelections`                 | `<label>: choose at least <minSelections>.` |
+| More than `maxSelections`                  | `<label>: choose at most <maxSelections>.`  |
+| A value that was not offered, or one twice | `<label>: choose from the options only.`    |
