@@ -49,6 +49,7 @@ const [user] = await io.select.table('User', {
 | --------------- | ------------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | `rows`          | `Record<string, unknown>[]`    | Required | The records to pick from, at least one.                                                                                       |
 | `columns`       | `(string \| { key, label })[]` | Optional | Which keys to show and their headings. Defaults to every key.                                                                 |
+| `defaultValue`  | `Record<string, unknown>[]`    | Optional | Rows picked at the start, taken from `rows`.                                                                                  |
 | `minSelections` | `number`                       | Optional | At least this many rows. Defaults to 1.                                                                                       |
 | `maxSelections` | `number`                       | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
 | `pageSize`      | `number`                       | Optional | Rows per page. Defaults to 10.                                                                                                |

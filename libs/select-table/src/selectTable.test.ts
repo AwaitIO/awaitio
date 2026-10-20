@@ -25,3 +25,9 @@ test('Should check custom limits and refuse a row that was not offered', () => {
 
   expect(validate([{ id: 9, name: 'Mallory' }])).toBe('Users: pick rows from the table only.');
 });
+
+test('Should start with the default rows picked', () => {
+  expect(selectTable.initialValue?.(selectTable.props.parse({ rows, defaultValue: [rows[1]] }))).toEqual([{ id: 2, name: 'Bo' }]);
+
+  expect(selectTable.initialValue?.(selectTable.props.parse({ rows }))).toEqual([]);
+});

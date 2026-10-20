@@ -5,6 +5,8 @@ import { useState, type FC } from 'react';
 // Filtering and paging happen in the browser, on the rows the page sent.
 export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable = true, emptyText = 'Nothing to show.', selection }) => {
   const [filter, setFilter] = useState('');
+  // A locked selection (disabled io.select.table) greys the table out; paging stays, to see what is there.
+  const isDisabled = selection?.disabled === true;
   const [page, setPage] = useState(0);
   const query = filter.trim().toLowerCase();
   const matching = query
@@ -22,7 +24,7 @@ export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable
   const pagerButton = 'rounded-md border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40';
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white">
+    <div className={['rounded-lg border border-gray-200', isDisabled ? 'bg-gray-100 text-gray-500' : 'bg-white'].join(' ')}>
       {hasToolbar && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 px-3 py-2">
           {filterable ? (
@@ -31,11 +33,12 @@ export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable
               value={filter}
               placeholder="Filter"
               aria-label="Filter rows"
+              disabled={isDisabled}
               onChange={(event) => {
                 setFilter(event.target.value);
                 setPage(0);
               }}
-              className="w-full max-w-56 rounded-md border border-gray-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-gray-900 focus:outline-none"
+              className="w-full max-w-56 rounded-md border border-gray-300 px-3 py-1 text-sm shadow-sm focus:border-gray-900 focus:outline-none enabled:bg-white disabled:bg-gray-100"
             />
           ) : (
             <span />

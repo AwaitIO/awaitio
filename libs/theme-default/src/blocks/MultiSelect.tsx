@@ -43,25 +43,30 @@ export const MultiSelect: FC<MultiSelectProps> = ({ choices, value, onChange, pl
       </div>
       {chosen.map((choice) => {
         return (
-          <div key={choice.value} className="flex items-center justify-between gap-3 bg-white py-1.5 pr-3.5 pl-5 text-gray-900 last:rounded-b-md">
+          <div
+            key={choice.value}
+            className={['flex items-center justify-between gap-3 py-1.5 pr-3.5 pl-5 last:rounded-b-md', disabled ? 'min-h-9 bg-gray-100 text-gray-500' : 'bg-white text-gray-900'].join(' ')}
+          >
             {choice.label}
-            <button
-              type="button"
-              aria-label={`Remove ${choice.label}`}
-              disabled={disabled}
-              onClick={() => {
-                onChange(
-                  value.filter((candidate) => {
-                    return candidate !== choice.value;
-                  }),
-                );
-              }}
-              className="flex size-6 shrink-0 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="size-3.5">
-                <path d="M6 6l8 8m0-8-8 8" />
-              </svg>
-            </button>
+            {!disabled && (
+              <button
+                type="button"
+                aria-label={`Remove ${choice.label}`}
+                disabled={disabled}
+                onClick={() => {
+                  onChange(
+                    value.filter((candidate) => {
+                      return candidate !== choice.value;
+                    }),
+                  );
+                }}
+                className="flex size-6 shrink-0 items-center justify-center rounded text-gray-400 hover:bg-gray-100 hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="size-3.5">
+                  <path d="M6 6l8 8m0-8-8 8" />
+                </svg>
+              </button>
+            )}
           </div>
         );
       })}

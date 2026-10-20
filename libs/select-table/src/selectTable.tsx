@@ -9,6 +9,8 @@ export const selectTable = defineComponent({
     rows: z.array(z.record(z.unknown())).min(1),
     // Which keys to show and how to call them; by default every key of the rows.
     columns: z.array(z.union([z.string(), z.object({ key: z.string(), label: z.string() })])).optional(),
+    // Rows picked at the start, taken from `rows`; a row is recognised by its values.
+    defaultValue: z.array(z.record(z.unknown())).optional(),
     // How many rows must and may be picked: by default exactly one.
     minSelections: z.number().int().nonnegative().default(1),
     maxSelections: z.number().int().positive().default(1),
@@ -17,8 +19,8 @@ export const selectTable = defineComponent({
   }),
   // The picked rows, as they were sent to the browser: plain JSON values, dates as ISO strings.
   returns: z.array(z.record(z.unknown())),
-  initialValue: () => {
-    return [];
+  initialValue: (props) => {
+    return props.defaultValue ?? [];
   },
   validate: ({ label, props, value }) => {
     const offered = new Set(
