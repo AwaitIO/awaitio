@@ -36,6 +36,10 @@
         "pages": ["io/input-text", "io/input-textarea"]
       },
       {
+        "group": "Display components",
+        "pages": ["io/display-metadata"]
+      },
+      {
         "group": "Layout components",
         "pages": ["io/layout-basic"]
       },

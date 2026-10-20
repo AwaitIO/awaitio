@@ -2,7 +2,8 @@ import { themeBlock } from './themeBlock';
 import type { ReactNode } from 'react';
 
 export type MetadataItem = {
-  label: string;
+  // Null for a tile that shows only its value.
+  label: string | null;
   value: ReactNode;
   description?: string;
 };

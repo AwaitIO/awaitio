@@ -8,6 +8,6 @@ export const pageContentSchema = z.object({
   layout: z.object({
     type: z.string(),
     props: z.unknown(),
-    children: z.array(z.object({ type: z.string(), label: z.string(), props: z.unknown() })),
+    children: z.array(z.object({ type: z.string(), label: z.string().nullable(), props: z.unknown() })),
   }),
 });

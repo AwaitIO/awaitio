@@ -8,7 +8,7 @@ export type CreateDisplayNodesArgs = {
   prefix: string;
 };
 
-type DisplayNode = ((label: string, props?: unknown) => DisplayElement) | { [key: string]: DisplayNode };
+type DisplayNode = ((label: string | null, props?: unknown) => DisplayElement) | { [key: string]: DisplayNode };
 
 // The display components of the tree as functions that only record what to show; the props are checked when the page
 // is served. Input components are left out.
@@ -27,7 +27,7 @@ export const createDisplayNodes = ({ tree, prefix }: CreateDisplayNodesArgs): Re
 
         return [
           key,
-          (label: string, props?: unknown): DisplayElement => {
+          (label: string | null, props?: unknown): DisplayElement => {
             return { kind: 'awaitio-display-element', type, label, props: props ?? {} };
           },
         ];

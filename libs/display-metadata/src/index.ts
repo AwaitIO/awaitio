@@ -1,0 +1,1 @@
+export { displayMetadata } from './displayMetadata';
