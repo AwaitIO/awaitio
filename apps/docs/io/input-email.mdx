@@ -18,7 +18,7 @@ npm install @awaitio/input-email
 
 ## Setup
 
-Register it under the key you want in `io`, see [Input components](/core/components):
+Register it under the key you want in `io`, see [Input components](/core/input-components):
 
 ```ts app.ts {5}
 import { inputEmail } from '@awaitio/input-email';
@@ -49,7 +49,7 @@ const ownerEmail = await io.input.email('Owner email', {
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/input-components#optional-fields).
 
 ```ts
 const backupEmail = await io.input.email('Backup email').optional();
@@ -69,7 +69,7 @@ The browser checks the format before sending, and the server checks every answer
 
 ## Custom validation
 
-Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
 
 ```ts
 const email = await io.input.email('Work email').validate((email) => {

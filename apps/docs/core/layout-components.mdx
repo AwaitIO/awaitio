@@ -16,7 +16,7 @@ export const app = new AwaitIO({
 });
 ```
 
-The key is the name, as for [input components](/core/components#the-key-is-the-name): `layouts: { basic: layoutBasic }` gives `io.layout.basic()` in page handlers.
+The key is the name, as for [input components](/core/input-components#the-key-is-the-name): `layouts: { basic: layoutBasic }` gives `io.layout.basic()` in page handlers.
 
 <Info>
   A page that returns just display components, `return [io.display.table(…)]`, goes into the layout registered as `basic`, titled with the page's name and description. Without one, the page shows an
@@ -35,7 +35,7 @@ Each card is one package and opens its page with its props.
 
 ## Write your own
 
-A layout is one `.tsx` file in its own package, built like [your own input component](/core/components#write-your-own), with `defineLayout`. `props` are its own options besides `children`:
+A layout is one `.tsx` file in its own package, built like [your own input component](/core/input-components#write-your-own), with `defineLayout`. `props` are its own options besides `children`:
 
 ```tsx src/layoutTwoColumns.tsx
 import { defineLayout } from 'awaitio';

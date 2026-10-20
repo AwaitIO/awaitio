@@ -29,11 +29,12 @@
       },
       {
         "group": "SDK",
-        "pages": ["core/app", "core/routing", "core/listen", "core/users", "core/environments", "core/components", "core/layout-components"]
+        "pages": ["core/app", "core/routing", "core/listen", "core/pages", "core/users", "core/environments", "core/theme"]
       },
       {
-        "group": "Components",
+        "group": "Input components",
         "pages": [
+          "core/input-components",
           "io/input-text",
           "io/input-email",
           "io/input-url",
@@ -50,11 +51,21 @@
       },
       {
         "group": "Display components",
-        "pages": ["io/display-table", "io/display-metadata", "io/display-link", "io/display-heading", "io/display-image", "io/display-markdown", "io/display-object", "io/display-html"]
+        "pages": [
+          "core/display-components",
+          "io/display-table",
+          "io/display-metadata",
+          "io/display-link",
+          "io/display-heading",
+          "io/display-image",
+          "io/display-markdown",
+          "io/display-object",
+          "io/display-html"
+        ]
       },
       {
         "group": "Layout components",
-        "pages": ["io/layout-basic"]
+        "pages": ["core/layout-components", "io/layout-basic"]
       },
       {
         "group": "Context",

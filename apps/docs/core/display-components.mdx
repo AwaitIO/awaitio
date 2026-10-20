@@ -1,0 +1,126 @@
+---
+title: 'Display components'
+sidebarTitle: 'Overview'
+icon: 'book-open'
+---
+
+Display components show something and ask for nothing: a table of records, tiles with totals. They go into a folder's page, see [Pages and layouts](/core/pages), or into a step of an action next to inputs.
+
+Each one is its own package. Register it in `components` under `display`, next to the input components:
+
+```ts app.ts {7}
+import { displayMetadata } from '@awaitio/display-metadata';
+import { displayTable } from '@awaitio/display-table';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: {
+    display: { table: displayTable, metadata: displayMetadata },
+  },
+});
+```
+
+The key is the name, as for [input components](/core/input-components#the-key-is-the-name): `display: { table: displayTable }` gives `io.display.table()` in page handlers.
+
+## Available components
+
+Each card is one package and opens its page: all its props and how the server checks them.
+
+<Columns cols={2}>
+  <Card title="Display Table" href="/io/display-table" img="/images/components/display-table.png">
+    `io.display.table()` shows records with filtering, paging, links to actions and a row menu.
+  </Card>
+  <Card title="Display Metadata" href="/io/display-metadata" img="/images/components/display-metadata.png">
+    `io.display.metadata()` shows label and value tiles, such as totals above a table.
+  </Card>
+  <Card title="Display Link" href="/io/display-link" img="/images/components/display-link.png">
+    `io.display.link()` shows a link to a page in the app or outside it.
+  </Card>
+  <Card title="Display Heading" href="/io/display-heading" img="/images/components/display-heading.png">
+    `io.display.heading()` shows a section title with an optional line under it.
+  </Card>
+  <Card title="Display Image" href="/io/display-image" img="/images/components/display-image.png">
+    `io.display.image()` shows a picture, such as a chart or a file preview.
+  </Card>
+  <Card title="Display Markdown" href="/io/display-markdown" img="/images/components/display-markdown.png">
+    `io.display.markdown()` shows formatted text written in markdown.
+  </Card>
+  <Card title="Display Object" href="/io/display-object" img="/images/components/display-object.png">
+    `io.display.object()` shows the keys and values of a record, nested data included.
+  </Card>
+  <Card title="Display HTML" href="/io/display-html" img="/images/components/display-html.png">
+    `io.display.html()` shows HTML markup, sanitized first.
+  </Card>
+</Columns>
+
+## In a page
+
+```ts actions/users/index.ts
+export const usersPage = app.definePage({
+  handler: async ({ io }) => {
+    const users = await prisma.user.findMany();
+
+    return io.layout.basic({
+      title: 'Users',
+      children: [io.display.metadata(null, { items: [{ label: 'Users', value: users.length }] }), io.display.table('All users', { data: users, columns: ['name', 'email'] })],
+    });
+  },
+});
+```
+
+- Every display component takes a label, shown as the heading above it (`null` for none), and its props.
+- Props are typed by the component's schema, and the server checks them again before they reach the browser: props that do not fit show an error instead of the page.
+
+## In an action
+
+An action's `io` has them too. Awaited on its own, a display component is a step with a Continue button; in `io.group` it sits next to inputs. Either way it answers nothing, `undefined`:
+
+```ts
+await io.display.table('Invoices to send', { data: invoices, columns: ['number', 'customer', 'total'] });
+
+const { reason } = await io.group({
+  summary: io.display.metadata(null, { items: [{ label: 'Total', value: total }] }),
+  reason: io.input.text('Why send them now?'),
+});
+```
+
+## Write your own
+
+A display component is one `.tsx` file in its own package, built like [your own input component](/core/input-components#write-your-own), with `defineDisplay` and only `props` and `component`:
+
+The SDK draws the label as a heading above the component. A component that shows the label itself, like `io.display.heading`, sets `wrap: false` in `defineDisplay`.
+
+```tsx src/displayList.tsx
+import { defineDisplay } from 'awaitio';
+import { z } from 'zod';
+
+export const displayList = defineDisplay({
+  props: z.object({ items: z.array(z.string()) }),
+  component: ({ props }) => {
+    return (
+      <ul>
+        {props.items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    );
+  },
+});
+```
+
+Register it under any key, `display: { list: displayList }`, and pages call `io.display.list('Label', { items })`. AwaitIO draws the label; the component draws the rest.
+
+## Building blocks
+
+Build a display component from the blocks in `awaitio/ui`. As for [input components](/core/input-components#building-blocks), the theme draws them, so your component looks like the rest of the app and needs no CSS.
+
+| Block      | Draws                                                          |
+| ---------- | -------------------------------------------------------------- |
+| `Table`    | A table with a filter, paging and a row menu.                  |
+| `Metadata` | Label and value tiles.                                         |
+| `Heading`  | The title of a block on a page.                                |
+| `Card`     | A box around content.                                          |
+| `Link`     | A link to another page of the app, e.g. an action with params. |
+| `RowMenu`  | The "…" menu at the end of a table row.                        |
+
+A component that fills a `Table` from database rows can format each cell with `formatCellValue(value)` from `awaitio/ui`: dates become _Oct 16, 2026, 9:30 AM_, numbers get separators, booleans read _Yes_ and _No_ and an empty value shows _N/A_, the same as in the built-in tables.

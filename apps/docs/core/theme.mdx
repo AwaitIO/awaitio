@@ -1,0 +1,149 @@
+---
+title: 'Theme'
+description: 'How the UI looks, and how to change one piece of it, such as the field label.'
+icon: 'palette'
+---
+
+Everything AwaitIO draws is built from a small set of blocks: `Field`, `Label`, `Input`, `Button`, `Table` and the rest. The core only knows their props; a **theme** gives each block its look. Components never style themselves, so a theme restyles every form, table and page at once.
+
+## Use the default theme
+
+```ts app.ts {8}
+import { defaultTheme } from '@awaitio/theme-default';
+import { AwaitIO } from 'awaitio';
+import { join } from 'path';
+
+export const app = new AwaitIO({
+  name: 'Internal tools',
+  actionsDirectory: join(__dirname, 'actions'),
+  theme: defaultTheme,
+  // secret, users, components…
+});
+```
+
+`theme` is required and has no default: it says which theme package draws each block. `defaultTheme` from `@awaitio/theme-default` draws all of them.
+
+## Change one block
+
+Spread a theme and replace the blocks you want with blocks of another theme package. To give every field a different label:
+
+```ts app.ts {6}
+import { defaultTheme } from '@awaitio/theme-default';
+import { myTheme } from '@acme/awaitio-theme';
+
+export const app = new AwaitIO({
+  // …
+  theme: { ...defaultTheme, Label: myTheme.Label },
+});
+```
+
+Every block is required in the type, so a theme missing one does not compile. Each block knows which package it comes from, so the UI loads exactly the theme scripts the blocks need.
+
+```tsx src/Label.tsx
+import type { LabelProps } from 'awaitio/ui';
+import type { FC } from 'react';
+
+export const Label: FC<LabelProps> = ({ htmlFor, children }) => {
+  return (
+    <label htmlFor={htmlFor} className="text-sm font-semibold text-gray-950">
+      {children}
+    </label>
+  );
+};
+```
+
+```tsx src/myTheme.tsx
+import { defineTheme } from 'awaitio';
+import { Label } from './Label';
+
+export const myTheme = defineTheme({ Label });
+```
+
+The default `Field` draws its label with `Label` from `awaitio/ui`, which is the block the theme picked, so the new label shows in every form: inputs, selects and your own components, see [Building blocks](/core/input-components#building-blocks). The demo app does exactly this in `apps/demo/components/theme`.
+
+## Package layout
+
+A theme is a package like [your own component](/core/input-components#write-your-own), built with the same `awaitio/vite` config plus its stylesheet:
+
+```text
+my-theme/
+├── package.json
+├── vite.config.mts
+└── src/
+    ├── index.ts        export { myTheme } from './myTheme';
+    ├── myTheme.tsx     defineTheme({ Label })
+    ├── Label.tsx
+    └── theme.css
+```
+
+```ts vite.config.mts
+import { componentBuildConfig } from 'awaitio/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig(componentBuildConfig({ root: import.meta.url, entry: 'src/myTheme.tsx', exportName: 'myTheme', css: 'src/theme.css' }));
+```
+
+```css src/theme.css
+@layer theme, components;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(components) source(none);
+@source './';
+```
+
+- The build writes `dist/ui/ui.js` and `dist/ui/ui.css`; the server serves them and the UI loads the theme scripts before it draws anything, the login page included.
+- The theme's classes go into the `components` layer, under the UI's own utilities, so the page layout always wins over a block's look. Install `tailwindcss` and `@tailwindcss/vite` in the theme package.
+- A block put under another name (`Label: myTheme.Button`) or missing from plain JavaScript stops the app at start with a message saying which one.
+
+## Blocks
+
+| Block          | Draws                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------- |
+| `Badge`        | A short colored label, e.g. a status in a table cell (`io.display.table`).                                    |
+| `Button`       | Every button: Continue, Cancel, the log out button, the pager.                                                |
+| `ButtonRow`    | Buttons side by side (`io.confirm`).                                                                          |
+| `Card`         | The box around a step, the login form, a result and the loading state.                                        |
+| `Checkbox`     | A checkbox with its text to the right (`io.input.boolean`).                                                   |
+| `ChoiceList`   | Options as cards with a radio or a checkbox.                                                                  |
+| `Field`        | Label, control, help text and error of one form field, with _optional_ next to the label of an optional one.  |
+| `Heading`      | The title above a display component.                                                                          |
+| `Hint`         | Small text under a control.                                                                                   |
+| `Image`        | A picture with a size limit (`io.display.image`).                                                             |
+| `Input`        | A one-line text field.                                                                                        |
+| `KeyValueList` | Keys and values one under another, nested lists included (`io.display.object`).                               |
+| `Label`        | The label of a form field.                                                                                    |
+| `Link`         | A link to another page of the UI, e.g. in a table cell, or with `external` to a page outside it in a new tab. |
+| `Metadata`     | Label and value tiles.                                                                                        |
+| `RowMenu`      | The _…_ menu at the end of a table row.                                                                       |
+| `Select`       | A drop-down (`io.select.single`, `io.select.multiple`).                                                       |
+| `MultiSelect`  | A drop-down with the chosen options under it in one frame (`io.select.multiple`).                             |
+| `Prose`        | Formatted text: headings, paragraphs, lists, links and code (`io.display.markdown`).                          |
+| `Table`        | A table with filter, pager, row menus and row selection.                                                      |
+| `Textarea`     | A multi-line text field.                                                                                      |
+
+## Write a block
+
+A block is a plain React component. Type it with the props the core gives it, exported from `awaitio/ui` as `<Block>Props` (`LabelProps`, `InputProps`, `TableProps`…), and draw whatever you like:
+
+```tsx src/Input.tsx
+import { useFieldId, type InputProps } from 'awaitio/ui';
+import type { FC } from 'react';
+
+export const Input: FC<InputProps> = ({ value, onChange, ...props }) => {
+  return (
+    <input
+      {...props}
+      id={useFieldId()}
+      value={value}
+      onChange={(event) => {
+        onChange(event.target.value);
+      }}
+      className="w-full rounded-md border border-gray-300 px-3 py-2"
+    />
+  );
+};
+```
+
+Two helpers from `awaitio/ui` keep a block wired to the rest of the UI:
+
+- **`useFieldId()`** returns the id the surrounding `Field` gave its control. Put it on the `<input>`, `<textarea>` or `<select>` your block draws: the label points at that id, so clicking the label focuses the field and screen readers read them together. A control block without it still works, but loses its label.
+- **`navigateTo(href)`** changes the page of the AwaitIO UI without reloading it. Call it from a `Link` block on a plain click, and leave clicks with a modifier key to the browser so they still open a new tab.

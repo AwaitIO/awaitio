@@ -20,7 +20,7 @@ npm install @awaitio/input-date
 
 ## Setup
 
-Register it under the key you want in `io`, see [Input components](/core/components):
+Register it under the key you want in `io`, see [Input components](/core/input-components):
 
 ```ts app.ts {5}
 import { inputDate } from '@awaitio/input-date';
@@ -58,7 +58,7 @@ dueOn.toISODate(); // '2026-11-02'
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `DateTime | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `DateTime | undefined`, see [Optional fields](/core/input-components#optional-fields).
 
 ```ts
 const birthday = await io.input.date('Birthday').optional();
@@ -83,7 +83,7 @@ The browser checks the date before sending, and the server checks every answer a
 
 ## Custom validation
 
-Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
 
 ```ts
 const shipsOn = await io.input.date('Ships on').validate((date) => {

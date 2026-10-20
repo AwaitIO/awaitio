@@ -18,7 +18,7 @@ npm install @awaitio/select-multiple
 
 ## Setup
 
-Register it under the key you want in `io`, see [Input components](/core/components):
+Register it under the key you want in `io`, see [Input components](/core/input-components):
 
 ```ts app.ts {5}
 import { selectMultiple } from '@awaitio/select-multiple';
@@ -74,7 +74,7 @@ The options stay on the server; the browser gets only their labels and answers w
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets the options or `undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets the options or `undefined`, see [Optional fields](/core/input-components#optional-fields).
 
 ```ts
 const channels = await io.select.multiple('Channels', { options: allChannels }).optional();
@@ -96,7 +96,7 @@ The server checks every answer, so a crafted request cannot slip in other values
 
 ## Custom validation
 
-Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
 
 ```ts
 const channels = await io.select.multiple('Notify by', { options: channelOptions }).validate((channels) => {

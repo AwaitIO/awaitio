@@ -1,13 +1,14 @@
 ---
-title: 'Components'
-icon: 'puzzle-piece'
+title: 'Input components'
+sidebarTitle: 'Overview'
+icon: 'book-open'
 ---
 
-`io` offers exactly the components you register. Each one is its own package, named after its method: `io.select.table()` comes from `@awaitio/select-table`.
+Input components ask a person for a value in an action: `await io.input.text('Company name')` waits until someone answers. `io` offers exactly the components you register. Each one is its own package, named after its method: `io.input.text()` comes from `@awaitio/input-text`. Components that only show something in a page are [display components](/core/display-components).
 
 Install the ones you use, or [write your own](#write-your-own), and register them in `components` when you create the app:
 
-```ts app.ts
+```ts app.ts {7}
 import { inputText } from '@awaitio/input-text';
 
 export const app = new AwaitIO({
@@ -50,10 +51,10 @@ Each card is one package and opens its page: all its props, what it returns and 
     `io.input.date()` asks for a calendar date and returns a luxon `DateTime`.
   </Card>
   <Card title="Select Single" href="/io/select-single" img="/images/components/select-single.png">
-    `io.select.single()` asks to pick one option from a drop-down and returns its `value`.
+    `io.select.single()` asks to pick one option from a drop-down and returns the chosen option.
   </Card>
   <Card title="Select Multiple" href="/io/select-multiple" img="/images/components/select-multiple.png">
-    `io.select.multiple()` asks to pick several options, listed under a drop-down, and returns their values.
+    `io.select.multiple()` asks to pick several options, listed under a drop-down, and returns the chosen options.
   </Card>
   <Card title="Select Table" href="/io/select-table" img="/images/components/select-table.png">
     `io.select.table()` asks to pick rows of a table and returns them.
@@ -62,19 +63,6 @@ Each card is one package and opens its page: all its props, what it returns and 
     `io.confirm()` asks before something irreversible and returns `true` for Confirm or `false` for Cancel.
   </Card>
 </Columns>
-
-## Display components in an action
-
-Display components, such as [`io.display.table`](/io/display-table), work in an action's `io` too. Awaited on their own, they are a step with a Continue button; in `io.group` they sit next to inputs. Either way they answer nothing, `undefined`:
-
-```ts
-await io.display.table('Invoices to send', { data: invoices, columns: ['number', 'customer', 'total'] });
-
-const { reason } = await io.group({
-  summary: io.display.metadata(null, { items: [{ label: 'Total', value: total }] }),
-  reason: io.input.text('Why send them now?'),
-});
-```
 
 ## Optional fields
 
@@ -104,24 +92,7 @@ const code = await io.input.text('Discount code').validate(async (code) => {
 - It runs on the server, so it can be async and use your database; the browser cannot skip it.
 - It runs only after the component's own checks pass, so `code` above is never empty. An optional field left empty and a disabled field skip it.
 - A function that throws fails the run, like an error thrown in the handler.
-
-For a check across several fields, chain `.validate()` to `io.group`. The function gets the values as the handler would get them; its message shows above **Continue**, not under one field, and it runs only once every field passed its own checks:
-
-```ts
-const { startsAt, endsAt } = await io
-  .group({
-    code: io.input.text('Discount code'),
-    startsAt: io.input.date('Starts on'),
-    endsAt: io.input.date('Ends on'),
-  })
-  .validate(({ startsAt, endsAt }) => {
-    return endsAt > startsAt ? undefined : 'The code must end after it starts.';
-  });
-```
-
-<Frame>
-  <img src="/images/io-group-validate.png" alt="A form with Discount code, Starts on and Ends on fields and the message The code must end after it starts. above the Continue button" />
-</Frame>
+- For a check across several fields, chain `.validate()` to `io.group`.
 
 ## Disabled fields
 
@@ -172,7 +143,7 @@ A method of a component that is not registered does not exist on `io`, and a wro
 
 ## Write your own
 
-A component is one `.tsx` file: zod schemas for its props and its answer, a check the server runs, and the React control. This is the star rating from the demo app:
+A component is one `.tsx` file: zod schemas for its props and its answer, a check the server runs, and the React control. For example, a star rating:
 
 ```tsx components/rating/src/rating.tsx
 import { defineComponent } from 'awaitio';
@@ -242,7 +213,7 @@ export default defineConfig(componentBuildConfig({ root: import.meta.url, entry:
 
 Register it like any other component, and its key is its name:
 
-```ts app.ts
+```ts app.ts {4}
 components: {
   input: {
     text: inputText,
@@ -250,10 +221,6 @@ components: {
   },
 }
 ```
-
-<Frame>
-  <img src="/images/custom-component-rating.png" alt="A star rating with four of five stars selected, above a text area" />
-</Frame>
 
 Register your component under a key that already exists, `input: { text: myText }`, and it replaces the built-in one in every action, as long as its props and its answer fit.
 

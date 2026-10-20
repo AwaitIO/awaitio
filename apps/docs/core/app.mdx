@@ -31,15 +31,15 @@ export const app = new AwaitIO({
 
 ## Options
 
-| Option             | Type                   | Required | Description                                                                         |
-| ------------------ | ---------------------- | -------- | ----------------------------------------------------------------------------------- |
-| `name`             | `string`               | Required | Shown on the login page, in the header and in the tab.                              |
-| `actionsDirectory` | `string`               | Required | Absolute path of the actions folder, see [Routing](/core/routing).                  |
-| `theme`            | `Theme`                | Required | How the UI looks, e.g. `defaultTheme`.                                              |
-| `secret`           | `string`               | Required | Signs the login cookies, see [Users](/core/users).                                  |
-| `users`            | `AwaitIOUser[]`        | Required | Who can log in, see [Users](/core/users).                                           |
-| `components`       | `object`               | Optional | What `io` offers, see [Components](/core/components).                               |
-| `environments`     | `AwaitIOEnvironment[]` | Optional | Your production, staging and local servers, see [Environments](/core/environments). |
-| `layouts`          | `object`               | Optional | The frames of folder pages, see [Layout components](/core/layout-components).       |
+| Option             | Type                   | Required | Description                                                                                                          |
+| ------------------ | ---------------------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `name`             | `string`               | Required | Shown on the login page, in the header and in the tab.                                                               |
+| `actionsDirectory` | `string`               | Required | Absolute path of the actions folder, see [Routing](/core/routing).                                                   |
+| `theme`            | `Theme`                | Required | How the UI looks, see [Theme](/core/theme).                                                                          |
+| `secret`           | `string`               | Required | Signs the login cookies, see [Users](/core/users).                                                                   |
+| `users`            | `AwaitIOUser[]`        | Required | Who can log in, see [Users](/core/users).                                                                            |
+| `components`       | `object`               | Optional | What `io` offers, see [Input components](/core/input-components) and [Display components](/core/display-components). |
+| `environments`     | `AwaitIOEnvironment[]` | Optional | Your production, staging and local servers, see [Environments](/core/environments).                                  |
+| `layouts`          | `object`               | Optional | The frames of folder pages, see [Layout components](/core/layout-components).                                        |
 
 The app checks the options when it is created and throws with a message naming the one that is wrong, so a typo stops the server before anyone logs in.

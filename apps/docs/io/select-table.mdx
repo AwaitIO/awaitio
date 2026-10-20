@@ -20,7 +20,7 @@ npm install @awaitio/select-table
 
 ## Setup
 
-Register it under the key you want in `io`, see [Input components](/core/components):
+Register it under the key you want in `io`, see [Input components](/core/input-components):
 
 ```ts app.ts {5}
 import { selectTable } from '@awaitio/select-table';
@@ -71,7 +71,7 @@ const devices = await io.select.table('Devices to restart', {
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `TRow[] | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `TRow[] | undefined`, see [Optional fields](/core/input-components#optional-fields).
 
 ```ts
 const notified = await io.select.table('Users to notify', { data: users, columns: ['name', 'email'], maxSelections: 5 }).optional();
@@ -106,7 +106,7 @@ The server checks every answer, so a crafted request cannot slip in another row:
 
 ## Custom validation
 
-Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
 
 ```ts
 const [user] = await io.select.table('User to remove', { data: users, columns: ['name', 'role'] }).validate((rows) => {

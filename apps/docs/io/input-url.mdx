@@ -18,7 +18,7 @@ npm install @awaitio/input-url
 
 ## Setup
 
-Register it under the key you want in `io`, see [Input components](/core/components):
+Register it under the key you want in `io`, see [Input components](/core/input-components):
 
 ```ts app.ts {5}
 import { inputUrl } from '@awaitio/input-url';
@@ -51,7 +51,7 @@ website.hostname; // 'example.com'
 
 ## Optional
 
-The field is required. Chain `.optional()` to let it stay empty; the handler then gets `URL | undefined`, see [Optional fields](/core/components#optional-fields).
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `URL | undefined`, see [Optional fields](/core/input-components#optional-fields).
 
 ```ts
 const homepage = await io.input.url('Homepage').optional();
@@ -72,7 +72,7 @@ The browser checks the format before sending, and the server checks every answer
 
 ## Custom validation
 
-Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/components#custom-validation).
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
 
 ```ts
 const webhook = await io.input.url('Webhook URL').validate((url) => {
