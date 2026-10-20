@@ -1,0 +1,71 @@
+---
+title: 'Input Datetime'
+description: 'Asks for a date and a time.'
+icon: 'calendar-days'
+---
+
+`io.input.datetime()` requests a point in time and returns it as a [luxon](https://moment.github.io/luxon/) `DateTime`. Provided by the `@awaitio/input-datetime` package.
+
+<Frame>
+  <img src="/images/io-input-datetime.png" alt="A Trial ends at field with a date and time, and the hint Time zone: Europe/Prague under it" />
+</Frame>
+
+The person picks the date and time in their browser's time zone, which is shown under the field (_Time zone: Europe/Prague_). The value is sent to the server in UTC, so the handler gets the same instant whatever time zone the person is in.
+
+## Install
+
+```bash
+npm install @awaitio/input-datetime
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputDatetime } from '@awaitio/input-datetime';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { datetime: inputDatetime } },
+});
+```
+
+## Usage
+
+```ts
+import { DateTime } from 'luxon';
+
+const endsAt = await io.input.datetime('Trial ends at', {
+  defaultValue: DateTime.now().plus({ days: 14 }).startOf('day'),
+  min: DateTime.now(),
+});
+```
+
+## Props
+
+| Prop           | Type                         | Required | Description                                           |
+| -------------- | ---------------------------- | -------- | ----------------------------------------------------- |
+| `helpText`     | `string`                     | Optional | Secondary text under the field.                       |
+| `defaultValue` | `DateTime \| Date \| string` | Optional | The value the field starts with. Empty when left out. |
+| `min`          | `DateTime \| Date \| string` | Optional | The earliest time that can be picked.                 |
+| `max`          | `DateTime \| Date \| string` | Optional | The latest time that can be picked.                   |
+
+`defaultValue`, `min` and `max` take a luxon `DateTime`, a JavaScript `Date` or an ISO 8601 string. An impossible date such as `2026-02-30` throws when the io call is made.
+
+## Returns
+
+A luxon `DateTime` in the UTC zone. Convert it with `.setZone(...)` when you need local time, or `.toISO()` to store it.
+
+## Validation
+
+The field is always required. The input works in whole minutes, so `min` and `max` are compared at minute precision: `min: DateTime.now()` still accepts the current minute. The server checks every answer:
+
+| When                       | Message                                      |
+| -------------------------- | -------------------------------------------- |
+| No date and time picked    | `<label>: pick a date and time.`             |
+| A date that does not exist | `<label>: pick a date and time that exists.` |
+| Earlier than `min`         | `<label> must not be earlier than <min>.`    |
+| Later than `max`           | `<label> must not be later than <max>.`      |
+
+`<min>` and `<max>` are printed in UTC.
