@@ -58,7 +58,7 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis, displayUis }) =>
 
   return (
     <Card>
-      <form onSubmit={submit} className="flex flex-col gap-4">
+      <form onSubmit={submit} className="flex flex-col gap-8">
         {/* The first step needs no number; from the second one on it tells the user the action goes on. */}
         {step.index > 1 && <p className="text-xs font-medium tracking-wide text-gray-400 uppercase">Step {step.index}</p>}
         {step.components.map((component, index) => {
