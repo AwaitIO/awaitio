@@ -68,6 +68,8 @@ Open http://localhost:3000, log in and run **Greet**.
 | `awaitio`                 | The server, the action runtime, the prebuilt UI, `defineComponent` and the `awaitio hash-password` CLI |
 | `@awaitio/input-text`     | `io.input.text()`: one line of text                                                                    |
 | `@awaitio/input-textarea` | `io.input.textarea()`: longer text                                                                     |
+| `@awaitio/input-number`   | `io.input.number()`: a number, with min, max and decimal places                                        |
+| `@awaitio/input-boolean`  | `io.input.boolean()`: yes or no, with a checkbox                                                       |
 | `@awaitio/input-datetime` | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`                                 |
 
 ## Documentation

@@ -1,0 +1,69 @@
+---
+title: 'Input Number'
+description: 'Asks for a number, with optional limits and decimal places.'
+icon: 'hashtag'
+---
+
+`io.input.number()` requests a number. Provided by the `@awaitio/input-number` package.
+
+<Frame>
+  <img src="/images/io-input-number.png" alt="A Refund amount field filled with 49.90, with help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-number
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputNumber } from '@awaitio/input-number';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { number: inputNumber } },
+});
+```
+
+## Usage
+
+```ts
+const amount = await io.input.number('Refund amount', {
+  min: 0,
+  max: 500,
+  decimals: 2,
+  helpText: 'In euros, up to 500',
+});
+```
+
+## Props
+
+| Prop           | Type     | Required | Description                                                               |
+| -------------- | -------- | -------- | ------------------------------------------------------------------------- |
+| `placeholder`  | `string` | Optional | Text shown in the empty field.                                            |
+| `helpText`     | `string` | Optional | Secondary text under the field.                                           |
+| `defaultValue` | `number` | Optional | The value the field starts with. Empty when left out.                     |
+| `min`          | `number` | Optional | The smallest number accepted.                                             |
+| `max`          | `number` | Optional | The largest number accepted.                                              |
+| `decimals`     | `number` | Optional | How many decimal places are allowed. Defaults to `0`: whole numbers only. |
+
+Props are checked when the io call is made: a prop of the wrong type throws in the handler.
+
+## Returns
+
+`number`, already checked against `min`, `max` and `decimals`: typing `49.90` gives `49.9`.
+
+## Validation
+
+The field is always required. The browser stops values outside the limits before they are sent, and the server checks every answer again, so these messages come back even when the browser's own checks are bypassed:
+
+| When                               | Message                                                                                                               |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| The field is empty or not a number | `<label>: enter a number.`                                                                                            |
+| Smaller than `min`                 | `<label> must be at least <min>.`                                                                                     |
+| Larger than `max`                  | `<label> must be at most <max>.`                                                                                      |
+| More decimal places than allowed   | `<label> must be a whole number.` with `decimals: 0`, otherwise `<label> can have at most <decimals> decimal places.` |

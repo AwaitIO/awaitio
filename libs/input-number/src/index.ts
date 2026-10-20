@@ -1,0 +1,1 @@
+export { inputNumber } from './inputNumber';
