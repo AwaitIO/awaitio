@@ -41,6 +41,7 @@
           "io/input-number",
           "io/input-boolean",
           "io/input-datetime",
+          "io/input-date",
           "io/select-single",
           "io/select-multiple",
           "io/select-table",

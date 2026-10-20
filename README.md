@@ -73,6 +73,7 @@ Open http://localhost:3000, log in and run **Greet**.
 | `@awaitio/input-number`     | `io.input.number()`: a number, with min, max and decimal places                                        |
 | `@awaitio/input-boolean`    | `io.input.boolean()`: yes or no, with a checkbox                                                       |
 | `@awaitio/input-datetime`   | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`                                 |
+| `@awaitio/input-date`       | `io.input.date()`: a date, returned as a luxon `DateTime`                                              |
 | `@awaitio/select-single`    | `io.select.single()`: one of a list of options, from a drop-down                                       |
 | `@awaitio/select-multiple`  | `io.select.multiple()`: any number of options, listed under a drop-down                                |
 | `@awaitio/select-table`     | `io.select.table()`: rows picked from a table                                                          |

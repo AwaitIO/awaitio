@@ -1,0 +1,82 @@
+---
+title: 'Input Date'
+description: 'Asks for a calendar date.'
+icon: 'calendar'
+---
+
+`io.input.date()` requests a calendar date, without a time, and returns it as a [luxon](https://moment.github.io/luxon/) `DateTime`. Provided by the `@awaitio/input-date` package.
+
+<Frame>
+  <img src="/images/io-input-date.png" alt="A Date field with a picked date, and help text under it" />
+</Frame>
+
+The value is a day, not an instant, so no time zone is involved: the date the person picks is the date the handler gets.
+
+## Install
+
+```bash
+npm install @awaitio/input-date
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputDate } from '@awaitio/input-date';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { date: inputDate } },
+});
+```
+
+## Usage
+
+```ts
+import { DateTime } from 'luxon';
+
+const dueOn = await io.input.date('Due date', {
+  defaultValue: DateTime.now().plus({ days: 14 }),
+  min: DateTime.now(),
+});
+
+dueOn.toISODate(); // '2026-11-02'
+```
+
+## Props
+
+| Prop           | Type                         | Required | Description                                                                                                 |
+| -------------- | ---------------------------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `helpText`     | `string`                     | Optional | Secondary text under the field.                                                                             |
+| `defaultValue` | `DateTime \| Date \| string` | Optional | The value the field starts with. Empty when left out.                                                       |
+| `min`          | `DateTime \| Date \| string` | Optional | The earliest date that can be picked, itself included.                                                      |
+| `max`          | `DateTime \| Date \| string` | Optional | The latest date that can be picked, itself included.                                                        |
+| `disabled`     | `boolean`                    | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
+
+`defaultValue`, `min` and `max` take a luxon `DateTime` (its own zone's day), a JavaScript `Date` (its day in UTC) or a `'YYYY-MM-DD'` string. An impossible date such as `2026-02-30` throws when the io call is made.
+
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `DateTime | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const birthday = await io.input.date('Birthday').optional();
+```
+
+## Returns
+
+A luxon `DateTime` at the start of the picked day in the UTC zone. Use `.toISODate()` to store it as `'YYYY-MM-DD'`.
+
+## Validation
+
+The browser checks the date before sending, and the server checks every answer again:
+
+| When                       | Message                                   |
+| -------------------------- | ----------------------------------------- |
+| No date picked             | `<label>: pick a date.`                   |
+| A date that does not exist | `<label>: pick a date that exists.`       |
+| Earlier than `min`         | `<label> must not be earlier than <min>.` |
+| Later than `max`           | `<label> must not be later than <max>.`   |
+
+`<min>` and `<max>` are printed as `YYYY-MM-DD`.
