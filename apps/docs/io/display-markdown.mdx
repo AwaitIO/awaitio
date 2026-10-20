@@ -1,0 +1,45 @@
+---
+title: 'Display Markdown'
+description: 'Shows formatted text written in markdown.'
+icon: 'markdown'
+---
+
+`io.display.markdown()` shows formatted text in a folder's page or in a step of an action: headings, paragraphs, lists, links and code. It only displays and returns nothing. Provided by the `@awaitio/display-markdown` package.
+
+<Frame>
+  <img src="/images/io-display-markdown.png" alt="A Before you start heading, a paragraph with bold text, a bulleted list and a line with a link and inline code" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-markdown
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayMarkdown } from '@awaitio/display-markdown';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { markdown: displayMarkdown } },
+});
+```
+
+## Usage
+
+```ts
+await io.display.markdown(`
+## Before you delete
+
+The account **${account.name}** has ${account.users} users.
+
+- Their runs stay in the log
+- Invoices are kept for 10 years
+`);
+```
+
+The text is the first and only argument; it takes no props. Raw HTML in it is shown as text, so values from the database cannot add their own markup.

@@ -83,6 +83,7 @@ Open http://localhost:3000, log in and run **Greet**.
 | `@awaitio/display-link`     | `io.display.link()`: a link to a page in the app or outside it                                         |
 | `@awaitio/display-heading`  | `io.display.heading()`: a section title with an optional description                                   |
 | `@awaitio/display-image`    | `io.display.image()`: a picture, such as a chart or a file preview                                     |
+| `@awaitio/display-markdown` | `io.display.markdown()`: formatted text written in markdown                                            |
 
 ## Documentation
 

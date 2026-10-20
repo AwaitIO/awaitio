@@ -13,6 +13,7 @@ import { Label } from './blocks/Label';
 import { Link } from './blocks/Link';
 import { Metadata } from './blocks/Metadata';
 import { MultiSelect } from './blocks/MultiSelect';
+import { Prose } from './blocks/Prose';
 import { RowMenu } from './blocks/RowMenu';
 import { Select } from './blocks/Select';
 import { Table } from './blocks/Table';
@@ -33,6 +34,7 @@ export const defaultTheme = defineTheme({
   Link,
   Metadata,
   MultiSelect,
+  Prose,
   RowMenu,
   Select,
   Table,
