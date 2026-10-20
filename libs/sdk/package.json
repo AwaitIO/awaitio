@@ -20,6 +20,16 @@
     },
     "./vite": "./vite/componentBuildConfig.mjs"
   },
+  "typesVersions": {
+    "*": {
+      "client": [
+        "./dist/esm/client/index.d.ts"
+      ],
+      "ui": [
+        "./dist/uikit/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist",
     "vite"
