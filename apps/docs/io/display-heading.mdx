@@ -1,0 +1,49 @@
+---
+title: 'Display Heading'
+description: 'Shows a section title with an optional line under it.'
+icon: 'heading'
+---
+
+`io.display.heading()` shows a title in a folder's page or in a step of an action, to split a long form or page into sections. It only displays and returns nothing. Provided by the `@awaitio/display-heading` package.
+
+<Frame>
+  <img src="/images/io-display-heading.png" alt="A Review heading with a line of description under it, above two tiles and a text field" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-heading
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayHeading } from '@awaitio/display-heading';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { heading: displayHeading } },
+});
+```
+
+## Usage
+
+```ts
+const { name, plan } = await io.group({
+  company: io.display.heading('Company', { description: 'How the account is called and billed.' }),
+  name: io.input.text('Name'),
+  plan: io.select.single('Plan', { options: plans }),
+});
+```
+
+The label is the title itself, drawn by the component rather than as a heading above it.
+
+## Props
+
+| Prop          | Type     | Required | Description                                                                                                                |
+| ------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `description` | `string` | Optional | A line under the title, e.g. what the section is for.                                                                      |
+| `level`       | `2 \| 3` | Optional | `2`, the default, is a section title bigger than the labels of the fields under it; `3` matches the headings above tables. |

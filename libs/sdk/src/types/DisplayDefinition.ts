@@ -9,6 +9,8 @@ export type DisplayDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny> = {
   // Checked on the server before the props go to the browser.
   props: TProps;
   component: ComponentType<DisplayUiProps<z.output<TProps>>>;
+  // False when the component draws its label itself; otherwise the SDK shows the label as a heading above it.
+  wrap?: boolean;
   // Folder of the file that called defineDisplay; `awaitio/vite` builds the browser script into <folder>/ui/ui.js.
   uiDirectory: string | null;
 };

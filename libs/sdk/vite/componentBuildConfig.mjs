@@ -57,7 +57,7 @@ export const componentBuildConfig = async ({ root, entry, exportName, css }) => 
             `} else if (${exportName}.kind === 'awaitio-layout') {`,
             `  __registerLayoutUi({ component: ${exportName}.component });`,
             `} else if (${exportName}.kind === 'awaitio-display') {`,
-            `  __registerDisplayUi({ component: ${exportName}.component });`,
+            `  __registerDisplayUi({ component: ${exportName}.component, wrap: ${exportName}.wrap ?? true });`,
             '} else {',
             `  __registerComponentUi({ component: ${exportName}.component, initialValue: ${exportName}.initialValue, wrap: ${exportName}.wrap ?? true, submitButton: ${exportName}.submitButton ?? true });`,
             '}',

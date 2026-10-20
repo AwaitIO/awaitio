@@ -64,11 +64,12 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis, displayUis }) =>
         {step.components.map((component, index) => {
           // A display component shows something under its label and has no answer, as on a page.
           if (component.display) {
-            const Display = displayUis.get(component.type)?.component;
+            const displayUi = displayUis.get(component.type);
+            const Display = displayUi?.component;
 
             return (
               <section key={index} className="flex min-w-0 flex-col gap-3">
-                {component.label && <Heading>{component.label}</Heading>}
+                {component.label && displayUi?.wrap !== false && <Heading>{component.label}</Heading>}
                 {Display && <Display label={component.label || null} props={component.props} />}
               </section>
             );

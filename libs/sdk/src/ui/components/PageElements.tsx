@@ -36,11 +36,12 @@ export const PageElements: FC<PageElementsProps> = ({ layout }) => {
     .with([{ status: 'ready' }, { status: 'ready' }], ([layoutReady, displayReady]) => {
       const Layout = layoutReady.uis.get(layout.type)?.component;
       const children = layout.children.map((child, index) => {
-        const Display = displayReady.uis.get(child.type)?.component;
+        const ui = displayReady.uis.get(child.type);
+        const Display = ui?.component;
 
         return (
           <section key={index} className="flex min-w-0 flex-col gap-3">
-            {child.label && <Heading>{child.label}</Heading>}
+            {child.label && ui?.wrap !== false && <Heading>{child.label}</Heading>}
             {Display && <Display label={child.label} props={child.props} />}
           </section>
         );

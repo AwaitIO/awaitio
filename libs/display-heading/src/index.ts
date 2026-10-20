@@ -1,0 +1,1 @@
+export { displayHeading } from './displayHeading';
