@@ -1,0 +1,64 @@
+---
+title: 'Select Single'
+description: 'Asks to pick one of a list of options.'
+icon: 'circle-dot'
+---
+
+`io.select.single()` asks to pick one option from a drop-down and returns its value. Provided by the `@awaitio/select-single` package.
+
+<Frame>
+  <img src="/images/io-select-single.png" alt="A Single choice drop-down with Slack chosen, with help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/select-single
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { selectSingle } from '@awaitio/select-single';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { select: { single: selectSingle } },
+});
+```
+
+## Usage
+
+```ts
+const role = await io.select.single('New role', {
+  options: [
+    { value: 'admin', label: 'Admin' },
+    { value: 'editor', label: 'Editor' },
+    { value: 'viewer', label: 'Viewer' },
+  ],
+  defaultValue: 'editor',
+});
+```
+
+## Props
+
+| Prop           | Type                 | Required | Description                                                       |
+| -------------- | -------------------- | -------- | ----------------------------------------------------------------- |
+| `options`      | `{ value, label }[]` | Required | What to choose from, at least one. The drop-down shows `label`.   |
+| `defaultValue` | `string`             | Optional | The `value` chosen at the start. Nothing is chosen when left out. |
+| `helpText`     | `string`             | Optional | Secondary text under the field.                                   |
+
+## Returns
+
+`string`: the chosen option's `value`.
+
+## Validation
+
+The server checks every answer, so a crafted request cannot slip in another value:
+
+| When                                   | Message                               |
+| -------------------------------------- | ------------------------------------- |
+| Nothing chosen                         | `Choose <label>.`                     |
+| A value that was not among the options | `<label>: choose one of the options.` |

@@ -1,0 +1,1 @@
+export { selectSingle } from './selectSingle';
