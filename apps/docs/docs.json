@@ -33,7 +33,7 @@
       },
       {
         "group": "Components",
-        "pages": ["io/input-text"]
+        "pages": ["io/input-text", "io/input-textarea"]
       },
       {
         "group": "Layout components",

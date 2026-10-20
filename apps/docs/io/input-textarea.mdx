@@ -1,0 +1,65 @@
+---
+title: 'Input Textarea'
+description: 'Asks for longer text over several lines.'
+icon: 'align-left'
+---
+
+`io.input.textarea()` requests a string value that can span several lines. Provided by the `@awaitio/input-textarea` package.
+
+<Frame>
+  <img src="/images/io-input-textarea.png" alt="A Why refund pay_1042? text area with a filled-in reason and help text under it" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/input-textarea
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { inputTextarea } from '@awaitio/input-textarea';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { input: { textarea: inputTextarea } },
+});
+```
+
+## Usage
+
+```ts
+const reason = await io.input.textarea('Why refund this payment?', {
+  lines: 4,
+  minLength: 10,
+  helpText: 'Goes to the customer with the refund',
+});
+```
+
+## Props
+
+| Prop           | Type     | Required | Description                                                                                                 |
+| -------------- | -------- | -------- | ----------------------------------------------------------------------------------------------------------- |
+| `placeholder`  | `string` | Optional | Text shown in the empty field.                                                                              |
+| `helpText`     | `string` | Optional | Secondary text under the field.                                                                             |
+| `defaultValue` | `string` | Optional | The value the field starts with. Defaults to an empty string.                                               |
+| `lines`        | `number` | Optional | Visible height in lines. A whole number, 1 or more. Defaults to `4`. The person can still resize the field. |
+| `minLength`    | `number` | Optional | Minimum number of characters. A whole number, 0 or more.                                                    |
+| `maxLength`    | `number` | Optional | Maximum number of characters. A whole number, 1 or more.                                                    |
+
+## Returns
+
+`string` with the line breaks the person typed (`\n`).
+
+## Validation
+
+The field is always required. Checked on the server:
+
+| When                                  | Message                                                 |
+| ------------------------------------- | ------------------------------------------------------- |
+| The value is empty or only whitespace | `<label> is required.`                                  |
+| Shorter than `minLength`              | `<label> must be at least <minLength> characters long.` |
+| Longer than `maxLength`               | `<label> must be at most <maxLength> characters long.`  |
