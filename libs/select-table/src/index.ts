@@ -1,0 +1,1 @@
+export { selectTable } from './selectTable';

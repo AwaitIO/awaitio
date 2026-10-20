@@ -1,0 +1,70 @@
+---
+title: 'Select Table'
+description: 'Asks to pick rows of a table.'
+icon: 'table-list'
+---
+
+`io.select.table()` shows records as a table with a radio or a checkbox in front of each row and returns the rows that were picked. Provided by the `@awaitio/select-table` package.
+
+<Frame>
+  <img src="/images/io-select-table.png" alt="A table with Name, Email and Role columns, a filter above it and a radio in front of every row, Anna picked" />
+</Frame>
+
+The table has the same filter, pager and value formatting as [`io.display.table`](/io/display-table).
+
+## Install
+
+```bash
+npm install @awaitio/select-table
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/components):
+
+```ts app.ts {5}
+import { selectTable } from '@awaitio/select-table';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { select: { table: selectTable } },
+});
+```
+
+## Usage
+
+```ts
+const [user] = await io.select.table('User', {
+  rows: await prisma.user.findMany(),
+  columns: [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+  ],
+});
+```
+
+## Props
+
+| Prop            | Type                           | Required | Description                                                                                                                   |
+| --------------- | ------------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `rows`          | `Record<string, unknown>[]`    | Required | The records to pick from, at least one.                                                                                       |
+| `columns`       | `(string \| { key, label })[]` | Optional | Which keys to show and their headings. Defaults to every key.                                                                 |
+| `minSelections` | `number`                       | Optional | At least this many rows. Defaults to 1.                                                                                       |
+| `maxSelections` | `number`                       | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
+| `pageSize`      | `number`                       | Optional | Rows per page. Defaults to 10.                                                                                                |
+| `helpText`      | `string`                       | Optional | Secondary text under the table.                                                                                               |
+
+## Returns
+
+`Record<string, unknown>[]`: the picked rows as they were sent to the browser. They travel as JSON, so a `Date` comes back as its ISO string; read the record again by its id when you need all of it.
+
+## Validation
+
+The server checks every answer, so a crafted request cannot slip in another row:
+
+| When                            | Message                                        |
+| ------------------------------- | ---------------------------------------------- |
+| No row picked, by default       | `<label>: pick a row.`                         |
+| Fewer than `minSelections`      | `<label>: pick at least <minSelections> rows.` |
+| More than `maxSelections`       | `<label>: pick at most <maxSelections> rows.`  |
+| A row that was not in the table | `<label>: pick rows from the table only.`      |

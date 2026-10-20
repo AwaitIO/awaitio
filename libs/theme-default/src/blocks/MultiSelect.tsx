@@ -8,6 +8,7 @@ export const MultiSelect: FC<MultiSelectProps> = ({ choices, value, onChange, pl
   const remaining = choices.filter((choice) => {
     return !value.includes(choice.value);
   });
+
   const chosen = choices.filter((choice) => {
     return value.includes(choice.value);
   });
