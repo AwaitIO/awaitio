@@ -1,5 +1,3 @@
-import { z } from 'zod';
-import { constants as sharedConstants } from '../shared/constants';
 import type { LayoutRegistry } from '../types/LayoutRegistry';
 import type { LayoutTree } from '../types/LayoutTree';
 
@@ -14,8 +12,9 @@ export const createLayoutRegistry = ({ tree }: CreateLayoutRegistryArgs): Layout
     }
   });
 
-  const byType: LayoutRegistry['byType'] = new Map([[sharedConstants.BASIC_LAYOUT_TYPE, { props: z.object({ title: z.string().optional(), description: z.string().optional() }), uiDirectory: null }]]);
-  const typeByKey = new Map([['basic', sharedConstants.BASIC_LAYOUT_TYPE]]);
+  // Every layout is a package registered in `layouts`; none is built in, not even basic.
+  const byType: LayoutRegistry['byType'] = new Map();
+  const typeByKey = new Map<string, string>();
   Object.entries(tree).forEach(([key, definition]) => {
     byType.set(key, definition);
     typeByKey.set(key, key);

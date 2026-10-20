@@ -29,11 +29,15 @@
       },
       {
         "group": "SDK",
-        "pages": ["core/app", "core/routing", "core/listen", "core/users", "core/environments", "core/components"]
+        "pages": ["core/app", "core/routing", "core/listen", "core/users", "core/environments", "core/components", "core/layout-components"]
       },
       {
         "group": "Components",
         "pages": ["io/input-text"]
+      },
+      {
+        "group": "Layout components",
+        "pages": ["io/layout-basic"]
       },
       {
         "group": "Context",

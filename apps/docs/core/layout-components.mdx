@@ -1,0 +1,66 @@
+---
+title: 'Layout components'
+icon: 'table-columns'
+---
+
+A layout is the frame of a page: it gets the display components the page returned, already drawn, and places them. Every layout is its own package, the basic one too; nothing is built in. Register them in `layouts`:
+
+```ts app.ts {6}
+import { layoutBasic } from '@awaitio/layout-basic';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users, components…
+  layouts: {
+    basic: layoutBasic,
+  },
+});
+```
+
+The key is the name, as for [input components](/core/components#the-key-is-the-name): `layouts: { basic: layoutBasic }` gives `io.layout.basic()` in page handlers.
+
+<Info>
+  A page that returns just display components, `return [io.display.table(…)]`, goes into the layout registered as `basic`, titled with the page's name and description. Without one, the page shows an
+  error that says so.
+</Info>
+
+## Available layouts
+
+Each card is one package and opens its page with its props.
+
+<Columns cols={2}>
+  <Card title="Layout Basic" href="/io/layout-basic" img="/images/components/layout-basic.png">
+    `io.layout.basic()` shows a title, a description and the display components below each other.
+  </Card>
+</Columns>
+
+## Write your own
+
+A layout is one `.tsx` file in its own package, built like [your own input component](/core/components#write-your-own), with `defineLayout`. `props` are its own options besides `children`:
+
+```tsx src/layoutTwoColumns.tsx
+import { defineLayout } from 'awaitio';
+import { z } from 'zod';
+
+export const layoutTwoColumns = defineLayout({
+  props: z.object({ title: z.string() }),
+  component: ({ props, children }) => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <h1>{props.title}</h1>
+        <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))' }}>{children}</div>
+      </div>
+    );
+  },
+});
+```
+
+Register it under any key, `layouts: { twoColumns: layoutTwoColumns }`, and pages call `io.layout.twoColumns({ title: 'Reports', children: [...] })`. Registered under `basic`, it takes the place of `@awaitio/layout-basic`.
+
+`component` gets:
+
+| Prop       | Type               | Description                                                             |
+| ---------- | ------------------ | ----------------------------------------------------------------------- |
+| `props`    | the parsed `props` | What the page passed besides `children`, with the schema's defaults.    |
+| `children` | `ReactNode[]`      | The display components, already drawn with their labels, in page order. |
+
+The server checks `props` against the schema before they reach the browser; props that do not fit show an error instead of the page.

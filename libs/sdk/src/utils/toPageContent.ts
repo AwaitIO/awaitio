@@ -1,5 +1,4 @@
 import { formatZodError } from './formatZodError';
-import { constants as sharedConstants } from '../shared/constants';
 import type { PageContent } from '../shared/types/PageContent';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { LayoutElement } from '../types/LayoutElement';
@@ -19,9 +18,17 @@ const isTagged = (value: unknown, kind: string) => {
 };
 
 // Checks what a page handler returned and parses the layout's and every display component's props, so the browser
-// only gets what it can draw. A bare array of display components goes into the basic layout.
+// only gets what it can draw. A bare array of display components goes into the layout registered as basic, titled
+// with the page's name and description.
 export const toPageContent = ({ page, result, registry, layoutRegistry }: ToPageContentArgs): PageContent => {
-  const layout: LayoutElement = Array.isArray(result) ? { kind: 'awaitio-layout-element', type: sharedConstants.BASIC_LAYOUT_TYPE, props: {}, children: result } : result;
+  const basicType = layoutRegistry.typeByKey.get('basic');
+
+  if (Array.isArray(result) && !basicType) {
+    throw new Error('The page returned display components without a layout. Register one under basic, e.g. layouts: { basic: layoutBasic } from @awaitio/layout-basic, or return io.layout.<name>({ children }).');
+  }
+
+  // Titled by the page, so a basic layout that requires a title still frames it.
+  const layout: LayoutElement = Array.isArray(result) ? { kind: 'awaitio-layout-element', type: basicType ?? '', props: { title: page.name, description: page.description ?? undefined }, children: result } : result;
 
   if (!isTagged(layout, 'awaitio-layout-element')) {
     throw new Error('The page handler must return io.layout.<name>({ …, children }) or an array of io.display.<name>(…).');
@@ -58,8 +65,6 @@ export const toPageContent = ({ page, result, registry, layoutRegistry }: ToPage
 
     return { type: child.type, label: child.label, props: parsed.data as unknown };
   });
-  // The basic layout titles the page with its name and description unless the handler gave its own.
-  const layoutProps = layout.type === sharedConstants.BASIC_LAYOUT_TYPE ? { title: page.name, description: page.description ?? undefined, ...(props.data as object) } : (props.data as unknown);
 
-  return { slug: page.slug, name: page.name, description: page.description, layout: { type: layout.type, props: layoutProps, children } };
+  return { slug: page.slug, name: page.name, description: page.description, layout: { type: layout.type, props: props.data as unknown, children } };
 };

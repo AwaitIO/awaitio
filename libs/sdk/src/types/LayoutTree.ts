@@ -1,6 +1,6 @@
 import type { LayoutDefinition } from './LayoutDefinition';
 
-// Layouts besides the built-in basic one: { columns: layoutColumns } gives io.layout.columns({ …, children }).
+// The layouts pages can use: { basic: layoutBasic } gives io.layout.basic({ …, children }).
 export type LayoutTree = {
   [key: string]: LayoutDefinition;
 };

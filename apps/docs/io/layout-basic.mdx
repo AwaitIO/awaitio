@@ -1,0 +1,55 @@
+---
+title: 'Layout Basic'
+description: 'A title, a description and the display components below each other.'
+icon: 'table-list'
+---
+
+`io.layout.basic()` frames a page with a title and a description and puts the display components below each other. Provided by the `@awaitio/layout-basic` package.
+
+<Frame>
+  <img src="/images/page-layout-table.png" alt="The Users page of the demo app: the title Users and its description, tiles with totals, a users table and a paged activity table" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/layout-basic
+```
+
+## Setup
+
+Register it under `basic`, see [Layout components](/core/layout-components):
+
+```ts app.ts {5}
+import { layoutBasic } from '@awaitio/layout-basic';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users, components…
+  layouts: { basic: layoutBasic },
+});
+```
+
+Under `basic`, it also frames every page that returns just display components, titled with the page's name and description.
+
+## Usage
+
+```ts actions/users/index.ts
+export const users = app.page({
+  description: 'Everyone who works with the back office.',
+  handler: async (io) => {
+    return io.layout.basic({
+      title: 'Users',
+      description: 'Everyone who works with the back office.',
+      children: [io.display.table('All users', { rows: await prisma.user.findMany() })],
+    });
+  },
+});
+```
+
+## Props
+
+| Prop          | Type                | Required | Description                            |
+| ------------- | ------------------- | -------- | -------------------------------------- |
+| `title`       | `string`            | Required | The heading of the page.               |
+| `description` | `string`            | Optional | One line under the title.              |
+| `children`    | `io.display.*(…)[]` | Required | The display components, top to bottom. |

@@ -451,7 +451,7 @@ test('Should run an action from a nested folder by its encoded slug', async () =
   expect([started.status, state.actionSlug, state.result]).toEqual([201, 'billing/invoices/send_reminder', { status: 'SUCCESS', data: 'Reminder sent' }]);
 });
 
-test('Should serve a folder page: display components in the basic layout, titled by the page', async () => {
+test('Should serve a folder page: display components in the layout registered as basic, titled by the page', async () => {
   const { pages } = await (await fetch(`${baseUrl}/api/actions`, authorized())).json();
 
   expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers' }]);
@@ -463,7 +463,7 @@ test('Should serve a folder page: display components in the basic layout, titled
     name: 'Reports',
     description: 'Monthly numbers',
     layout: {
-      type: 'awaitio:basic',
+      type: 'basic',
       props: { title: 'Reports', description: 'Monthly numbers' },
       children: [
         { type: 'display.list', label: 'Months', props: { items: ['January', 'February'], ordered: false } },

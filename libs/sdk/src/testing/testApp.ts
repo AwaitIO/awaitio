@@ -58,6 +58,16 @@ export const testApp = new AwaitIO({
     },
   },
   layouts: {
+    // Stands in for @awaitio/layout-basic: pages that return just display components land here.
+    basic: {
+      ...defineLayout({
+        props: z.object({ title: z.string(), description: z.string().optional() }),
+        component: () => {
+          return null;
+        },
+      }),
+      uiDirectory: layoutUiDirectory,
+    },
     columns: {
       ...defineLayout({
         props: z.object({ count: z.number().int().min(1).max(4).default(2) }),
