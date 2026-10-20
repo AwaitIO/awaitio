@@ -5,6 +5,8 @@ import type { ReactNode } from 'react';
 export type LinkProps = {
   href: string;
   children: ReactNode;
+  // A page outside AwaitIO: opens in a new tab instead of moving within the app.
+  external?: boolean;
   className?: string;
 };
 

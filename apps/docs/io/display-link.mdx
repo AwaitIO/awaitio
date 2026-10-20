@@ -1,0 +1,47 @@
+---
+title: 'Display Link'
+description: 'Shows a link to a page in the app or outside it.'
+icon: 'link'
+---
+
+`io.display.link()` shows a link in a folder's page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-link` package.
+
+<Frame>
+  <img src="/images/io-display-link.png" alt="A Login link heading with https://example.com/login/7f3a9c under it as a blue link" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-link
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayLink } from '@awaitio/display-link';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { link: displayLink } },
+});
+```
+
+## Usage
+
+```ts
+const token = await createLoginToken(user);
+
+await io.display.link('Login link', { url: `https://app.example.com/login/${token}` });
+```
+
+The label is the heading above the link; pass `null` for none.
+
+## Props
+
+| Prop   | Type     | Required | Description                                                                                                                                                            |
+| ------ | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`  | `string` | Required | Where the link goes. An address with a scheme, such as `https://` or `mailto:`, opens in a new tab; a path such as `/actions/users/change_role?id=2` stays in the app. |
+| `text` | `string` | Optional | What the link says. Defaults to the URL.                                                                                                                               |

@@ -3,7 +3,15 @@ import type { FC } from 'react';
 
 // A link to another page of the AwaitIO UI, e.g. an action with params. A plain click stays in the app; a click with
 // a modifier key opens a new tab as usual.
-export const Link: FC<LinkProps> = ({ href, children, className = 'text-blue-600 underline-offset-2 hover:text-blue-800 hover:underline' }) => {
+export const Link: FC<LinkProps> = ({ href, children, external = false, className = 'text-blue-600 underline-offset-2 hover:text-blue-800 hover:underline' }) => {
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children}
+      </a>
+    );
+  }
+
   return (
     <a
       href={href}

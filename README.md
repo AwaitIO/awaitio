@@ -80,6 +80,7 @@ Open http://localhost:3000, log in and run **Greet**.
 | `@awaitio/confirm`          | `io.confirm()`: Confirm or Cancel before something irreversible                                        |
 | `@awaitio/display-table`    | `io.display.table()` in pages: rows with filter, paging, links and row menus                           |
 | `@awaitio/display-metadata` | `io.display.metadata()` in pages: label and value tiles                                                |
+| `@awaitio/display-link`     | `io.display.link()`: a link to a page in the app or outside it                                         |
 
 ## Documentation
 
