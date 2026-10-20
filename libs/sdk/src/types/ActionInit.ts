@@ -2,7 +2,7 @@ import type { ActionParamsSchema } from './ActionParamsSchema';
 import type { AwaitIOActionHandler } from './AwaitIOActionHandler';
 
 export type ActionInit<TIO> = {
-  name?: string;
+  name: string;
   description?: string;
   params?: ActionParamsSchema;
   // ctx.params is typed where the action is defined (app.action); here the handler accepts whatever its schema produced.

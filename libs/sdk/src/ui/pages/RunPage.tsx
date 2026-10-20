@@ -1,10 +1,10 @@
 import { useEffect, useState, type FC } from 'react';
 import { match, P } from 'ts-pattern';
+import { Button } from '../../uikit/Button';
 import { cancelRun } from '../api/cancelRun';
 import { startRun } from '../api/startRun';
 import { ActionResult } from '../components/ActionResult';
 import { Breadcrumbs } from '../components/Breadcrumbs';
-import { Button } from '../components/Button';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import { RunOutcome } from '../components/RunOutcome';
 import { StepView } from '../components/StepView';

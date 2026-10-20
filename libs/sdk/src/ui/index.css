@@ -1,6 +1,4 @@
 @import 'tailwindcss';
-/* The kit is used by component scripts built elsewhere; its classes have to be in this stylesheet. */
-@source '../uikit';
 
 /* Geist Sans and Geist Mono, bundled with the SDK so the UI needs no font CDN (it often runs on an internal network). */
 @font-face {

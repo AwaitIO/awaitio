@@ -16,6 +16,7 @@ import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { LayoutRegistry } from '../types/LayoutRegistry';
 import type { RegisteredAction } from '../types/RegisteredAction';
 import type { RegisteredPage } from '../types/RegisteredPage';
+import type { ThemeScripts } from '../types/ThemeScripts';
 
 export type CreateAppArgs = {
   name: string;
@@ -26,9 +27,10 @@ export type CreateAppArgs = {
   manager: RunManager;
   registry: ComponentRegistry;
   layoutRegistry: LayoutRegistry;
+  themeScripts: ThemeScripts;
 };
 
-export const createApp = ({ name, environments, sessions, actions, pages, manager, registry, layoutRegistry }: CreateAppArgs): Express => {
+export const createApp = ({ name, environments, sessions, actions, pages, manager, registry, layoutRegistry, themeScripts }: CreateAppArgs): Express => {
   return (
     express()
       .disable('x-powered-by')
@@ -51,7 +53,7 @@ export const createApp = ({ name, environments, sessions, actions, pages, manage
         },
         rejectCrossSiteRequests,
         express.json(),
-        createAppInfoRouter({ name, environments, sessions }),
+        createAppInfoRouter({ name, environments, sessions, themeBlocks: themeScripts.scriptByBlock }),
         createSessionRouter({ sessions }),
         createAccessRequestRouter(),
         createAuthMiddleware({ sessions }),
@@ -62,6 +64,8 @@ export const createApp = ({ name, environments, sessions, actions, pages, manage
           res.status(404).json({ error: 'NOT_FOUND' });
         },
       )
+      // The theme draws the login page too, so its scripts and styles are open like the page itself; they hold no data.
+      .use(createUiScriptsRouter({ kind: 'themes', definitions: new Map(themeScripts.directories.map((uiDirectory, index) => [String(index), { uiDirectory }])) }))
       .use('/components', createAuthMiddleware({ sessions }))
       .use(createUiScriptsRouter({ kind: 'components', definitions: new Map<string, { uiDirectory: string | null }>([...registry.byType, ...registry.displayByType]) }))
       .use('/layouts', createAuthMiddleware({ sessions }))

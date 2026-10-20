@@ -18,17 +18,19 @@ import type { LayoutRegistry } from './types/LayoutRegistry';
 import type { LayoutTree } from './types/LayoutTree';
 import type { PageIO } from './types/PageIO';
 import type { PageOptions } from './types/PageOptions';
+import type { ThemeScripts } from './types/ThemeScripts';
 import { createComponentRegistry } from './utils/createComponentRegistry';
 import { createLayoutRegistry } from './utils/createLayoutRegistry';
 import { isPage } from './utils/isPage';
 import { loadActionsDirectory } from './utils/loadActionsDirectory';
+import { toThemeScripts } from './utils/toThemeScripts';
 import { validateEnvironments } from './utils/validateEnvironments';
 import { walkPages } from './utils/walkPages';
 import { walkRoutes } from './utils/walkRoutes';
 
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
 // Components are fixed here so action files can import the instance and get a typed io from app.action();
-// actions are loaded from the actions directory at listen() time, after the components are known.
+// the actions directory is loaded at listen() time, when the action files can import the finished instance.
 type AwaitIOServeArgs = {
   routes: Record<string, AwaitIORoutes<unknown>[string] | Page<unknown>>;
   port: number;
@@ -40,17 +42,21 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   private readonly layoutRegistry: LayoutRegistry;
   private readonly sessions: Sessions;
   private readonly name: string;
+  private readonly actionsDirectory: string;
   private readonly environments: AwaitIOEnvironment[];
+  private readonly themeScripts: ThemeScripts;
   private running: { server: Server; manager: RunManager } | null = null;
   private isStarting = false;
 
-  constructor({ name, environments = [], secret, users, components, layouts }: AwaitIOOptions<T, L>) {
+  constructor({ name, actionsDirectory, environments = [], secret, users, components, layouts, theme }: AwaitIOOptions<T, L>) {
     if (name.trim().length === 0) {
       throw new Error('The name must not be empty.');
     }
 
     validateEnvironments({ environments });
+    this.themeScripts = toThemeScripts({ theme });
     this.name = name.trim();
+    this.actionsDirectory = actionsDirectory;
     this.environments = environments;
     this.sessions = new Sessions({ secret, users });
     this.registry = createComponentRegistry({ tree: components ?? {} });
@@ -69,7 +75,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  async listen({ actionsDirectory, port, host }: AwaitIOListenArgs) {
+  async listen({ port, host }: AwaitIOListenArgs) {
     if (this.running || this.isStarting) {
       throw new Error('This AwaitIO app is already listening.');
     }
@@ -77,7 +83,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
     this.isStarting = true;
 
     try {
-      return await this.serve({ routes: await loadActionsDirectory({ directory: actionsDirectory }), port, host });
+      return await this.serve({ routes: await loadActionsDirectory({ directory: this.actionsDirectory }), port, host });
     } finally {
       this.isStarting = false;
     }
@@ -100,6 +106,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
         manager,
         registry: this.registry,
         layoutRegistry: this.layoutRegistry,
+        themeScripts: this.themeScripts,
       }),
     );
     const running = { server, manager };

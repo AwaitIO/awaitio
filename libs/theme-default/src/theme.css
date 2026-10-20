@@ -1,0 +1,10 @@
+/* Only the theme's own classes: the base styles, fonts and the SDK's screens come with the AwaitIO UI. */
+/* In the components layer, under the UI's own utilities: the SDK's layout classes always win over a block's look, while
+   the block's own variants (hover, md:) keep their order. */
+@layer theme, components;
+
+@import 'tailwindcss/theme.css' layer(theme);
+
+@import 'tailwindcss/utilities.css' layer(components) source(none);
+
+@source './';

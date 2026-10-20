@@ -1,8 +1,8 @@
 import { AppTitle } from './AppTitle';
-import { Button } from './Button';
 import { FolderNav } from './FolderNav';
 import type { AppInfo } from '../../shared/types/AppInfo';
 import type { SessionUser } from '../../shared/types/SessionUser';
+import { Button } from '../../uikit/Button';
 import { routes } from '../utils/routes';
 import type { FC } from 'react';
 

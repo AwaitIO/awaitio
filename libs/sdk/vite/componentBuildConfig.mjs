@@ -4,18 +4,24 @@ import { fileURLToPath } from 'url';
 
 const defineShimId = '\0awaitio-define-component';
 
-// Vite config for a component, display component or layout package: builds the browser half of one defineComponent(),
-// defineDisplay() or defineLayout() file into dist/ui/ui.js.
+// Vite config for a component, display component, layout or theme package: builds the browser half of one
+// defineComponent(), defineDisplay(), defineLayout() or defineTheme() file into dist/ui/ui.js.
 // React, zod and `awaitio/ui` come from the SDK UI at run time (window.__AWAITIO__), so the script holds only the
-// component itself. `root` is import.meta.url of the package's vite.config.mts.
-export const componentBuildConfig = ({ root, entry, exportName }) => {
+// component itself. `root` is import.meta.url of the package's vite.config.mts. A theme passes `css`, a Tailwind
+// stylesheet that is built into dist/ui/ui.css next to the script; components and layouts draw with the theme's blocks
+// and need none.
+export const componentBuildConfig = async ({ root, entry, exportName, css }) => {
   const directory = dirname(fileURLToPath(root));
   const entryPath = resolve(directory, entry);
+  const cssPath = css ? resolve(directory, css) : null;
+  // Loaded only for a theme, so component packages do not need Tailwind installed.
+  const tailwind = cssPath ? (await import('@tailwindcss/vite')).default() : null;
 
   return {
     root: directory,
     plugins: [
       react(),
+      ...(tailwind ? [tailwind] : []),
       {
         name: 'awaitio-component',
         enforce: 'pre',
@@ -32,6 +38,7 @@ export const componentBuildConfig = ({ root, entry, exportName }) => {
                 "export const defineComponent = (definition) => ({ kind: 'awaitio-component', ...definition, uiDirectory: null });",
                 "export const defineDisplay = (definition) => ({ kind: 'awaitio-display', ...definition, uiDirectory: null });",
                 "export const defineLayout = (definition) => ({ kind: 'awaitio-layout', ...definition, uiDirectory: null });",
+                "export const defineTheme = (blocks) => Object.fromEntries(Object.entries(blocks).map(([name, component]) => [name, { kind: 'awaitio-theme-block', name, component, uiDirectory: null }]));",
               ].join('\n')
             : null;
         },
@@ -42,9 +49,12 @@ export const componentBuildConfig = ({ root, entry, exportName }) => {
           }
 
           return [
+            ...(cssPath ? [`import ${JSON.stringify(cssPath)};`] : []),
             code,
-            "import { registerComponentUi as __registerComponentUi, registerDisplayUi as __registerDisplayUi, registerLayoutUi as __registerLayoutUi } from 'awaitio/client';",
-            `if (${exportName}.kind === 'awaitio-layout') {`,
+            "import { registerComponentUi as __registerComponentUi, registerDisplayUi as __registerDisplayUi, registerLayoutUi as __registerLayoutUi, registerThemeUi as __registerThemeUi } from 'awaitio/client';",
+            `if (Object.values(${exportName}).every((block) => block && block.kind === 'awaitio-theme-block')) {`,
+            `  __registerThemeUi({ blocks: Object.fromEntries(Object.entries(${exportName}).map(([name, block]) => [name, block.component])) });`,
+            `} else if (${exportName}.kind === 'awaitio-layout') {`,
             `  __registerLayoutUi({ component: ${exportName}.component });`,
             `} else if (${exportName}.kind === 'awaitio-display') {`,
             `  __registerDisplayUi({ component: ${exportName}.component });`,
@@ -68,6 +78,7 @@ export const componentBuildConfig = ({ root, entry, exportName }) => {
         fileName: () => {
           return 'ui.js';
         },
+        cssFileName: 'ui',
       },
       rollupOptions: {
         external: ['react', 'react/jsx-runtime', 'zod', 'awaitio/ui'],

@@ -1,6 +1,6 @@
 export type UiScriptRegistryArgs = {
-  // Where the scripts are served: /components/:type/ui.js or /layouts/:type/ui.js.
-  kind: 'components' | 'layouts';
+  // Where the scripts are served: /components/:type/ui.js, /layouts/:type/ui.js or /themes/:index/ui.js.
+  kind: 'components' | 'layouts' | 'themes';
 };
 
 // Component and layout UIs are not part of the SDK bundle: each one is a script served by its package

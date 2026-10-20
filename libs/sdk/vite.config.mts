@@ -19,6 +19,8 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '/api': `http://localhost:${env.PORT ?? 3000}`,
         '/components': `http://localhost:${env.PORT ?? 3000}`,
+        '/layouts': `http://localhost:${env.PORT ?? 3000}`,
+        '/themes': `http://localhost:${env.PORT ?? 3000}`,
       },
     },
   };

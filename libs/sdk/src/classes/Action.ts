@@ -6,7 +6,7 @@ import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
 export class Action<TIO> {
   // Recognizes an action loaded from the actions directory even when it comes from another copy of the package.
   readonly kind = 'awaitio-action';
-  readonly name: string | undefined;
+  readonly name: string;
   readonly description: string | undefined;
   readonly params: ActionParamsSchema | null;
   readonly handler: AwaitIOActionHandler<TIO, never>;

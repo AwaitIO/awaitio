@@ -2,6 +2,8 @@ import { mkdirSync, mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { z } from 'zod';
+import { testLabelBlock } from './testLabelBlock';
+import { testTheme } from './testTheme';
 import { testUser } from './testUser';
 import { AwaitIO } from '../AwaitIO';
 import { defineComponent } from '../defineComponent';
@@ -19,10 +21,12 @@ writeFileSync(join(layoutUiDirectory, 'ui', 'ui.js'), 'window.testLayoutLoaded =
 // The app the server tests run; its actions live in ./actions, one file each, like in a real project.
 export const testApp = new AwaitIO({
   name: 'Test app',
+  actionsDirectory: join(__dirname, 'actions'),
   environments: [
     { title: 'Production', color: '#dc2626', url: 'https://tools.example.com' },
     { title: 'Staging', color: '#f59e0b', url: 'https://staging.example.com' },
   ],
+  theme: { ...testTheme, Label: testLabelBlock },
   secret: testUser.secret,
   users: [
     { email: 'petr@example.com', name: 'Petr', passwordHash: testUser.passwordHash },

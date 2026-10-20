@@ -5,7 +5,7 @@ import { expect, test, vi } from 'vitest';
 import { loadActionsDirectory } from './loadActionsDirectory';
 
 // An action as another copy of the package would create it: a plain object with the marker.
-const actionSource = "export default { kind: 'awaitio-action', name: null, description: null, params: null, handler: async () => 'ok' };";
+const actionSource = "export default { kind: 'awaitio-action', name: 'Ok', description: null, params: null, handler: async () => 'ok' };";
 
 const createDirectory = (files: Record<string, string>) => {
   const directory = mkdtempSync(join(tmpdir(), 'awaitio-actions-'));

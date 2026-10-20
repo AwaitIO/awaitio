@@ -9,11 +9,13 @@ export type CreateAppInfoRouterArgs = {
   name: string;
   environments: AwaitIOEnvironment[];
   sessions: Sessions;
+  // Which theme script draws each block; the UI loads them (/themes/0/ui.js…) before it draws anything.
+  themeBlocks: Record<string, number>;
 };
 
 // Open without a session: the login page shows which project and environment it logs into. The current environment
 // is the one whose URL has the host of the request.
-export const createAppInfoRouter = ({ name, environments, sessions }: CreateAppInfoRouterArgs): IRouter => {
+export const createAppInfoRouter = ({ name, environments, sessions, themeBlocks }: CreateAppInfoRouterArgs): IRouter => {
   const router = Router();
 
   router.get('/app', (req, res) => {
@@ -28,6 +30,7 @@ export const createAppInfoRouter = ({ name, environments, sessions }: CreateAppI
       name,
       environment: current ? { title: current.title, color: current.color } : null,
       environments: readSessionUser({ req, sessions }) ? links : [],
+      themeBlocks,
     };
 
     res.json(body);

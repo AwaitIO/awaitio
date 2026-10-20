@@ -1,11 +1,12 @@
 import { useState, type FC } from 'react';
 import type { AppInfo } from '../../shared/types/AppInfo';
 import type { SessionUser } from '../../shared/types/SessionUser';
+import { Button } from '../../uikit/Button';
+import { Card } from '../../uikit/Card';
 import { Field } from '../../uikit/Field';
 import { Input } from '../../uikit/Input';
 import { logIn } from '../api/logIn';
 import { AppTitle } from '../components/AppTitle';
-import { Button } from '../components/Button';
 import { NavLink } from '../components/NavLink';
 import { routes } from '../utils/routes';
 import { toErrorMessage } from '../utils/toErrorMessage';
@@ -23,34 +24,38 @@ export const LoginPage: FC<LoginPageProps> = ({ info, onLoggedIn }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   return (
-    <form
-      className="flex w-full max-w-sm flex-col gap-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        setErrorMessage(null);
-        logIn({ email, password })
-          .then(onLoggedIn)
-          .catch((error) => {
-            setErrorMessage(toErrorMessage(error));
-            setIsSubmitting(false);
-          });
-      }}
-    >
-      {info && <AppTitle info={info} />}
-      <h1 className="text-xl font-semibold">Log in</h1>
-      <Field label="Email">
-        <Input type="email" autoComplete="username" autoFocus required value={email} onChange={setEmail} disabled={isSubmitting} />
-      </Field>
-      <Field label="Password" error={errorMessage}>
-        <Input type="password" autoComplete="current-password" required value={password} onChange={setPassword} disabled={isSubmitting} />
-      </Field>
-      <Button type="submit" disabled={isSubmitting}>
-        Log in
-      </Button>
-      <NavLink href={routes.access()} className="text-center text-sm text-gray-600 hover:text-gray-900">
-        Create new account
-      </NavLink>
-    </form>
+    <div className="w-full max-w-sm">
+      <Card>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(event) => {
+            event.preventDefault();
+            setIsSubmitting(true);
+            setErrorMessage(null);
+            logIn({ email, password })
+              .then(onLoggedIn)
+              .catch((error) => {
+                setErrorMessage(toErrorMessage(error));
+                setIsSubmitting(false);
+              });
+          }}
+        >
+          {info && <AppTitle info={info} />}
+          <h1 className="text-xl font-semibold">Log in</h1>
+          <Field label="Email">
+            <Input type="email" autoComplete="username" autoFocus required value={email} onChange={setEmail} disabled={isSubmitting} />
+          </Field>
+          <Field label="Password" error={errorMessage}>
+            <Input type="password" autoComplete="current-password" required value={password} onChange={setPassword} disabled={isSubmitting} />
+          </Field>
+          <Button type="submit" disabled={isSubmitting}>
+            Log in
+          </Button>
+          <NavLink href={routes.access()} className="text-center text-sm text-gray-600 hover:text-gray-900">
+            Create new account
+          </NavLink>
+        </form>
+      </Card>
+    </div>
   );
 };

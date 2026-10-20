@@ -3,8 +3,8 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 
 export type CreateUiScriptsRouterArgs = {
-  // 'components' or 'layouts': the scripts are served at /<kind>/:type/ui.js and ui.css.
-  kind: 'components' | 'layouts';
+  // The scripts are served at /<kind>/:type/ui.js and ui.css; a theme's type is its position in the list.
+  kind: 'components' | 'layouts' | 'themes';
   definitions: Map<string, { uiDirectory: string | null }>;
 };
 
@@ -20,7 +20,7 @@ export const createUiScriptsRouter = ({ kind, definitions }: CreateUiScriptsRout
       return res
         .status(404)
         .type('text')
-        .send(`Unknown ${kind === 'components' ? 'component' : 'layout'}.`);
+        .send(`Unknown ${kind.slice(0, -1)}.`);
     }
 
     res.setHeader('Cache-Control', 'no-cache');

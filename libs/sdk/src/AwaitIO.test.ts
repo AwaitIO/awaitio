@@ -8,7 +8,9 @@ import { defineComponent } from './defineComponent';
 import { runStateSchema } from './shared/schemas/runStateSchema';
 import type { RunState } from './shared/types/RunState';
 import { testApp } from './testing/testApp';
+import { testTheme } from './testing/testTheme';
 import { testUser } from './testing/testUser';
+import type { Theme } from './types/Theme';
 import { verifyPassword } from './utils/verifyPassword';
 import type { AddressInfo } from 'net';
 
@@ -24,10 +26,7 @@ let baseUrl = '';
 let cookie = '';
 
 beforeAll(async () => {
-  const server = await app.listen({
-    actionsDirectory: join(__dirname, 'testing', 'actions'),
-    port: 0,
-  });
+  const server = await app.listen({ port: 0 });
   baseUrl = `http://localhost:${(server.address() as AddressInfo).port}`;
   cookie = await logIn({ email: 'petr@example.com' });
 });
@@ -108,9 +107,9 @@ test('Should answer health checks without a session', async () => {
 test('Should tell the login page the project and the environment of the host, without the other URLs', async () => {
   const response = await fetch(`${baseUrl}/api/app`, { headers: { 'X-Forwarded-Host': 'tools.example.com' } });
 
-  expect(await response.json()).toEqual({ name: 'Test app', environment: { title: 'Production', color: '#dc2626' }, environments: [] });
+  expect(await response.json()).toEqual({ name: 'Test app', environment: { title: 'Production', color: '#dc2626' }, environments: [], themeBlocks: expect.objectContaining({ Button: 0, Label: 1 }) });
 
-  expect(await (await fetch(`${baseUrl}/api/app`)).json()).toEqual({ name: 'Test app', environment: null, environments: [] });
+  expect(await (await fetch(`${baseUrl}/api/app`)).json()).toEqual({ name: 'Test app', environment: null, environments: [], themeBlocks: expect.objectContaining({ Button: 0, Label: 1 }) });
 });
 
 test('Should list every environment with its URL to a logged-in user', async () => {
@@ -124,12 +123,14 @@ test('Should list every environment with its URL to a logged-in user', async () 
 
 test('Should refuse an environment URL that is not http and two environments on one host', () => {
   expect(() => {
-    return new AwaitIO({ name: 'Test app', secret, users, environments: [{ title: 'Evil', color: 'red', url: 'javascript:alert(1)' }] });
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, environments: [{ title: 'Evil', color: 'red', url: 'javascript:alert(1)' }] });
   }).toThrow('must be an http or https URL');
 
   expect(() => {
     return new AwaitIO({
+      theme: testTheme,
       name: 'Test app',
+      actionsDirectory: emptyActionsDirectory,
       secret,
       users,
       environments: [
@@ -277,12 +278,12 @@ test('Should list the actions in folder order, files before subfolders', async (
         },
         {
           "description": null,
-          "name": "Next id",
+          "name": "Next ID",
           "slug": "next_id",
         },
         {
           "description": null,
-          "name": "Who am i",
+          "name": "Who am I",
           "slug": "who_am_i",
         },
         {
@@ -377,8 +378,8 @@ test('Should forbid other pages to frame the UI', async () => {
 });
 
 test('Should listen only on this machine unless a host is given', async () => {
-  const local = new AwaitIO({ name: 'Test app', secret, users });
-  const server = await local.listen({ actionsDirectory: emptyActionsDirectory, port: 0 });
+  const local = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
+  const server = await local.listen({ port: 0 });
 
   expect((server.address() as AddressInfo).address).toBe('127.0.0.1');
 
@@ -412,29 +413,67 @@ test('Should reject a value that the component cannot parse', async () => {
   await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST' }));
 });
 
+test('Should refuse a theme without every block or with a block under another name', () => {
+  expect(() => {
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: { ...testTheme, Label: undefined } as unknown as Theme, secret, users });
+  }).toThrow('theme.Label is missing');
+
+  expect(() => {
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: { ...testTheme, Label: testTheme.Button } as unknown as Theme, secret, users });
+  }).toThrow('theme.Label is the Button block');
+});
+
+test('Should serve every theme package the theme picks blocks from, to everyone, and tell the UI which block is where', async () => {
+  const { themeBlocks } = await (await fetch(`${baseUrl}/api/app`, { headers: { 'X-AwaitIO-Request': '1' } })).json();
+
+  expect([themeBlocks.Button, themeBlocks.Label]).toEqual([0, 1]);
+
+  expect(await (await fetch(`${baseUrl}/themes/0/ui.js`)).text()).toBe('window.testThemeLoaded = true;');
+
+  expect(await (await fetch(`${baseUrl}/themes/1/ui.js`)).text()).toBe('window.testLabelLoaded = true;');
+
+  expect((await fetch(`${baseUrl}/themes/2/ui.js`)).status).toBe(404);
+});
+
+test('Should turn an access request into a users entry without logging anyone in', async () => {
+  const request = (body: object) => {
+    return fetch(`${baseUrl}/api/access-request`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' }, body: JSON.stringify(body) });
+  };
+  const response = await request({ email: ' Ada@Example.com ', name: 'Ada', password: 'correct horse battery' });
+  const { user } = await response.json();
+
+  expect([response.status, response.headers.get('set-cookie'), user.email, user.name]).toEqual([200, null, 'ada@example.com', 'Ada']);
+
+  expect(await verifyPassword({ password: 'correct horse battery', passwordHash: user.passwordHash })).toBe(true);
+
+  const short = await request({ email: 'ada@example.com', name: 'Ada', password: 'short' });
+
+  expect([short.status, (await short.json()).message]).toEqual([400, 'password: Use at least 10 characters.']);
+});
+
 test('Should refuse an empty project name', () => {
   expect(() => {
-    return new AwaitIO({ name: ' ', secret, users });
+    return new AwaitIO({ name: ' ', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
   }).toThrow('The name must not be empty.');
 });
 
 test('Should refuse "group" and "layout" as component keys', () => {
   expect(() => {
-    return new AwaitIO({ name: 'Test app', secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, components: { group: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"group" is reserved');
 
   expect(() => {
-    return new AwaitIO({ name: 'Test app', secret, users, components: { layout: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, components: { layout: { text: defineComponent({ props: z.object({}), returns: z.string(), component: noControl }) } } });
   }).toThrow('"layout" is reserved');
 });
 
 test('Should allow listen() again after the port was taken', async () => {
-  const another = new AwaitIO({ name: 'Test app', secret, users });
+  const another = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
   const takenPort = Number(new URL(baseUrl).port);
 
-  await expect(another.listen({ actionsDirectory: emptyActionsDirectory, port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
+  await expect(another.listen({ port: takenPort })).rejects.toMatchObject({ code: 'EADDRINUSE' });
 
-  const server = await another.listen({ actionsDirectory: emptyActionsDirectory, port: 0 });
+  const server = await another.listen({ port: 0 });
 
   expect(server.listening).toBe(true);
 
@@ -499,20 +538,4 @@ test('Should return 404 for an unknown action or run', async () => {
   expect((await fetch(`${baseUrl}/api/actions/missing/runs`, authorized({ method: 'POST' }))).status).toBe(404);
 
   expect((await fetch(`${baseUrl}/api/runs/missing/events`, authorized())).status).toBe(404);
-});
-
-test('Should turn an access request into a users entry without logging anyone in', async () => {
-  const request = (body: object) => {
-    return fetch(`${baseUrl}/api/access-request`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' }, body: JSON.stringify(body) });
-  };
-  const response = await request({ email: ' Ada@Example.com ', name: 'Ada', password: 'correct horse battery' });
-  const { user } = await response.json();
-
-  expect([response.status, response.headers.get('set-cookie'), user.email, user.name]).toEqual([200, null, 'ada@example.com', 'Ada']);
-
-  expect(await verifyPassword({ password: 'correct horse battery', passwordHash: user.passwordHash })).toBe(true);
-
-  const short = await request({ email: 'ada@example.com', name: 'Ada', password: 'short' });
-
-  expect([short.status, (await short.json()).message]).toEqual([400, 'password: Use at least 10 characters.']);
 });

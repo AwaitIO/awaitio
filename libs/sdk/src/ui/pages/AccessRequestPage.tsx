@@ -2,11 +2,12 @@ import { useState, type FC } from 'react';
 import { match, P } from 'ts-pattern';
 import { constants as sharedConstants } from '../../shared/constants';
 import type { AppInfo } from '../../shared/types/AppInfo';
+import { Button } from '../../uikit/Button';
+import { Card } from '../../uikit/Card';
 import { Field } from '../../uikit/Field';
 import { Input } from '../../uikit/Input';
 import { requestAccess } from '../api/requestAccess';
 import { AppTitle } from '../components/AppTitle';
-import { Button } from '../components/Button';
 import { NavLink } from '../components/NavLink';
 import { routes } from '../utils/routes';
 import { toErrorMessage } from '../utils/toErrorMessage';
@@ -30,7 +31,7 @@ export const AccessRequestPage: FC<AccessRequestPageProps> = ({ info }) => {
 
   return (
     <div className="w-full max-w-lg">
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+      <Card>
         {match(entry)
           .with(P.string, (line) => {
             return (
@@ -107,7 +108,7 @@ export const AccessRequestPage: FC<AccessRequestPageProps> = ({ info }) => {
               </form>
             );
           })}
-      </div>
+      </Card>
     </div>
   );
 };
