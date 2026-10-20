@@ -37,7 +37,7 @@ export const inputNumber = defineComponent({
 
     return null;
   },
-  component: ({ props, value, onChange, disabled, autoFocus }) => {
+  component: ({ props, value, onChange, disabled, autoFocus, optional }) => {
     return (
       <Input
         type="number"
@@ -48,7 +48,7 @@ export const inputNumber = defineComponent({
         min={props.min}
         max={props.max}
         step={10 ** -props.decimals}
-        required
+        required={!optional}
         disabled={disabled}
         autoFocus={autoFocus}
       />

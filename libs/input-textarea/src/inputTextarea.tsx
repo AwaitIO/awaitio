@@ -30,7 +30,7 @@ export const inputTextarea = defineComponent({
 
     return null;
   },
-  component: ({ props, value, onChange, disabled, autoFocus }) => {
+  component: ({ props, value, onChange, disabled, autoFocus, optional }) => {
     return (
       <Textarea
         value={value}
@@ -39,7 +39,7 @@ export const inputTextarea = defineComponent({
         placeholder={props.placeholder}
         minLength={props.minLength}
         maxLength={props.maxLength}
-        required
+        required={!optional}
         disabled={disabled}
         autoFocus={autoFocus}
       />

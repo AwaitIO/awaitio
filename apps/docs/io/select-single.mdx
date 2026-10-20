@@ -51,6 +51,14 @@ const role = await io.select.single('New role', {
 | `helpText`     | `string`             | Optional | Secondary text under the field.                                                                             |
 | `disabled`     | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const team = await io.select.single('Team', { options: teams }).optional();
+```
+
 ## Returns
 
 `string`: the chosen option's `value`.

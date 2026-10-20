@@ -17,6 +17,12 @@ export class IOPromise<T> implements PromiseLike<T> {
     this.render = render;
   }
 
+  // Lets the person leave the field empty: the handler gets undefined then, and the component's checks do not run.
+  // Pass a condition to decide at run time: .optional(!user.isAdmin).
+  optional(isOptional = true): IOPromise<T | undefined> {
+    return new IOPromise<T | undefined>({ component: { ...this.component, optional: isOptional }, render: this.render });
+  }
+
   then<TResult1 = T, TResult2 = never>(
     onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | null,
     onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,

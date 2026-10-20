@@ -41,7 +41,7 @@ export const inputDatetime = defineComponent({
 
     return null;
   },
-  component: ({ props, value, onChange, disabled, autoFocus }) => {
+  component: ({ props, value, onChange, disabled, autoFocus, optional }) => {
     return (
       <>
         <Input
@@ -49,7 +49,7 @@ export const inputDatetime = defineComponent({
           value={toLocalInputValue({ iso: value }) ?? ''}
           min={toLocalInputValue({ iso: props.min })}
           max={toLocalInputValue({ iso: props.max })}
-          required
+          required={!optional}
           disabled={disabled}
           autoFocus={autoFocus}
           onChange={(local) => {

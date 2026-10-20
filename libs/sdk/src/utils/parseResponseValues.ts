@@ -1,3 +1,4 @@
+import { isEmptyValue } from './isEmptyValue';
 import type { StepComponent } from '../shared/types/StepComponent';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { ParsedResponseValues } from '../types/ParsedResponseValues';
@@ -34,6 +35,11 @@ export const parseResponseValues = ({ registry, components, values }: ParseRespo
       const kept = definition.returns.safeParse(definition.initialValue?.(component.props));
 
       return kept.success ? { error: null, value: kept.data } : { error: `${component.label}: a disabled field needs a defaultValue.`, value: undefined };
+    }
+
+    // An optional field left empty gives undefined; its component's checks are for an answer, not for no answer.
+    if (component.optional && isEmptyValue({ value: values[index] })) {
+      return { error: null, value: undefined };
     }
 
     const parsed = definition.returns.safeParse(values[index]);

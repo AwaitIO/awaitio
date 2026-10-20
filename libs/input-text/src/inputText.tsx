@@ -29,7 +29,9 @@ export const inputText = defineComponent({
 
     return null;
   },
-  component: ({ props, value, onChange, disabled, autoFocus }) => {
-    return <Input value={value} onChange={onChange} placeholder={props.placeholder} minLength={props.minLength} maxLength={props.maxLength} required disabled={disabled} autoFocus={autoFocus} />;
+  component: ({ props, value, onChange, disabled, autoFocus, optional }) => {
+    return (
+      <Input value={value} onChange={onChange} placeholder={props.placeholder} minLength={props.minLength} maxLength={props.maxLength} required={!optional} disabled={disabled} autoFocus={autoFocus} />
+    );
   },
 });

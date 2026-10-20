@@ -51,6 +51,14 @@ const query = await io.input.text('Search for', {
 
 Props are checked when the io call is made: a prop of the wrong type throws in the handler.
 
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const nickname = await io.input.text('Nickname').optional();
+```
+
 ## Returns
 
 `string`, exactly as typed, including surrounding spaces.

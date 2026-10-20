@@ -56,6 +56,14 @@ const [user] = await io.select.table('User', {
 | `helpText`      | `string`                       | Optional | Secondary text under the table.                                                                                               |
 | `disabled`      | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
 
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `Record<string, unknown>[] | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const notified = await io.select.table('Users to notify', { rows: users, maxSelections: 5 }).optional();
+```
+
 ## Returns
 
 `Record<string, unknown>[]`: the picked rows as they were sent to the browser. They travel as JSON, so a `Date` comes back as its ISO string; read the record again by its id when you need all of it.

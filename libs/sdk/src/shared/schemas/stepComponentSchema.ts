@@ -8,4 +8,6 @@ export const stepComponentSchema = z.object({
   props: z.record(z.unknown()),
   // The io call's `disabled`: the field is locked and the server keeps its starting value.
   disabled: z.boolean().optional(),
+  // From .optional(): the field may stay empty and the handler gets undefined.
+  optional: z.boolean().optional(),
 });

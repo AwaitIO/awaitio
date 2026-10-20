@@ -76,6 +76,7 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
               value={values[index]}
               autoFocus={index === 0}
               disabled={isSubmitting || component.disabled === true}
+              optional={component.optional === true}
               error={step.errors[index] ?? null}
               onChange={(value) => {
                 setValues((previous) => {
@@ -100,7 +101,13 @@ export const StepForm: FC<StepFormProps> = ({ runId, step, uis }) => {
           }
 
           return (
-            <Field key={index} label={component.label} helpText={typeof component.props.helpText === 'string' ? component.props.helpText : undefined} error={step.errors[index]}>
+            <Field
+              key={index}
+              label={component.label}
+              helpText={typeof component.props.helpText === 'string' ? component.props.helpText : undefined}
+              optional={component.optional === true}
+              error={step.errors[index]}
+            >
               {control}
             </Field>
           );

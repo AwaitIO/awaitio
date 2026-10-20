@@ -54,6 +54,14 @@ const endsAt = await io.input.datetime('Trial ends at', {
 
 `defaultValue`, `min` and `max` take a luxon `DateTime`, a JavaScript `Date` or an ISO 8601 string. An impossible date such as `2026-02-30` throws when the io call is made.
 
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `DateTime | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const remindAt = await io.input.datetime('Remind me at').optional();
+```
+
 ## Returns
 
 A luxon `DateTime` in the UTC zone. Convert it with `.setZone(...)` when you need local time, or `.toISO()` to store it.

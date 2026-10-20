@@ -54,6 +54,19 @@ Each card is one package and opens its page: all its props, what it returns and 
   </Card>
 </Columns>
 
+## Optional fields
+
+Every input is required unless you chain `.optional()` to it. The field is marked _optional_ next to its label, can be left empty, and the handler gets `undefined` for it; the component's own checks, such as `minLength`, run only when something was filled in:
+
+```ts
+const { company, note } = await io.group({
+  company: io.input.text('Company name'),
+  note: io.input.textarea('Note').optional(), // string | undefined
+});
+```
+
+Pass a condition to decide at run time: `.optional(!user.isAdmin)`. Text with only spaces and nothing picked in a multiple select count as empty.
+
 ## Disabled fields
 
 Every input takes `disabled: true` next to its own props. The field shows its starting value, usually `defaultValue`, and cannot be changed, and the server hands the handler that value whatever the browser sends:

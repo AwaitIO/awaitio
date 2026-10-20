@@ -7,6 +7,8 @@ import type { ReactNode } from 'react';
 export type FieldProps = {
   label: string;
   helpText?: string;
+  // From .optional(): the theme can mark the field, e.g. with "optional" next to the label.
+  optional?: boolean;
   // What is wrong with the value, shown under the control.
   error?: string | null;
   children: ReactNode;

@@ -51,6 +51,14 @@ const reason = await io.input.textarea('Why refund this payment?', {
 | `maxLength`    | `number`  | Optional | Maximum number of characters. A whole number, 1 or more.                                                    |
 | `disabled`     | `boolean` | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets `string | undefined`, see [Optional fields](/core/components#optional-fields).
+
+```ts
+const note = await io.input.textarea('Note for the team').optional();
+```
+
 ## Returns
 
 `string` with the line breaks the person typed (`\n`).
