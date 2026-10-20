@@ -6,6 +6,7 @@ import type { ChoiceListProps } from '../ChoiceList';
 import type { FieldProps } from '../Field';
 import type { HeadingProps } from '../Heading';
 import type { HintProps } from '../Hint';
+import type { ImageProps } from '../Image';
 import type { InputProps } from '../Input';
 import type { LabelProps } from '../Label';
 import type { LinkProps } from '../Link';
@@ -27,6 +28,7 @@ export type ThemeBlocks = {
   Field: ComponentType<FieldProps>;
   Heading: ComponentType<HeadingProps>;
   Hint: ComponentType<HintProps>;
+  Image: ComponentType<ImageProps>;
   Input: ComponentType<InputProps>;
   Label: ComponentType<LabelProps>;
   Link: ComponentType<LinkProps>;

@@ -1,0 +1,51 @@
+---
+title: 'Display Image'
+description: 'Shows a picture, such as a chart or a file preview.'
+icon: 'image'
+---
+
+`io.display.image()` shows a picture in a folder's page or in a step of an action. It only displays and returns nothing. Provided by the `@awaitio/display-image` package.
+
+<Frame>
+  <img src="/images/io-display-image.png" alt="An Uploaded photo heading with a photo of a misty cliff under it, kept to a medium height" />
+</Frame>
+
+## Install
+
+```bash
+npm install @awaitio/display-image
+```
+
+## Setup
+
+Register it under the key you want in `io`:
+
+```ts app.ts {5}
+import { displayImage } from '@awaitio/display-image';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { display: { image: displayImage } },
+});
+```
+
+## Usage
+
+```ts
+await io.display.image('Uploaded photo', {
+  url: await getSignedUrl(upload.fileKey),
+  size: 'medium',
+});
+```
+
+A chart works the same way: it is just an image URL, e.g. from [QuickChart](https://quickchart.io).
+
+The label is the heading above the image; pass `null` for none.
+
+## Props
+
+| Prop   | Type                                            | Required | Description                                                                           |
+| ------ | ----------------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| `url`  | `string`                                        | Required | Any image the browser can load, e.g. a chart service or a signed file URL.            |
+| `alt`  | `string`                                        | Optional | Read by screen readers and shown when the image does not load. Defaults to the label. |
+| `size` | `'thumbnail' \| 'small' \| 'medium' \| 'large'` | Optional | How tall the image may get. Without it, the image is as wide as there is room for.    |

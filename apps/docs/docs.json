@@ -50,7 +50,7 @@
       },
       {
         "group": "Display components",
-        "pages": ["io/display-table", "io/display-metadata", "io/display-link", "io/display-heading"]
+        "pages": ["io/display-table", "io/display-metadata", "io/display-link", "io/display-heading", "io/display-image"]
       },
       {
         "group": "Layout components",

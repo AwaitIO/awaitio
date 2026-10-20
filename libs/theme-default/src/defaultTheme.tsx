@@ -7,6 +7,7 @@ import { ChoiceList } from './blocks/ChoiceList';
 import { Field } from './blocks/Field';
 import { Heading } from './blocks/Heading';
 import { Hint } from './blocks/Hint';
+import { Image } from './blocks/Image';
 import { Input } from './blocks/Input';
 import { Label } from './blocks/Label';
 import { Link } from './blocks/Link';
@@ -26,6 +27,7 @@ export const defaultTheme = defineTheme({
   Field,
   Heading,
   Hint,
+  Image,
   Input,
   Label,
   Link,
