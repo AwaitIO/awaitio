@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-heading",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Heading for AwaitIO: io.display.heading(), a section title with an optional description.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

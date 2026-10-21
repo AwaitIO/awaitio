@@ -1,6 +1,6 @@
 {
   "name": "awaitio",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Internal tools in one process: actions in code await a human's answer, the same server serves the UI.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
@@ -18,7 +18,8 @@
       "types": "./dist/uikit/index.d.ts",
       "default": "./dist/uikit/index.js"
     },
-    "./vite": "./vite/componentBuildConfig.mjs"
+    "./vite": "./vite/componentBuildConfig.mjs",
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {

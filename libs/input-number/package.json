@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/input-number",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Number input for AwaitIO: io.input.number().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

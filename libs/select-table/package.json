@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/select-table",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Rows picked from a table for AwaitIO: io.select.table().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

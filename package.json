@@ -11,9 +11,13 @@
     "tsc": "pnpm --filter './libs/**' run build && pnpm -r run tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "pnpm --filter awaitio run build && pnpm -r run test"
+    "test": "pnpm --filter awaitio run build && pnpm -r run test",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm build && changeset publish && git push --follow-tags"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@typescript-eslint/parser": "^8.46.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^9.37.0",

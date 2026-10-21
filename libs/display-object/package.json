@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-object",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Object for AwaitIO: io.display.object(), keys and values of a record, nested data included.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

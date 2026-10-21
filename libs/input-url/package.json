@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/input-url",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "URL input for AwaitIO: io.input.url(), returns a URL.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
