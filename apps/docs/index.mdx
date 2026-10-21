@@ -3,7 +3,9 @@ title: 'Introduction'
 icon: 'house'
 ---
 
-AwaitIO runs internal tools in one Node process. You write each tool as an async function; every `await` on `io` asks a person something in the browser and waits for the answer. The same server serves the UI, so there is nothing else to host.
+AwaitIO is a backoffice written just like regular API routes. Each action is an async TypeScript function, like a route handler. Instead of reading a request, every `await` on `io` asks a person in the browser and waits for the answer.
+
+There is no frontend to build. The same Node process serves the UI, so there is nothing else to host.
 
 ## What you write
 

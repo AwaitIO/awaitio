@@ -6,8 +6,8 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'AwaitIO – internal tools with just async/await',
-  description: 'Write internal tools as async TypeScript functions. Every await asks a person in the browser. One Node process inside your own app.',
+  title: 'AwaitIO – backoffice written just like regular API routes',
+  description: 'Backoffice written just like regular API routes. Each action is an async TypeScript function and every await io asks a person in the browser. No frontend to build.',
 };
 
 // The wordmark font: IBM Plex Mono (semibold and regular), exposed as --font-wordmark for the logo lockup.
