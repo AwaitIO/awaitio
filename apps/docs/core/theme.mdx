@@ -4,6 +4,17 @@ description: 'How the UI looks, and how to change one piece of it, such as the f
 icon: 'palette'
 ---
 
+<Info>
+Themes are in preview. A theme restyles the [blocks](#blocks), but the frame of the UI around them is still drawn by the core with fixed classes and cannot be styled yet:
+
+- The page background, the header with the app name, environment badge and switcher, user and log out button, and the folder tabs.
+- The action list: action and folder cards, the folder sidebar, breadcrumbs and the page title.
+- A run: the action title, the _Step 2_ line, the loading spinner and progress bar, the outcome line with its icon, the error box of a failed run.
+- The result of an action: the text, key and value table, record table or JSON the handler returned.
+- The login and account request pages, apart from the `Card`, `Field`, `Input` and `Button` blocks in them.
+- Status texts such as _Loading…_ and _Connecting…_ and error messages outside a `Field`.
+</Info>
+
 Everything AwaitIO draws is built from a small set of blocks: `Field`, `Label`, `Input`, `Button`, `Table` and the rest. The core only knows their props; a **theme** gives each block its look. Components never style themselves, so a theme restyles every form, table and page at once.
 
 ## Use the default theme
