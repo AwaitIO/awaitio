@@ -1,7 +1,7 @@
 import { mkdirSync, mkdtempSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { testLabelBlock } from './testLabelBlock';
 import { testTheme } from './testTheme';
 import { testUser } from './testUser';

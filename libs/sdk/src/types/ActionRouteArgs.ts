@@ -1,5 +1,5 @@
 import type { ActionParamsSchema } from './ActionParamsSchema';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // What action.route() takes: the params its schema expects (before parsing, so z.coerce.number() takes a number),
 // and a label for a menu item, the action's name by default. Without a schema, or when every param is optional,

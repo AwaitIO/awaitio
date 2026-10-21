@@ -46,7 +46,7 @@ test('Should accept the minute of min, because the input has no seconds', () => 
 test('Should refuse a date that does not exist', () => {
   const result = parse('2026-02-30T10:00:00.000Z');
 
-  expect(result.success === false && result.error.issues[0]?.message).toBe('pick a date and time that exists');
+  expect(result.success === false && result.error.issues[0]?.message).toBe('pick a date and time');
 
   expect(inputDatetime.props.safeParse({ min: '2026-02-30T10:00:00.000Z' }).success).toBe(false);
 });

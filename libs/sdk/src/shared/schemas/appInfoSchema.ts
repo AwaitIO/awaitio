@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { appEnvironmentSchema } from './appEnvironmentSchema';
 import { environmentLinkSchema } from './environmentLinkSchema';
 
@@ -8,5 +8,5 @@ export const appInfoSchema = z.object({
   // Empty without a session: the URLs of other environments are not shown to anyone who is not logged in.
   environments: z.array(environmentLinkSchema),
   // Block name → position of the theme script that draws it.
-  themeBlocks: z.record(z.number().int().nonnegative()),
+  themeBlocks: z.record(z.string(), z.number().int().nonnegative()),
 });

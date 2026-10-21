@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // Checks a column of a table's props; TableColumnDefinition<TRow> is its typed form. renderCell only has to be a function
 // here: it runs on the server, row by row, and what it returns is checked as a cell.

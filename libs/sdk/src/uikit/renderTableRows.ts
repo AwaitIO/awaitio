@@ -1,6 +1,6 @@
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
 import type { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 export type RenderTableRowsArgs = {
   data: Record<string, unknown>[];

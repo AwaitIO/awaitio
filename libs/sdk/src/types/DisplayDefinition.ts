@@ -1,10 +1,11 @@
+import type { AnySchema } from './AnySchema';
 import type { DisplayUiProps } from '../client/types/DisplayUiProps';
 import type { ComponentType } from 'react';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // One display component, written in a single .tsx file with defineDisplay(): it shows something (a table, tiles…) and
 // returns nothing. It is registered in the same component tree as inputs, e.g. { display: { table: displayTable } }.
-export type DisplayDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny> = {
+export type DisplayDefinition<TProps extends AnySchema = AnySchema> = {
   kind: 'awaitio-display';
   // Checked on the server before the props go to the browser.
   props: TProps;

@@ -40,7 +40,7 @@ A layout is one `.tsx` file in its own package, built like [your own input compo
 
 ```tsx src/layoutTwoColumns.tsx
 import { defineLayout } from 'awaitio';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const layoutTwoColumns = defineLayout({
   props: z.object({ title: z.string() }),

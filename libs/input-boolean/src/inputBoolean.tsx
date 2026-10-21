@@ -1,6 +1,6 @@
 import { defineComponent } from 'awaitio';
 import { Checkbox, Field } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const inputBoolean = defineComponent({
   props: z.object({

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { actionDefinitionSchema } from './actionDefinitionSchema';
 
 export const actionListSchema = z.object({

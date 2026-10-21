@@ -83,12 +83,14 @@ export const componentBuildConfig = async ({ root, entry, exportName, css }) => 
         cssFileName: 'ui',
       },
       rollupOptions: {
-        external: ['react', 'react/jsx-runtime', 'zod', 'awaitio/ui'],
+        external: ['react', 'react/jsx-runtime', 'zod', 'zod/v4', 'awaitio/ui'],
         output: {
           globals: {
             react: '__AWAITIO__.React',
             'react/jsx-runtime': '__AWAITIO__.jsxRuntime',
+            // Components import zod/v4, which zod 3.25+ and zod 4 both provide; plain zod is the same zod 4 here.
             zod: '__AWAITIO__.zod',
+            'zod/v4': '__AWAITIO__.zod',
             'awaitio/ui': '__AWAITIO__.ui',
           },
         },

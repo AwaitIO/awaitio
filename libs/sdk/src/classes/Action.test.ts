@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { Action } from './Action';
 
 const handler = async () => {

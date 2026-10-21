@@ -18,11 +18,11 @@
     "release": "pnpm build && pnpm publish --access public --no-git-checks"
   },
   "peerDependencies": {
-    "awaitio": "workspace:^"
+    "awaitio": "workspace:^",
+    "zod": "^3.25.0 || ^4.0.0"
   },
   "dependencies": {
-    "react": "^19.1.0",
-    "zod": "3.22.4"
+    "react": "^19.1.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",
@@ -34,6 +34,7 @@
     "tailwindcss": "^4.1.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^7.1.0",
-    "vitest": "^3.2.0"
+    "vitest": "^3.2.0",
+    "zod": "^4.3.6"
   }
 }

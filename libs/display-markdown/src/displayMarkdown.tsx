@@ -1,5 +1,5 @@
 import { defineDisplay } from 'awaitio';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { MarkdownText } from './components/MarkdownText';
 
 export const displayMarkdown = defineDisplay({

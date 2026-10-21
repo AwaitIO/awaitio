@@ -1,7 +1,7 @@
 import { defineDisplay } from 'awaitio';
 import { Prose } from 'awaitio/ui';
 import DOMPurify from 'dompurify';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const displayHtml = defineDisplay({
   props: z.object({

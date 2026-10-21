@@ -1,7 +1,7 @@
 import type { DisplayElement } from './DisplayElement';
 import type { LayoutElement } from './LayoutElement';
 import type { LayoutTree } from './LayoutTree';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 type LayoutChildren = {
   children: DisplayElement[];

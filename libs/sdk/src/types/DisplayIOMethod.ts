@@ -1,6 +1,6 @@
 import type { DisplayDefinition } from './DisplayDefinition';
 import type { IOPromise } from '../classes/IOPromise';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // A display component in an action: shows something in the step, on its own (with Continue) or in io.group next to
 // inputs, and gives nothing back. The label is its heading, null for none.

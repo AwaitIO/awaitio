@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { Run } from './Run';
 import { defineComponent } from '../defineComponent';
 import { defineDisplay } from '../defineDisplay';
@@ -538,7 +538,7 @@ test('Should fail the run when a validator throws', async () => {
 
 const pickTree = {
   pick: defineComponent({
-    props: z.object({ data: z.array(z.record(z.unknown())) }),
+    props: z.object({ data: z.array(z.record(z.string(), z.unknown())) }),
     // The browser answers with an index; toValue turns it into the record, as io.select.table does with rows.
     returns: z.number().int(),
     toValue: ({ props, value }) => {

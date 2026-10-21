@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StrictMode } from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
 import { createRoot } from 'react-dom/client';
-import * as zod from 'zod';
+import * as zod from 'zod/v4';
 import { App } from './App';
 import { componentUiRegistry } from './componentUiRegistry';
 import { displayUiRegistry } from './displayUiRegistry';

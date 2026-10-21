@@ -1,6 +1,6 @@
 import { defineComponent } from 'awaitio';
 import { Input } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const inputNumber = defineComponent({
   props: z.object({
@@ -13,7 +13,7 @@ export const inputNumber = defineComponent({
   }),
   // The field holds what was typed; the handler gets a number. A plain decimal only, so Number() never sees 1e3 or 0x10.
   returns: z
-    .string({ required_error: 'enter a number' })
+    .string({ error: 'enter a number' })
     .trim()
     .regex(/^-?\d+(\.\d+)?$/, 'enter a number')
     .transform((value) => {

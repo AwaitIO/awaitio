@@ -1,6 +1,6 @@
 import { defineDisplay, withSignature } from 'awaitio';
 import { actionHref, formatCellValue, renderTableRows, Table, TableCellView, tableColumnSchema } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { rowMenuItemSchema } from './schemas/rowMenuItemSchema';
 import type { DisplayTableSignature } from './types/DisplayTableSignature';
 
@@ -10,7 +10,7 @@ export const displayTable = withSignature<DisplayTableSignature>()(
     props: z
       .object({
         // Records as they come from the database; none is fine. They stay on the server, the browser gets only the cells.
-        data: z.array(z.record(z.unknown())),
+        data: z.array(z.record(z.string(), z.unknown())),
         // Required, because an empty table has no rows to read them from: a key, or { label, accessorKey?, renderCell? }.
         columns: z.array(tableColumnSchema),
         // Builds each row's "…" menu from the row, [] for none.
@@ -28,7 +28,7 @@ export const displayTable = withSignature<DisplayTableSignature>()(
         const table = renderTableRows({ data, columns });
 
         table.issues.forEach((message) => {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['columns'], message });
+          ctx.addIssue({ code: 'custom', path: ['columns'], message });
         });
 
         const rows = table.rows.map((cells, index) => {
@@ -45,9 +45,9 @@ export const displayTable = withSignature<DisplayTableSignature>()(
               return { cells, menu: menu.data };
             }
 
-            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenuItems'], message: `row ${index + 1}: ${menu.error.issues[0]?.message ?? 'invalid menu'}` });
+            ctx.addIssue({ code: 'custom', path: ['rowMenuItems'], message: `row ${index + 1}: ${menu.error.issues[0]?.message ?? 'invalid menu'}` });
           } catch (error) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rowMenuItems'], message: `row ${index + 1}: ${error instanceof Error ? error.message : String(error)}` });
+            ctx.addIssue({ code: 'custom', path: ['rowMenuItems'], message: `row ${index + 1}: ${error instanceof Error ? error.message : String(error)}` });
           }
 
           return { cells, menu: [] };

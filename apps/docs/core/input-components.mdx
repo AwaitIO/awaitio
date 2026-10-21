@@ -147,7 +147,7 @@ A component is one `.tsx` file: zod schemas for its props and its answer, a chec
 
 ```tsx components/rating/src/rating.tsx
 import { defineComponent } from 'awaitio';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const rating = defineComponent({
   props: z.object({ max: z.number().int().min(2).max(10).default(5) }),
@@ -251,7 +251,7 @@ This is the rating unwrapped, drawn with `Field` and `Hint` from `awaitio/ui`, w
 ```tsx components/rating/src/rating.tsx
 import { defineComponent } from 'awaitio';
 import { Field, Hint } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const rating = defineComponent({
   props: z.object({ max: z.number().int().min(2).max(10).default(5) }),

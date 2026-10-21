@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'crypto';
 import { DateTime } from 'luxon';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { LoginLimiter } from './LoginLimiter';
 import { constants } from '../constants';
 import type { LoginRequest } from '../shared/types/LoginRequest';

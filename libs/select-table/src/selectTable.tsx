@@ -1,6 +1,6 @@
 import { defineComponent, withSignature } from 'awaitio';
 import { formatCellValue, renderTableRows, Table, TableCellView, tableColumnSchema } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import type { SelectTableSignature } from './types/SelectTableSignature';
 import { toRowKey } from './utils/toRowKey';
 
@@ -36,7 +36,7 @@ export const selectTable = withSignature<SelectTableSignature>()(
         const table = renderTableRows({ data, columns });
 
         table.issues.forEach((message) => {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['columns'], message });
+          ctx.addIssue({ code: 'custom', path: ['columns'], message });
         });
 
         const selected = (defaultValue ?? []).flatMap((picked) => {

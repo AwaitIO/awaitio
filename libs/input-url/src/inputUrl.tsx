@@ -1,6 +1,6 @@
 import { defineComponent } from 'awaitio';
 import { Input } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const inputUrl = defineComponent({
   props: z.object({

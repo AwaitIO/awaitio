@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { constants } from '../constants';
 
 // Dates travel as 'YYYY-MM-DD'; a DateTime or Date from the handler is turned into one here.

@@ -1,7 +1,7 @@
 import { defineComponent } from 'awaitio';
 import { Input } from 'awaitio/ui';
 import { DateTime } from 'luxon';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { constants } from './constants';
 import { isoDateSchema } from './schemas/isoDateSchema';
 
@@ -14,7 +14,7 @@ export const inputDate = defineComponent({
   }),
   // The browser sends 'YYYY-MM-DD'; the handler gets a luxon DateTime at the start of that day in UTC.
   returns: z
-    .string({ required_error: 'pick a date' })
+    .string({ error: 'pick a date' })
     .regex(constants.ISO_DATE_PATTERN, 'pick a date')
     // The pattern checks only the shape; 2026-02-30 has the right shape but is no real date, and would slip past min/max.
     .refine((value) => {

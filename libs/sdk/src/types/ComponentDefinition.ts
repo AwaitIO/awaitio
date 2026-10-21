@@ -1,12 +1,13 @@
+import type { AnySchema } from './AnySchema';
 import type { ComponentToValueArgs } from './ComponentToValueArgs';
 import type { ComponentValidateArgs } from './ComponentValidateArgs';
 import type { ComponentUiProps } from '../client/types/ComponentUiProps';
 import type { ComponentType } from 'react';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // One io component, written in a single .tsx file with defineComponent(). The same definition runs on the server
 // (props, returns, validate) and, built by `awaitio/vite`, in the browser (component, initialValue).
-export type ComponentDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny, TReturns extends z.ZodTypeAny = z.ZodTypeAny> = {
+export type ComponentDefinition<TProps extends AnySchema = AnySchema, TReturns extends AnySchema = AnySchema> = {
   kind: 'awaitio-component';
   props: TProps;
   // Parses the value the browser sends. May transform it (an ISO string into a DateTime); the handler gets the output.

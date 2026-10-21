@@ -1,6 +1,6 @@
 import { defineDisplay } from 'awaitio';
 import { Image } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const displayImage = defineDisplay({
   props: z.object({

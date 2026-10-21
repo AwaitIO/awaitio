@@ -5,7 +5,7 @@ import type { LayoutUi } from './LayoutUi';
 import type { ThemeUi } from './ThemeUi';
 import type * as React from 'react';
 import type * as JsxRuntime from 'react/jsx-runtime';
-import type * as Zod from 'zod';
+import type * as Zod from 'zod/v4';
 
 // What the SDK UI puts on window.__AWAITIO__. Component scripts take React, zod and the `awaitio/ui` blocks from here,
 // so there is one copy of each and the theme decides how every block looks.

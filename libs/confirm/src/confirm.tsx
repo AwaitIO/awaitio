@@ -1,6 +1,6 @@
 import { defineComponent } from 'awaitio';
 import { Button, ButtonRow, Heading } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // Asks before something irreversible: the label as the question, Confirm and Cancel under it. Either button sends the
 // step at once, so it has no Continue button. Ask it on its own, not in io.group.

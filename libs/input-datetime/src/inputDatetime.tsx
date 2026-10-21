@@ -1,7 +1,7 @@
 import { defineComponent } from 'awaitio';
 import { Hint, Input } from 'awaitio/ui';
 import { DateTime } from 'luxon';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { constants } from './constants';
 import { isoDatetimeSchema } from './schemas/isoDatetimeSchema';
 import { formatUtc } from './utils/formatUtc';
@@ -14,14 +14,10 @@ export const inputDatetime = defineComponent({
     min: isoDatetimeSchema.optional(),
     max: isoDatetimeSchema.optional(),
   }),
-  // The browser sends an ISO string in UTC; the handler gets a luxon DateTime.
-  returns: z
-    .string({ required_error: 'pick a date and time' })
-    .datetime({ message: 'pick a date and time' })
-    // zod checks only the shape; 2026-02-30 has the right shape but is no real date, and would slip past min/max.
-    .refine((value) => {
-      return DateTime.fromISO(value).isValid;
-    }, 'pick a date and time that exists')
+  // The browser sends an ISO string in UTC; the handler gets a luxon DateTime. zod refuses a date that does not exist
+  // (2026-02-30) too, not only a wrong shape.
+  returns: z.iso
+    .datetime({ error: 'pick a date and time' })
     .transform((value) => {
       return DateTime.fromISO(value, { zone: 'utc' });
     }),

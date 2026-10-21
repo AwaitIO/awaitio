@@ -1,6 +1,6 @@
 import { defineComponent, withSignature } from 'awaitio';
 import { MultiSelect } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import type { SelectMultipleSignature } from './types/SelectMultipleSignature';
 import { findOptionIndex } from './utils/findOptionIndex';
 import { toSelectChoices } from './utils/toSelectChoices';
@@ -34,7 +34,7 @@ export const selectMultiple = withSignature<SelectMultipleSignature>()(
         const { choices, keys, issues } = toSelectChoices({ options, key, label });
 
         issues.forEach((message) => {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['options'], message });
+          ctx.addIssue({ code: 'custom', path: ['options'], message });
         });
 
         const found = (defaultValue ?? []).map((wanted) => {

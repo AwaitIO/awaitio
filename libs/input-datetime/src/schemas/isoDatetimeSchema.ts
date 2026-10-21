@@ -1,5 +1,4 @@
-import { DateTime } from 'luxon';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // Times travel as ISO 8601 strings in UTC; a DateTime or Date from the handler is turned into one here.
 export const isoDatetimeSchema = z.preprocess(
@@ -15,11 +14,6 @@ export const isoDatetimeSchema = z.preprocess(
 
     return value;
   },
-  z
-    .string()
-    .datetime()
-    // zod checks only the shape; 2026-02-30 has the right shape but is no real date.
-    .refine((value) => {
-      return DateTime.fromISO(value).isValid;
-    }, 'not a real date and time'),
+  // Refuses a date that does not exist (2026-02-30) too, not only a wrong shape.
+  z.iso.datetime(),
 );

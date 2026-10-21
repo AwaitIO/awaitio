@@ -2,7 +2,7 @@ import { mkdtempSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { afterAll, beforeAll, expect, test } from 'vitest';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { AwaitIO } from './AwaitIO';
 import { defineComponent } from './defineComponent';
 import { runStateSchema } from './shared/schemas/runStateSchema';
@@ -241,7 +241,7 @@ test('Should parse params with the schema of the action and refuse a link that d
 
   const refused = await start({ id: 'abc' });
 
-  expect([refused.status, await refused.json()]).toEqual([400, { error: 'INVALID_PARAMS', message: 'The link does not fit this action. id: Expected number, received nan.' }]);
+  expect([refused.status, await refused.json()]).toEqual([400, { error: 'INVALID_PARAMS', message: 'The link does not fit this action. id: Invalid input: expected number, received NaN.' }]);
 });
 
 test('Should hide a run from everyone but the user who started it', async () => {
@@ -420,7 +420,7 @@ test('Should reject a value that the component cannot parse', async () => {
   });
   const response = await fetch(`${baseUrl}/api/runs/${runId}/respond`, authorized({ method: 'POST', body: JSON.stringify({ stepId: step?.stepId, values: ['Petr', 42] }) }));
 
-  expect([response.status, await response.json()]).toEqual([400, { error: 'VALIDATION_ERROR', message: 'Last name: Expected string, received number.' }]);
+  expect([response.status, await response.json()]).toEqual([400, { error: 'VALIDATION_ERROR', message: 'Last name: Invalid input: expected string, received number.' }]);
 
   await fetch(`${baseUrl}/api/runs/${runId}/cancel`, authorized({ method: 'POST' }));
 });
@@ -547,7 +547,7 @@ test('Should put display components into a registered layout with its own props'
 test('Should refuse display props that do not fit and an unknown page', async () => {
   const response = await fetch(`${baseUrl}/api/pages/reports?fail=props`, authorized());
 
-  expect([response.status, await response.json()]).toEqual([500, { error: 'PAGE_FAILED', message: 'io.display.list: items.0: Expected string, received number.' }]);
+  expect([response.status, await response.json()]).toEqual([500, { error: 'PAGE_FAILED', message: 'io.display.list: items.0: Invalid input: expected string, received number.' }]);
 
   expect((await fetch(`${baseUrl}/api/pages/missing`, authorized())).status).toBe(404);
 });

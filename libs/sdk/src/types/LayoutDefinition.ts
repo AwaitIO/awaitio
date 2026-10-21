@@ -1,10 +1,11 @@
+import type { AnySchema } from './AnySchema';
 import type { LayoutUiProps } from '../client/types/LayoutUiProps';
 import type { ComponentType } from 'react';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // One layout, written in a single .tsx file with defineLayout(): the frame of a page, which places the display
 // components the page puts in (children). It only displays; nothing is asked and there is no Continue button.
-export type LayoutDefinition<TProps extends z.ZodTypeAny = z.ZodTypeAny> = {
+export type LayoutDefinition<TProps extends AnySchema = AnySchema> = {
   kind: 'awaitio-layout';
   // Its own options besides children (a title, a number of columns…), checked on the server before they go to the
   // browser.

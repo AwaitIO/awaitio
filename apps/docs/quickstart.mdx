@@ -8,7 +8,7 @@ Build a server with one action that asks for a name and greets back, then log in
 <Steps>
   <Step title="Install">
     ```bash
-    npm install awaitio @awaitio/theme-default @awaitio/input-text
+    npm install awaitio @awaitio/theme-default @awaitio/input-text zod
     ```
 
     **What's happening here**
@@ -16,6 +16,7 @@ Build a server with one action that asks for a name and greets back, then log in
     - `awaitio` is the server, the action runtime and the UI.
     - `@awaitio/theme-default` is how the UI looks.
     - `@awaitio/input-text` is the text field the action will ask with.
+    - `zod` checks props, answers and action params. AwaitIO works with zod 4, or with zod 3.25 and later through `import { z } from 'zod/v4'`.
 
   </Step>
   <Step title="Create a session secret">

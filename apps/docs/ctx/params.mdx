@@ -12,7 +12,7 @@ The query string of the link that started the run, as an object of strings. Open
 Describe the params the action expects with a zod schema in `params`. The server checks the link against it before the handler runs, and `ctx.params` gets the parsed, typed value:
 
 ```ts
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const couponDetailAction = app.defineAction({
   name: 'Coupon detail',
@@ -28,7 +28,7 @@ export const couponDetailAction = app.defineAction({
 
 Share or bookmark `/actions/coupon_detail?id=42`, put it in an email, a Slack message or your own admin, and the action opens straight on that coupon. Someone who is not logged in sees the login page first and lands on the same link afterwards.
 
-A link that does not fit the schema does not start the action: the page shows _The link does not fit this action_ with what is wrong, e.g. `page: Expected number, received nan.`
+A link that does not fit the schema does not start the action: the page shows _The link does not fit this action_ with what is wrong, e.g. `page: Invalid input: expected number, received NaN.`
 
 ## Values
 

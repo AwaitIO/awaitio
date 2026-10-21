@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // A served page: its layout with the display components in it, every props object already checked by its schema.
 export const pageContentSchema = z.object({

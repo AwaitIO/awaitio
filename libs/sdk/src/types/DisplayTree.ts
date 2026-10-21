@@ -2,7 +2,7 @@ import type { ComponentDefinition } from './ComponentDefinition';
 import type { ComponentTree } from './ComponentTree';
 import type { DisplayDefinition } from './DisplayDefinition';
 import type { DisplayElement } from './DisplayElement';
-import type { z } from 'zod';
+import type { z } from 'zod/v4';
 
 // The display components of the tree as page methods: { display: { table } } gives io.display.table(label, props).
 export type DisplayTree<T extends ComponentTree> = {

@@ -1,8 +1,8 @@
+import type { AnySchema } from './types/AnySchema';
 import type { ComponentDefinition } from './types/ComponentDefinition';
 import { callerDirectory } from './utils/callerDirectory';
-import type { z } from 'zod';
 
-export const defineComponent = <TProps extends z.ZodTypeAny, TReturns extends z.ZodTypeAny>(
+export const defineComponent = <TProps extends AnySchema, TReturns extends AnySchema>(
   definition: Omit<ComponentDefinition<TProps, TReturns>, 'kind' | 'uiDirectory'>,
 ): ComponentDefinition<TProps, TReturns> => {
   return { kind: 'awaitio-component', ...definition, uiDirectory: callerDirectory({ depth: 1 }) };

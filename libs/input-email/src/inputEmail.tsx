@@ -1,6 +1,6 @@
 import { defineComponent } from 'awaitio';
 import { Input } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const inputEmail = defineComponent({
   props: z.object({
@@ -9,7 +9,7 @@ export const inputEmail = defineComponent({
     defaultValue: z.string().optional(),
   }),
   // The address without the spaces around it; the server checks it is one.
-  returns: z.string().trim().email('enter an email address'),
+  returns: z.string().trim().pipe(z.email('enter an email address')),
   initialValue: (props) => {
     return props.defaultValue ?? '';
   },

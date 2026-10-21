@@ -1,6 +1,6 @@
 import { defineComponent, withSignature } from 'awaitio';
 import { Select } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import type { SelectSingleSignature } from './types/SelectSingleSignature';
 import { findOptionIndex } from './utils/findOptionIndex';
 import { toSelectChoices } from './utils/toSelectChoices';
@@ -31,7 +31,7 @@ export const selectSingle = withSignature<SelectSingleSignature>()(
         const { choices, keys, issues } = toSelectChoices({ options, key, label });
 
         issues.forEach((message) => {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['options'], message });
+          ctx.addIssue({ code: 'custom', path: ['options'], message });
         });
 
         const selected = defaultValue === undefined ? -1 : findOptionIndex({ options, keys, key, wanted: defaultValue });

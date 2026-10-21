@@ -31,7 +31,7 @@ export const refundOrderAction = app.defineAction({
 ## Quickstart
 
 ```bash
-npm install awaitio @awaitio/theme-default @awaitio/input-text
+npm install awaitio @awaitio/theme-default @awaitio/input-text zod
 ```
 
 ```ts

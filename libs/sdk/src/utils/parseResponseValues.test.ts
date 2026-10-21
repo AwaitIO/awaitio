@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { createComponentRegistry } from './createComponentRegistry';
 import { parseResponseValues } from './parseResponseValues';
 import { defineComponent } from '../defineComponent';

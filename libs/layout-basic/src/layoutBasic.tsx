@@ -1,6 +1,6 @@
 import { defineLayout } from 'awaitio';
 import { actionHref, actionRouteSchema, Button, navigateTo } from 'awaitio/ui';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 // Registered as layouts: { basic: layoutBasic } it becomes io.layout.basic({ title, description?, menuItems?, children }).
 // Pages that return just display components land in it too, titled with the page's name and description.

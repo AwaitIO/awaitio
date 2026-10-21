@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { stepComponentSchema } from './stepComponentSchema';
 
 // One screen of a run: everything the handler awaited at once.

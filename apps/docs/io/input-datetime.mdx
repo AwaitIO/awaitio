@@ -70,12 +70,11 @@ A luxon `DateTime` in the UTC zone. Convert it with `.setZone(...)` when you nee
 
 The field is always required. The input works in whole minutes, so `min` and `max` are compared at minute precision: `min: DateTime.now()` still accepts the current minute. The server checks every answer:
 
-| When                       | Message                                      |
-| -------------------------- | -------------------------------------------- |
-| No date and time picked    | `<label>: pick a date and time.`             |
-| A date that does not exist | `<label>: pick a date and time that exists.` |
-| Earlier than `min`         | `<label> must not be earlier than <min>.`    |
-| Later than `max`           | `<label> must not be later than <max>.`      |
+| When                                         | Message                                   |
+| -------------------------------------------- | ----------------------------------------- |
+| No date and time, or one that does not exist | `<label>: pick a date and time.`          |
+| Earlier than `min`                           | `<label> must not be earlier than <min>.` |
+| Later than `max`                             | `<label> must not be later than <max>.`   |
 
 `<min>` and `<max>` are printed in UTC.
 

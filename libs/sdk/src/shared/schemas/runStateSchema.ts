@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { actionResultSchema } from './actionResultSchema';
 import { loadingStateSchema } from './loadingStateSchema';
 import { runParamsSchema } from './runParamsSchema';

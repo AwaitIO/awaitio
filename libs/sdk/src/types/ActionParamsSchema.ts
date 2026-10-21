@@ -1,4 +1,4 @@
-import type { z } from 'zod';
+import type { AnySchema } from './AnySchema';
 
 // Checks the query string an action was opened with; it gets an object of strings, so numbers need z.coerce.
-export type ActionParamsSchema = z.ZodTypeAny;
+export type ActionParamsSchema = AnySchema;

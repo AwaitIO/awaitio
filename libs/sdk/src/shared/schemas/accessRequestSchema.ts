@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { constants } from '../constants';
 
 // What someone asking for access sends: who they are and the password they want, to get the line for `users`.

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import { environmentLinkSchema } from '../schemas/environmentLinkSchema';
 
 // One entry of the environment switcher in the header.
