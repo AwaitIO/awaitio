@@ -16,6 +16,45 @@ AwaitIO is an all-in-one framework for internal tools: actions written in code `
 - Commits go through `/commit-fast`, which follows `.claude/commit-rules.md` (scopes, precommit checks, docs and README check, changesets).
 - **Whenever the user points something out** (a correction, a preference, "don't do X"), write it down straight away as its own `##` section in the guideline it belongs to (`.claude/guidelines/*.md`), in English, in the style of that file (short description, why, ✅ DO / ❌ DON'T when it helps). No names, dates or history of how the rule came about, only the rule as it is now. Replace a section it contradicts. When no guideline fits, add one and list it below. Not in `CLAUDE.md`.
 
+## Worktrees
+
+Several conversations work on the repository at once, each in its own git worktree next to the repo: `/Users/homoky/Developer/awaitio.worktrees/<name>`. Worktrees are created and removed only through the commands below, never by hand and **never with the built-in `EnterWorktree` tool**, which puts the worktree in `.claude/worktrees/` (gitignored, so VS Code does not see it as a repository) and pins the session to a path that stops existing once it is moved.
+
+- **Create**: [`/create-worktree`](./.claude/commands/create-worktree.md). Names the worktree after the conversation, copies `.env`, installs and builds `libs/` in the background, switches the VS Code workspace to it and puts the `[worktree]` prefix on the chat name.
+- **Status**: [`/worktree-status`](./.claude/commands/worktree-status.md). What this conversation did, how the branch stands against `main`, whether it can be deleted. `/commit-fast` prints it after every commit.
+- **Rebase**: [`/rebase-main`](./.claude/commands/rebase-main.md). Puts the branch on top of the current `main` and resolves the conflicts.
+- **Merge**: [`/merge-worktree-to-main`](./.claude/commands/merge-worktree-to-main.md). Rebases, merges into `main` with all commits and verifies; the worktree stays. Run only when the user asks for it, like every commit.
+- **Delete**: [`/delete-worktree`](./.claude/commands/delete-worktree.md). Only when nothing is uncommitted and everything is on `main`; removes the worktree, its branch and its workspace entry together and switches its chats back to `[main]`.
+- **Editor view**: [`/switch-workspace`](./.claude/commands/switch-workspace.md) `[<name> | main | all]`. Points `/Users/homoky/Developer/awaitio.code-workspace` at one checkout or all of them.
+- **Close a chat**: `/archive-chat` (global command). Removes the conversation from the job list and keeps its transcript (`claude --resume <sessionId>`).
+
+### Where do I work: create the worktree, don't ask
+
+**Writing to the main checkout is forbidden by default.** Before a conversation's first change to any file (code, docs, config, `CLAUDE.md`, `.claude/`), run `/create-worktree` silently, say the worktree path and branch in one line and go straight on with the work through **absolute paths** into the worktree. The session itself stays in the main checkout; that is a technical detail, not a licence to write there.
+
+- Read-only work (questions, search, analysis, reviews) never gets a worktree.
+- Already in a worktree and the subject has not moved on: keep working there.
+- Writing on `main` needs the user's explicit words in the current conversation ("do it on main"). It covers that conversation's work and never carries over to the next one. Naming a file is not that permission.
+- **The subject moved on inside an existing worktree**: ask, in the language of the conversation:
+
+  ```
+  I'm working in /Users/homoky/Developer/awaitio.worktrees/<name> (branch <name>).
+
+  1. Rename the worktree, branch and chat to <new topic> and continue here
+  2. Create a new worktree for <new topic> and make the changes there
+  3. Continue here under the current name
+  ```
+
+  Option 1 moves worktree, branch, VS Code workspace entry and chat name together, never one of them alone. Option 2 is `/create-worktree` with the current worktree left untouched.
+
+## Chat naming
+
+Every chat is named `[worktree] what it is about`: the worktree's directory name, `[main]` without one, then a short lowercase English description of the goal. The full rules are in [`/rename-chat`](./.claude/commands/rename-chat.md).
+
+- **Never change a name the user set.** Only its `[worktree]` prefix is kept current.
+- A wrong `[worktree]` prefix is always fixed straight away (new worktree, renamed or deleted worktree).
+- Rename the description only when the subject has actually moved on, silently, at most once per conversation, mentioned in one line at the end of a reply.
+
 ## Guidelines
 
 Read the guideline before working in its area:
@@ -30,6 +69,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/demo.md` – `apps/demo`: the made-up data, no Czech names.
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
+- `.claude/guidelines/final-banner.md` – the closing banner of `/delete-worktree`.
 - `.claude/workbench.md` – how the review workbench groups changes.
 
 ## Repository map
