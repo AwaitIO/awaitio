@@ -2,11 +2,11 @@
 
 ## AwaitIO Exceptions
 
-These project decisions (see `CLAUDE.md`) win over any rule below:
+These project decisions win over any rule below. The full rules for io components are in `components.md`:
 
-- **Action and page handlers take one object, `({ io, ctx })`**, like every other function (Petr, 2026-10-20), so a handler can take just what it needs: `async ({ ctx }) => …`.
-- **Component definitions** (`libs/input-*`, `apps/demo/components/*`) are one `.tsx` file each with `defineComponent({ props, returns, initialValue, validate, component, wrap? })`. The `component` is written inline in the definition; its props are typed by `defineComponent`, so it has no separate `Props` type and no `FC` annotation.
-- **zod schemas stay inline in `defineComponent`**, never in a separate file or in `constants`. The "one type per file" rule does not pull them out.
+- **Action and page handlers take one object, `({ io, ctx })`**, like every other function, so a handler can take just what it needs: `async ({ ctx }) => …`.
+- **Component definitions** (`libs/input-*`, `libs/select-*`, `libs/display-*`) are one `.tsx` file each with `defineComponent({ props, returns, initialValue, validate, component, wrap? })`. The `component` is written inline in the definition; its props are typed by `defineComponent`, so it has no separate `Props` type and no `FC` annotation.
+- **zod schemas stay inline in `defineComponent`**, never in `constants`; only a schema used more than once goes to `src/schemas/<name>Schema.ts`. The "one type per file" rule does not pull them out.
 - **uikit components** (`libs/sdk/src/uikit`) are written as `export const X: FC<XProps> = (...) => { ... }`.
 
 ## Exports and Files
@@ -37,7 +37,7 @@ export const nameToSlug = (name: string) => {};
 
 ## One Function per File
 
-Quick description: A file holds exactly one function — exported or not. A helper the main function needs goes into its own file next to it (usually `utils/<helperName>.ts`), named after the helper. Petr's rule.
+Quick description: A file holds exactly one function — exported or not. A helper the main function needs goes into its own file next to it (usually `utils/<helperName>.ts`), named after the helper.
 
 ✅ DO:
 
@@ -686,7 +686,7 @@ const handleApiResponse = (response: any) => {
 
 ## Environment Variables
 
-Quick description: `process.env` is read only in `apps/demo/src/secrets.ts` (validated by `@homoky/znv`). Everything else imports `secrets`. The SDK never reads `process.env`; it gets configuration through `new AwaitIO(...)` and `app.listen(...)`.
+Quick description: `process.env` is read only in an app's `src/secrets.ts` (validated by `@homoky/znv`). Everything else imports `secrets`. The SDK never reads `process.env`; it gets configuration through `new AwaitIO(...)` and `app.listen(...)`.
 
 ✅ DO:
 
@@ -817,7 +817,7 @@ const { MIN_TOKEN_LENGTH } = constants; // ❌ Wrong - access via constants.MIN_
 - One `export const constants = { ... }` object per `constants.ts` file
 - Constant keys use `SCREAMING_SNAKE_CASE`
 - Always access through `constants.NAME` — keeps the source obvious and never destructure
-- Existing examples: `libs/sdk/src/constants.ts`, `libs/sdk/src/ui/constants.ts`, `apps/demo/src/constants.ts`
+- Existing examples: `libs/sdk/src/constants.ts`, `libs/sdk/src/ui/constants.ts`
 - Exception: zod schemas of an io component never go to `constants`, they stay inline in `defineComponent`
 
 ## Blank Lines

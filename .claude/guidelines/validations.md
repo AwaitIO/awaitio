@@ -4,9 +4,9 @@ This document contains guidelines for writing validation schemas using Zod.
 
 ## Where Schemas Live
 
-- io component schemas (`props`, `returns`) are written **inline in `defineComponent`**, never in a separate file or in `constants` (Petr's decision, see `CLAUDE.md`).
+- io component schemas (`props`, `returns`) are written **inline in `defineComponent`**, never in `constants`; only a schema the component uses more than once goes to `src/schemas/<name>Schema.ts` (see `components.md`).
 - Schemas shared by the server and the UI live in `libs/sdk/src/shared/schemas/`, one schema per file named `<name>Schema.ts`; the inferred type lives in `libs/sdk/src/shared/types/<Name>.ts` as `z.infer<typeof nameSchema>`.
-- Environment variables are validated only in `apps/demo/src/secrets.ts` through `@homoky/znv`.
+- Environment variables are validated only in the app's `src/secrets.ts` through `@homoky/znv` (the SDK reads none).
 - Unknown input (request bodies, IO responses, SSE messages) is parsed with zod, never cast.
 
 ## String Validation Rules

@@ -87,3 +87,8 @@
 - Use `pnpm add` instead of `npm install <package>`
 - Use `pnpm remove` instead of `npm uninstall`
 - Always respect the `pnpm-lock.yaml` file and never create `package-lock.json` or `yarn.lock`
+
+## No Interval in the project rules
+
+- `CLAUDE.md` and everything in `.claude/` describe AwaitIO on its own terms. They never mention Interval: not as the product AwaitIO replaces, not as a model to copy ("as in Interval"), not as a source of a rule.
+- State the rule or the behaviour itself instead.

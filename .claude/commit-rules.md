@@ -10,14 +10,13 @@ Extends the global `commit-fast` skill.
 
 - `[sdk]` – `libs/sdk` server, runtime, shared schemas
 - `[ui]` – `libs/sdk/src/ui`
-- `[demo]` – `apps/demo`
 - `[docs]` – `apps/docs`
 - `[site]` – `apps/site`; its static export `apps/site/out/` always as `[site] static export`
 - `[input-text]`, `[input-textarea]`, `[input-datetime]` – the component packages in `libs/input-*`
-- `[claude]` – `CLAUDE.md`, `PROGRESS.md`, `.claude/`, `docs/`
+- `[claude]` – `CLAUDE.md`, `.claude/`
 - `[release]` – the commit `pnpm version-packages` makes (versions, `CHANGELOG.md`, used-up `.changeset/*.md`), always exactly `[release] version packages`
 - `[eslint]`, `[typescript]`, `[gitignore]` – tooling
-- Several packages: `[sdk,demo]`
+- Several packages: `[sdk,docs]`
 
 ## Site export (`apps/site/out/`)
 
@@ -38,7 +37,7 @@ Every published package in `libs/` has its own version, managed by Changesets (`
 ## Precommit checks
 
 - `pnpm lint`
-- `pnpm tsc` (needs `pnpm build` once, the demo typechecks against `libs/sdk/dist`)
+- `pnpm tsc` (needs `pnpm build` once, the packages typecheck against `libs/sdk/dist`)
 - `pnpm test`
 
 ### Docs, site and READMEs stay in line with the commit

@@ -2,11 +2,11 @@
 
 ## AwaitIO Exceptions
 
-These project decisions (see `CLAUDE.md`) win over any rule below:
+These project decisions win over any rule below. The full rules for io components are in `components.md`:
 
-- **io component definitions** (`libs/input-*`, `apps/demo/components/*`) are one `src/<name>.tsx` file with `defineComponent({ props, returns, initialValue, validate, component, wrap? })`. The `component` is written inline in the definition, typed by `defineComponent`: no separate `Props` type, no `FC` annotation, no extra component file.
+- **io component definitions** (`libs/input-*`, `libs/select-*`, `libs/display-*`) are one `src/<name>.tsx` file with `defineComponent({ props, returns, initialValue, validate, component, wrap? })`. The `component` is written inline in the definition, typed by `defineComponent`: no separate `Props` type, no `FC` annotation, no extra component file.
 - An io component's `component` draws only the control, built from `awaitio/ui` (`Input`, `Textarea`, `Field`, `Hint`). Label, help text and error come from the SDK (`Field`). No own CSS.
-- zod schemas of an io component stay inline in `defineComponent`, never in a separate file or in `constants`.
+- zod schemas of an io component stay inline in `defineComponent`, never in `constants`; only a schema used more than once goes to `src/schemas/<name>Schema.ts`.
 - **uikit components** (`libs/sdk/src/uikit`, published as `awaitio/ui`) are written as `export const X: FC<XProps> = (...) => { ... }` with an exported `XProps` right above.
 - The UI has no i18n: texts are plain English strings in the components.
 

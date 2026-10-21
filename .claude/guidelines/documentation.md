@@ -1,6 +1,14 @@
 # Documentation Guidelines
 
-`apps/docs` is a Mintlify app (`pnpm --filter @awaitio/docs dev`, `mint broken-links`). The edicek rules for the image-sync pipeline and the **WHY** concept do not apply here.
+`apps/docs` is a Mintlify app (`pnpm --filter @awaitio/docs dev`, port 8070; `mint broken-links`). The edicek rules for the image-sync pipeline and the **WHY** concept do not apply here.
+
+## Page layout
+
+- English. Top level: `index`, `quickstart`, `how-it-works`, `deployment`.
+- `core/` – one page per option of `new AwaitIO` and `listen`.
+- `io/` – one page per io method.
+- `ctx/` – one page per part of `ctx`.
+- Screenshots live in `images/`, taken with Playwright (locale en-US, 2×) from an app logged in with a demo account.
 
 ## Pages describe what the code does
 
