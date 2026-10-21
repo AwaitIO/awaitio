@@ -5,7 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 // Same rules as edicek-monorepo/.eslintrc.js, written as one flat config for this small workspace.
 const eslintConfig = [
   {
-    ignores: ['**/dist/**', '**/node_modules/**', 'reference/**', '.claude/**'],
+    ignores: ['**/dist/**', '**/node_modules/**', 'reference/**', '.claude/**', '**/.next/**', '**/out/**', '**/next-env.d.ts'],
   },
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.mts'],
