@@ -29,3 +29,11 @@ Invoices, payment steps and contract terms belong on `/pricing`, in the terms an
 ## Long explanations in short paragraphs
 
 A block that explains several steps (how to pay, what the license is, how to get an invoice) is split into one short paragraph per step instead of one long paragraph.
+
+## No ellipsis inside inline code
+
+Inline code in copy names a real call. An ellipsis after it (`await io.input…`) reads like broken code; say what it is in words instead.
+
+✅ DO: "Every `await io.input` call shows a form …"
+
+❌ DON'T: "Every `await io.input…` shows a form …"
