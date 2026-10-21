@@ -42,7 +42,7 @@ const tiers: PricingTierInfo[] = [
     detail: 'Custom agreement',
     features: ['More than 50 users', 'Custom components', 'Onboarding and training', 'Contract and custom terms', 'Priority support', 'SLA'],
     excluded: [],
-    cta: { label: 'Contact us', href: `mailto:${constants.CONTACT_EMAIL}?subject=${encodeURIComponent('Custom AwaitIO license request')}` },
+    cta: { label: 'Contact us', href: `mailto:${constants.LICENSE_EMAIL}?subject=${encodeURIComponent('Custom AwaitIO license request')}` },
     highlighted: false,
   },
 ];
@@ -75,8 +75,8 @@ const PricingPage = () => {
         <p className="mt-3 text-gray-600">That is the license: it stays valid while the sponsorship is active.</p>
         <p className="mt-3 text-gray-600">
           Every payment comes with an invoice on request: send your billing details to{' '}
-          <a href={`mailto:${constants.CONTACT_EMAIL}`} className="underline hover:text-gray-900">
-            {constants.CONTACT_EMAIL}
+          <a href={`mailto:${constants.LICENSE_EMAIL}`} className="underline hover:text-gray-900">
+            {constants.LICENSE_EMAIL}
           </a>
           .
         </p>

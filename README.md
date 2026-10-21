@@ -124,7 +124,7 @@ AwaitIO is source-available under the [AwaitIO License](LICENSE).
 | 11–50        | $250 per month                                             |
 | More than 50 | Enterprise: contract, SLA and priority support; let's talk |
 
-Get it by sponsoring AwaitIO on [GitHub Sponsors](https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users; the license is valid while the sponsorship is active. Every payment comes with an invoice on request. For the invoice, a contract, an SLA or custom terms, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
+Get it by sponsoring AwaitIO on [GitHub Sponsors](https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users; the license is valid while the sponsorship is active. Every payment comes with an invoice on request. For the invoice, a contract, an SLA or custom terms, write to [license@awaitio.com](mailto:license@awaitio.com).
 
 The free and the paid version are the same software: no paid features, no license keys, no limits and no telemetry. AwaitIO never checks your license; it works on trust.
 
@@ -140,7 +140,7 @@ Licenses are issued by Orukami s.r.o. (company ID 64049159, Prague). Without a s
 
 Your own components, plugins and extensions for AwaitIO are yours to share or sell. Building apps for clients is fine too: whoever runs the app pays for its users, and the developers who only build it do not count. An agency can buy the license on its client's behalf.
 
-Not sure which license you need, or need a written confirmation of your license for an audit or a client? Write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
+Not sure which license you need, or need a written confirmation of your license for an audit or a client? Write to [license@awaitio.com](mailto:license@awaitio.com).
 
 The license may change for future versions; each version keeps the license it was released with. If you disagree with a newer license, stay on the version you have. The license is governed by Czech law.
 

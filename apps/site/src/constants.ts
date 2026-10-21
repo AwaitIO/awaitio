@@ -7,6 +7,7 @@ export const constants = {
   DEMO_SOURCE_URL: 'https://github.com/awaitio/awaitio/tree/main/apps/demo',
   DEMO_EMAIL: 'demo@awaitio.com',
   DEMO_PASSWORD: 'demo',
-  CONTACT_EMAIL: 'p.homoky@gmail.com',
+  CONTACT_EMAIL: 'hello@awaitio.com',
+  LICENSE_EMAIL: 'license@awaitio.com',
   LEGAL_LAST_UPDATED: 'October 21, 2026',
 };
