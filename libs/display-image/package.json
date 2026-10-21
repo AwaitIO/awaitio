@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-image",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Image for AwaitIO: io.display.image(), e.g. a chart or a file preview.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

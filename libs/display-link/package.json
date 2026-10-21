@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-link",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Link for AwaitIO: io.display.link(), to a page in the app or outside it.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

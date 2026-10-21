@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/confirm",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Confirmation for AwaitIO: io.confirm(), returns true or false.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

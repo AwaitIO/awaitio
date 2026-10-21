@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/theme-default",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "The default look of AwaitIO: every block of awaitio/ui, with its styles.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",
