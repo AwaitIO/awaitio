@@ -19,13 +19,13 @@ export const AppTitle: FC<AppTitleProps> = ({ info, homeHref }) => {
       {match(homeHref)
         .with(P.string, (href) => {
           return (
-            <NavLink href={href} className="font-semibold text-gray-900 hover:text-gray-600">
+            <NavLink href={href} className="text-xl font-semibold text-gray-900 hover:text-gray-600">
               {info.name}
             </NavLink>
           );
         })
         .otherwise(() => {
-          return <span className="font-semibold text-gray-900">{info.name}</span>;
+          return <span className="text-xl font-semibold text-gray-900">{info.name}</span>;
         })}
       {match(info)
         .with({ environments: [P._, ...P.array()] }, ({ environment, environments }) => {
