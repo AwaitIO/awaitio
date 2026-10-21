@@ -13,15 +13,3 @@ A group (task) with more than a few files always has its steps in this order, an
 5. **Other** — demos (`apps/demo*`), root config, lockfile, `.claude/`
 
 A feature's documentation is the Documentation step in its group, not a separate "Docs: …" group. A separate docs group is only for documentation changes without code.
-
-## Demos outside the workbench
-
-Demos (`apps/demo/` and the migration `apps/demo-*/`) do not belong to groups or tasks (Petr, 2026-10-20). Their changes are not assigned, and the workbench does not list them.
-
-## Ignored files
-
-```gitignore
-# Demos are not part of groups or tasks
-/apps/demo/
-/apps/demo-*/
-```
