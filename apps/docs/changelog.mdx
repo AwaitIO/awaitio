@@ -1,0 +1,76 @@
+---
+title: 'Changelog'
+icon: 'clock-rotate-left'
+rss: true
+---
+
+What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
+
+<Update label="1.0.0" description="October 21, 2026" tags={["Core", "Components", "License"]}>
+  First stable release. AwaitIO runs internal tools in production, and from now on the API follows semver: breaking changes come only in a new major version.
+
+  ## Core
+
+  `awaitio` 1.0.0
+
+  - New [`maxFailedLogins`](/core/users#too-many-failed-attempts) option: how many failed logins per email lock it, or `false` to turn the lock off.
+  - The log out button in the header is a plain icon without a border, so it does not stand out next to the user's name.
+  - The app name in the header and on the login page is larger.
+
+  ## Components
+
+  Every `@awaitio/*` package 1.0.0
+
+  - No changes in behavior. They move to 1.0.0 together with the core.
+
+  ## License
+
+  All packages
+
+  - Users are counted across a group of companies, and the free limit of 3 users applies to individuals too.
+  - A 30-day evaluation with any number of users.
+  - $250 a month for 11–50 users with standard support, and an Enterprise agreement above 50 users.
+  - Whoever runs an app pays for it. An agency may buy the license for its client.
+  - Components and plugins may be sold.
+  - A written answer or a license confirmation on request, at license@awaitio.com.
+  - The license is governed by Czech law.
+
+  See [License and pricing](/license).
+
+  ## Migration guide
+
+  From 0.1.0 to 1.0.0.
+
+  <AccordionGroup>
+    <Accordion title="Core">
+      Nothing to change. `maxFailedLogins` is optional and defaults to `10`, the same lock 0.1.0 had built in.
+    </Accordion>
+    <Accordion title="Components">
+      Nothing to change. Update every `@awaitio/*` package to `^1.0.0` together with `awaitio`.
+    </Accordion>
+    <Accordion title="License">
+      Nothing to change in code. Check the user count of your apps against the new tiers in [License and pricing](/license).
+    </Accordion>
+  </AccordionGroup>
+</Update>
+
+<Update label="0.1.0" description="October 21, 2026" tags={["Core", "Components"]}>
+  First public release on npm.
+
+  ## Core
+
+  `awaitio` 0.1.0
+
+  - Actions written as async functions that `await` a person's answer through `io`, served together with the UI by the same Node process.
+  - Routing, pages, users with login, environments and themes.
+  - `ctx` with the user, params, the action, the run id, redirects and loading states.
+
+  ## Components
+
+  Every `@awaitio/*` package 0.1.0
+
+  - Inputs: text, email, URL, textarea, number, boolean, date and datetime.
+  - Selects: single, multiple and table, plus confirm.
+  - Displays: table, metadata, link, heading, image, Markdown, object and HTML.
+  - `@awaitio/layout-basic` and the default theme `@awaitio/theme-default`.
+</Update>

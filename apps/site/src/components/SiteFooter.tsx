@@ -13,6 +13,9 @@ export const SiteFooter: FC = () => {
             <a href={constants.DOCS_URL} className="hover:text-gray-900">
               Docs
             </a>
+            <a href={`${constants.DOCS_URL}/changelog`} className="hover:text-gray-900">
+              Changelog
+            </a>
             <a href={constants.GITHUB_URL} className="hover:text-gray-900">
               GitHub
             </a>

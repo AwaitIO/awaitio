@@ -20,6 +20,11 @@
           "anchor": "AwaitIO homepage",
           "icon": "house",
           "href": "https://awaitio.com"
+        },
+        {
+          "anchor": "Changelog",
+          "icon": "clock-rotate-left",
+          "href": "https://docs.awaitio.com/changelog"
         }
       ]
     },
@@ -75,7 +80,7 @@
       },
       {
         "group": "Other",
-        "pages": ["license"]
+        "pages": ["license", "changelog"]
       }
     ]
   }
