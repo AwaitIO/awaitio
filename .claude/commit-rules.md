@@ -43,6 +43,20 @@ Every published package in `libs/` has its own version, managed by Changesets (`
 - `pnpm tsc` (needs `pnpm build` once, the packages typecheck against `libs/sdk/dist`)
 - `pnpm test`
 
+### Nothing private leaks into the public repository
+
+Runs before every commit, whatever is staged. The repository is public on GitHub and the packages on npm: whatever is committed is out for good, even when a later commit removes it.
+
+- Go through **the whole** staged diff (`git diff --cached`, every file, every line, new files in full) and the commit message. Open staged images (screenshots, media) and look at them too.
+- Look for:
+  - **Secrets**: API keys, tokens, passwords, private keys, session secrets, cookies, connection strings, `.env` files with real values, `npm` or cloud credentials, secrets in deploy specs (`.do/*.yaml` names a secret, it never holds its value). Placeholders in example `.env` files are fine.
+  - **Other projects**: names, links, code, paths or data from other projects, clients or employers; anything taken from `reference/` (it stays local, so a path into it or code copied from it does not belong in the repository).
+  - **Competitors**: any product that does what AwaitIO does, named, linked, compared or used as a model ("like X", "unlike X", "inspired by X"), in code, comments, docs, site copy, roadmap, changesets, `CLAUDE.md`, `.claude/` or the commit message.
+  - **Links** to anything but AwaitIO's own places (`awaitio.com`, `demo.awaitio.com`, `github.com/awaitio`, the npm packages) and the docs of a dependency the code really uses.
+  - **Personal and local details**: private email addresses and phone numbers, absolute local paths (`/Users/…`), machine names, internal hostnames and IP addresses, real people's names and data (the demo uses only made-up data, see `demo.md`). In screenshots also browser tabs, bookmarks, notifications and other windows.
+- When anything is found: **do not commit**. List each finding as `file:line` with what it is and a suggested fix, and wait for the user. A real secret that was ever committed or pushed is rotated, not just deleted.
+- When nothing is found, say so in one line and go on.
+
 ### Docs, site and READMEs stay in line with the commit
 
 Runs before every commit, whatever is staged.
