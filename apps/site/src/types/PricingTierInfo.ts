@@ -2,7 +2,8 @@ export type PricingTierInfo = {
   name: string;
   price: string;
   detail: string;
-  note: string;
+  features: string[];
+  excluded: string[];
   cta: { label: string; href: string };
   highlighted: boolean;
 };

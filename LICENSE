@@ -72,4 +72,10 @@ AwaitIO is provided "as is", without warranty of any kind, express or implied, i
 
 ## Support
 
-Support is provided on a best-effort basis through GitHub issues. Company License holders get priority; an Enterprise agreement may add a service-level agreement.
+Support is provided through GitHub issues:
+
+- under the Free License, on a best-effort basis;
+- under a Company License for 4 to 10 users, standard support with a first response within 3 working days;
+- under a Company License for more than 10 users, priority support with a first response within 12 hours on working days.
+
+Working days are business days in the Czech Republic. The response times are targets, not a service-level agreement; an Enterprise agreement may add one.
