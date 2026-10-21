@@ -1,0 +1,19 @@
+# awaitio.com on DigitalOcean App Platform: the static export in apps/site/out, deployed on every push to main.
+# Apply with `doctl apps update <id> --spec .do/awaitio-site.yaml`.
+name: awaitio-site
+region: fra
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+domains:
+- domain: awaitio.com
+  type: PRIMARY
+  zone: awaitio.com
+static_sites:
+- name: site
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: awaitio/awaitio
+  source_dir: apps/site/out
+  environment_slug: html

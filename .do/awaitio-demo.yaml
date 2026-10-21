@@ -1,0 +1,38 @@
+# The public demo at demo.awaitio.com: apps/demo as one Node service on DigitalOcean App Platform.
+# One instance only: runs live in the memory of the process.
+# Apply with `doctl apps update <id> --spec .do/awaitio-demo.yaml`. SESSION_SECRET holds the value DigitalOcean encrypted (EV[…]).
+name: awaitio-demo
+region: fra
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+domains:
+- domain: demo.awaitio.com
+  type: PRIMARY
+  zone: awaitio.com
+services:
+- name: demo
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: awaitio/awaitio
+  source_dir: /
+  environment_slug: node-js
+  build_command: pnpm install --frozen-lockfile && pnpm --filter './libs/**' run build && pnpm --filter @awaitio/demo build
+  run_command: pnpm --filter @awaitio/demo start
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-0.5gb
+  health_check:
+    http_path: /health
+  envs:
+  - key: SESSION_SECRET
+    type: SECRET
+    scope: RUN_TIME
+    value: EV[1:Cwv5/dir3iqd7d8Wc0b1EJ6jU9f6bvGH:sSGBBXbG6RIDggzxzs771pMStH6YB9CIm1LSLCXG0y1JmqA56JQ9Rr8t2oYwZs59BN63omCmCoKrTVE=]
+  - key: HOST
+    value: 0.0.0.0
+    scope: RUN_TIME
+  - key: PORT
+    value: '8080'
+    scope: RUN_TIME
