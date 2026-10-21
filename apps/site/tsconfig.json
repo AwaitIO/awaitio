@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "out", ".next"],
+  "compilerOptions": {
+    "types": ["node"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "incremental": true,
+    "declaration": false,
+    "declarationMap": false,
+    "jsx": "preserve",
+    "allowJs": true,
+    // Next.js handles the global stylesheet import in the root layout.
+    "noUncheckedSideEffectImports": false,
+    "plugins": [{ "name": "next" }]
+  }
+}

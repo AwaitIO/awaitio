@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+
+/* Geist Sans for text, Geist Mono for code and small labels, as Vercel uses them; loaded by next/font in the layout. */
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Thin, quiet scrollbar for long lines in the dark code terminals. */
+.code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.18) transparent;
+}
+
+.code-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.18);
+}
+
+/* Inline code (not in a code block) never breaks in the middle, "await io" stays on one line. In the base layer, so
+   a utility such as whitespace-normal still wins for long values like font stacks. */
+@layer base {
+  :not(pre) > code {
+    white-space: nowrap;
+  }
+}

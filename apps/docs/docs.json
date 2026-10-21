@@ -7,6 +7,12 @@
     "light": "#60A5FA",
     "dark": "#1D4ED8"
   },
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png",
+    "href": "https://awaitio.com"
+  },
+  "favicon": "/favicon.svg",
   "navigation": {
     "global": {
       "anchors": [
@@ -14,11 +20,6 @@
           "anchor": "AwaitIO homepage",
           "icon": "house",
           "href": "https://awaitio.com"
-        },
-        {
-          "anchor": "Changelog",
-          "icon": "clock-rotate-left",
-          "href": "https://awaitio.com/changelog"
         }
       ]
     },
