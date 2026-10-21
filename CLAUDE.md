@@ -40,8 +40,9 @@ Read the guideline before working in its area:
 - `libs/theme-default/` – the default theme (`@awaitio/theme-default`), the look of the `awaitio/ui` blocks.
 - `apps/docs/` – documentation in Mintlify, English. See `documentation.md`.
 - `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`.
+- `roadmap/` – possible future improvements, one Markdown file per idea, listed in `roadmap/README.md`.
 - `reference/` – read-only clones of related open-source projects, gitignored.
-- The demo apps are no longer in this repo. `apps/demo*/` holds only untracked leftovers (`dist`, `node_modules`, empty folders).
+- `apps/demo/` – the public demo at demo.awaitio.com: the backoffice of a made-up store platform, built like a client project, with a Prisma-like `db` over made-up rows that saves nothing. Deployed from `.do/awaitio-demo.yaml`.
 
 ## Versions and releases
 

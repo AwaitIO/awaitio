@@ -48,6 +48,13 @@
 - Use meaningful and explanatory comments where necessary
 - Comments should explain "why" rather than "what" the code is doing
 
+## Roadmap
+
+- Possible future improvements go to `roadmap/` in the repository root, one Markdown file per idea, in English, listed with one line in `roadmap/README.md`.
+- A file says what the situation is today, the idea, how it could work, its trade-offs and the work it takes, so it can be picked up later without the conversation it came from.
+- When an idea ships or is dropped, delete its file and its line in `roadmap/README.md`.
+- Open work on something already being built stays in `PROGRESS.md`, not in `roadmap/`.
+
 ## Dependency Management
 
 - **MANDATORY**: Always verify package usage when modifying dependencies
