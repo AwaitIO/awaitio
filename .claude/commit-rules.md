@@ -11,10 +11,20 @@ Extends the global `commit-fast` skill.
 - `[sdk]` – `libs/sdk` server, runtime, shared schemas
 - `[ui]` – `libs/sdk/src/ui`
 - `[demo]` – `apps/demo`
+- `[docs]` – `apps/docs`
+- `[site]` – `apps/site`; its static export `apps/site/out/` always as `[site] static export`
 - `[input-text]`, `[input-textarea]`, `[input-datetime]` – the component packages in `libs/input-*`
 - `[claude]` – `CLAUDE.md`, `PROGRESS.md`, `.claude/`, `docs/`
 - `[eslint]`, `[typescript]`, `[gitignore]` – tooling
 - Several packages: `[sdk,demo]`
+
+## Site export (`apps/site/out/`)
+
+The site is a static export that lives in git (see `CLAUDE.md`). The generated `out/` is committed on its own, never mixed with source changes.
+
+- After a site change is committed, run `pnpm --filter @awaitio/site build` and commit `apps/site/out/` alone.
+- That commit's message is always exactly `[site] static export`, whatever changed.
+- A commit that mixes `out/` with other files is split: the source change with its own message, then `out/` as `[site] static export`.
 
 ## Precommit checks
 
