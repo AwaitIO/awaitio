@@ -1,0 +1,31 @@
+# Site Guidelines
+
+`apps/site` is awaitio.com in Next.js as a static export (`pnpm --filter @awaitio/site dev`, port 8080). The export in `apps/site/out/` is committed on its own as `[site] static export`.
+
+## Rebuild the export only with the dev server stopped
+
+`next build` and `next dev` share `apps/site/.next`. Building while the dev server runs overwrites its files and the dev site loses its styles.
+
+✅ DO: stop the dev server, run `pnpm --filter @awaitio/site build`, then start it again (delete `.next` first if it already broke).
+
+❌ DON'T: run the build next to a running `next dev`.
+
+## One fact per sentence in marketing copy
+
+Facts that stand on their own get their own sentence, not a tail joined with "and". A fact that holds for every case (the same software whether free or paid) is said as such, not tacked onto one case.
+
+✅ DO: "Larger teams pay one flat monthly price per organization. Free or paid, it is the same software."
+
+❌ DON'T: "Larger teams pay one flat monthly price, and it is the same software either way."
+
+## Billing details stay on the pricing page
+
+Invoices, payment steps and contract terms belong on `/pricing`, in the terms and in the license. Headlines and calls to action on other pages (hero, closing CTA) speak about the product and the price model only.
+
+✅ DO: mention "Invoice on request" on the pricing cards.
+
+❌ DON'T: add "with an invoice for every payment" to the closing CTA on the home page.
+
+## Long explanations in short paragraphs
+
+A block that explains several steps (how to pay, what the license is, how to get an invoice) is split into one short paragraph per step instead of one long paragraph.

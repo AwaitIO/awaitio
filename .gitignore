@@ -2,6 +2,8 @@
 node_modules/
 # Build output (tsc + vite)
 dist/
+# Copies of the root LICENSE, written by `pnpm copy-license` (part of `pnpm build`)
+libs/*/LICENSE
 # Local secrets (ACCESS_TOKEN, PORT)
 .env
 # Read-only clones of related open-source projects, used as reference

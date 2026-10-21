@@ -1,5 +1,5 @@
-import { LicenseRequestForm } from '../../components/LicenseRequestForm';
 import { PricingTier } from '../../components/PricingTier';
+import { SupportBanner } from '../../components/SupportBanner';
 import { constants } from '../../constants';
 import type { PricingTierInfo } from '../../types/PricingTierInfo';
 import type { Metadata } from 'next';
@@ -9,13 +9,36 @@ export const metadata: Metadata = {
 };
 
 const tiers: PricingTierInfo[] = [
-  { users: '1–3 users', price: 'Free', yearly: null, note: 'Commercial use included. Also free for non-profits, education and evaluation.', highlighted: false },
-  { users: '4–10 users', price: '$49/mo', yearly: 'or $490 per year', note: 'One flat price for your organization, however many apps and environments you run.', highlighted: true },
   {
-    users: 'More than 10 users',
-    price: '$199/mo',
-    yearly: 'or $1,990 per year',
-    note: 'Flat, with no limit on users. Need invoicing, custom terms or priority support? Ask in the form.',
+    name: '1–3 users',
+    price: 'Free',
+    detail: 'No sign-up, no license key',
+    note: 'Commercial use included. Also free for non-profits, education and evaluation.',
+    cta: { label: 'Get started', href: `${constants.DOCS_URL}/quickstart` },
+    highlighted: false,
+  },
+  {
+    name: '4–10 users',
+    price: '$50/mo',
+    detail: 'Company License, per organization',
+    note: 'One flat price for all your apps and environments. Invoice on request.',
+    cta: { label: 'Sponsor on GitHub', href: constants.SPONSORS_URL },
+    highlighted: true,
+  },
+  {
+    name: 'More than 10 users',
+    price: '$250/mo',
+    detail: 'Company License, no user limit',
+    note: 'Flat, however many people, apps and environments. Invoice on request.',
+    cta: { label: 'Sponsor on GitHub', href: constants.SPONSORS_URL },
+    highlighted: false,
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    detail: 'Contract, SLA, priority support',
+    note: 'Need a written contract, a purchase order, an SLA or custom terms? Write to us and we agree on them.',
+    cta: { label: 'Contact us', href: `mailto:${constants.CONTACT_EMAIL}?subject=${encodeURIComponent('AwaitIO Enterprise')}` },
     highlighted: false,
   },
 ];
@@ -30,24 +53,36 @@ const PricingPage = () => {
           keys, no limits and no telemetry. It works on trust.
         </p>
       </div>
-      <div className="mt-12 grid gap-6 md:grid-cols-3">
+      <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {tiers.map((tier) => {
-          return <PricingTier key={tier.users} tier={tier} />;
+          return <PricingTier key={tier.name} tier={tier} />;
         })}
       </div>
-      <div id="request" className="mt-20 grid gap-10 lg:grid-cols-[1fr_1.4fr]">
-        <div>
-          <h2 className="text-2xl font-semibold tracking-[-0.02em]">Request a license</h2>
-          <p className="mt-3 text-gray-600">Tell us who the license is for and how many people use AwaitIO. You will get a reply with the license and the invoice.</p>
-          <p className="mt-3 text-sm text-gray-500">
-            The full terms are in the{' '}
-            <a href={constants.LICENSE_URL} className="underline hover:text-gray-900">
-              AwaitIO License
-            </a>
-            .
-          </p>
-        </div>
-        <LicenseRequestForm />
+      <SupportBanner />
+      <div className="mt-20 max-w-2xl">
+        <h2 className="text-2xl font-semibold tracking-[-0.02em]">How to get a Company License</h2>
+        <p className="mt-3 text-gray-600">
+          Sponsor AwaitIO on{' '}
+          <a href={constants.SPONSORS_URL} className="underline hover:text-gray-900">
+            GitHub Sponsors
+          </a>{' '}
+          with the monthly Company License tier for your number of users, from your organization&apos;s GitHub account or on its behalf.
+        </p>
+        <p className="mt-3 text-gray-600">That is the license: it stays valid while the sponsorship is active.</p>
+        <p className="mt-3 text-gray-600">
+          Every payment comes with an invoice on request: send your billing details to{' '}
+          <a href={`mailto:${constants.CONTACT_EMAIL}`} className="underline hover:text-gray-900">
+            {constants.CONTACT_EMAIL}
+          </a>
+          .
+        </p>
+        <p className="mt-3 text-sm text-gray-500">
+          The full terms are in the{' '}
+          <a href={constants.LICENSE_URL} className="underline hover:text-gray-900">
+            AwaitIO License
+          </a>
+          .
+        </p>
       </div>
     </div>
   );

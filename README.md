@@ -115,19 +115,22 @@ Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Every contrib
 
 AwaitIO is source-available under the [AwaitIO License](LICENSE).
 
-**Free, including commercial use,** with up to 3 users (the real people who use it, however many logins they share), for non-profits and educational institutions, and for evaluation. That covers production use and building tools for your clients. For-profit organizations with more users need a Company License:
+**Free, including commercial use,** with up to 3 users (the real people who use it, however many logins they share), for non-profits and educational institutions, and for evaluation. That covers production use and building tools for your clients. For-profit organizations with more users need a Company License, one flat monthly price per organization for all your apps and environments:
 
-| Users        | Price                              |
-| ------------ | ---------------------------------- |
-| 1–3          | Free                               |
-| 4–10         | $49 per month, or $490 per year    |
-| More than 10 | $199 per month, or $1,990 per year |
+| Users        | Price                                      |
+| ------------ | ------------------------------------------ |
+| 1–3          | Free                                       |
+| 4–10         | $50 per month                              |
+| More than 10 | $250 per month                             |
+| Enterprise   | Contract, SLA and custom terms; let's talk |
 
-One flat price per organization, however many apps and environments you run. Need invoicing, custom terms or priority support? Let's talk.
+Get it by sponsoring AwaitIO on [GitHub Sponsors](https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users; the license is valid while the sponsorship is active. Every payment comes with an invoice on request. For the invoice, a contract, an SLA or custom terms, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
 
 The free and the paid version are the same software: no paid features, no license keys, no limits and no telemetry. AwaitIO never checks your license; it works on trust.
 
-Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. To get a Company License, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
+Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share.
+
+Want to support AwaitIO without needing a license? A one-time or monthly sponsorship of any amount on [GitHub Sponsors](https://github.com/sponsors/awaitio) is very welcome.
 
 Licenses are issued by Orukami s.r.o. (company ID 64049159, Prague). Without a separate agreement, nobody may:
 

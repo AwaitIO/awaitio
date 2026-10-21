@@ -1,7 +1,8 @@
 export type PricingTierInfo = {
-  users: string;
+  name: string;
   price: string;
-  yearly: string | null;
+  detail: string;
   note: string;
+  cta: { label: string; href: string };
   highlighted: boolean;
 };

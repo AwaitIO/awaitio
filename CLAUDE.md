@@ -27,12 +27,14 @@ Read the guideline before working in its area:
 - `.claude/guidelines/sdk.md` – layout of `libs/sdk`, wire names (`run`, `step`), in-memory state.
 - `.claude/guidelines/components.md` – io component packages: one definition file, inline schemas, drawing with `awaitio/ui`, registration, new component.
 - `.claude/guidelines/documentation.md` – `apps/docs`: page layout, screenshots, media.
+- `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/workbench.md` – how the review workbench groups changes.
 
 ## Repository map
 
 - `libs/sdk/` – the framework, npm `awaitio` (+ `awaitio/client`, `awaitio/ui`, `awaitio/vite`). Never imports from `apps/`. See `sdk.md`.
 - `libs/input-*/`, `libs/select-*/`, `libs/display-*/`, `libs/confirm/`, `libs/layout-basic/` – one io component per package, npm `@awaitio/*`. See `components.md`.
+- `LICENSE` – the one license file. `pnpm build` (via `pnpm copy-license`, `scripts/copyLicense.mjs`) copies it into every package in `libs/` so npm ships it; the copies are gitignored, edit only the root one.
 - `libs/theme-default/` – the default theme (`@awaitio/theme-default`), the look of the `awaitio/ui` blocks.
 - `apps/docs/` – documentation in Mintlify, English. See `documentation.md`.
 - `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`.

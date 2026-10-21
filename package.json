@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
-    "build": "pnpm -r run build",
+    "build": "pnpm copy-license && pnpm -r run build",
+    "copy-license": "node scripts/copyLicense.mjs",
     "dev": "pnpm --filter './libs/**' run build && pnpm -r --parallel --filter '!@awaitio/docs' --filter '!@awaitio/site' run dev",
     "dev:ui": "pnpm --filter awaitio run dev:ui",
     "start": "pnpm --filter @awaitio/demo run start",
