@@ -31,7 +31,10 @@ The site is a static export that lives in git (see `CLAUDE.md`). The generated `
 Every published package in `libs/` has its own version, managed by Changesets (`.changeset/README.md`).
 
 - When the staged change touches a published package's code or its public behaviour (not just tests, a README or comments), a `.changeset/*.md` naming that package must be staged too.
-- Missing one: write it yourself in the working tree (`patch` for anything compatible, `minor` for a breaking change, one English line for the changelog), do **not** stage it, show it to the user and stop, the same way as the docs check below.
+- Missing one: write it yourself (`patch` for anything compatible, `minor` for a breaking change, one English line for the changelog), stage it together with the change and commit; name it in the report. This is the one file `/commit-fast` stages on its own.
+- Only packages in `libs/` get changesets. `apps/site`, `apps/demo` and `apps/docs` are private, never published, and never named in a changeset; a commit that touches only them needs none.
+- A changeset describes only what is staged (`git diff --cached`): its packages and its changelog line come from the staged diff, never from changes still only in the working tree. Unstaged work gets its own changeset when it is committed.
+- File name: `YYYY-MM-DD-HHMM_<packages>_<what>.md`, e.g. `2026-10-21-1542_sdk_header-title-and-logout-button.md`. Packages by their folder in `libs/` (`sdk` for `awaitio`, `input-text` for `@awaitio/input-text`), comma-separated (`sdk,input-text`), or `all` when every package is in it; `<what>` in kebab-case. No brackets: the shell reads `[…]` as a pattern. Inside the file the packages keep their npm names (`'awaitio'`, `'@awaitio/input-text'`), or Changesets does not find them. Changesets reads any `.md` name, so files sort by the time they were written.
 - Never tag, bump versions or publish from this command. Releases are `pnpm version-packages` and `pnpm release`, run by the user.
 
 ## Precommit checks
