@@ -16,7 +16,7 @@ export const usersPage = app.definePage({
     return io.layout.basic({
       title: 'Users',
       description: 'Everyone who can log in to a Shopwise store.',
-      menuItems: [inviteUserAction.route()],
+      menuItems: [inviteUserAction.route(), resetPasswordAction.route()],
       children: [
         io.display.metadata(null, {
           items: [

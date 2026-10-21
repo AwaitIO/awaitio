@@ -2,7 +2,7 @@
 
 Object for [AwaitIO](https://awaitio.com): `io.display.object()`, keys and values of a record, nested data included.
 
-![An Account heading with a JSON tree: id, name, a nested plan, a list of owners and isTrial false](https://docs.awaitio.com/images/io-display-object.png)
+![An Account heading with the record as a JSON tree: id, name, domain, plan, status and the rest of its fields](https://docs.awaitio.com/images/io-display-object.png)
 
 ## Install
 

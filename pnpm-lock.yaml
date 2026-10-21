@@ -41,18 +41,36 @@ importers:
       '@awaitio/display-heading':
         specifier: workspace:*
         version: link:../../libs/display-heading
+      '@awaitio/display-html':
+        specifier: workspace:*
+        version: link:../../libs/display-html
+      '@awaitio/display-image':
+        specifier: workspace:*
+        version: link:../../libs/display-image
+      '@awaitio/display-link':
+        specifier: workspace:*
+        version: link:../../libs/display-link
       '@awaitio/display-markdown':
         specifier: workspace:*
         version: link:../../libs/display-markdown
       '@awaitio/display-metadata':
         specifier: workspace:*
         version: link:../../libs/display-metadata
+      '@awaitio/display-object':
+        specifier: workspace:*
+        version: link:../../libs/display-object
       '@awaitio/display-table':
         specifier: workspace:*
         version: link:../../libs/display-table
       '@awaitio/input-boolean':
         specifier: workspace:*
         version: link:../../libs/input-boolean
+      '@awaitio/input-date':
+        specifier: workspace:*
+        version: link:../../libs/input-date
+      '@awaitio/input-datetime':
+        specifier: workspace:*
+        version: link:../../libs/input-datetime
       '@awaitio/input-email':
         specifier: workspace:*
         version: link:../../libs/input-email
@@ -65,9 +83,15 @@ importers:
       '@awaitio/input-textarea':
         specifier: workspace:*
         version: link:../../libs/input-textarea
+      '@awaitio/input-url':
+        specifier: workspace:*
+        version: link:../../libs/input-url
       '@awaitio/layout-basic':
         specifier: workspace:*
         version: link:../../libs/layout-basic
+      '@awaitio/select-multiple':
+        specifier: workspace:*
+        version: link:../../libs/select-multiple
       '@awaitio/select-single':
         specifier: workspace:*
         version: link:../../libs/select-single

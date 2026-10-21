@@ -11,33 +11,50 @@ There is no frontend to build. The same Node process serves the UI, so there is 
 
 ```ts actions/accounts/createAccountAction.ts
 import { app } from '../../app';
+import { constants } from '../../constants';
+import { db } from '../../db/db';
 
 export const createAccountAction = app.defineAction({
   name: 'Create account',
-  description: 'Opens a trial account for a new company and invites its owner.',
+  description: 'Opens a 14-day trial for a new store and invites its owner.',
   handler: async ({ io }) => {
-    const { company, ownerEmail } = await io.group({
-      company: io.input.text('Company name'),
-      ownerEmail: io.input.text('Owner email', { helpText: 'Gets the invitation' }),
+    const { name, domain, ownerName, ownerEmail, plan } = await io.group({
+      store: io.display.heading('Store', { description: 'How the store is called and where it runs.' }),
+      name: io.input.text('Store name', { placeholder: 'Acme Coffee' }),
+      domain: io.input.text('Domain', { placeholder: 'acme-coffee.example' }),
+      owner: io.display.heading('Owner', { description: 'Gets the invitation and full access.' }),
+      ownerName: io.input.text('Owner name'),
+      ownerEmail: io.input.email('Owner email'),
+      plan: io.select.single('Plan after the trial', { options: constants.PLANS, defaultValue: 'growth' }),
     });
 
-    return { company, ownerEmail, plan: 'Trial' };
+    const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+
+    const account = await db.account.create({
+      data: { name, domain, plan: plan.value, status: 'trial', monthlyRevenue: 0, ownerEmail, trialEndsAt, createdAt: new Date() },
+    });
+
+    await db.user.create({
+      data: { name: ownerName, email: ownerEmail, role: 'owner', accountId: account.id, lastLoginAt: null, createdAt: new Date() },
+    });
+
+    return { account: account.name, id: account.id, plan: plan.label, trialEndsAt, invitationSentTo: ownerEmail };
   },
 });
 ```
 
 ## What people see
 
-The form shows what `io.group` asked for:
+The form shows what `io.group` asked for. It is the same action in the [demo](https://demo.awaitio.com), whose `db` stands in for your Prisma client:
 
 <Frame>
-  <img src="/images/intro-form.png" alt="The Create account action: Company name and Owner email fields with a Continue button" />
+  <img src="/images/intro-form.png" alt="The Create account action: store and owner fields filled in for Juniper Tea, with a Continue button" />
 </Frame>
 
 **Continue** sends the answers to the server, which validates them and resumes the handler. Its return value is the result:
 
 <Frame>
-  <img src="/images/intro-result.png" alt="The result of Create account: company, ownerEmail and plan" />
+  <img src="/images/intro-result.png" alt="The result of Create account: the new account, its plan, the end of its trial and who got the invitation" />
 </Frame>
 
 ## Bring your codebase

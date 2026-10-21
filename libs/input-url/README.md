@@ -2,7 +2,7 @@
 
 URL input for [AwaitIO](https://awaitio.com): `io.input.url()`, returns a URL.
 
-![A Website field filled with https://example.com/pricing, with help text under it](https://docs.awaitio.com/images/io-input-url.png)
+![A Website field filled with https://northwind-coffee.example/pricing](https://docs.awaitio.com/images/io-input-url.png)
 
 ## Install
 

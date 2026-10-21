@@ -27,6 +27,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/sdk.md` – layout of `libs/sdk`, wire names (`run`, `step`), in-memory state.
 - `.claude/guidelines/components.md` – io component packages: one definition file, inline schemas, drawing with `awaitio/ui`, registration, new component.
 - `.claude/guidelines/documentation.md` – `apps/docs`: page layout, screenshots, media.
+- `.claude/guidelines/demo.md` – `apps/demo`: the made-up data, no Czech names.
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
 - `.claude/workbench.md` – how the review workbench groups changes.

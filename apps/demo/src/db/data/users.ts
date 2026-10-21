@@ -21,7 +21,7 @@ export const users: User[] = [
   },
   {
     id: 'usr_03',
-    name: 'Mia Novak',
+    name: 'Mia Chen',
     email: 'mia@northwind-coffee.example',
     role: 'member',
     accountId: 'acc_01',
@@ -32,8 +32,8 @@ export const users: User[] = [
   { id: 'usr_05', name: 'Jonas Weber', email: 'jonas@littlefern.example', role: 'member', accountId: 'acc_02', lastLoginAt: null, createdAt: new Date('2026-09-30T09:00:00Z') },
   {
     id: 'usr_06',
-    name: 'Hana Svobodová',
-    email: 'hana@brickandboard.example',
+    name: 'Grace Miller',
+    email: 'grace@brickandboard.example',
     role: 'owner',
     accountId: 'acc_03',
     lastLoginAt: new Date('2026-10-15T09:00:00Z'),
@@ -41,8 +41,8 @@ export const users: User[] = [
   },
   {
     id: 'usr_07',
-    name: 'Marek Dvořák',
-    email: 'marek@pine-outdoor.example',
+    name: 'Lucas Moreau',
+    email: 'lucas@pine-outdoor.example',
     role: 'owner',
     accountId: 'acc_04',
     lastLoginAt: new Date('2026-10-21T09:00:00Z'),
@@ -59,8 +59,8 @@ export const users: User[] = [
   },
   {
     id: 'usr_09',
-    name: 'Tomáš Král',
-    email: 'tomas@veloparts.example',
+    name: 'Noah Fischer',
+    email: 'noah@veloparts.example',
     role: 'owner',
     accountId: 'acc_06',
     lastLoginAt: new Date('2026-10-18T09:00:00Z'),

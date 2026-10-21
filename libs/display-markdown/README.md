@@ -2,7 +2,7 @@
 
 Markdown for [AwaitIO](https://awaitio.com): `io.display.markdown()`, formatted text in a page or a step.
 
-![A Before you start heading, a paragraph with bold text, a bulleted list and a line with a link and inline code](https://docs.awaitio.com/images/io-display-markdown.png)
+![A Before you delete heading, a paragraph with the account name in bold and a bulleted list](https://docs.awaitio.com/images/io-display-markdown.png)
 
 ## Install
 

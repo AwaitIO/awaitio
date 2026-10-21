@@ -17,7 +17,7 @@ export const refundOrderAction = app.defineAction({
 });
 ```
 
-<img src="apps/docs/images/intro-form.png" alt="An AwaitIO action asking for a company name and an owner email" width="720" />
+<img src="apps/docs/images/intro-form.png" alt="The Create account action: store and owner fields filled in for Juniper Tea, with a Continue button" width="720" />
 
 ## Why AwaitIO
 

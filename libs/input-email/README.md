@@ -2,7 +2,7 @@
 
 Email address input for [AwaitIO](https://awaitio.com): `io.input.email()`.
 
-![An Email field filled with ada@example.com, with help text under it](https://docs.awaitio.com/images/io-input-email.png)
+![An Owner email field filled with olivia@northwind-coffee.example, with help text under it](https://docs.awaitio.com/images/io-input-email.png)
 
 ## Install
 

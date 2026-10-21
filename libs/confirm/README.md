@@ -2,7 +2,7 @@
 
 Confirmation for [AwaitIO](https://awaitio.com): `io.confirm()`, returns true or false.
 
-![The question Clear the whole cache? with help text under it and Confirm and Cancel buttons](https://docs.awaitio.com/images/io-confirm.png)
+![The question Delete this user account? with help text under it and Confirm and Cancel buttons](https://docs.awaitio.com/images/io-confirm.png)
 
 ## Install
 

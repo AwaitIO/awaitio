@@ -2,7 +2,7 @@
 
 Date input for [AwaitIO](https://awaitio.com): `io.input.date()`, returns a luxon DateTime.
 
-![A Date field with a picked date, and help text under it](https://docs.awaitio.com/images/io-input-date.png)
+![A Due date field with a date two weeks ahead](https://docs.awaitio.com/images/io-input-date.png)
 
 ## Install
 

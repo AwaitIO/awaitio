@@ -26,53 +26,54 @@ Every action sits directly in `actions/`, as in the [Quickstart](/quickstart):
 
 ```text
 actions/
-├── greetAction.ts         → /actions/greet
-├── refundOrderAction.ts   → /actions/refund_order
+├── createAccountAction.ts → /actions/create_account
+├── refundPaymentAction.ts → /actions/refund_payment
 └── resetPasswordAction.ts → /actions/reset_password
 ```
 
 The home page lists them as cards, without tabs. Enough for a handful of tools.
 
 <Frame caption="A flat actions folder: the home page lists every action.">
-  <img src="/images/routing-flat.png" alt="The home page with three action cards, Greet, Refund order and Reset password, and no tabs" />
+  <img src="/images/routing-flat.png" alt="The home page with three action cards, Create account, Refund payment and Reset password, and no tabs" />
 </Frame>
 
 ### Folders with tabs and a file browser
 
 Put the actions into folders and the folders become the navigation:
 
-<Frame caption="The Accounts tab of the demo app: the Billing subfolder as a card, then the actions of Accounts itself.">
-  <img src="/images/routing-tabs.png" alt="The action list with the tabs Accounts, Logs, Support, System and Users; the Accounts tab shows a Billing folder card above two action cards" />
+<Frame caption="The Inputs folder of the Components tab in the demo app: the Dates subfolder as a card, then the actions of Inputs itself.">
+  <img src="/images/routing-tabs.png" alt="The action list with the tabs Accounts, Billing, Components, Support and Users; the Inputs folder of Components shows a Dates folder card above its action cards" />
 </Frame>
 
-- **Top-level folders are tabs.** Each folder directly in `actions/` becomes a tab in the second row of the header (_Accounts_, _Logs_, _Support_, _System_, _Users_) at `/groups/<folder>`, e.g. `/groups/accounts`. There is no tab with everything: `/` opens the first tab.
-- **A folder shows only what is directly in it**, like a file browser: its subfolders as cards first, then its own actions. Open a subfolder card to see what is inside: `/groups/accounts/billing`. A folder with a page (see below) lists them in a column on the left instead and shows the page next to them.
-- **Breadcrumbs.** Inside a subfolder and above an action, _← Actions › Accounts › Billing_ links back to each folder. Leaving a run that is still going cancels it.
+- **Top-level folders are tabs.** Each folder directly in `actions/` becomes a tab in the second row of the header (_Accounts_, _Billing_, _Components_, _Support_, _Users_) at `/groups/<folder>`, e.g. `/groups/accounts`. There is no tab with everything: `/` opens the first tab.
+- **A folder shows only what is directly in it**, like a file browser: its subfolders as cards first, then its own actions. Open a subfolder card to see what is inside: `/groups/components/inputs/dates`. A folder with a page (see below) lists them in a column on the left instead and shows the page next to them.
+- **Breadcrumbs.** Inside a subfolder and above an action, _← Actions › Components › Inputs_ links back to each folder. Leaving a run that is still going cancels it.
 
 ## The path is the URL
 
-The slug of an action is its path in the folder, each part in snake_case. This is the demo app in folders, each file with its URL:
+The slug of an action is its path in the folder, each part in snake_case. This is part of the demo app, each file with its URL:
 
 ```text
 actions/
 ├── accounts/
+│   ├── index.ts                   → /groups/accounts (a page)
 │   ├── createAccountAction.ts     → /actions/accounts/create_account
-│   ├── extendTrialAction.ts       → /actions/accounts/extend_trial
-│   └── billing/
-│       └── refundPaymentAction.ts → /actions/accounts/billing/refund_payment
-├── logs/
-│   └── searchLogsAction.ts        → /actions/logs/search_logs
+│   └── extendTrialAction.ts       → /actions/accounts/extend_trial
+├── billing/
+│   ├── index.ts                   → /groups/billing (a page)
+│   └── refundPaymentAction.ts     → /actions/billing/refund_payment
+├── components/
+│   ├── index.ts                   → /groups/components (a page)
+│   ├── confirmAction.ts           → /actions/components/confirm
+│   └── inputs/
+│       ├── inputTextAction.ts     → /actions/components/inputs/input_text
+│       └── dates/
+│           └── inputDateAction.ts → /actions/components/inputs/dates/input_date
 ├── support/
-│   └── rateSupportCallAction.ts   → /actions/support/rate_support_call
-├── system/
-│   └── clearCacheAction.ts        → /actions/system/clear_cache
+│   └── replyToTicketAction.ts     → /actions/support/reply_to_ticket
 └── users/
     ├── index.ts                   → /groups/users (a page)
-    ├── changeRoleAction.ts        → /actions/users/change_role
-    ├── exportUsersAction.ts       → /actions/users/export_users
-    ├── sendWelcomeEmailAction.ts  → /actions/users/send_welcome_email
-    └── messages/
-        └── sendMessageAction.ts   → /actions/users/messages/send_message
+    └── changeRoleAction.ts        → /actions/users/change_role
 ```
 
 - Name an action's file after its const, which ends in `Action`: `export const createAccountAction` lives in `createAccountAction.ts`. The URL leaves the suffix out, so the slug is `create_account`.

@@ -2,7 +2,7 @@
 
 The basic page layout for [AwaitIO](https://awaitio.com): `io.layout.basic()`, a title, a description and the display components below each other.
 
-![The Users page of the demo app: the title Users and its description, tiles with totals, a users table and a paged activity table](https://docs.awaitio.com/images/page-layout-table.png)
+![The Users page of the demo app: the title Users with its description and two buttons, tiles with totals and a users table](https://docs.awaitio.com/images/page-layout-table.png)
 
 ## Install
 

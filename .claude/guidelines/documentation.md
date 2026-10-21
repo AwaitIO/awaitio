@@ -8,7 +8,17 @@
 - `core/` – one page per option of `new AwaitIO` and `listen`.
 - `io/` – one page per io method.
 - `ctx/` – one page per part of `ctx`.
-- Screenshots live in `images/`, taken with Playwright (locale en-US, 2×) from an app logged in with a demo account.
+- Screenshots live in `images/`, see **Screenshots** below.
+
+## Screenshots
+
+Every image in `apps/docs/images` is taken from the demo (`apps/demo`) in a browser at locale en-US and 2×. A component is shot from its action in the demo's Components tab, which uses the props of the example on its docs page. Screens of the app (introduction, pages, routing) come from the demo's own tabs.
+
+- **A component or a part of a form** (`io-*.png`, `components/*.png` and the like) is shown as a card: the element at its own size in a white card with rounded corners and a soft shadow, with gray space around it. The cards in the component grids are 600×375 with the element scaled to fit; the shot on a component's own page keeps the element at full size.
+- **A whole screen** (introduction, a page, routing) keeps its full size, cut off below the content, in a browser window like `AppScreenshot` on awaitio.com: traffic lights, an address bar with the page's URL (`demo.awaitio.com/…`), rounded corners, a shadow and gray space around it. Never an image that touches its own edge.
+- The alt text describes what the image shows now; change it in the same change as the image.
+
+**Why**: the card with space around it reads as one component and looks the same in the grid and on the component's page, and the demo is what readers can open themselves.
 
 ## Pages describe what the code does
 

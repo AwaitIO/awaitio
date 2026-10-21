@@ -2,7 +2,7 @@
 
 One choice from a list for [AwaitIO](https://awaitio.com): `io.select.single()`.
 
-![A Single choice drop-down with Slack chosen, with help text under it](https://docs.awaitio.com/images/io-select-single.png)
+![A New role drop-down with Editor chosen](https://docs.awaitio.com/images/io-select-single.png)
 
 ## Install
 

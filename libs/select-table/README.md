@@ -2,7 +2,7 @@
 
 Rows picked from a table for [AwaitIO](https://awaitio.com): `io.select.table()`.
 
-![A table with Name, Email and Role columns, a filter above it and a radio in front of every row, Anna picked](https://docs.awaitio.com/images/io-select-table.png)
+![A User table with Name, email and Account columns, a filter and pager above it and a radio in front of every row, Mia Novak picked](https://docs.awaitio.com/images/io-select-table.png)
 
 ## Install
 

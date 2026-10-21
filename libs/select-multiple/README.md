@@ -2,7 +2,7 @@
 
 Several choices from a list for [AwaitIO](https://awaitio.com): `io.select.multiple()`.
 
-![A Multiple choice frame with the Add… drop-down on top and Email and SMS in rows under it, each with a × on the right](https://docs.awaitio.com/images/io-select-multiple.png)
+![A Tell them by frame with the Add… drop-down on top and Email in a row under it with a × on the right, and help text under the frame](https://docs.awaitio.com/images/io-select-multiple.png)
 
 ## Install
 

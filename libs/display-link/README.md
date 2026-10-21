@@ -2,7 +2,7 @@
 
 Link for [AwaitIO](https://awaitio.com): `io.display.link()`, to a page in the app or outside it.
 
-![A Login link heading with https://example.com/login/7f3a9c under it as a blue link](https://docs.awaitio.com/images/io-display-link.png)
+![A Login link heading with an app.example.com login URL under it as a blue link](https://docs.awaitio.com/images/io-display-link.png)
 
 ## Install
 

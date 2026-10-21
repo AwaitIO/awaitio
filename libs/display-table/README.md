@@ -2,7 +2,7 @@
 
 Table display component for [AwaitIO](https://awaitio.com): `io.display.table()`.
 
-![An All users table with linked names, emails, roles, dates and a … menu at the end of every row](https://docs.awaitio.com/images/io-display-table.png)
+![An All users table with linked names, emails, accounts, dates and a … menu at the end of every row](https://docs.awaitio.com/images/io-display-table.png)
 
 ## Install
 
