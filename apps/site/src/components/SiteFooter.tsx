@@ -19,6 +19,9 @@ export const SiteFooter: FC = () => {
             <Link href="/pricing" className="hover:text-gray-900">
               Pricing
             </Link>
+            <Link href="/demo" className="hover:text-gray-900">
+              Demo
+            </Link>
             <Link href="/terms-of-use" className="hover:text-gray-900">
               Terms of use
             </Link>

@@ -15,6 +15,9 @@ export const SiteHeader: FC = () => {
           <Link href="/pricing" className="hover:text-gray-900">
             Pricing
           </Link>
+          <Link href="/demo" className="hover:text-gray-900">
+            Demo
+          </Link>
           <a href={constants.DOCS_URL} className="inline-flex items-center gap-1 hover:text-gray-900">
             Docs
             <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
