@@ -22,7 +22,7 @@ export const usersPage = app.definePage({
           items: [
             { label: 'Users', value: users.length },
             { label: 'Owners and admins', value: users.filter((user) => user.role !== 'member').length },
-            { label: 'Active this week', value: users.filter((user) => user.lastLoginAt && user.lastLoginAt.getTime() > weekAgo).length, description: 'Logged in in the last 7 days' },
+            { label: 'Active this week', value: users.filter((user) => user.lastLoginAt && user.lastLoginAt.getTime() > weekAgo).length, description: 'In the last 7 days' },
           ],
         }),
         io.display.table('All users', {
