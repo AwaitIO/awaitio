@@ -17,6 +17,7 @@ Build a server with one action that asks for a name and greets back, then log in
     - `@awaitio/theme-default` is how the UI looks.
     - `@awaitio/input-text` is the text field the action will ask with.
     - `zod` checks props, answers and action params. AwaitIO works with zod 4, or with zod 3.25 and later through `import { z } from 'zod/v4'`.
+    - In a TypeScript project, also `npm install -D @types/react`: the component and UI types use React's, and npm does not add them by itself.
 
   </Step>
   <Step title="Create a session secret">
