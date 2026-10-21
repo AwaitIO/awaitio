@@ -105,7 +105,7 @@ Requires Node 22.14 and pnpm.
 ```bash
 pnpm install
 cp .env.example .env   # SESSION_SECRET
-pnpm dev               # demo at http://localhost:3000; Create new account gives DEMO_USER_EMAIL and DEMO_USER_PASSWORD_HASH for .env
+pnpm dev               # demo at http://localhost:3000, log in with demo@awaitio.com / demo
 pnpm test && pnpm lint && pnpm tsc
 ```
 

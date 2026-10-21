@@ -1,0 +1,40 @@
+{
+  "name": "@awaitio/demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shopwise backoffice: the public AwaitIO demo at demo.awaitio.com, built like a real client project.",
+  "scripts": {
+    "dev": "env-cmd -f ../../.env nodemon --watch src --ext ts --exec ts-node src/server.ts",
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "tsc": "tsc --noEmit",
+    "start": "node dist/server.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "@awaitio/confirm": "workspace:*",
+    "@awaitio/display-heading": "workspace:*",
+    "@awaitio/display-markdown": "workspace:*",
+    "@awaitio/display-metadata": "workspace:*",
+    "@awaitio/display-table": "workspace:*",
+    "@awaitio/input-boolean": "workspace:*",
+    "@awaitio/input-email": "workspace:*",
+    "@awaitio/input-number": "workspace:*",
+    "@awaitio/input-text": "workspace:*",
+    "@awaitio/input-textarea": "workspace:*",
+    "@awaitio/layout-basic": "workspace:*",
+    "@awaitio/select-single": "workspace:*",
+    "@awaitio/select-table": "workspace:*",
+    "@awaitio/theme-default": "workspace:*",
+    "awaitio": "workspace:*",
+    "luxon": "^3.7.2",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.7.6",
+    "@types/node": "^22.20.5",
+    "env-cmd": "^10.1.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2"
+  }
+}
