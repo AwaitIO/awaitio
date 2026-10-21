@@ -51,7 +51,7 @@ How to release:
 4. When releasing, run `pnpm version-packages`: it bumps only the packages with a changeset, writes their `CHANGELOG.md` and deletes the used changesets. Commit it as exactly `[release] version packages`.
 5. Log in to npm once (`npm login`, check with `npm whoami`).
 6. Run `pnpm release`: `pnpm build`, `changeset publish` (publishes only versions not yet on npm and tags each `<package>@<version>`), then `git push --follow-tags`.
-7. Check the tags on https://github.com/orukami/awaitio/tags. `changeset tag` and `changeset publish` create git tags only, not GitHub Releases.
+7. Check the tags on https://github.com/awaitio/awaitio/tags. `changeset tag` and `changeset publish` create git tags only, not GitHub Releases.
 
 Rules:
 
