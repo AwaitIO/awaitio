@@ -13,7 +13,7 @@ A change to the license, the prices, the user limits, the way to pay or the invo
 5. `apps/site/src/app/pricing/page.tsx` – the tier cards and "How to get a Company License".
 6. `apps/site/src/app/terms-of-use/page.tsx` – the Company Licenses section; also move `LEGAL_LAST_UPDATED` in `apps/site/src/constants.ts`.
 7. `apps/site/src/components/SupportBanner.tsx` and `SponsorStrip.tsx` – the sponsoring texts, when what a sponsorship means changes.
-8. A changeset for every published package (`pnpm changeset`, `patch`), because each one ships the license.
+8. A changeset for every published package (`patch`), because each one ships the license. `/commit-fast` writes it when the change is staged; never write it ahead (see `common.md`).
 
 ✅ DO: after the edit, grep for the old value (`$50`, `4–10`, `Company License`) across these files and check that none is left.
 

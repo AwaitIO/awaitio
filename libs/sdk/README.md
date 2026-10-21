@@ -102,31 +102,34 @@ The documentation is at **[docs.awaitio.com](https://docs.awaitio.com)**: introd
 
 AwaitIO is source-available under the AwaitIO License, the `LICENSE` file in this package.
 
-**Free, including commercial use,** with up to 3 users (the real people who use it, however many logins they share), for non-profits and educational institutions, and for evaluation. That covers production use and building tools for your clients. For-profit organizations with more users need a Company License, one flat monthly price per organization for all your apps and environments:
+**Free, including commercial use,** with up to 3 users (the real people who use it, however many logins they share), and for non-profits and educational institutions. Any organization can evaluate it free for 30 days with any number of users. That covers production use and building tools for your clients. For-profit organizations with more users need a Company License, one flat monthly price per organization for all your apps and environments:
 
-| Users        | Price                                      |
-| ------------ | ------------------------------------------ |
-| 1–3          | Free                                       |
-| 4–10         | $50 per month                              |
-| More than 10 | $250 per month                             |
-| Enterprise   | Contract, SLA and custom terms; let's talk |
+| Users        | Price                                                      |
+| ------------ | ---------------------------------------------------------- |
+| 1–3          | Free                                                       |
+| 4–10         | $50 per month                                              |
+| 11–50        | $250 per month                                             |
+| More than 50 | Enterprise: contract, SLA and priority support; let's talk |
 
 Get it by sponsoring AwaitIO on [GitHub Sponsors](https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users; the license is valid while the sponsorship is active. Every payment comes with an invoice on request. For the invoice, a contract, an SLA or custom terms, write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
 
 The free and the paid version are the same software: no paid features, no license keys, no limits and no telemetry. AwaitIO never checks your license; it works on trust.
 
-Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share.
+Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. They are counted across your whole organization, including the companies in its group. The 3-user limit applies to individuals and freelancers too.
 
 Want to support AwaitIO without needing a license? A one-time or monthly sponsorship of any amount on [GitHub Sponsors](https://github.com/sponsors/awaitio) is very welcome.
 
 Licenses are issued by Orukami s.r.o. (company ID 64049159, Prague). Without a separate agreement, nobody may:
 
 - sell or license AwaitIO itself, or a fork or modified version of it;
-- offer a product or service that competes with AwaitIO;
-- offer a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for AwaitIO apps;
-- sell or license components, plugins or extensions made for AwaitIO.
+- offer AwaitIO or a fork of it as a framework, builder or platform for others to build their own internal tools;
+- offer a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for AwaitIO apps.
 
-The license may change for future versions; each version keeps the license it was released with. If you disagree with a newer license, stay on the version you have.
+Your own components, plugins and extensions for AwaitIO are yours to share or sell. Building apps for clients is fine too: whoever runs the app pays for its users, and the developers who only build it do not count. An agency can buy the license on its client's behalf.
+
+Not sure which license you need, or need a written confirmation of your license for an audit or a client? Write to [p.homoky@gmail.com](mailto:p.homoky@gmail.com).
+
+The license may change for future versions; each version keeps the license it was released with. If you disagree with a newer license, stay on the version you have. The license is governed by Czech law.
 
 ## Inspiration
 

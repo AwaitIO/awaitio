@@ -99,3 +99,10 @@
 
 - `CLAUDE.md` and everything in `.claude/` describe AwaitIO on its own terms. They never mention Interval: not as the product AwaitIO replaces, not as a model to copy ("as in Interval"), not as a source of a rule.
 - State the rule or the behaviour itself instead.
+
+## Changesets only from staged changes
+
+- A `.changeset/*.md` is written only by `/commit-fast` (or on an explicit request), from what is staged. Never write one while the work is still in progress in the working tree.
+- Why: a changeset describes a commit; written ahead of time it goes stale, names the wrong packages or ends up committed with unrelated work.
+- ✅ DO: finish the change, leave it unstaged, and let `/commit-fast` write the changeset for the staged diff.
+- ❌ DON'T: run `pnpm changeset` or create `.changeset/*.md` by hand as part of a change, even when a guideline lists a changeset among the places to update.

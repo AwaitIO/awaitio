@@ -10,15 +10,19 @@ This license covers everything in this repository, the package `awaitio` and eve
 
 A "user" is a person who uses an application built with AwaitIO, whether it runs locally or is deployed: an employee, a contractor or anyone else who opens it, runs its actions or answers them. What counts is the number of real people, not the number of logins: several people sharing one login are several users. Count each person once across all of your organization's AwaitIO applications and environments.
 
+## Organization
+
+Your "organization" is you, if you are an individual, or the legal entity that uses AwaitIO, together with every entity that controls it, is controlled by it or is under common control with it. "Control" means owning more than 50% of the voting shares or other ownership interest, or having the power to direct the entity's management. Users are counted across the whole organization: entities in one group count their users together and cannot each use the Free License separately.
+
 ## Free License
 
 ### Who is eligible
 
 You may use AwaitIO for free if you are:
 
-- an individual or a for-profit organization with up to 3 users;
+- an individual, including a sole trader or a freelancer, or a for-profit organization, in each case with up to 3 users;
 - a non-profit or not-for-profit organization, or an educational institution; or
-- evaluating whether AwaitIO fits your needs, and not yet using it commercially.
+- evaluating whether AwaitIO fits your needs, with any number of users, for 30 days from your organization's first use of AwaitIO. The evaluation period is counted once per organization and does not start again with a new application, environment or version. After it ends, an organization that is not eligible for the Free License otherwise needs a Company License or an Enterprise agreement to keep using AwaitIO.
 
 ### What you may do
 
@@ -30,16 +34,18 @@ If you are eligible, you are granted permission, free of charge, to:
 
 ## Company License
 
-A for-profit organization with more than 3 users needs a Company License to use AwaitIO. It allows the same use as the Free License, in any number of applications and environments. Its price depends on the number of users:
+An individual or a for-profit organization with more than 3 users needs a Company License to use AwaitIO. It allows the same use as the Free License, in any number of applications and environments. Its price depends on the number of users:
 
 - 4 to 10 users: 50 USD per month per organization;
-- more than 10 users: 250 USD per month per organization, with no limit on users.
+- 11 to 50 users: 250 USD per month per organization.
 
-To get one, sponsor AwaitIO on GitHub Sponsors (https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users, from your organization's GitHub account or on its behalf. The Company License is valid for as long as the monthly sponsorship is active; when it ends, so does the Company License. When your organization grows past 10 users, move to the higher tier.
+An individual or a for-profit organization with more than 50 users needs an Enterprise agreement instead of a Company License (see below).
 
-The Licensor issues an invoice for every payment on request: write to p.homoky@gmail.com with your organization's billing details. For a written contract, a service-level agreement, priority support or other custom terms, write to the same address to agree on an Enterprise agreement.
+To get one, sponsor AwaitIO on GitHub Sponsors (https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users, from your organization's GitHub account or on its behalf. The Company License is valid for as long as the monthly sponsorship is active; when it ends, so does the Company License. When your organization grows past 10 users, move to the higher tier; when it grows past 50 users, agree on an Enterprise agreement.
 
-Eligibility is decided by the organization that uses AwaitIO. If you build tools with AwaitIO for a client and the client runs them, the client's users count and the client needs a Company License unless it is eligible for the Free License itself.
+The Licensor issues an invoice for every payment on request: write to p.homoky@gmail.com with your organization's billing details. For more than 50 users, a written contract, a service-level agreement, priority support or other custom terms, write to the same address to agree on an Enterprise agreement.
+
+Eligibility is decided by the organization that runs the application. If you build tools with AwaitIO for a client and the client runs them, the client's users count and the client needs a Company License unless it is eligible for the Free License itself. People who only develop, test or demonstrate an application for a client, such as the developers of an agency or a freelancer, are not users of it and do not count towards their own organization either. Whoever runs the application for its users pays: if you run it for your client yourself, for example as a hosted back office, its users count as yours. An agency or a freelancer may get the client's Company License on the client's behalf, for example as part of its own price: the license then covers the client, in the tier for the client's number of users, for as long as the sponsorship for it is active.
 
 ## Same software, honor system
 
@@ -54,11 +60,10 @@ Anyone may sponsor AwaitIO on GitHub Sponsors, once or monthly, with any amount,
 Whatever your license, without a separate written agreement with the Licensor you may not:
 
 1. copy or modify AwaitIO in order to sell, rent, license, relicense or sublicense AwaitIO itself or your own derivative or fork of it;
-2. offer AwaitIO, or a derivative or fork of it, to third parties as a product or service that competes with AwaitIO;
-3. offer to third parties a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for applications that use AwaitIO; or
-4. sell or license to third parties components, plugins or extensions made for AwaitIO.
+2. offer AwaitIO, or a derivative or fork of it, to third parties as a framework, builder or platform for making internal tools, admin panels or back offices, that is, a product whose main purpose is to let others build their own applications;
+3. offer to third parties a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for applications that use AwaitIO.
 
-Building applications with AwaitIO, running them and handing them over to your clients is none of the above.
+Building applications with AwaitIO, running them and handing them over to your clients is none of the above. An application with its own purpose, such as the back office of a particular business, or the same application delivered to many clients, is not a framework, builder or platform under point 2, even when it is built with AwaitIO. Neither is making your own components, plugins or extensions for AwaitIO and sharing, selling or licensing them, as long as they do not include AwaitIO itself or a modified copy of it.
 
 ## Changes to this license
 
@@ -70,12 +75,20 @@ If you do not agree with the license of a newer version, you may keep using the 
 
 AwaitIO is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the Licensor or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with AwaitIO or the use of or other dealings in AwaitIO.
 
+## Questions and license confirmation
+
+If you are not sure whether or which license you need, for example how to count your users or whether your use is allowed, write to p.homoky@gmail.com before you decide; the Licensor will answer in writing. If you need a confirmation that your organization holds a valid license, for example for an audit, a client or a procurement process, write to the same address and the Licensor will confirm in writing which license your organization holds and for how long it is valid.
+
+## Governing law
+
+This license and every dispute arising from it or in connection with AwaitIO are governed by the laws of the Czech Republic, excluding its conflict-of-laws rules and the United Nations Convention on Contracts for the International Sale of Goods. The courts of the Czech Republic with jurisdiction for Prague have exclusive jurisdiction, unless mandatory law gives a consumer the right to sue in the courts of their own country.
+
 ## Support
 
 Support is provided through GitHub issues:
 
 - under the Free License, on a best-effort basis;
-- under a Company License for 4 to 10 users, standard support with a first response within 3 working days;
-- under a Company License for more than 10 users, priority support with a first response within 12 hours on working days.
+- under a Company License, standard support with a first response within 3 working days;
+- under an Enterprise agreement, priority support with a first response within 12 hours on working days, unless the agreement says otherwise.
 
 Working days are business days in the Czech Republic. The response times are targets, not a service-level agreement; an Enterprise agreement may add one.

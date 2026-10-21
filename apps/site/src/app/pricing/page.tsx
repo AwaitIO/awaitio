@@ -23,16 +23,16 @@ const tiers: PricingTierInfo[] = [
     price: '$50/mo',
     detail: 'Company License',
     features: ['4 to 10 users', 'Commercial use', 'Unlimited apps', 'Invoice on request', 'Standard support'],
-    excluded: ['SLA'],
+    excluded: ['Priority support', 'SLA'],
     cta: { label: 'Sponsor on GitHub', href: constants.SPONSORS_URL },
     highlighted: true,
   },
   {
-    name: 'More than 10 users',
+    name: '11–50 users',
     price: '$250/mo',
     detail: 'Company License',
-    features: ['Unlimited users', 'Commercial use', 'Unlimited apps', 'Invoice on request', 'Priority support'],
-    excluded: ['SLA'],
+    features: ['11 to 50 users', 'Commercial use', 'Unlimited apps', 'Invoice on request', 'Standard support'],
+    excluded: ['Priority support', 'SLA'],
     cta: { label: 'Sponsor on GitHub', href: constants.SPONSORS_URL },
     highlighted: false,
   },
@@ -40,7 +40,7 @@ const tiers: PricingTierInfo[] = [
     name: 'Enterprise',
     price: 'Custom',
     detail: 'Custom agreement',
-    features: ['Any number of users', 'Custom components', 'Onboarding and training', 'Contract and custom terms', 'Priority support', 'SLA'],
+    features: ['More than 50 users', 'Custom components', 'Onboarding and training', 'Contract and custom terms', 'Priority support', 'SLA'],
     excluded: [],
     cta: { label: 'Contact us', href: `mailto:${constants.CONTACT_EMAIL}?subject=${encodeURIComponent('Custom AwaitIO license request')}` },
     highlighted: false,
@@ -54,7 +54,7 @@ const PricingPage = () => {
         <h1 className="text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Pricing</h1>
         <p className="mt-4 text-lg text-gray-600">
           Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. The free and the paid version are the same software: no paid features, no license
-          keys, no limits and no telemetry. It works on trust.
+          keys, no limits and no telemetry. It works on trust. Try it free for 30 days with any number of users.
         </p>
       </div>
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
