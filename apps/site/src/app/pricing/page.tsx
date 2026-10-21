@@ -42,7 +42,7 @@ const tiers: PricingTierInfo[] = [
     detail: 'Custom agreement',
     features: ['Any number of users', 'Custom components', 'Onboarding and training', 'Contract and custom terms', 'Priority support', 'SLA'],
     excluded: [],
-    cta: { label: 'Contact us', href: `mailto:${constants.CONTACT_EMAIL}?subject=${encodeURIComponent('AwaitIO Enterprise')}` },
+    cta: { label: 'Contact us', href: `mailto:${constants.CONTACT_EMAIL}?subject=${encodeURIComponent('Custom AwaitIO license request')}` },
     highlighted: false,
   },
 ];
