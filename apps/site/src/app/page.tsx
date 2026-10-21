@@ -1,4 +1,3 @@
-import { ClosingCta } from '../components/ClosingCta';
 import { ComponentsSection } from '../components/ComponentsSection';
 import { FeatureGrid } from '../components/FeatureGrid';
 import { Hero } from '../components/Hero';
@@ -13,7 +12,6 @@ const HomePage = () => {
       <ComponentsSection />
       <UseCasesSection />
       <FeatureGrid />
-      <ClosingCta />
     </>
   );
 };

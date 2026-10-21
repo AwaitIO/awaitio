@@ -4,7 +4,7 @@
 
 ## Page layout
 
-- English. Top level: `index`, `quickstart`, `how-it-works`, `deployment`.
+- English. Top level: `index`, `quickstart`, `how-it-works`, `deployment`, and `license` (license and pricing, in the Other group).
 - `core/` – one page per option of `new AwaitIO` and `listen`.
 - `io/` – one page per io method.
 - `ctx/` – one page per part of `ctx`.

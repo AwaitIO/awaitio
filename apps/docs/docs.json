@@ -72,6 +72,10 @@
       {
         "group": "Context",
         "pages": ["ctx/user", "ctx/params", "ctx/action", "ctx/run-id", "ctx/redirect", "ctx/loading-start"]
+      },
+      {
+        "group": "Other",
+        "pages": ["license"]
       }
     ]
   }

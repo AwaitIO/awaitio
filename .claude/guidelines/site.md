@@ -20,11 +20,11 @@ Facts that stand on their own get their own sentence, not a tail joined with "an
 
 ## Billing details stay on the pricing page
 
-Invoices, payment steps and contract terms belong on `/pricing`, in the terms and in the license. Headlines and calls to action on other pages (hero, closing CTA) speak about the product and the price model only.
+Invoices, payment steps and contract terms belong on `/pricing`, in the terms and in the license. Headlines and calls to action on other pages (hero, sponsor strip) speak about the product and the price model only.
 
 ✅ DO: mention "Invoice on request" on the pricing cards.
 
-❌ DON'T: add "with an invoice for every payment" to the closing CTA on the home page.
+❌ DON'T: add "with an invoice for every payment" to a section of the home page.
 
 ## Long explanations in short paragraphs
 
