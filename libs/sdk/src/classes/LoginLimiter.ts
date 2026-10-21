@@ -6,18 +6,24 @@ type Failures = {
   firstAt: DateTime;
 };
 
-// Counts failed logins per email in memory. After MAX_FAILED_LOGINS the email is locked until its window ends,
-// so a password can be guessed only a few dozen times an hour.
+// Counts failed logins per email in memory. After maxFailures the email is locked until its window ends,
+// so a password can be guessed only a few dozen times an hour. With false nothing is counted and nothing is locked.
 export class LoginLimiter {
   private readonly failures = new Map<string, Failures>();
+
+  constructor(private readonly maxFailures: number | false = constants.MAX_FAILED_LOGINS) {}
 
   isLocked(email: string) {
     const failures = this.current(email);
 
-    return failures !== null && failures.count >= constants.MAX_FAILED_LOGINS;
+    return this.maxFailures !== false && failures !== null && failures.count >= this.maxFailures;
   }
 
   recordFailure(email: string) {
+    if (this.maxFailures === false) {
+      return;
+    }
+
     const failures = this.current(email);
     this.failures.set(email, failures ? { ...failures, count: failures.count + 1 } : { count: 1, firstAt: DateTime.now() });
   }

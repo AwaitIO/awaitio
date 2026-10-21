@@ -38,6 +38,7 @@ export const app = new AwaitIO({
 | `theme`            | `Theme`                | Required | How the UI looks, see [Theme](/core/theme).                                                                          |
 | `secret`           | `string`               | Required | Signs the login cookies, see [Users](/core/users).                                                                   |
 | `users`            | `AwaitIOUser[]`        | Required | Who can log in, see [Users](/core/users).                                                                            |
+| `maxFailedLogins`  | `number \| false`      | Optional | Failed logins per email before it is locked, `false` for none, see [Users](/core/users#too-many-failed-attempts).    |
 | `components`       | `object`               | Optional | What `io` offers, see [Input components](/core/input-components) and [Display components](/core/display-components). |
 | `environments`     | `AwaitIOEnvironment[]` | Optional | Your production, staging and local servers, see [Environments](/core/environments).                                  |
 | `layouts`          | `object`               | Optional | The frames of folder pages, see [Layout components](/core/layout-components).                                        |

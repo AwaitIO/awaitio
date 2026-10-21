@@ -14,6 +14,7 @@ import { verifyPassword } from '../utils/verifyPassword';
 export type SessionsOptions = {
   secret: string;
   users: AwaitIOUser[];
+  maxFailedLogins?: number | false;
 };
 
 const payloadSchema = z.object({ email: z.string(), exp: z.number() });
@@ -23,12 +24,18 @@ const payloadSchema = z.object({ email: z.string(), exp: z.number() });
 export class Sessions {
   private readonly secret: string;
   private readonly users: Map<string, AwaitIOUser>;
-  private readonly limiter = new LoginLimiter();
+  private readonly limiter: LoginLimiter;
 
-  constructor({ secret, users }: SessionsOptions) {
+  constructor({ secret, users, maxFailedLogins = constants.MAX_FAILED_LOGINS }: SessionsOptions) {
     if (secret.length < constants.MIN_SECRET_LENGTH) {
       throw new Error(`The secret must be at least ${constants.MIN_SECRET_LENGTH} characters long.`);
     }
+
+    if (maxFailedLogins !== false && (!Number.isInteger(maxFailedLogins) || maxFailedLogins < 1)) {
+      throw new Error('maxFailedLogins must be a whole number of at least 1, or false.');
+    }
+
+    this.limiter = new LoginLimiter(maxFailedLogins);
 
     this.secret = secret;
     this.users = new Map();

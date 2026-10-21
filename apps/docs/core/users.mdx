@@ -29,13 +29,14 @@ export const app = new AwaitIO({
 });
 ```
 
-| Option                 | Type            | Required | Description                                                                       |
-| ---------------------- | --------------- | -------- | --------------------------------------------------------------------------------- |
-| `secret`               | `string`        | Required | Signs the session cookies. At least 32 characters; changing it logs everyone out. |
-| `users`                | `AwaitIOUser[]` | Required | Who can log in. May be empty.                                                     |
-| `users[].email`        | `string`        | Required | What the person logs in with. Case and spaces around it are ignored.              |
-| `users[].name`         | `string`        | Required | Shown in the header and as `ctx.user.name`.                                       |
-| `users[].passwordHash` | `string`        | Required | From **Create new account**, never the password itself.                           |
+| Option                 | Type              | Required | Description                                                                                                               |
+| ---------------------- | ----------------- | -------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `secret`               | `string`          | Required | Signs the session cookies. At least 32 characters; changing it logs everyone out.                                         |
+| `users`                | `AwaitIOUser[]`   | Required | Who can log in. May be empty.                                                                                             |
+| `users[].email`        | `string`          | Required | What the person logs in with. Case and spaces around it are ignored.                                                      |
+| `users[].name`         | `string`          | Required | Shown in the header and as `ctx.user.name`.                                                                               |
+| `users[].passwordHash` | `string`          | Required | From **Create new account**, never the password itself.                                                                   |
+| `maxFailedLogins`      | `number \| false` | Optional | Failed logins per email before it is locked, see [Too many failed attempts](#too-many-failed-attempts). Defaults to `10`. |
 
 The app refuses to start when the secret is too short, an email is listed twice or a hash is not one from **Create new account**.
 
@@ -115,6 +116,8 @@ Hashes use scrypt with a random 16-byte salt. One hash takes about 100 ms, so gu
 ### Too many failed attempts
 
 After 10 failed logins for one email within 15 minutes, that email is locked until the 15 minutes run out and the login page shows _Too many failed attempts_. A successful login resets the count. The count is kept in memory, so a restart clears it.
+
+Change the number with `maxFailedLogins`. `maxFailedLogins: false` turns the lock off, for a public demo whose shared login anyone could otherwise lock for everyone; the cost of scrypt still slows down guessing, but nothing stops it, so never turn it off for real accounts.
 
 ### Cookie and requests from other sites
 

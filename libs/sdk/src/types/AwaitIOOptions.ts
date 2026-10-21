@@ -17,6 +17,9 @@ export type AwaitIOOptions<T extends ComponentTree, L extends LayoutTree> = {
   secret: string;
   // Who can log in. Changing a user's password hash logs that user out everywhere.
   users: AwaitIOUser[];
+  // Failed logins per email within 15 minutes before that email is locked for the rest of them. Defaults to 10; false
+  // turns the lock off, e.g. for a public demo whose shared login anyone could otherwise lock.
+  maxFailedLogins?: number | false;
   // io components available to every action, e.g. { input: { text: inputText } } for io.input.text().
   components?: T;
   // How the UI looks: which theme package draws each block, e.g. defaultTheme from @awaitio/theme-default, or

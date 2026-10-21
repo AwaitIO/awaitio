@@ -31,6 +31,7 @@ export const app = new AwaitIO({
   theme: defaultTheme,
   secret: secrets.SESSION_SECRET,
   users,
+  maxFailedLogins: false,
   components: {
     input: {
       text: inputText,

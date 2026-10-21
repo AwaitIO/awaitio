@@ -184,6 +184,34 @@ test('Should lock an email after too many failed logins', async () => {
   expect((await requestLogIn({ email: 'eva@example.com' })).status).toBe(200);
 });
 
+test('Should never lock an email with maxFailedLogins false', async () => {
+  const unlimited = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, maxFailedLogins: false });
+  const server = await unlimited.listen({ port: 0 });
+  const unlimitedUrl = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
+  const logInTo = ({ candidate }: { candidate: string }) =>
+    fetch(`${unlimitedUrl}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' },
+      body: JSON.stringify({ email: 'petr@example.com', password: candidate }),
+    });
+
+  try {
+    for (let attempt = 0; attempt < 12; attempt++) {
+      expect((await logInTo({ candidate: 'wrong password' })).status).toBe(401);
+    }
+
+    expect((await logInTo({ candidate: password })).status).toBe(200);
+  } finally {
+    await unlimited.close();
+  }
+});
+
+test('Should refuse a maxFailedLogins that is not a whole number of at least 1', () => {
+  expect(() => {
+    return new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, maxFailedLogins: 0 });
+  }).toThrow('maxFailedLogins must be a whole number of at least 1, or false.');
+});
+
 test('Should refuse a login that does not come from the AwaitIO UI', async () => {
   const response = await fetch(`${baseUrl}/api/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'petr@example.com', password }) });
 
