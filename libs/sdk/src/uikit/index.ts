@@ -5,7 +5,7 @@ export { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 export { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
 export { tableCellSchema } from '../shared/schemas/tableCellSchema';
 export { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
-export { actionHref } from '../shared/utils/actionHref';
+export { actionHref } from './actionHref';
 export { Badge } from './Badge';
 export { Button } from './Button';
 export { ButtonRow } from './ButtonRow';

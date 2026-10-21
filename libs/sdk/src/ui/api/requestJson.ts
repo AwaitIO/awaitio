@@ -1,9 +1,11 @@
 import { ApiError } from './ApiError';
 import { constants as sharedConstants } from '../../shared/constants';
 import { errorResponseSchema } from '../../shared/schemas/errorResponseSchema';
+import { withBasePath } from '../../uikit/withBasePath';
 import { constants } from '../constants';
 
 export type RequestJsonArgs = {
+  // Under the basePath, which requestJson adds: /api/actions.
   path: string;
   method?: 'GET' | 'POST';
   body?: unknown;
@@ -12,7 +14,7 @@ export type RequestJsonArgs = {
 // The session cookie goes along automatically (same origin). Every request carries the UI's header and every POST a
 // JSON body: together they are what the server's cross-site check accepts, and what no other origin can send.
 export const requestJson = async ({ path, method = 'GET', body }: RequestJsonArgs) => {
-  const response = await fetch(path, {
+  const response = await fetch(withBasePath(path), {
     method,
     headers: method === 'POST' ? { [sharedConstants.REQUEST_HEADER_NAME]: '1', 'Content-Type': 'application/json' } : { [sharedConstants.REQUEST_HEADER_NAME]: '1' },
     body: method === 'POST' ? JSON.stringify(body ?? {}) : undefined,

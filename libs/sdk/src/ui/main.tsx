@@ -15,7 +15,7 @@ import { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 import { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
 import { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
-import { actionHref } from '../shared/utils/actionHref';
+import { actionHref } from '../uikit/actionHref';
 import { FieldContext } from '../uikit/FieldContext';
 import { formatCellValue } from '../uikit/formatCellValue';
 import { navigateTo } from '../uikit/navigateTo';

@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     root: fileURLToPath(new URL('./src/ui', import.meta.url)),
+    // Relative, so the assets load under any listen({ basePath }); the server's <base href> anchors them on every route.
+    base: './',
     plugins: [react(), tailwindcss()],
     build: {
       outDir: fileURLToPath(new URL('./dist/ui', import.meta.url)),

@@ -1,3 +1,5 @@
+import { withBasePath } from '../../uikit/withBasePath';
+
 export type UiScriptRegistryArgs = {
   // Where the scripts are served: /components/:type/ui.js, /layouts/:type/ui.js or /themes/:index/ui.js.
   kind: 'components' | 'layouts' | 'themes';
@@ -36,7 +38,7 @@ export class UiScriptRegistry<TUi> {
       return pending;
     }
 
-    const base = `/${this.kind}/${encodeURIComponent(type)}`;
+    const base = withBasePath(`/${this.kind}/${encodeURIComponent(type)}`);
     const load = new Promise<TUi>((resolve, reject) => {
       this.waiters.set(type, resolve);
 

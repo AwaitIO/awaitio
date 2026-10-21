@@ -80,6 +80,25 @@ server {
 
 Caddy sets `X-Forwarded-Proto` and keeps the `Host` header on its own. The long `proxy_read_timeout` keeps a quiet event stream open; AwaitIO also sends a keep-alive comment every 15 seconds.
 
+## Serve under a path
+
+AwaitIO runs best on its own subdomain, e.g. `backoffice.example.com`. When it has to share a domain with another app, pass `basePath` and AwaitIO serves everything under it: the UI, `/api`, the component scripts, `/health` and the session cookie, whose `Path` keeps it from being sent to the other app.
+
+```ts server.ts
+void app.listen({ port: 3000, basePath: '/backoffice' });
+```
+
+The proxy forwards the path as it is, without stripping the prefix:
+
+```nginx nginx.conf
+location /backoffice/ {
+  proxy_pass http://127.0.0.1:3000;
+  # the same headers and timeout as above
+}
+```
+
+<Warning>A subdomain is the safer choice. Pages on the same origin can call each other freely, so a script injected into the other app could act in AwaitIO as the logged-in user.</Warning>
+
 ## Docker
 
 ```dockerfile Dockerfile
@@ -98,4 +117,4 @@ Pass the secrets at run time (`docker run --env-file .env …`) and listen on `0
 
 ## Health check
 
-`GET /health` answers `{"status":"ok"}` with `200` and needs no login. Point your platform's health check or uptime monitor at it.
+`GET /health` (under the `basePath`, if any) answers `{"status":"ok"}` with `200` and needs no login. Point your platform's health check or uptime monitor at it.

@@ -1,8 +1,8 @@
+import { actionHref } from './actionHref';
 import { Badge } from './Badge';
 import { formatCellValue } from './formatCellValue';
 import { Link } from './Link';
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
-import { actionHref } from '../shared/utils/actionHref';
 import type { FC } from 'react';
 
 export type TableCellViewProps = {

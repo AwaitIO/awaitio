@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { runStateSchema } from '../../shared/schemas/runStateSchema';
 import type { RunState } from '../../shared/types/RunState';
+import { withBasePath } from '../../uikit/withBasePath';
 
 // Follows one run over SSE. The server sends the current state on every (re)connect, so a page refresh or a
 // dropped connection picks up exactly where it was; states older than the one shown are ignored.
@@ -10,7 +11,7 @@ export const useRunState = (runId: string) => {
 
   useEffect(() => {
     let lastVersion = -1;
-    const source = new EventSource(`/api/runs/${encodeURIComponent(runId)}/events`);
+    const source = new EventSource(withBasePath(`/api/runs/${encodeURIComponent(runId)}/events`));
 
     source.addEventListener('state', (event) => {
       const next = runStateSchema.parse(JSON.parse((event as MessageEvent<string>).data));

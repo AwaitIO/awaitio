@@ -2,7 +2,7 @@ import type { actionRouteSchema } from '../../shared/schemas/actionRouteSchema';
 import type { highlightColorSchema } from '../../shared/schemas/highlightColorSchema';
 import type { tableCellSchema } from '../../shared/schemas/tableCellSchema';
 import type { tableColumnSchema } from '../../shared/schemas/tableColumnSchema';
-import type { actionHref } from '../../shared/utils/actionHref';
+import type { actionHref } from '../../uikit/actionHref';
 import type { FieldContext } from '../../uikit/FieldContext';
 import type { formatCellValue } from '../../uikit/formatCellValue';
 import type { navigateTo } from '../../uikit/navigateTo';

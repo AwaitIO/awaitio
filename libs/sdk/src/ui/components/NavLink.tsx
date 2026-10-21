@@ -1,7 +1,9 @@
+import { withBasePath } from '../../uikit/withBasePath';
 import { navigate } from '../utils/navigate';
 import type { FC, ReactNode } from 'react';
 
 export type NavLinkProps = {
+  // A route of the UI (routes.action()); the link itself points under the basePath.
   href: string;
   className?: string;
   // Runs instead of plain navigation, e.g. to cancel a running action first.
@@ -13,7 +15,7 @@ export type NavLinkProps = {
 export const NavLink: FC<NavLinkProps> = ({ href, className, onNavigate = navigate, children }) => {
   return (
     <a
-      href={href}
+      href={withBasePath(href)}
       className={className}
       onClick={(event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) {

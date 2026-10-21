@@ -8,11 +8,12 @@ import { sessionCookieOptions } from '../utils/sessionCookieOptions';
 
 export type CreateSessionRouterArgs = {
   sessions: Sessions;
+  basePath: string;
 };
 
 // The only API routes open without a session. They sit behind the cross-site check like the rest of /api, so
 // another site cannot log the browser into its own account either.
-export const createSessionRouter = ({ sessions }: CreateSessionRouterArgs): IRouter => {
+export const createSessionRouter = ({ sessions, basePath }: CreateSessionRouterArgs): IRouter => {
   const router = Router();
 
   router.get('/session', (req, res) => {
@@ -33,7 +34,7 @@ export const createSessionRouter = ({ sessions }: CreateSessionRouterArgs): IRou
       .then((result) => {
         return match(result)
           .with({ status: 'OK' }, ({ user, cookie }) => {
-            res.cookie(constants.SESSION_COOKIE_NAME, cookie, sessionCookieOptions({ req }));
+            res.cookie(constants.SESSION_COOKIE_NAME, cookie, sessionCookieOptions({ req, basePath }));
 
             return res.json(user);
           })
@@ -49,7 +50,7 @@ export const createSessionRouter = ({ sessions }: CreateSessionRouterArgs): IRou
   });
 
   router.post('/logout', (req, res) => {
-    res.clearCookie(constants.SESSION_COOKIE_NAME, { ...sessionCookieOptions({ req }), maxAge: undefined });
+    res.clearCookie(constants.SESSION_COOKIE_NAME, { ...sessionCookieOptions({ req, basePath }), maxAge: undefined });
 
     return res.status(204).end();
   });

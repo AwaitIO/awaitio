@@ -23,6 +23,7 @@ import { createComponentRegistry } from './utils/createComponentRegistry';
 import { createLayoutRegistry } from './utils/createLayoutRegistry';
 import { isPage } from './utils/isPage';
 import { loadActionsDirectory } from './utils/loadActionsDirectory';
+import { normalizeBasePath } from './utils/normalizeBasePath';
 import { toThemeScripts } from './utils/toThemeScripts';
 import { validateEnvironments } from './utils/validateEnvironments';
 import { walkPages } from './utils/walkPages';
@@ -35,6 +36,7 @@ type AwaitIOServeArgs = {
   routes: Record<string, AwaitIORoutes<unknown>[string] | Page<unknown>>;
   port: number;
   host?: string;
+  basePath: string;
 };
 
 export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends LayoutTree = Record<string, never>> {
@@ -76,21 +78,23 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  async listen({ port, host }: AwaitIOListenArgs) {
+  async listen({ port, host, basePath }: AwaitIOListenArgs) {
     if (this.running || this.isStarting) {
       throw new Error('This AwaitIO app is already listening.');
     }
 
+    const normalizedBasePath = normalizeBasePath({ basePath });
+
     this.isStarting = true;
 
     try {
-      return await this.serve({ routes: await loadActionsDirectory({ directory: this.actionsDirectory }), port, host });
+      return await this.serve({ routes: await loadActionsDirectory({ directory: this.actionsDirectory }), port, host, basePath: normalizedBasePath });
     } finally {
       this.isStarting = false;
     }
   }
 
-  private serve({ routes, port, host }: AwaitIOServeArgs) {
+  private serve({ routes, port, host, basePath }: AwaitIOServeArgs) {
     const manager = new RunManager({ registry: this.registry });
     const actionRoutes = Object.fromEntries(
       Object.entries(routes).filter(([, route]) => {
@@ -100,6 +104,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
     const server = createServer(
       createApp({
         name: this.name,
+        basePath,
         environments: this.environments,
         sessions: this.sessions,
         actions: walkRoutes({ routes: actionRoutes }),

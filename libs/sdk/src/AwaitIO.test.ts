@@ -493,6 +493,33 @@ test('Should refuse "group" and "layout" as component keys', () => {
   }).toThrow('"layout" is reserved');
 });
 
+test('Should serve the UI, the API and the session cookie under a basePath and nothing outside it', async () => {
+  const prefixed = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
+  const server = await prefixed.listen({ port: 0, basePath: '/backoffice/' });
+  const origin = `http://localhost:${(server.address() as AddressInfo).port}`;
+  const login = await fetch(`${origin}/backoffice/api/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-AwaitIO-Request': '1' },
+    body: JSON.stringify({ email: 'petr@example.com', password }),
+  });
+
+  expect(login.headers.get('set-cookie')).toContain('Path=/backoffice;');
+  expect((await fetch(`${origin}/backoffice/health`)).status).toBe(200);
+  expect((await fetch(`${origin}/backoffice/api/app`)).status).toBe(200);
+  expect(await (await fetch(`${origin}/backoffice/actions/billing/refund`)).text()).toContain('<base href="/backoffice/" />');
+  expect((await fetch(`${origin}/api/app`)).status).toBe(404);
+  expect((await fetch(`${origin}/`)).status).toBe(404);
+
+  await prefixed.close();
+});
+
+test('Should refuse a basePath that is not a plain path', async () => {
+  const prefixed = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
+
+  await expect(prefixed.listen({ port: 0, basePath: 'backoffice' })).rejects.toThrow("The basePath must be a path like '/backoffice'");
+  await expect(prefixed.listen({ port: 0, basePath: '/back office' })).rejects.toThrow("The basePath must be a path like '/backoffice'");
+});
+
 test('Should allow listen() again after the port was taken', async () => {
   const another = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
   const takenPort = Number(new URL(baseUrl).port);
