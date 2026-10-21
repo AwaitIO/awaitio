@@ -845,6 +845,36 @@ validate: ({ label, value }) => {
 },
 ```
 
+### Blank line around a statement that spans several lines
+
+A statement that takes more than one line (a multi-line `const`, an `await` call with an object argument) gets a blank line before and after it, so it does not run into the statements next to it. One-line statements may stay together.
+
+✅ DO:
+
+```typescript
+const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+
+const account = await db.account.create({
+  data: { name, plan: plan.value, trialEndsAt },
+});
+
+await db.user.create({
+  data: { name: ownerName, accountId: account.id },
+});
+```
+
+❌ DON'T:
+
+```typescript
+const trialEndsAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+const account = await db.account.create({
+  data: { name, plan: plan.value, trialEndsAt },
+});
+await db.user.create({
+  data: { name: ownerName, accountId: account.id },
+});
+```
+
 ## Tests
 
 Quick description: Vitest, `<name>.test.ts` next to the code, top-level `test('Should …')` without `describe`, and a blank line between assertions.
