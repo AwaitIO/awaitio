@@ -49,13 +49,13 @@ const BrandingPage = () => {
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="flex h-56 items-center justify-center rounded-2xl border border-gray-200 bg-white">
-            <div className="relative p-6 outline-2 outline-offset-0 outline-orange-300 outline-dashed">
+            <div className="relative p-4 outline-2 sm:p-6 outline-offset-0 outline-orange-300 outline-dashed">
               <div className="outline-1 outline-gray-300 outline-dashed">
                 <Lockup size={56} tone="light" Mark={LogoMark10} />
               </div>
             </div>
           </div>
-          <div className="flex h-56 items-end justify-center gap-8 rounded-2xl border border-gray-200 bg-white pb-12">
+          <div className="flex h-56 items-end justify-center gap-5 rounded-2xl sm:gap-8 border border-gray-200 bg-white pb-12">
             {[64, 32, 24, 16].map((size) => {
               return (
                 <div key={size} className="flex flex-col items-center gap-3">

@@ -13,7 +13,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({ feature }) => {
   const Icon = feature.icon;
 
   return (
-    <div className="flex flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
+    <div className="flex min-w-0 flex-col gap-6 rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
       <div className="flex flex-col gap-3 lg:px-2.5 lg:pt-2">
         <Icon />
         <h3 className="text-xl font-semibold tracking-[-0.02em]">{feature.title}</h3>

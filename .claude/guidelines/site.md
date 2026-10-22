@@ -47,3 +47,19 @@ Inline code in copy names a real call. An ellipsis after it (`await io.input…`
 ✅ DO: "Every `await io.input` call shows a form …"
 
 ❌ DON'T: "Every `await io.input…` shows a form …"
+
+## Every page fits a 320 px wide phone
+
+No page scrolls sideways on a phone. The header folds its text links into a menu below `sm`. A grid or flex child that holds code or a `truncate` file name gets `min-w-0`, otherwise its unbroken text sets the minimum width and pushes the whole page wider.
+
+✅ DO: check the pages at 320 and 375 px after a layout change; long code wraps or scrolls inside its own box.
+
+❌ DON'T: add a nav link, a fixed-width row or a code card without checking that it still fits.
+
+## Icons live in `src/icons/`, one per file
+
+Every inline SVG icon is its own component in `apps/site/src/icons/<Name>Icon.tsx`, imported where it is drawn. A component file holds its own markup, not helper icons.
+
+✅ DO: `import { GitHubIcon } from '../icons/GitHubIcon';`
+
+❌ DON'T: declare `const GitHubIcon` next to `SiteHeader` in the same file.
