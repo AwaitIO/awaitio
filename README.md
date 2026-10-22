@@ -1,5 +1,7 @@
 # AwaitIO
 
+<img src=".github/readme/just-code.png" alt="Internal tools. Just code. An io.display.table call next to the Users page of the demo backoffice, where it shows the All users table" width="100%" />
+
 Internal tools in one Node process. Write each tool as an async TypeScript function; every `await` on `io` asks a person something in the browser and waits for the answer. The same server serves the UI, so there is nothing else to host.
 
 ```ts
@@ -17,7 +19,7 @@ export const refundOrderAction = app.defineAction({
 });
 ```
 
-<img src="apps/docs/images/intro-form.png" alt="The Create account action: store and owner fields filled in for Juniper Tea, with a Continue button" width="720" />
+<img src=".github/readme/how-it-works.png" alt="How it works: the refundOrderAction code on the left, and on the right its first await, the Order ID field with a Continue button, shown in the browser" width="100%" />
 
 ## Why AwaitIO
 
@@ -27,6 +29,10 @@ export const refundOrderAction = app.defineAction({
 - **Extensible.** A component is plain React in one file. Write your own and register it next to the built-in ones.
 - **Deploys with your app.** Each environment (production, staging, local) is its own server with its own secrets; the header switches between them.
 - **Private by default.** Login with email and password (scrypt hashes, signed cookies), runs visible only to the person who started them, the server listens on `127.0.0.1` unless you say otherwise.
+
+<img src=".github/readme/beyond-forms.png" alt="Real backoffices, not just forms: the Support page of the demo with stats and a tickets table, next to folders as navigation, unlimited actions, pages and linked actions" width="100%" />
+
+<img src=".github/readme/bring-your-own.png" alt="Bring your own: a color input written with defineComponent in one file, next to custom components, layouts and themes" width="100%" />
 
 ## Quickstart
 
