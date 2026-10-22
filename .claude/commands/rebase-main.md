@@ -170,9 +170,9 @@ being rebased, so state the side by its name — "kept the branch version" — n
 - **Generated files** (test database dumps and anything marked generated in `.gitattributes`) — take
   the branch version and regenerate it if the package has a command for that, rather than merging
   line by line.
-- **`apps/site/out/`** — the committed static export is generated, never merged by hand. Take the
-  branch version of every conflicting file there, finish the rebase, then rebuild it with
-  `pnpm --filter @awaitio/site build` and let the user commit the result as `[site] static export`.
+- **`apps/site/out/`** — the committed static export is generated, never merged by hand and never
+  rebuilt here. Take the main branch's version of every conflicting file there; `/prepare-release` rebuilds
+  the export on `main` (`.claude/guidelines/site.md`).
 - **`CHANGELOG.md` and `package.json` versions written by `pnpm version-packages`** — the higher
   version wins, and both sides' changelog entries are kept, newest first.
 - **`.changeset/*.md`** — the files have unique names and rarely conflict. When one side deleted a

@@ -1,6 +1,16 @@
 # Site Guidelines
 
-`apps/site` is awaitio.com in Next.js as a static export (`pnpm --filter @awaitio/site dev`, port 8080). The export in `apps/site/out/` is committed on its own as `[site] static export`.
+`apps/site` is awaitio.com in Next.js as a static export (`pnpm --filter @awaitio/site dev`, port 8080). The export in `apps/site/out/` is committed on its own as `[site] static export`, on `main`, only by `/prepare-release`.
+
+## The static export is built only by /prepare-release, on main
+
+Claude never builds or commits `apps/site/out/` on its own: not after a site change, not in a worktree. A commit with site changes is a source commit only. The export is built and committed as `[site] static export` only by [`/prepare-release`](../commands/prepare-release.md), which the user runs on a clean `main`. Changes Claude finds in `apps/site/out/` are left alone, never staged or reverted.
+
+**Why**: the export is generated from everything on `main`; built in a worktree it holds only that branch and conflicts with every other branch that touches the site.
+
+✅ DO: commit `[site] add … to the home page` and stop.
+
+❌ DON'T: run `pnpm --filter @awaitio/site build` after the commit and commit `apps/site/out/`.
 
 ## Rebuild the export only with the dev server stopped
 

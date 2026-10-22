@@ -20,11 +20,10 @@ Extends the global `commit-fast` skill.
 
 ## Site export (`apps/site/out/`)
 
-The site is a static export that lives in git (see `CLAUDE.md`). The generated `out/` is committed on its own, never mixed with source changes.
+The site is a static export that lives in git (see `CLAUDE.md`). Only `/prepare-release` builds and commits it on `main` as `[site] static export`; this command never does (`.claude/guidelines/site.md`).
 
-- After a site change is committed, run `pnpm --filter @awaitio/site build` and commit `apps/site/out/` alone.
-- That commit's message is always exactly `[site] static export`, whatever changed.
-- A commit that mixes `out/` with other files is split: the source change with its own message, then `out/` as `[site] static export`.
+- Never run `pnpm --filter @awaitio/site build` and never commit `apps/site/out/`, not even after a site change.
+- When `out/` is staged together with source changes, stop and ask the user to unstage it.
 
 ## Changesets
 

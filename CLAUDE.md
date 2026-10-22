@@ -80,7 +80,7 @@ Read the guideline before working in its area:
 - `LICENSE` – the one license file. `pnpm build` (via `pnpm copy-license`, `scripts/copyLicense.mjs`) copies it into every package in `libs/` so npm ships it; the copies are gitignored, edit only the root one.
 - `libs/theme-default/` – the default theme (`@awaitio/theme-default`), the look of the `awaitio/ui` blocks.
 - `apps/docs/` – documentation in Mintlify, English. See `documentation.md`.
-- `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`.
+- `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`, only by `/prepare-release` on `main`.
 - `roadmap/` – possible future improvements, one Markdown file per idea, listed in `roadmap/README.md`.
 - `reference/` – read-only clones of related open-source projects, gitignored.
 - `apps/demo/` – the public demo at demo.awaitio.com: the backoffice of a made-up store platform, built like a client project, with a Prisma-like `db` over made-up rows that saves nothing. Deployed from `.do/awaitio-demo.yaml`.
@@ -89,7 +89,7 @@ Read the guideline before working in its area:
 
 Every package in `libs/` has its own version. Changesets manages them (`.changeset/`).
 
-How to release:
+How to release (steps 4 to 7 start with [`/prepare-release`](./.claude/commands/prepare-release.md) on a clean `main`: install, build, site export, missing changesets, the changelog entry, then the list of what to run next):
 
 1. Change a published package and run `pnpm changeset`: pick the packages, `patch` or `minor`, one English line for the changelog. It writes `.changeset/<name>.md`.
 2. Commit the changeset together with the change (`/commit-fast` writes a missing one and stops for review).
