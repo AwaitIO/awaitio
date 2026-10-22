@@ -10,8 +10,8 @@ A change to the license, the prices, the user limits, the way to pay or the invo
 2. `README.md` – the short License section: the free limit, one flat monthly price and a link to `/pricing`. Changes only with the free limit or the price model.
 3. `libs/sdk/README.md` – the same short License section on the npm page of `awaitio`.
 4. `apps/docs/license.mdx` – the price table, the same short text and a link to `/pricing`.
-5. `apps/site/src/app/pricing/page.tsx` – the tier cards and "How to get a Company License". Its FAQ and examples are read at build time from the "Examples" section of `LICENSE` (`apps/site/src/utils/readLicenseExamples.ts`); only "Why is AwaitIO licensed this way?" is written in the page.
-6. `apps/site/src/app/terms-of-use/page.tsx` – the Company Licenses section; also move `LEGAL_LAST_UPDATED` in `apps/site/src/constants.ts`.
+5. `apps/site/src/app/pricing/page.tsx` – the tier cards and "How to get a Company License". Its FAQ and examples are read at build time from the "Examples" section of `LICENSE` (`apps/site/src/utils/readLicenseExamples.ts`); only "Why is AwaitIO licensed this way?" is written in the page. Move its `LAST_MODIFIED_AT`; when the price changes, also its `<Page description>` and the pricing OG image (`public/og/pricing.png`, from Figma).
+6. `apps/site/src/app/terms-of-use/page.tsx` – the Company Licenses section; also move its `LAST_MODIFIED_AT`.
 7. `apps/site/src/components/SupportBanner.tsx` and `SponsorStrip.tsx` – the sponsoring texts, when what a sponsorship means changes.
 8. A changeset for every published package (`patch`), because each one ships the license. `/commit-fast` writes it when the change is staged; never write it ahead (see `common.md`).
 
