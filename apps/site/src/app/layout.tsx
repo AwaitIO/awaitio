@@ -2,13 +2,7 @@ import './globals.css';
 import { Geist, Geist_Mono, IBM_Plex_Mono } from 'next/font/google';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
-import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-
-export const metadata: Metadata = {
-  title: 'AwaitIO – backoffice written just like regular API routes',
-  description: 'Backoffice written just like regular API routes. Each action is an async TypeScript function and every await io asks a person in the browser. No frontend to build.',
-};
 
 // Both mono fonts fall back to a system mono, not to the Arial-based fallback next/font makes by default: while the
 // font loads, code and the wordmark stay monospaced instead of jumping from Arial on every refresh.

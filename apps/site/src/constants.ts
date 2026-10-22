@@ -1,4 +1,5 @@
 export const constants = {
+  SITE_URL: 'https://awaitio.com',
   DOCS_URL: 'https://docs.awaitio.com',
   GITHUB_URL: 'https://github.com/awaitio/awaitio',
   LICENSE_URL: 'https://github.com/awaitio/awaitio/blob/main/LICENSE',
@@ -9,5 +10,4 @@ export const constants = {
   DEMO_PASSWORD: 'demo',
   CONTACT_EMAIL: 'hello@awaitio.com',
   LICENSE_EMAIL: 'license@awaitio.com',
-  LEGAL_LAST_UPDATED: 'October 22, 2026',
 };

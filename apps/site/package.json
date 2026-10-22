@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 8080",
+    "prebuild": "pnpm run generate:sitemap",
     "build": "next build",
     "start": "npx serve@latest out",
     "tsc": "tsc --noEmit",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "generate:sitemap": "TSX_TSCONFIG_PATH=scripts/tsconfig.json node --import tsx scripts/generateSitemap.ts"
   },
   "dependencies": {
     "next": "15.5.9",
@@ -25,6 +27,7 @@
     "@types/react-dom": "^19.1.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "tailwindcss": "^4.1.14",
+    "tsx": "^4.19.0",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   }
 }

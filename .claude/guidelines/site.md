@@ -63,3 +63,11 @@ Every inline SVG icon is its own component in `apps/site/src/icons/<Name>Icon.ts
 ✅ DO: `import { GitHubIcon } from '../icons/GitHubIcon';`
 
 ❌ DON'T: declare `const GitHubIcon` next to `SiteHeader` in the same file.
+
+## OG images come from Figma
+
+Link preview images are made in the Figma file AwaitIO, section "OG images" (one 1200×630 frame per page), exported as PNG to `public/og/<page>.png`. Only images of pages that exist go into `public/og/`; `documentation.png` is the preview of docs.awaitio.com, which `apps/docs/docs.json` points at under `seo.metatags`.
+
+✅ DO: change the frame in Figma and export it again.
+
+❌ DON'T: edit the PNG or draw a preview in code.
