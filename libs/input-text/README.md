@@ -1,6 +1,6 @@
 # @awaitio/input-text
 
-Single-line text input for [AwaitIO](https://awaitio.com): `io.input.text()` asks for a string and the action waits for the answer.
+Single-line text input for [AwaitIO](https://awaitio.com) – `io.input.text()` asks for a string and the action waits for the answer.
 
 ![A Search for text field filled with refund, with help text under it](https://docs.awaitio.com/images/io-input-text.png)
 

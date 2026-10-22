@@ -1,6 +1,6 @@
 # @awaitio/input-email
 
-Email address input for [AwaitIO](https://awaitio.com): `io.input.email()`.
+Email address input for [AwaitIO](https://awaitio.com) – `io.input.email()`.
 
 ![An Owner email field filled with olivia@northwind-coffee.example, with help text under it](https://docs.awaitio.com/images/io-input-email.png)
 

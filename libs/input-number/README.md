@@ -1,6 +1,6 @@
 # @awaitio/input-number
 
-Number input for [AwaitIO](https://awaitio.com): `io.input.number()`.
+Number input for [AwaitIO](https://awaitio.com) – `io.input.number()`.
 
 ![A Refund amount field filled with 120, with help text under it](https://docs.awaitio.com/images/io-input-number.png)
 

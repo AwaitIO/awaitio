@@ -1,6 +1,6 @@
 # @awaitio/input-boolean
 
-A yes or no field for [AwaitIO](https://awaitio.com): `io.input.boolean()`.
+A yes or no field for [AwaitIO](https://awaitio.com) – `io.input.boolean()`.
 
 ![The label Send a confirmation email above a checked checkbox with the help text to its right](https://docs.awaitio.com/images/io-input-boolean.png)
 

@@ -1,6 +1,6 @@
 # @awaitio/display-heading
 
-Heading for [AwaitIO](https://awaitio.com): `io.display.heading()`, a section title with an optional description.
+Heading for [AwaitIO](https://awaitio.com) – `io.display.heading()`, a section title with an optional description.
 
 ![A Company heading with a line of description under it, above a Name field and a Plan drop-down](https://docs.awaitio.com/images/io-display-heading.png)
 

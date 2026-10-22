@@ -97,7 +97,7 @@ Open http://localhost:3000, log in and run **Greet**.
 
 ## Documentation
 
-The documentation is at **[docs.awaitio.com](https://docs.awaitio.com)**: introduction, quickstart, how it works and security, every setting, routing, pages and layouts, themes, every `io` method and `ctx` field, custom components and deployment.
+The documentation is at **[docs.awaitio.com](https://docs.awaitio.com)** – introduction, quickstart, how it works and security, every setting, routing, pages and layouts, themes, every `io` method and `ctx` field, custom components and deployment.
 
 ## License
 

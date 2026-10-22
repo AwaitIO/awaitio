@@ -1,6 +1,6 @@
 # @awaitio/select-single-native
 
-One choice from a list for [AwaitIO](https://awaitio.com): `io.select.singleNative()`.
+One choice from a list for [AwaitIO](https://awaitio.com) – `io.select.singleNative()`.
 
 ![A New role drop-down with Editor chosen](https://docs.awaitio.com/images/io-select-single-native.png)
 

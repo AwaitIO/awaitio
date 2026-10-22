@@ -1,6 +1,6 @@
 # @awaitio/theme-default
 
-The default look of [AwaitIO](https://awaitio.com): every building block of `awaitio/ui` (`Field`, `Label`, `Input`, `Button`, `Table` and the rest), with its styles. Components never style themselves, so the theme restyles every form, table and page at once.
+The default look of [AwaitIO](https://awaitio.com) – every building block of `awaitio/ui` (`Field`, `Label`, `Input`, `Button`, `Table` and the rest), with its styles. Components never style themselves, so the theme restyles every form, table and page at once.
 
 ![An AwaitIO action asking for a company name and an owner email](https://docs.awaitio.com/images/intro-form.png)
 

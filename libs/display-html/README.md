@@ -1,6 +1,6 @@
 # @awaitio/display-html
 
-HTML for [AwaitIO](https://awaitio.com): `io.display.html()`, sanitized markup in a page or a step.
+HTML for [AwaitIO](https://awaitio.com) – `io.display.html()`, sanitized markup in a page or a step.
 
 ![An Email preview heading with a short email in formatted text and a blue Choose a plan link](https://docs.awaitio.com/images/io-display-html.png)
 

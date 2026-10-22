@@ -1,6 +1,6 @@
 # @awaitio/select-single
 
-One choice from a list for [AwaitIO](https://awaitio.com): `io.select.single()`.
+One choice from a list for [AwaitIO](https://awaitio.com) – `io.select.single()`.
 
 ![A New role drop-down open on Admin, Editor and Viewer, with Editor chosen and a × to clear it](https://docs.awaitio.com/images/io-select-single.png)
 

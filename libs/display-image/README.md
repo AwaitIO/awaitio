@@ -1,6 +1,6 @@
 # @awaitio/display-image
 
-Image for [AwaitIO](https://awaitio.com): `io.display.image()`, e.g. a chart or a file preview.
+Image for [AwaitIO](https://awaitio.com) – `io.display.image()`, e.g. a chart or a file preview.
 
 ![An Uploaded photo heading with a photo of coffee beans under it, kept to a medium height](https://docs.awaitio.com/images/io-display-image.png)
 

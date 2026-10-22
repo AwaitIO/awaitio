@@ -1,6 +1,6 @@
 # @awaitio/input-textarea
 
-Multi-line text input for [AwaitIO](https://awaitio.com): `io.input.textarea()`.
+Multi-line text input for [AwaitIO](https://awaitio.com) – `io.input.textarea()`.
 
 ![A Why refund this payment? text area with a filled-in reason and help text under it](https://docs.awaitio.com/images/io-input-textarea.png)
 

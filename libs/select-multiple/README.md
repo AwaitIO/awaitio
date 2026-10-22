@@ -1,6 +1,6 @@
 # @awaitio/select-multiple
 
-Several choices from a list for [AwaitIO](https://awaitio.com): `io.select.multiple()`.
+Several choices from a list for [AwaitIO](https://awaitio.com) – `io.select.multiple()`.
 
 ![A Tell them by frame with the Add… drop-down on top and Email in a row under it with a × on the right, and help text under the frame](https://docs.awaitio.com/images/io-select-multiple.png)
 

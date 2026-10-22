@@ -1,6 +1,6 @@
 # @awaitio/input-url
 
-URL input for [AwaitIO](https://awaitio.com): `io.input.url()`, returns a URL.
+URL input for [AwaitIO](https://awaitio.com) – `io.input.url()`, returns a URL.
 
 ![A Website field filled with https://northwind-coffee.example/pricing](https://docs.awaitio.com/images/io-input-url.png)
 

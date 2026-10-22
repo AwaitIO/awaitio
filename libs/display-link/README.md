@@ -1,6 +1,6 @@
 # @awaitio/display-link
 
-Link for [AwaitIO](https://awaitio.com): `io.display.link()`, to a page in the app or outside it.
+Link for [AwaitIO](https://awaitio.com) – `io.display.link()`, to a page in the app or outside it.
 
 ![A Login link heading with an app.example.com login URL under it as a blue link](https://docs.awaitio.com/images/io-display-link.png)
 

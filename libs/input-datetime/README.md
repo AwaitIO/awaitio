@@ -1,6 +1,6 @@
 # @awaitio/input-datetime
 
-Date and time input for [AwaitIO](https://awaitio.com): `io.input.datetime()`, returns a luxon DateTime.
+Date and time input for [AwaitIO](https://awaitio.com) – `io.input.datetime()`, returns a luxon DateTime.
 
 ![A Trial ends at field with a date and time, and the hint Time zone: Europe/Prague under it](https://docs.awaitio.com/images/io-input-datetime.png)
 

@@ -1,6 +1,6 @@
 # @awaitio/display-metadata
 
-Label and value tiles for [AwaitIO](https://awaitio.com): `io.display.metadata()`.
+Label and value tiles for [AwaitIO](https://awaitio.com) – `io.display.metadata()`.
 
 ![Three tiles: Users 12, Admins 2 and Activity this month 45 with a description](https://docs.awaitio.com/images/io-display-metadata.png)
 
