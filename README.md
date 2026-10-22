@@ -72,6 +72,15 @@ void app.listen({ port: 3000 });
 
 Open http://localhost:3000, log in and run **Greet**.
 
+## Demo
+
+Try it at **[demo.awaitio.com](https://demo.awaitio.com)**: the backoffice of a made-up store platform, built like a real client project, with accounts, users, billing and support. Nothing you do there is saved.
+
+- **Email:** `demo@awaitio.com`
+- **Password:** `demo`
+
+Its source is in [`apps/demo`](apps/demo).
+
 ## Packages
 
 | Package                                                                             | What it is                                                                        |
