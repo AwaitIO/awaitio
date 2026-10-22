@@ -1,15 +1,16 @@
 import Link from 'next/link';
 import { AppScreenshot } from './AppScreenshot';
 import { constants } from '../constants';
+import { TypeScriptIcon } from '../icons/TypeScriptIcon';
 import type { FC } from 'react';
 
 export const Hero: FC = () => {
   return (
     <section className="relative overflow-hidden border-b border-gray-100 bg-gradient-to-b from-orange-50/60 to-white">
       <div className="mx-auto max-w-4xl px-4 pt-24 pb-14 text-center">
-        <p className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600">
-          <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-          TypeScript · no frontend · one Node process
+        <p className="inline-flex items-center gap-2.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600">
+          <TypeScriptIcon />
+          TypeScript
         </p>
         <h1 className="mt-6 text-5xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-6xl">
           Backoffice written just like regular <span className="text-orange-500">API routes</span>
