@@ -6,38 +6,6 @@ rss: true
 
 What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
 
-<Update label="Unreleased" description="Not released yet" tags={["Core", "Components", "Theme"]}>
-  ## Core
-
-  `awaitio` next minor
-
-  - The `Select` block of `awaitio/ui` takes a `clearable` prop, and component and theme scripts get ReactDOM from the AwaitIO UI instead of bundling their own copy.
-
-  ## Components
-
-  `@awaitio/select-single` next minor
-
-  - [`io.select.single`](/io/select-single) is a searchable drop-down: type to filter the options. The new `clearable` option shows a × that empties the field again.
-
-  ## Theme
-
-  `@awaitio/theme-default` next minor
-
-  - The `Select` block is a searchable drop-down built on react-select, styled like the other controls, with a × when `clearable` is set.
-
-  ## Migration guide
-
-  From 1.0.0 to the next minor.
-
-  <AccordionGroup>
-    <Accordion title="Core">Nothing to change.</Accordion>
-    <Accordion title="select-single">Nothing to change. `clearable` is optional and off by default; update `@awaitio/theme-default` together with it to get the searchable drop-down.</Accordion>
-    <Accordion title="Theme">
-      Nothing to change with `@awaitio/theme-default`. A theme of your own keeps working: its `Select` block now also gets `clearable`, which it may ignore or draw as a × that calls `onChange('')`.
-    </Accordion>
-  </AccordionGroup>
-</Update>
-
 <Update label="1.0.0" description="October 21, 2026" tags={["Core", "Components", "License"]}>
   First stable release. AwaitIO runs internal tools in production, and from now on the API follows semver: breaking changes come only in a new major version.
 

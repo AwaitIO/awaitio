@@ -1,5 +1,5 @@
 import { defineComponent, withSignature } from 'awaitio';
-import { Select } from 'awaitio/ui';
+import { NativeSelect } from 'awaitio/ui';
 import { z } from 'zod/v4';
 import type { SelectSingleNativeSignature } from './types/SelectSingleNativeSignature';
 import { findOptionIndex } from './utils/findOptionIndex';
@@ -65,7 +65,7 @@ export const selectSingleNative = withSignature<SelectSingleNativeSignature>()(
       return props.options[Number(value)];
     },
     component: ({ props, value, onChange, disabled, autoFocus }) => {
-      return <Select choices={props.choices} value={value} onChange={onChange} disabled={disabled} autoFocus={autoFocus} />;
+      return <NativeSelect choices={props.choices} value={value} onChange={onChange} disabled={disabled} autoFocus={autoFocus} />;
     },
   }),
 );

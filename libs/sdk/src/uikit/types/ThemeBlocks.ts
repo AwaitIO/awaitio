@@ -13,6 +13,7 @@ import type { LabelProps } from '../Label';
 import type { LinkProps } from '../Link';
 import type { MetadataProps } from '../Metadata';
 import type { MultiSelectProps } from '../MultiSelect';
+import type { NativeSelectProps } from '../NativeSelect';
 import type { ProseProps } from '../Prose';
 import type { RowMenuProps } from '../RowMenu';
 import type { SelectProps } from '../Select';
@@ -37,6 +38,7 @@ export type ThemeBlocks = {
   Link: ComponentType<LinkProps>;
   Metadata: ComponentType<MetadataProps>;
   MultiSelect: ComponentType<MultiSelectProps>;
+  NativeSelect: ComponentType<NativeSelectProps>;
   Prose: ComponentType<ProseProps>;
   RowMenu: ComponentType<RowMenuProps>;
   Select: ComponentType<SelectProps>;

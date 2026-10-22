@@ -17,6 +17,7 @@ export const themeBlockNames: (keyof ThemeBlocks)[] = [
   'Link',
   'Metadata',
   'MultiSelect',
+  'NativeSelect',
   'Prose',
   'RowMenu',
   'Select',
