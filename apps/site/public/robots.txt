@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://awaitio.com/sitemap.xml

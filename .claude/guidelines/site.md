@@ -63,3 +63,35 @@ Every inline SVG icon is its own component in `apps/site/src/icons/<Name>Icon.ts
 ✅ DO: `import { GitHubIcon } from '../icons/GitHubIcon';`
 
 ❌ DON'T: declare `const GitHubIcon` next to `SiteHeader` in the same file.
+
+## Every page is wrapped in `<Page>`
+
+`src/components/Page.tsx` writes a page's title, description, canonical URL, Open Graph and Twitter tags; React moves them into `<head>`. A page sets them as props right next to its content, never through Next's `metadata` export, and the root layout sets no title of its own.
+
+✅ DO: `<Page title="Pricing – AwaitIO" description="…" ogImage="pricing" canonicalPath="/pricing/" lastModifiedAt={LAST_MODIFIED_AT}>`
+
+❌ DON'T: `export const metadata = { title: … }` in a page or the layout.
+
+## A page with a date exports `LAST_MODIFIED_AT`
+
+A page whose content has a date of its own (pricing, the legal pages) exports `export const LAST_MODIFIED_AT = 'YYYY-MM-DD'` from its `page.tsx` and passes it to `<Page lastModifiedAt>` and, on legal pages, to `LegalPageLayout`. Move it whenever the content changes; it is `og:updated_time`, the "Last updated" line and the sitemap's `lastmod` at once.
+
+✅ DO: bump `LAST_MODIFIED_AT` in the same change as the page's content.
+
+❌ DON'T: keep the date in `constants` or write it out by hand in the page text.
+
+## The sitemap is generated before every build
+
+`scripts/generateSitemap.ts` (run by `prebuild`, or `pnpm --filter @awaitio/site generate:sitemap`) writes `public/sitemap.xml` and `public/robots.txt`, both committed. It lists every page by hand and imports `LAST_MODIFIED_AT` from the pages that have one; URLs go through `getSiteUrl`, the same helper as the canonical links.
+
+✅ DO: add a new page to the list in `generateSitemap.ts` and import its `LAST_MODIFIED_AT` when it has one.
+
+❌ DON'T: edit `public/sitemap.xml` by hand or add a Next.js `sitemap.ts` route.
+
+## OG images come from Figma
+
+Link preview images are made in the Figma file AwaitIO, section "OG images" (one 1200×630 frame per page), exported as PNG to `public/og/<page>.png` and listed in the `OgImage` type, which is what `<Page ogImage>` accepts. Only images of pages that exist go into `public/og/`; `documentation.png` is the preview of docs.awaitio.com, which `apps/docs/docs.json` points at under `seo.metatags`.
+
+✅ DO: change the frame in Figma and export it again.
+
+❌ DON'T: edit the PNG or draw a preview in code.

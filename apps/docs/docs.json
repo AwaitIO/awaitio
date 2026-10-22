@@ -13,6 +13,19 @@
     "href": "https://awaitio.com"
   },
   "favicon": "/favicon.svg",
+  "contextual": {
+    "options": ["copy", "view", "claude", "chatgpt"],
+    "display": "header"
+  },
+  "seo": {
+    "metatags": {
+      "og:image": "https://awaitio.com/og/documentation.png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "twitter:image": "https://awaitio.com/og/documentation.png",
+      "twitter:card": "summary_large_image"
+    }
+  },
   "navigation": {
     "global": {
       "anchors": [
