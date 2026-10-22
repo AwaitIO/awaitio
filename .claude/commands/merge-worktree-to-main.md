@@ -297,21 +297,17 @@ table.
 
 ### 7. Report
 
-The final table **is** the report — print it one last time, fully filled in. Underneath it:
+The report is the final table, printed one last time, and then **`/worktree-status`**, run as written.
+Nothing else: no summary of where the work landed, no list of restored stashes, no offer to run
+`/delete-worktree`. The status report says whether the worktree can be deleted and lists what is
+still needed.
 
-- where the work landed — the main branch and the merge hash
-- one line per stash that was restored, naming it and the file count; when a conflict was resolved in
-  a pop, one line per file saying which side was taken
-- any stash still sitting there because the chain stopped — that line goes **first**, with its ref
-- the worktree is still on disk on branch `<worktree-branch>`, and
-  [`/delete-worktree`](./delete-worktree.md) is what removes it, its branch and its VS Code workspace
-  entry, whenever the user wants that
+The only extra lines, short and above `/worktree-status`, are problems the user has to act on: a
+stash still sitting there because the chain stopped (with its ref), a conflict resolved in a pop
+(file and side taken), a squash after which `/delete-worktree` will list the commits as unmerged.
 
-Offer that cleanup, never run it. Deleting is the other command's job.
-
-One thing to flag when the merge was a squash: `/delete-worktree` will later list the branch's commits
-as unmerged, because after a squash git no longer recognises them. That is expected, and its second
-safety check covers it.
+**Why**: the table already shows what happened, and `/worktree-status` shows what comes next; a
+paragraph repeating both is read by nobody.
 
 ## Important Notes
 
