@@ -1,6 +1,6 @@
-# AwaitIO
-
 <img src=".github/readme/just-code.png" alt="Internal tools. Just code. An io.display.table call next to the Users page of the demo backoffice, where it shows the All users table" width="100%" />
+
+# AwaitIO
 
 Internal tools in one Node process. Write each tool as an async TypeScript function; every `await` on `io` asks a person something in the browser and waits for the answer. The same server serves the UI, so there is nothing else to host.
 
