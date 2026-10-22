@@ -87,11 +87,15 @@ Read the guideline before working in its area:
 
 ## Versions and releases
 
-Every package in `libs/` has its own version. Changesets manages them (`.changeset/`).
+Every package in `libs/` has its own version, and Changesets manages them (`.changeset/`). Major and minor are the same for every package and follow `awaitio`, so `@awaitio/*@1.1.x` goes with `awaitio@1.1.x`:
+
+- `awaitio` follows semver: `patch` for a fix, `minor` for a new feature, `major` for a breaking change.
+- A component or theme raises only the last number for any change of its own, a fix or a new feature (`patch`).
+- When `awaitio` goes up a minor or a major, every other package goes up with it in the same release; `/prepare-release` writes that changeset. A breaking change in a component is a `major` for every package.
 
 How to release (steps 4 to 7 start with [`/prepare-release`](./.claude/commands/prepare-release.md) on a clean `main`: install, build, site export, missing changesets, the changelog entry, then the list of what to run next):
 
-1. Change a published package and run `pnpm changeset`: pick the packages, `patch` or `minor`, one English line for the changelog. It writes `.changeset/<name>.md`.
+1. Change a published package and run `pnpm changeset`: pick the packages and the bump by the rules above, one English line for the changelog. It writes `.changeset/<name>.md`.
 2. Commit the changeset together with the change (`/commit-fast` writes a missing one and stops for review).
 3. Collect as many changesets as you like across packages.
 4. When releasing, first add the release to `apps/docs/changelog.mdx` from the changesets and commits since the last release (see `changelog.md`), then run `pnpm version-packages`: it bumps only the packages with a changeset, writes their `CHANGELOG.md` and deletes the used changesets. Commit both as exactly `[release] version packages`.

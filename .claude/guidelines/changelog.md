@@ -21,7 +21,9 @@ Inside each `<Update>` the lines are grouped under `##` headings by scope, in th
 3. **Theme**: `@awaitio/theme-default`
 4. **License**: changes to `LICENSE`, which ship in every package
 
-Under each heading, one line says which packages and versions it covers (`awaitio` 1.0.0, Every `@awaitio/*` package 1.0.0). The `tags` of the `<Update>` list the scopes it contains.
+Under each heading, one line says which packages and versions it covers, each written as `package@version` in inline code (`awaitio@1.1.0`, `@awaitio/select-single@1.1.0`, `@awaitio/*@1.0.1`, every component). The `tags` of the `<Update>` list the scopes it contains.
+
+**Why**: `package@version` is how npm, the git tags and `npm install` write it, so a reader or an agent can copy it as it is.
 
 **Why**: a license change lands in 23 packages at once; listed per package, the page repeats it 23 times.
 
@@ -33,7 +35,7 @@ One short English sentence per change, in the words of someone using AwaitIO: wh
 
 Every released `<Update>` ends with a migration guide, so a person or an agent told "we are on 0.1.0, what do I change so it keeps working and type-checks?" finds the answer in one place. It sits in an `<AccordionGroup>`, one `<Accordion>` per scope or component, so it is closed by default and does not push the release notes down.
 
-- It is its own `## Migration guide` section after the scopes, like **License**, opened by one line naming the versions (`From 0.1.0 to 1.0.0.`). Each accordion is titled with the scope or component name alone (`Core`, `input-text`, `License`).
+- It is its own `## Migration guide` section after the scopes, like **License**, opened by one line naming the versions (`From 0.1.0 to 1.0.0.`). Each accordion is titled with the full npm name of the package it is about (`awaitio`, `@awaitio/input-text`, `@awaitio/theme-default`, `@awaitio/*` for every component at once), and `License` for the license.
 - Each accordion lists exactly what to change in user code: the old call, the new call, a short code block when it helps, and what breaks (type error, runtime error, different behaviour) when it is not changed.
 - A scope with nothing to change says so in one line ("Nothing to change."). Leave it in: "no change needed" is an answer the agent is looking for.
 - Every breaking change since the last release gets its migration lines, written with the rest of the release entry.
@@ -48,7 +50,8 @@ Every released `<Update>` ends with a migration guide, so a person or an agent t
 From 0.1.0 to 1.0.0.
 
 <AccordionGroup>
-  <Accordion title="Core">Nothing to change.</Accordion>
+  <Accordion title="awaitio">Nothing to change.</Accordion>
+  <Accordion title="@awaitio/input-text">The `placeholder` option is now `hint`. Rename it in every `io.input.text` call, or the call does not type-check.</Accordion>
 </AccordionGroup>
 ```
 

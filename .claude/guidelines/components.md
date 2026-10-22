@@ -36,7 +36,7 @@ Copy `libs/input-text`, rename the package, the folder and the file, then change
 
 ## A new component starts at the version of the SDK
 
-A new package in `libs/` gets the current version of `libs/sdk/package.json` in its `package.json` and is released at exactly that version, without a changeset that would bump it further. Its line in `apps/docs/changelog.mdx` names that version.
+A new package in `libs/` gets the current version of `libs/sdk/package.json` in its `package.json`, without a changeset of its own. When the release also raises the minor or major of `awaitio`, the changeset `/prepare-release` writes for every package moves the new one with it, so it comes out at the same major and minor as `awaitio`. Its line in `apps/docs/changelog.mdx` names the version it comes out at.
 
 **Why**: a new component is released as a version that matches the SDK it was written for, so nobody wonders which `awaitio` a `0.1.0` component belongs to.
 

@@ -66,10 +66,17 @@ For every package in `libs/` that changed since the last release:
 
 - **Has a changeset** naming it: fine.
 - **New package** whose `package.json` version is not on npm yet (`npm view <name> version` fails):
-  no changeset, it is released at its own version (`.claude/guidelines/components.md`).
+  no changeset of its own (`.claude/guidelines/components.md`); the step below moves it with
+  `awaitio` when its minor goes up.
 - **Changed code or public behaviour without a changeset**: write one by the rules in
   `.claude/commit-rules.md` (bump, file name, one English line), from the commits that touched it.
 - **Only tests, a README or comments**: no changeset.
+
+Then keep major and minor the same for every package (**Versions and releases** in `CLAUDE.md`):
+when any changeset raises `awaitio` by a `minor` or `major`, write one more changeset,
+`<date>_all_align-with-awaitio-<major>-<minor>.md`, that names every other package in `libs/` with
+the same bump and one line saying they move with `awaitio`. Then `pnpm changeset status --verbose`
+must list the same major and minor for every package.
 
 Leave the new changesets uncommitted; they go into the release commit.
 
