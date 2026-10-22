@@ -50,7 +50,7 @@ Allowed values of `Status`, and nothing else:
 - `⏸ waiting` — not started yet
 - `⏳ working` — running right now
 - `✅ done` — finished, optionally followed by ` — <detail>`
-- `⏭ skipped` — genuinely nothing to do (branch already on top of the main branch, nothing to stash)
+- `✅ skipped` — genuinely nothing to do (branch already on top of the main branch, nothing to stash); ✅ like done, because nothing is left to do
 - `⚠️ attention!` — stopped here; the detail says why
 
 The detail after `done`, `skipped` and `attention!` is short, factual and in English — a hash, a
@@ -100,7 +100,7 @@ git log <main-branch>..<worktree-branch> --oneline            # must not be empt
 Only then look at the tree — `git status --porcelain`, where untracked files count too. Uncommitted
 work is not part of the merge, so it goes into a stash and comes back in step 5:
 
-- **Clean** → row 1 becomes `⏭ skipped`.
+- **Clean** → row 1 becomes `✅ skipped`.
 - **Not clean** → **stash it, including untracked files**, under a name step 5 can find again:
 
   ```bash
@@ -135,7 +135,7 @@ changelogs and versions, the docs screenshots, the both-sides-kept lists.
 - Step 1 already emptied the worktree, so **its stash step will report nothing to stash**. That is
   correct — one stash for the whole chain, not two nested ones. The stash from step 1 stays untouched
   by the rebase and is restored here in step 5, not by `/rebase-main`.
-- If it reports the branch was already on top of the main branch, row 2 becomes `⏭ skipped`.
+- If it reports the branch was already on top of the main branch, row 2 becomes `✅ skipped`.
 - If it **escalates a conflict**, the chain stops here. Row 2 becomes `⚠️ attention! — <file>` and
   nothing is merged. The rebase is left in progress for the user to answer or abort — and because a
   stash cannot be popped over a rebase in progress, the report names the step 1 stash ref instead of
@@ -168,7 +168,7 @@ comm -12 <(git -C <main-repo> diff --name-only <main-branch>..<worktree-branch> 
          <(git -C <main-repo> diff --name-only | sort)
 ```
 
-- **Empty** → the merge cannot disturb the work in progress. Row 3 becomes `⏭ skipped — no collisions`.
+- **Empty** → the merge cannot disturb the work in progress. Row 3 becomes `✅ skipped — no collisions`.
 - **Not empty** → **stash exactly those files** in the main checkout, and nothing else. A pathspec
   stash leaves the rest of the user's work in progress sitting where they left it, which a whole-tree
   stash would not:
@@ -236,7 +236,7 @@ Row 5 goes to `⏳ working`. Print the table.
 Two stashes may exist, and both are given back — the main checkout's first, because that is the tree
 the merge just rewrote and the one the user is most likely looking at.
 
-- **Nothing was stashed in steps 1 and 3** → row 5 becomes `⏭ skipped`.
+- **Nothing was stashed in steps 1 and 3** → row 5 becomes `✅ skipped`.
 - **Do not run this while a rebase or merge is still in progress.** Pop needs a settled index. Say
   the stash is still there, name its ref, and leave it.
 

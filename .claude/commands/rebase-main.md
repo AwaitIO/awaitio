@@ -45,7 +45,7 @@ Allowed values of `Status`, and nothing else:
 - `⏸ waiting` — not started yet
 - `⏳ working` — running right now
 - `✅ done` — finished, optionally followed by ` — <detail>`
-- `⏭ skipped` — genuinely nothing to do (branch already on top of main, no conflicts, nothing stashed)
+- `✅ skipped` — genuinely nothing to do (branch already on top of main, no conflicts, nothing stashed); ✅ like done, because nothing is left to do
 - `⚠️ attention!` — stopped here; the detail says why
 
 The detail after `done`, `skipped` and `attention!` is short, factual and in English — a hash, a
@@ -85,7 +85,7 @@ Then look at the tree — `git status --porcelain`, where untracked files count 
 dirty tree either refuses to start or leaves the changes stranded mid-replay, so anything uncommitted
 goes into a stash first.
 
-- **Clean** → nothing to do. Row 1 becomes `⏭ skipped`.
+- **Clean** → nothing to do. Row 1 becomes `✅ skipped`.
 - **Not clean** → **stash it, including untracked files**, and remember the name so step 5 can find
   it even if other stashes appear in between:
 
@@ -120,7 +120,7 @@ git merge-base --is-ancestor <main-branch> <worktree-branch>
 ```
 
 - **Exit code 0** → the main branch is already an ancestor; the branch is up to date. Say so in one
-  line, mark rows 2, 3 and 4 `⏭ skipped`, and go straight to step 5.
+  line, mark rows 2, 3 and 4 `✅ skipped`, and go straight to step 5.
 - **Non-zero** → the main branch has commits this branch does not have. Show how many, with
   `git log <worktree-branch>..<main-branch> --oneline`, and continue.
 
@@ -137,7 +137,7 @@ where it was, so nothing here is unrecoverable. The stash from step 1 survives a
 git rebase <main-branch>
 ```
 
-- **Clean rebase** → row 3 becomes `✅ done — <n> commits replayed`, row 4 becomes `⏭ skipped`, and
+- **Clean rebase** → row 3 becomes `✅ done — <n> commits replayed`, row 4 becomes `✅ skipped`, and
   step 4 is skipped entirely.
 - **Conflicts** → row 3 becomes `✅ done — conflicts` and step 4 resolves them.
 
@@ -204,7 +204,7 @@ When the rebase completes, row 4 becomes `✅ done — <n> files resolved`. Prin
 
 Row 5 goes to `⏳ working`. Print the table.
 
-- **Nothing was stashed in step 1** → row 5 becomes `⏭ skipped`.
+- **Nothing was stashed in step 1** → row 5 becomes `✅ skipped`.
 - **Something was stashed** → put it back on top of the rebased branch, by the name from step 1:
 
   ```bash
