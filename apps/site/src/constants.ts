@@ -9,5 +9,5 @@ export const constants = {
   DEMO_PASSWORD: 'demo',
   CONTACT_EMAIL: 'hello@awaitio.com',
   LICENSE_EMAIL: 'license@awaitio.com',
-  LEGAL_LAST_UPDATED: 'October 21, 2026',
+  LEGAL_LAST_UPDATED: 'October 22, 2026',
 };

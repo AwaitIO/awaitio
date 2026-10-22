@@ -1,7 +1,11 @@
+import { FaqItem } from '../../components/FaqItem';
+import { LicenseParagraph } from '../../components/LicenseParagraph';
 import { PricingTier } from '../../components/PricingTier';
 import { SupportBanner } from '../../components/SupportBanner';
 import { constants } from '../../constants';
+import type { FaqEntry } from '../../types/FaqEntry';
 import type { PricingTierInfo } from '../../types/PricingTierInfo';
+import { readLicenseExamples } from '../../utils/readLicenseExamples';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -47,14 +51,29 @@ const tiers: PricingTierInfo[] = [
   },
 ];
 
+// The FAQ and the examples are the Examples section of the license, word for word: its first group is the FAQ.
 const PricingPage = () => {
+  const [generalGroup, ...exampleGroups] = readLicenseExamples().map(({ title, questions }) => {
+    const entries: FaqEntry[] = questions.map(({ question, paragraphs }) => {
+      return {
+        question,
+        answer: paragraphs.map((paragraph, index) => {
+          return <LicenseParagraph key={paragraph} text={paragraph} className={index > 0 ? 'mt-3' : undefined} />;
+        }),
+      };
+    });
+
+    return { title, entries };
+  });
+  const faq = generalGroup?.entries ?? [];
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-20">
       <div className="max-w-2xl">
         <h1 className="text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Pricing</h1>
         <p className="mt-4 text-lg text-gray-600">
-          Users are the real people who use your AwaitIO apps, locally or deployed, however many logins they share. The free and the paid version are the same software: no paid features, no license
-          keys, no limits and no telemetry. It works on trust. Try it free for 30 days with any number of users.
+          Users are the real people who have access to your AwaitIO apps at the same time, locally or deployed, however many accounts they have or share. The free and the paid version are the same
+          software: no paid features, no license keys, no limits and no telemetry. It works on trust. Try it free for 30 days with any number of users.
         </p>
       </div>
       <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -87,6 +106,36 @@ const PricingPage = () => {
           </a>
           .
         </p>
+      </div>
+      <div className="mt-20 max-w-2xl">
+        <h2 className="text-2xl font-semibold tracking-[-0.02em]">Frequently asked questions</h2>
+        <div className="mt-4">
+          {faq.map((entry) => {
+            return <FaqItem key={entry.question} entry={entry} />;
+          })}
+        </div>
+      </div>
+      <div className="mt-20 max-w-2xl">
+        <h2 className="text-2xl font-semibold tracking-[-0.02em]">Examples</h2>
+        <p className="mt-3 text-gray-600">
+          How the license applies to common cases. These examples are part of the{' '}
+          <a href={constants.LICENSE_URL} className="underline hover:text-gray-900">
+            AwaitIO License
+          </a>
+          , word for word.
+        </p>
+        {exampleGroups.map((group) => {
+          return (
+            <div key={group.title} className="mt-10">
+              <h3 className="text-lg font-semibold">{group.title}</h3>
+              <div className="mt-2">
+                {group.entries.map((entry) => {
+                  return <FaqItem key={entry.question} entry={entry} />;
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

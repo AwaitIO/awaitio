@@ -18,9 +18,9 @@ const TermsPage = () => {
       <h2>Using the software</h2>
       <p>
         AwaitIO itself is governed by the <a href={constants.LICENSE_URL}>AwaitIO License</a>, not by these terms. In short: it is free for up to 3 users, for non-profits and education, and for a
-        30-day evaluation with any number of users; larger for-profit organizations need a Company License. Users are counted across a whole group of companies, and the 3-user limit applies to
-        individuals too. Nobody may sell AwaitIO or a fork of it, offer it as a framework or builder for others to make internal tools, or offer a commercial hosted service built on it without a
-        written agreement; your own components and plugins for it are yours to sell. The license text decides in every detail.
+        30-day evaluation with any number of users; other organizations with more users need a Company License. Users are counted across a whole group of companies, and the 3-user limit applies to
+        individuals too. Nobody may sell AwaitIO or a fork of it, offer it as a framework or builder for others to make internal tools, or offer a commercial hosting or management service for other
+        people's AwaitIO apps without a written agreement; your own components and plugins for it are yours to sell. The license text decides in every detail.
       </p>
       <h2>Company Licenses</h2>
       <p>

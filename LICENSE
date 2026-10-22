@@ -2,17 +2,17 @@
 
 Copyright © 2026 Orukami s.r.o., Rybná 716/24, 110 00 Praha 1, Czech Republic, company ID 64049159, registered in the Commercial Register kept by the Municipal Court in Prague, section C, file 74046 (the "Licensor")
 
-The source code of AwaitIO is public. Whether you can use it for free depends on how many people use it: small teams use AwaitIO for free, including commercially, while for-profit organizations with more users need a Company License. This keeps AwaitIO free for most people and funds its development.
+The source code of AwaitIO is public. Whether you can use it for free depends on how many people use it: small teams use AwaitIO for free, including commercially, while other organizations with more users need a Company License, unless they are non-profits or educational institutions. This keeps AwaitIO free for most people and funds its development.
 
 This license covers everything in this repository, the package `awaitio` and every package published by the Licensor under the `@awaitio` scope on npm, now or in the future, such as `@awaitio/input-text`, `@awaitio/input-textarea` and `@awaitio/input-datetime` (together, "AwaitIO").
 
 ## Users
 
-A "user" is a person who uses an application built with AwaitIO, whether it runs locally or is deployed: an employee, a contractor or anyone else who opens it, runs its actions or answers them. What counts is the number of real people, not the number of logins: several people sharing one login are several users. Count each person once across all of your organization's AwaitIO applications and environments.
+A "user" is a real person who has access to an application built with AwaitIO, whether it runs locally or is deployed: an employee, a contractor or anyone else who can open it, run its actions or answer them. What counts is the number of real people with access, not how many of them use it and not the number of accounts: several people sharing one account are several users, and one person with several accounts, for example a different email in each environment, is one user. Users are counted per calendar month: what counts is the highest number of real people who had access at the same time during that month. People who left and people who replaced them are not added up. Count each person once across all of your organization's AwaitIO applications and environments. Your own employees who build or test an application are users too. Only people count: scheduled jobs, webhooks, AI agents and other systems that call an application are not users; the people who run them or check their work in the application are.
 
 ## Organization
 
-Your "organization" is you, if you are an individual, or the legal entity that uses AwaitIO, together with every entity that controls it, is controlled by it or is under common control with it. "Control" means owning more than 50% of the voting shares or other ownership interest, or having the power to direct the entity's management. Users are counted across the whole organization: entities in one group count their users together and cannot each use the Free License separately.
+Your "organization" is you, if you are an individual, or the legal entity that uses AwaitIO, together with every entity that controls it, is controlled by it or is under common control with it. "Control" means owning more than 50% of the voting shares or other ownership interest, or having the power to direct the entity's management. Users are counted across the whole organization: entities in one group count their users together and cannot each use the Free License separately. A non-profit or not-for-profit organization or an educational institution is eligible for the Free License on its own, even when it belongs to a group with for-profit entities.
 
 ## Free License
 
@@ -20,8 +20,9 @@ Your "organization" is you, if you are an individual, or the legal entity that u
 
 You may use AwaitIO for free if you are:
 
-- an individual, including a sole trader or a freelancer, or a for-profit organization, in each case with up to 3 users;
-- a non-profit or not-for-profit organization, or an educational institution; or
+- an individual, including a sole trader or a freelancer, or any other organization, in each case with up to 3 users;
+- a non-profit or not-for-profit organization, or an educational institution;
+- teaching or learning AwaitIO in a course, including a paid course of a for-profit school, for the teachers and students of that course; or
 - evaluating whether AwaitIO fits your needs, with any number of users, for 30 days from your organization's first use of AwaitIO. The evaluation period is counted once per organization and does not start again with a new application, environment or version. After it ends, an organization that is not eligible for the Free License otherwise needs a Company License or an Enterprise agreement to keep using AwaitIO.
 
 ### What you may do
@@ -34,18 +35,22 @@ If you are eligible, you are granted permission, free of charge, to:
 
 ## Company License
 
-An individual or a for-profit organization with more than 3 users needs a Company License to use AwaitIO. It allows the same use as the Free License, in any number of applications and environments. Its price depends on the number of users:
+An individual or an organization with more than 3 users that is not eligible for the Free License otherwise needs a Company License to use AwaitIO. It allows the same use as the Free License, in any number of applications and environments. Its price depends on the number of users:
 
 - 4 to 10 users: 50 USD per month per organization;
 - 11 to 50 users: 250 USD per month per organization.
 
-An individual or a for-profit organization with more than 50 users needs an Enterprise agreement instead of a Company License (see below).
+An individual or an organization with more than 50 users that is not eligible for the Free License otherwise needs an Enterprise agreement instead of a Company License (see below).
 
-To get one, sponsor AwaitIO on GitHub Sponsors (https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users, from your organization's GitHub account or on its behalf. The Company License is valid for as long as the monthly sponsorship is active; when it ends, so does the Company License. When your organization grows past 10 users, move to the higher tier; when it grows past 50 users, agree on an Enterprise agreement.
+To get one, sponsor AwaitIO on GitHub Sponsors (https://github.com/sponsors/awaitio) with the monthly Company License tier for your number of users, from your organization's GitHub account or on its behalf. The Company License is valid for as long as the monthly sponsorship is active; when it ends, so does the Company License. The Company License belongs to the organization, not to the GitHub account that pays for it. The month your organization first has more users than its license allows, it needs the higher license for that month: a Company License past 3 users, the higher tier past 10 users and an Enterprise agreement past 50 users.
 
 The Licensor issues an invoice for every payment on request: write to license@awaitio.com with your organization's billing details. For more than 50 users, a written contract, a service-level agreement, priority support or other custom terms, write to the same address to agree on an Enterprise agreement.
 
-Eligibility is decided by the organization that runs the application. If you build tools with AwaitIO for a client and the client runs them, the client's users count and the client needs a Company License unless it is eligible for the Free License itself. People who only develop, test or demonstrate an application for a client, such as the developers of an agency or a freelancer, are not users of it and do not count towards their own organization either. Whoever runs the application for its users pays: if you run it for your client yourself, for example as a hosted back office, its users count as yours. An agency or a freelancer may get the client's Company License on the client's behalf, for example as part of its own price: the license then covers the client, in the tier for the client's number of users, for as long as the sponsorship for it is active.
+If you build tools with AwaitIO for a client, the client's users count, and they are counted for each client on its own. This holds whether the client runs the application or you run it for the client, for example as a hosted back office. A client with more than 3 users needs its own Company License unless it is eligible for the Free License itself; one Company License never covers several clients. People who only develop, test or demonstrate an application for a client, such as the developers of an agency or a freelancer, are not users of it and do not count towards their own organization either. People of an agency who use a client's application in production, for example to run its actions for the client, are users of that client. An agency or a freelancer may get the client's Company License on the client's behalf, for example as part of its own price: the license then covers the client, in the tier for the client's number of users, for as long as the sponsorship for it is active.
+
+An application that many customers use and pay you to use, for example by subscription as software as a service, is your product, even when each customer has its own copy of it: the users of all its customers are counted together as your users. Users are counted for each client on its own only when you build or adapt the application for that particular client and the client pays for your work.
+
+If you distribute an application that includes AwaitIO, for example as open source, each organization that runs it counts its own users and needs its own license. State this in the application's README or documentation.
 
 ## Same software, honor system
 
@@ -61,9 +66,121 @@ Whatever your license, without a separate written agreement with the Licensor yo
 
 1. copy or modify AwaitIO in order to sell, rent, license, relicense or sublicense AwaitIO itself or your own derivative or fork of it;
 2. offer AwaitIO, or a derivative or fork of it, to third parties as a framework, builder or platform for making internal tools, admin panels or back offices, that is, a product whose main purpose is to let others build their own applications;
-3. offer to third parties a commercial hosted or managed service built on AwaitIO, such as a dashboard, cloud, monitoring or management service for applications that use AwaitIO.
+3. offer to third parties a commercial service whose main purpose is to host, deploy, monitor or manage their applications built with AwaitIO, such as an AwaitIO cloud or dashboard.
 
-Building applications with AwaitIO, running them and handing them over to your clients is none of the above. An application with its own purpose, such as the back office of a particular business, or the same application delivered to many clients, is not a framework, builder or platform under point 2, even when it is built with AwaitIO. Neither is making your own components, plugins or extensions for AwaitIO and sharing, selling or licensing them, as long as they do not include AwaitIO itself or a modified copy of it.
+Building applications with AwaitIO, running them, also for your clients as a hosted service, and handing them over to your clients is none of the above. An application with its own purpose, such as the back office of a particular business, or the same application delivered to many clients, is not a framework, builder or platform under point 2, even when it is built with AwaitIO. Neither is making your own components, plugins or extensions for AwaitIO and sharing, selling or licensing them, as long as they do not include AwaitIO itself or a modified copy of it.
+
+## Examples
+
+These examples are part of this license. They show how its rules apply to common cases.
+
+### General questions
+
+#### Why is AwaitIO licensed this way?
+
+The model is inspired by [Remotion](https://www.remotion.dev/license). The source code is public, but AwaitIO is not open source.
+
+The Licensor values people who build side projects and small teams on a tight budget. It does not want to take their money, so for them AwaitIO is free.
+
+If you use AwaitIO for free and want to say thanks, a one-time sponsorship on [GitHub Sponsors](https://github.com/sponsors/awaitio) helps the most. Paying for a license anyway is welcome too.
+
+Companies that have clients, sell services and earn money pay for the services that help them make a profit. AwaitIO is one of them. The Licensor helps them build their business, and in return it wants to be part of that journey. That is fair.
+
+#### Is AwaitIO free for non-profits and schools?
+
+Yes, with any number of users, also when the non-profit belongs to a group of for-profit companies. A paid course that teaches AwaitIO is free for its teachers and students; the school's own internal tools count as usual. Please tell the Licensor who you are at license@awaitio.com.
+
+#### What if the person who pays the sponsorship leaves?
+
+The license belongs to the organization, not to that person's GitHub account. If the sponsorship ends, for example because the owner who set it up from a personal account leaves, the organization needs to renew it from another account.
+
+#### What if I am not sure whether or which license I need?
+
+Write to license@awaitio.com and the Licensor will answer in writing.
+
+### Agencies and clients
+
+#### Can I build tools with AwaitIO for my clients and charge for them?
+
+Yes. The client's users count, for each client on its own. A client with more than 3 users needs its own Company License, in the tier for its own number of users. This is the preferred way: the client pays for the software it runs.
+
+You may also get the client's Company License on the client's behalf, for example as part of your own price. That license covers that one client only.
+
+One Company License never covers several clients.
+
+#### What if I host the applications for my clients myself?
+
+Nothing changes: users are still counted for each client on its own. A client with 2 users is free; a client with 5 users needs its own Company License, which you may get on its behalf. Hosting the applications you built for your clients is allowed and is not a hosted service under "What nobody may do".
+
+#### May I deliver the same application to many clients?
+
+Yes. An application with its own purpose, such as a booking back office delivered to many clients, is not a framework, builder or platform, even when it is built with AwaitIO.
+
+When the clients pay you to use it, it is your product and their users count together as yours. An agency that hosts one booking back office for 20 hair salons for a monthly fee counts the users of all 20 salons.
+
+#### Do the people of an agency who run a client's application count?
+
+Yes. A project manager of an agency who runs the actions of five clients' applications in production is a user of each of the five clients. Developers who only build or test the applications do not count.
+
+### Products and services
+
+#### What if I sell my application to many customers as a service?
+
+Then it is your product and the users of all your customers count together as yours. A service with 100 customers of 2 users each has 200 users and needs an Enterprise agreement.
+
+#### May I offer a cloud for running other people's AwaitIO applications?
+
+Not without a separate written agreement with the Licensor. A service whose main purpose is to host, deploy, monitor or manage other people's applications built with AwaitIO, such as an AwaitIO cloud or dashboard, is not allowed.
+
+#### May I include AwaitIO in an open-source application?
+
+Yes. Each organization that runs your application counts its own users and needs its own license past 3 users; you pay nothing for distributing it. Say so in your README or documentation, so the people who run it know.
+
+### Counting users
+
+#### How are users counted when people join or leave?
+
+By the highest number of people with access at the same time in the month. If 3 people have access, one of them leaves and a new person takes their place in the same month, no more than 3 people had access at once, so that month has 3 users.
+
+#### What if we have more users only for one month?
+
+You need the license for that month. If you normally have 3 users and an auditor gets access next to them in one month, 4 people had access at once, so that month has 4 users and needs a Company License.
+
+#### Does someone who has access but does not use the application count?
+
+Yes. What counts is how many real people have access, not how many of them used the application.
+
+#### Does someone who only approves a step count?
+
+Yes. A manager who only answers an approval step, or an external accountant who opens an application once a month, has access and is a user in that month.
+
+#### What if one person has several accounts?
+
+That person is one user. A developer with a different email locally, in staging and in production, or with extra accounts for testing, counts once.
+
+### Teams and environments
+
+#### Do our own developers count?
+
+Yes. If two of your employees develop an application and two others use it, you have 4 users. The developers of an agency or a freelancer who only build, test or demonstrate an application for a client do not count.
+
+#### Do testers in a staging environment count?
+
+Yes. Users are counted across all environments. If 3 people have access in production and 2 testers have access only in staging, you have 5 users. The same person with an account in each environment counts once.
+
+#### Do companies in one group count together?
+
+Yes. If a parent company and its subsidiary each have 2 users, they have 4 users together and need one Company License.
+
+### Automation and AI agents
+
+#### Does an application that only runs on its own count?
+
+No. An application that only runs scheduled jobs or answers webhooks, with nobody opening it or answering its steps, has no users.
+
+#### Does an AI agent that answers steps count?
+
+No. An AI agent is a system, like a scheduled job. The people who run the agent or check its work in the application count.
 
 ## Changes to this license
 
