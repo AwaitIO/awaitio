@@ -31,11 +31,12 @@ The site is a static export that lives in git (see `CLAUDE.md`). The generated `
 Every published package in `libs/` has its own version, managed by Changesets (`.changeset/README.md`).
 
 - When the staged change touches a published package's code or its public behaviour (not just tests, a README or comments), a `.changeset/*.md` naming that package must be staged too.
+- A new package released at its first version, the version of the SDK, gets no changeset (`.claude/guidelines/components.md`).
 - Missing one: write it yourself (`patch` for a fix, `minor` for a new compatible feature, `major` for a breaking change, one English line for the changelog), stage it together with the change and commit; name it in the report. This is the one file `/commit-fast` stages on its own.
 - Only packages in `libs/` get changesets. `apps/site`, `apps/demo` and `apps/docs` are private, never published, and never named in a changeset; a commit that touches only them needs none.
 - A changeset describes only what is staged (`git diff --cached`): its packages and its changelog line come from the staged diff, never from changes still only in the working tree. Unstaged work gets its own changeset when it is committed.
 - File name: `YYYY-MM-DD-HHMM_<packages>_<what>.md`, e.g. `2026-10-21-1542_sdk_header-title-and-logout-button.md`. Packages by their folder in `libs/` (`sdk` for `awaitio`, `input-text` for `@awaitio/input-text`), comma-separated (`sdk,input-text`), or `all` when every package is in it; `<what>` in kebab-case. No brackets: the shell reads `[…]` as a pattern. Inside the file the packages keep their npm names (`'awaitio'`, `'@awaitio/input-text'`), or Changesets does not find them. Changesets reads any `.md` name, so files sort by the time they were written.
-- Every staged changeset has its line in the Unreleased block of `apps/docs/changelog.mdx`, and every breaking one its migration lines, staged in the same commit (`.claude/guidelines/changelog.md`). Missing: write them like the changeset, stage them and name them in the report. `[release] version packages` renames the Unreleased block to the new version.
+- Never edit `apps/docs/changelog.mdx` in an ordinary commit; it is written only in `[release] version packages` (`.claude/guidelines/changelog.md`).
 - Never tag, bump versions or publish from this command. Releases are `pnpm version-packages` and `pnpm release`, run by the user.
 
 ## Precommit checks

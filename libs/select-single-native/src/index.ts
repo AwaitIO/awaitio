@@ -1,0 +1,1 @@
+export { selectSingleNative } from './selectSingleNative';

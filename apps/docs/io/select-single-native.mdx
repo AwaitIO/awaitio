@@ -1,0 +1,111 @@
+---
+title: 'Select Single Native'
+description: 'Asks to pick one of a list of options.'
+icon: 'circle-dot'
+---
+
+`io.select.singleNative()` asks to pick one option from a native drop-down and returns the chosen option itself: a `{ value, label }` object, an enum member or a record from your database. Provided by the `@awaitio/select-single-native` package.
+
+<Frame>
+  <img src="/images/io-select-single-native.png" alt="A New role drop-down with Editor chosen" />
+</Frame>
+
+<Note>
+  The drop-down is the browser's own `<select>`: it opens the list the browser and the operating system draw, with no search as you type, no button to clear the choice and nothing else on top. It suits short lists, such as a role or a plan. For long lists and anything more involved, use [`io.select.single()`](/io/select-single).
+</Note>
+
+## Install
+
+```bash
+npm install @awaitio/select-single-native
+```
+
+## Setup
+
+Register it under the key you want in `io`, see [Input components](/core/input-components):
+
+```ts app.ts {5}
+import { selectSingleNative } from '@awaitio/select-single-native';
+
+export const app = new AwaitIO({
+  // name, actionsDirectory, theme, secret, users…
+  components: { select: { singleNative: selectSingleNative } },
+});
+```
+
+## Usage
+
+```ts
+const role = await io.select.singleNative('New role', {
+  options: [
+    { value: 'admin', label: 'Admin' },
+    { value: 'editor', label: 'Editor' },
+    { value: 'viewer', label: 'Viewer' },
+  ],
+  defaultValue: 'editor',
+});
+// role is { value: 'editor', label: 'Editor' }
+```
+
+Options can be records as they come from the database. Say how to identify and name them with `key` and `label`; the handler gets the record back, relations and dates included:
+
+```ts
+const account = await io.select.singleNative('Account', {
+  options: await prisma.account.findMany({ include: { integrator: true } }),
+  key: (account) => account.id,
+  label: (account) => account.name,
+  defaultValue: user.accountId, // a key is enough
+});
+// account is the Prisma record: account.integrator.name, account.createdAt as a Date
+```
+
+Strings and numbers, such as the members of an enum, name themselves:
+
+```ts
+const billingType = await io.select.singleNative('Billing type', { options: Object.values(BillingType), defaultValue: account.billingType });
+// billingType is a BillingType
+```
+
+The options stay on the server. The browser gets only their labels and answers with the position of the chosen one, so values do not have to be strings and nothing that is not shown leaves the server.
+
+## Props
+
+| Prop           | Type                           | Required | Description                                                                                                                                                                  |
+| -------------- | ------------------------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `options`      | `TOption[]`                    | Required | What to choose from: strings, numbers, `{ value, label }` objects or any records. May be empty.                                                                              |
+| `key`          | `(option) => string \| number` | Optional | What identifies an option. Required for records without `value`; defaults to the string, number or `value`. Two options with the same key are an error.                      |
+| `label`        | `(option) => string`           | Optional | What the drop-down shows. Required for records without `label`; defaults to the string, number or `label`.                                                                   |
+| `defaultValue` | key or `TOption`               | Optional | The option chosen at the start: its key (an id is enough) or the option itself. A key that is not among the options leaves nothing chosen and is reported in the server log. |
+| `helpText`     | `string`                       | Optional | Secondary text under the field.                                                                                                                                              |
+| `disabled`     | `boolean`                      | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                                                                  |
+
+## Optional
+
+The field is required. Chain `.optional()` to let it stay empty; the handler then gets the option or `undefined`, see [Optional fields](/core/input-components#optional-fields).
+
+```ts
+const team = await io.select.singleNative('Team', { options: teams }).optional();
+```
+
+## Returns
+
+The chosen option itself, typed by `options`: the same object you passed, not a copy.
+
+## Built-in validation
+
+The server checks every answer, so a crafted request cannot slip in another value:
+
+| When                                   | Message                               |
+| -------------------------------------- | ------------------------------------- |
+| Nothing chosen                         | `Choose <label>.`                     |
+| A value that was not among the options | `<label>: choose one of the options.` |
+
+## Custom validation
+
+Chain `.validate()` for a check of your own. It runs on the server after the checks above, gets the value the handler would get and returns a message to show under the field, or nothing when the value is fine; see [Custom validation](/core/input-components#custom-validation).
+
+```ts
+const plan = await io.select.singleNative('Plan', { options: plans }).validate((plan) => {
+  return plan.value === 'enterprise' && !account.hasContract ? 'Enterprise needs a signed contract first.' : undefined;
+});
+```

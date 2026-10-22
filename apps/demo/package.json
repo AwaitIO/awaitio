@@ -32,6 +32,7 @@
     "@awaitio/layout-basic": "workspace:*",
     "@awaitio/select-multiple": "workspace:*",
     "@awaitio/select-single": "workspace:*",
+    "@awaitio/select-single-native": "workspace:*",
     "@awaitio/select-table": "workspace:*",
     "@awaitio/theme-default": "workspace:*",
     "awaitio": "workspace:*",

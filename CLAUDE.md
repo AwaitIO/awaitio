@@ -66,7 +66,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/sdk.md` – layout of `libs/sdk`, wire names (`run`, `step`), in-memory state.
 - `.claude/guidelines/components.md` – io component packages: one definition file, inline schemas, drawing with `awaitio/ui`, registration, new component.
 - `.claude/guidelines/documentation.md` – `apps/docs`: page layout, screenshots, media.
-- `.claude/guidelines/changelog.md` – `apps/docs/changelog.mdx`: updated per commit, grouped by scope, migration guides.
+- `.claude/guidelines/changelog.md` – `apps/docs/changelog.mdx`: written at release time, grouped by scope, migration guides.
 - `.claude/guidelines/demo.md` – `apps/demo`: the made-up data, no Czech names.
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
@@ -94,7 +94,7 @@ How to release:
 1. Change a published package and run `pnpm changeset`: pick the packages, `patch` or `minor`, one English line for the changelog. It writes `.changeset/<name>.md`.
 2. Commit the changeset together with the change (`/commit-fast` writes a missing one and stops for review).
 3. Collect as many changesets as you like across packages.
-4. When releasing, run `pnpm version-packages`: it bumps only the packages with a changeset, writes their `CHANGELOG.md` and deletes the used changesets. Commit it as exactly `[release] version packages`.
+4. When releasing, first add the release to `apps/docs/changelog.mdx` from the changesets and commits since the last release (see `changelog.md`), then run `pnpm version-packages`: it bumps only the packages with a changeset, writes their `CHANGELOG.md` and deletes the used changesets. Commit both as exactly `[release] version packages`.
 5. Log in to npm once (`npm login`, check with `npm whoami`).
 6. Run `pnpm release`: `pnpm build`, `changeset publish` (publishes only versions not yet on npm and tags each `<package>@<version>`), then `git push --follow-tags`.
 7. Check the tags on https://github.com/awaitio/awaitio/tags. `changeset tag` and `changeset publish` create git tags only, not GitHub Releases.
@@ -103,4 +103,4 @@ Rules:
 
 - A release is run by hand, never by Claude unasked. `commit-fast` never bumps versions, tags or publishes.
 - No `release:all` any more: it published all packages every time. Do not use the per-package `release` scripts in `libs/*`, they skip tags and changelogs.
-- Every release is listed in `apps/docs/changelog.mdx` with a collapsed migration guide, updated with every commit that has a changeset. See `changelog.md`.
+- Every release is listed in `apps/docs/changelog.mdx` with a collapsed migration guide, written when the release is cut, never in an ordinary commit. See `changelog.md`.

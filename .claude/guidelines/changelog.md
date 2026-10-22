@@ -2,18 +2,15 @@
 
 `apps/docs/changelog.mdx` is the public changelog, linked from the main navigation of the docs and from the header and footer of awaitio.com. The `CHANGELOG.md` files Changesets writes into each package stay as they are; this page is the one people and agents read.
 
-## Updated with every commit that has a changeset
+## Written at release time
 
-The page is never written in one go at release time. Every commit that stages a `.changeset/*.md` also adds its line to the page, in the same commit, so the page is always as current as `main`.
+The page is updated only when releasing, never in an ordinary commit. Before `pnpm version-packages` deletes the changesets, the release adds a new `<Update label="1.0.1" description="October 21, 2026" …>` at the top from everything released since the last release: the `.changeset/*.md` files, the commits since the last `[release] version packages`, and new packages released at their first version without a changeset. It is committed in `[release] version packages`.
 
-- The newest entry is `<Update label="Unreleased" …>` at the top. A commit adds its lines there; create the block when it is missing.
-- `[release] version packages` renames that block to the new version (`label="1.0.1"`) with the release date in `description` (`October 21, 2026`), in the same commit.
+**Why**: what is released is known only at release time; lines written per commit describe work that may still change or never ship, and an Unreleased block on the public page shows readers things they cannot install yet.
 
-**Why**: written at release time, the page misses half of what changed; written per commit, the line comes from the diff that is staged right then.
+✅ DO: commit a component change with its changeset only, and write its line when the release is cut.
 
-✅ DO: stage `.changeset/…_sdk_max-failed-logins-option.md` and the new line under **Core** in the Unreleased block together.
-
-❌ DON'T: leave the page for `pnpm version-packages` to catch up.
+❌ DON'T: add an `Unreleased` block or a line to `apps/docs/changelog.mdx` in a feature commit.
 
 ## Grouped by scope, not by package
 
@@ -39,7 +36,7 @@ Every released `<Update>` ends with a migration guide, so a person or an agent t
 - It is its own `## Migration guide` section after the scopes, like **License**, opened by one line naming the versions (`From 0.1.0 to 1.0.0.`). Each accordion is titled with the scope or component name alone (`Core`, `input-text`, `License`).
 - Each accordion lists exactly what to change in user code: the old call, the new call, a short code block when it helps, and what breaks (type error, runtime error, different behaviour) when it is not changed.
 - A scope with nothing to change says so in one line ("Nothing to change."). Leave it in: "no change needed" is an answer the agent is looking for.
-- Every breaking change in a changeset gets its migration lines in the same commit as the change, in the Unreleased block.
+- Every breaking change since the last release gets its migration lines, written with the rest of the release entry.
 
 **Why**: agents upgrading a project read the changelog first; a guide that is there but collapsed answers them without cluttering the page for people.
 

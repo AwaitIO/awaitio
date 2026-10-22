@@ -33,6 +33,7 @@ export const componentShowcases: ComponentShowcase[] = [
   { method: 'io.input.datetime', description: 'A date and time, as a luxon DateTime', docsPath: '/io/input-datetime', Mock: DatetimeMock },
   { method: 'io.input.date', description: 'A day, as a luxon DateTime', docsPath: '/io/input-date', Mock: DateMock },
   { method: 'io.select.single', description: 'One option from a drop-down', docsPath: '/io/select-single', Mock: SelectMock },
+  { method: 'io.select.singleNative', description: 'One option from a native drop-down', docsPath: '/io/select-single-native', Mock: SelectMock },
   { method: 'io.select.multiple', description: 'Any number of options', docsPath: '/io/select-multiple', Mock: MultipleSelectMock },
   { method: 'io.select.table', description: 'Rows picked from a table', docsPath: '/io/select-table', Mock: SelectTableMock },
   { method: 'io.confirm', description: 'Ask before something irreversible', docsPath: '/io/confirm', Mock: ConfirmMock },

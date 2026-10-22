@@ -32,4 +32,14 @@ Rules for the io component packages: `libs/input-*`, `libs/select-*`, `libs/disp
 
 ## New component
 
-Copy `libs/input-text`, rename the package, the folder and the file, then change the one `.tsx`: schemas, `validate`, `component`. Add a `README.md` for its npm page and a changeset (`pnpm changeset`) when it is published.
+Copy `libs/input-text`, rename the package, the folder and the file, then change the one `.tsx`: schemas, `validate`, `component`. Add a `README.md` for its npm page; its version is set as below.
+
+## A new component starts at the version of the SDK
+
+A new package in `libs/` gets the current version of `libs/sdk/package.json` in its `package.json` and is released at exactly that version, without a changeset that would bump it further. Its line in `apps/docs/changelog.mdx` names that version.
+
+**Why**: a new component is released as a version that matches the SDK it was written for, so nobody wonders which `awaitio` a `0.1.0` component belongs to.
+
+✅ DO: SDK `1.0.0`, new `@awaitio/select-single-native` with `"version": "1.0.0"` and no changeset.
+
+❌ DON'T: start it at `0.0.0` and add a `minor` changeset that releases it as `0.1.0`.

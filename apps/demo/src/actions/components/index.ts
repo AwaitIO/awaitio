@@ -20,6 +20,7 @@ import { inputTextareaAction } from './inputs/inputTextareaAction';
 import { inputUrlAction } from './inputs/inputUrlAction';
 import { selectMultipleAction } from './selects/selectMultipleAction';
 import { selectSingleAction } from './selects/selectSingleAction';
+import { selectSingleNativeAction } from './selects/selectSingleNativeAction';
 import { selectTableAction } from './selects/selectTableAction';
 import { app } from '../../app';
 
@@ -36,6 +37,7 @@ export const componentsPage = app.definePage({
       { group: 'Input', action: inputDateAction, call: 'io.input.date' },
       { group: 'Input', action: inputDatetimeAction, call: 'io.input.datetime' },
       { group: 'Select', action: selectSingleAction, call: 'io.select.single' },
+      { group: 'Select', action: selectSingleNativeAction, call: 'io.select.singleNative' },
       { group: 'Select', action: selectMultipleAction, call: 'io.select.multiple' },
       { group: 'Select', action: selectTableAction, call: 'io.select.table' },
       { group: 'Input', action: confirmAction, call: 'io.confirm' },

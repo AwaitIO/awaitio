@@ -68,31 +68,32 @@ Open http://localhost:3000, log in and run **Greet**.
 
 ## Packages
 
-| Package                                                                     | What it is                                                                        |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| [`awaitio`](https://docs.awaitio.com/core/app)                              | The server, the action runtime, the prebuilt UI and `defineComponent`             |
-| [`@awaitio/theme-default`](https://docs.awaitio.com/core/theme)             | The default look: every building block of `awaitio/ui`, with its styles           |
-| [`@awaitio/input-text`](https://docs.awaitio.com/io/input-text)             | `io.input.text()`: one line of text                                               |
-| [`@awaitio/input-email`](https://docs.awaitio.com/io/input-email)           | `io.input.email()`: an email address                                              |
-| [`@awaitio/input-url`](https://docs.awaitio.com/io/input-url)               | `io.input.url()`: a web address, returned as a `URL`                              |
-| [`@awaitio/input-textarea`](https://docs.awaitio.com/io/input-textarea)     | `io.input.textarea()`: longer text                                                |
-| [`@awaitio/input-number`](https://docs.awaitio.com/io/input-number)         | `io.input.number()`: a number, with min, max and decimal places                   |
-| [`@awaitio/input-boolean`](https://docs.awaitio.com/io/input-boolean)       | `io.input.boolean()`: yes or no, with a checkbox                                  |
-| [`@awaitio/input-datetime`](https://docs.awaitio.com/io/input-datetime)     | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`            |
-| [`@awaitio/input-date`](https://docs.awaitio.com/io/input-date)             | `io.input.date()`: a date, returned as a luxon `DateTime`                         |
-| [`@awaitio/select-single`](https://docs.awaitio.com/io/select-single)       | `io.select.single()`: one of a list of options                                    |
-| [`@awaitio/select-multiple`](https://docs.awaitio.com/io/select-multiple)   | `io.select.multiple()`: any number of options                                     |
-| [`@awaitio/select-table`](https://docs.awaitio.com/io/select-table)         | `io.select.table()`: rows picked from a table                                     |
-| [`@awaitio/confirm`](https://docs.awaitio.com/io/confirm)                   | `io.confirm()`: Confirm or Cancel before something irreversible                   |
-| [`@awaitio/display-table`](https://docs.awaitio.com/io/display-table)       | `io.display.table()` in pages: rows with filter, paging, links and row menus      |
-| [`@awaitio/display-metadata`](https://docs.awaitio.com/io/display-metadata) | `io.display.metadata()` in pages: label and value tiles                           |
-| [`@awaitio/display-link`](https://docs.awaitio.com/io/display-link)         | `io.display.link()`: a link to a page in the app or outside it                    |
-| [`@awaitio/display-heading`](https://docs.awaitio.com/io/display-heading)   | `io.display.heading()`: a section title with an optional description              |
-| [`@awaitio/display-image`](https://docs.awaitio.com/io/display-image)       | `io.display.image()`: a picture, such as a chart or a file preview                |
-| [`@awaitio/display-markdown`](https://docs.awaitio.com/io/display-markdown) | `io.display.markdown()`: formatted text written in markdown                       |
-| [`@awaitio/display-object`](https://docs.awaitio.com/io/display-object)     | `io.display.object()`: the keys and values of a record, nested data included      |
-| [`@awaitio/display-html`](https://docs.awaitio.com/io/display-html)         | `io.display.html()`: HTML markup, sanitized first                                 |
-| [`@awaitio/layout-basic`](https://docs.awaitio.com/io/layout-basic)         | `io.layout.basic()`: the frame of a page, with its title, description and buttons |
+| Package                                                                             | What it is                                                                        |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`awaitio`](https://docs.awaitio.com/core/app)                                      | The server, the action runtime, the prebuilt UI and `defineComponent`             |
+| [`@awaitio/theme-default`](https://docs.awaitio.com/core/theme)                     | The default look: every building block of `awaitio/ui`, with its styles           |
+| [`@awaitio/input-text`](https://docs.awaitio.com/io/input-text)                     | `io.input.text()`: one line of text                                               |
+| [`@awaitio/input-email`](https://docs.awaitio.com/io/input-email)                   | `io.input.email()`: an email address                                              |
+| [`@awaitio/input-url`](https://docs.awaitio.com/io/input-url)                       | `io.input.url()`: a web address, returned as a `URL`                              |
+| [`@awaitio/input-textarea`](https://docs.awaitio.com/io/input-textarea)             | `io.input.textarea()`: longer text                                                |
+| [`@awaitio/input-number`](https://docs.awaitio.com/io/input-number)                 | `io.input.number()`: a number, with min, max and decimal places                   |
+| [`@awaitio/input-boolean`](https://docs.awaitio.com/io/input-boolean)               | `io.input.boolean()`: yes or no, with a checkbox                                  |
+| [`@awaitio/input-datetime`](https://docs.awaitio.com/io/input-datetime)             | `io.input.datetime()`: a date and time, returned as a luxon `DateTime`            |
+| [`@awaitio/input-date`](https://docs.awaitio.com/io/input-date)                     | `io.input.date()`: a date, returned as a luxon `DateTime`                         |
+| [`@awaitio/select-single`](https://docs.awaitio.com/io/select-single)               | `io.select.single()`: one of a list of options                                    |
+| [`@awaitio/select-single-native`](https://docs.awaitio.com/io/select-single-native) | `io.select.singleNative()`: one of a list of options, in a native drop-down       |
+| [`@awaitio/select-multiple`](https://docs.awaitio.com/io/select-multiple)           | `io.select.multiple()`: any number of options                                     |
+| [`@awaitio/select-table`](https://docs.awaitio.com/io/select-table)                 | `io.select.table()`: rows picked from a table                                     |
+| [`@awaitio/confirm`](https://docs.awaitio.com/io/confirm)                           | `io.confirm()`: Confirm or Cancel before something irreversible                   |
+| [`@awaitio/display-table`](https://docs.awaitio.com/io/display-table)               | `io.display.table()` in pages: rows with filter, paging, links and row menus      |
+| [`@awaitio/display-metadata`](https://docs.awaitio.com/io/display-metadata)         | `io.display.metadata()` in pages: label and value tiles                           |
+| [`@awaitio/display-link`](https://docs.awaitio.com/io/display-link)                 | `io.display.link()`: a link to a page in the app or outside it                    |
+| [`@awaitio/display-heading`](https://docs.awaitio.com/io/display-heading)           | `io.display.heading()`: a section title with an optional description              |
+| [`@awaitio/display-image`](https://docs.awaitio.com/io/display-image)               | `io.display.image()`: a picture, such as a chart or a file preview                |
+| [`@awaitio/display-markdown`](https://docs.awaitio.com/io/display-markdown)         | `io.display.markdown()`: formatted text written in markdown                       |
+| [`@awaitio/display-object`](https://docs.awaitio.com/io/display-object)             | `io.display.object()`: the keys and values of a record, nested data included      |
+| [`@awaitio/display-html`](https://docs.awaitio.com/io/display-html)                 | `io.display.html()`: HTML markup, sanitized first                                 |
+| [`@awaitio/layout-basic`](https://docs.awaitio.com/io/layout-basic)                 | `io.layout.basic()`: the frame of a page, with its title, description and buttons |
 
 ## Documentation
 

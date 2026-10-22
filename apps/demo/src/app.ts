@@ -18,6 +18,7 @@ import { inputUrl } from '@awaitio/input-url';
 import { layoutBasic } from '@awaitio/layout-basic';
 import { selectMultiple } from '@awaitio/select-multiple';
 import { selectSingle } from '@awaitio/select-single';
+import { selectSingleNative } from '@awaitio/select-single-native';
 import { selectTable } from '@awaitio/select-table';
 import { defaultTheme } from '@awaitio/theme-default';
 import { AwaitIO } from 'awaitio';
@@ -45,6 +46,7 @@ export const app = new AwaitIO({
     },
     select: {
       single: selectSingle,
+      singleNative: selectSingleNative,
       multiple: selectMultiple,
       table: selectTable,
     },

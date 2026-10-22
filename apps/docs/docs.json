@@ -55,6 +55,7 @@
           "io/input-datetime",
           "io/input-date",
           "io/select-single",
+          "io/select-single-native",
           "io/select-multiple",
           "io/select-table",
           "io/confirm",
