@@ -88,3 +88,9 @@ test('Should refuse records without key and label, and two options with the same
 test('Should take no options at all', () => {
   expect(selectSingle.props.parse({ options: [] }).choices).toEqual([]);
 });
+
+test('Should pass clearable to the browser', () => {
+  expect(selectSingle.props.parse({ options: roles, clearable: true }).clearable).toBe(true);
+
+  expect(selectSingle.props.parse({ options: roles }).clearable).toBeUndefined();
+});

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StrictMode } from 'react';
 import * as jsxRuntime from 'react/jsx-runtime';
+import * as ReactDOM from 'react-dom';
 import { createRoot } from 'react-dom/client';
 import * as zod from 'zod/v4';
 import { App } from './App';
@@ -25,10 +26,11 @@ import { themeBlockNames } from '../uikit/themeBlockNames';
 import { useFieldId } from '../uikit/useFieldId';
 import './index.css';
 
-// Component scripts do not bundle React, zod or the kit; they take these, so hooks share a single React instance.
+// Component scripts do not bundle React, ReactDOM, zod or the kit; they take these, so hooks share a single React instance.
 // The theme scripts add the blocks to `ui` before anything is drawn (loadThemes); the helpers are the core's own.
 const host: AwaitIOHost = {
   React,
+  ReactDOM,
   jsxRuntime,
   zod,
   ui: {

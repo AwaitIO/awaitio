@@ -4,10 +4,10 @@ description: 'Asks to pick one of a list of options.'
 icon: 'circle-dot'
 ---
 
-`io.select.single()` asks to pick one option from a drop-down and returns the chosen option itself: a `{ value, label }` object, an enum member or a record from your database. Provided by the `@awaitio/select-single` package.
+`io.select.single()` asks to pick one option from a searchable drop-down and returns the chosen option itself: a `{ value, label }` object, an enum member or a record from your database. Provided by the `@awaitio/select-single` package.
 
 <Frame>
-  <img src="/images/io-select-single.png" alt="A New role drop-down with Editor chosen" />
+  <img src="/images/io-select-single.png" alt="A New role drop-down open on Admin, Editor and Viewer, with Editor chosen and a × to clear it" />
 </Frame>
 
 ## Install
@@ -39,6 +39,7 @@ const role = await io.select.single('New role', {
     { value: 'viewer', label: 'Viewer' },
   ],
   defaultValue: 'editor',
+  clearable: true,
 });
 // role is { value: 'editor', label: 'Editor' }
 ```
@@ -72,6 +73,7 @@ The options stay on the server. The browser gets only their labels and answers w
 | `key`          | `(option) => string \| number` | Optional | What identifies an option. Required for records without `value`; defaults to the string, number or `value`. Two options with the same key are an error. |
 | `label`        | `(option) => string` | Optional | What the drop-down shows. Required for records without `label`; defaults to the string, number or `label`. |
 | `defaultValue` | key or `TOption`     | Optional | The option chosen at the start: its key (an id is enough) or the option itself. A key that is not among the options leaves nothing chosen and is reported in the server log. |
+| `clearable`    | `boolean`            | Optional | Shows a × that empties the field again. Mostly with `.optional()`; a required field then asks to choose. |
 | `helpText`     | `string`             | Optional | Secondary text under the field.                                                                             |
 | `disabled`     | `boolean`            | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends. |
 

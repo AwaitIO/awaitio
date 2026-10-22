@@ -28,7 +28,8 @@
     }
   },
   "dependencies": {
-    "react": "^19.1.0"
+    "react": "^19.1.0",
+    "react-select": "^5.10.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.0",

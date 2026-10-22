@@ -2,7 +2,7 @@
 
 One choice from a list for [AwaitIO](https://awaitio.com): `io.select.single()`.
 
-![A New role drop-down with Editor chosen](https://docs.awaitio.com/images/io-select-single.png)
+![A New role drop-down open on Admin, Editor and Viewer, with Editor chosen and a × to clear it](https://docs.awaitio.com/images/io-select-single.png)
 
 ## Install
 
@@ -35,6 +35,7 @@ const role = await io.select.single('New role', {
     { value: 'viewer', label: 'Viewer' },
   ],
   defaultValue: 'editor',
+  clearable: true,
 });
 // role is { value: 'editor', label: 'Editor' }
 ```

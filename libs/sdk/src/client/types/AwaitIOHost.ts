@@ -5,12 +5,15 @@ import type { LayoutUi } from './LayoutUi';
 import type { ThemeUi } from './ThemeUi';
 import type * as React from 'react';
 import type * as JsxRuntime from 'react/jsx-runtime';
+import type * as ReactDOM from 'react-dom';
 import type * as Zod from 'zod/v4';
 
-// What the SDK UI puts on window.__AWAITIO__. Component scripts take React, zod and the `awaitio/ui` blocks from here,
+// What the SDK UI puts on window.__AWAITIO__. Component scripts take React, ReactDOM, zod and the `awaitio/ui` blocks from here,
 // so there is one copy of each and the theme decides how every block looks.
 export type AwaitIOHost = {
   React: typeof React;
+  // For blocks built on libraries that render portals (react-select).
+  ReactDOM: typeof ReactDOM;
   jsxRuntime: typeof JsxRuntime;
   zod: typeof Zod;
   ui: AwaitIOHostUi;

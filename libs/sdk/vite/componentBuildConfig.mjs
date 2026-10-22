@@ -6,7 +6,7 @@ const defineShimId = '\0awaitio-define-component';
 
 // Vite config for a component, display component, layout or theme package: builds the browser half of one
 // defineComponent(), defineDisplay(), defineLayout() or defineTheme() file into dist/ui/ui.js.
-// React, zod and `awaitio/ui` come from the SDK UI at run time (window.__AWAITIO__), so the script holds only the
+// React, ReactDOM, zod and `awaitio/ui` come from the SDK UI at run time (window.__AWAITIO__), so the script holds only the
 // component itself. `root` is import.meta.url of the package's vite.config.mts. A theme passes `css`, a Tailwind
 // stylesheet that is built into dist/ui/ui.css next to the script; components and layouts draw with the theme's blocks
 // and need none.
@@ -83,10 +83,11 @@ export const componentBuildConfig = async ({ root, entry, exportName, css }) => 
         cssFileName: 'ui',
       },
       rollupOptions: {
-        external: ['react', 'react/jsx-runtime', 'zod', 'zod/v4', 'awaitio/ui'],
+        external: ['react', 'react-dom', 'react/jsx-runtime', 'zod', 'zod/v4', 'awaitio/ui'],
         output: {
           globals: {
             react: '__AWAITIO__.React',
+            'react-dom': '__AWAITIO__.ReactDOM',
             'react/jsx-runtime': '__AWAITIO__.jsxRuntime',
             // Components import zod/v4, which zod 3.25+ and zod 4 both provide; plain zod is the same zod 4 here.
             zod: '__AWAITIO__.zod',

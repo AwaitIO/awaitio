@@ -11,6 +11,7 @@ export const selectSingleAction = app.defineAction({
         { value: 'viewer', label: 'Viewer' },
       ],
       defaultValue: 'editor',
+      clearable: true,
     });
 
     return role;

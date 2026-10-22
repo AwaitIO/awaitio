@@ -25,6 +25,8 @@ export const selectSingle = withSignature<SelectSingleSignature>()(
         label: optionFunctionSchema,
         // A key (an id is enough) or the option itself.
         defaultValue: z.unknown().optional(),
+        // A × that empties the field again; mostly with .optional(), a required field asks to choose after clearing.
+        clearable: z.boolean().optional(),
         helpText: z.string().optional(),
       })
       .transform(({ options, key, label, defaultValue, ...props }, ctx) => {
@@ -65,7 +67,7 @@ export const selectSingle = withSignature<SelectSingleSignature>()(
       return props.options[Number(value)];
     },
     component: ({ props, value, onChange, disabled, autoFocus }) => {
-      return <Select choices={props.choices} value={value} onChange={onChange} disabled={disabled} autoFocus={autoFocus} />;
+      return <Select choices={props.choices} value={value} onChange={onChange} clearable={props.clearable} disabled={disabled} autoFocus={autoFocus} />;
     },
   }),
 );

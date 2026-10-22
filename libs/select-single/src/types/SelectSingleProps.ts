@@ -7,6 +7,8 @@ export type SelectSingleProps<TOption> = SelectOptionNaming<TOption> & {
   // The option chosen at the start: its key (an id is enough) or the option itself. A key that is not among the options
   // leaves nothing chosen and is reported on the server.
   defaultValue?: SelectOptionKey | TOption;
+  // A × that empties the field again; mostly with .optional(), a required field asks to choose after clearing.
+  clearable?: boolean;
   helpText?: string;
   disabled?: boolean;
 };
