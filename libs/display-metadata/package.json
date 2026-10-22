@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-metadata",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Label and value tiles for AwaitIO: io.display.metadata().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

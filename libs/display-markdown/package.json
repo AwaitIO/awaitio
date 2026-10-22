@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-markdown",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Markdown for AwaitIO: io.display.markdown(), formatted text in a page or a step.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

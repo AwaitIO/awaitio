@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/select-single-native",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "One choice from a list for AwaitIO: io.select.singleNative().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

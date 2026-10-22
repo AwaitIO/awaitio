@@ -1,5 +1,16 @@
 # @awaitio/select-multiple
 
+## 1.1.0
+
+### Minor Changes
+
+- Every package moves to 1.1.0 with awaitio: from now on major and minor follow awaitio, and each package raises the last number for its own changes.
+
+### Patch Changes
+
+- 6ede4cf: License: users are the most people with access at the same time in a month, clients are counted one by one even when hosted, a SaaS counts all its customers, any organization other than a non-profit or school pays past 3 users, and a new Examples section answers common cases.
+- 9c55aa6: License: a team that cannot afford the license right now can ask for an exception or individual terms at license@awaitio.com.
+
 ## 1.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/input-email",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Email address input for AwaitIO: io.input.email().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

@@ -6,7 +6,28 @@ rss: true
 
 What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
 
-<Update label="Unreleased" description="" tags={["License"]}>
+<Update label="1.1.0" description="October 22, 2026" tags={["Core", "Components", "Theme", "License"]}>
+  ## Core
+
+  `awaitio@1.1.0`
+
+  - Component and theme scripts take ReactDOM from the app instead of bundling their own copy.
+  - The [theme](/core/theme) has a new `NativeSelect` block for the browser's own drop-down.
+
+  ## Components
+
+  `@awaitio/*@1.1.0`, every component, with the new `@awaitio/select-single-native@1.1.0`
+
+  - Every package now shares its major and minor version with `awaitio`, so `@awaitio/*@1.1.x` goes with `awaitio@1.1.x`. The last number is each package's own and goes up with any change to it.
+  - [`io.select.single`](/io/select-single) is a searchable drop-down. The new `clearable` option shows a × that empties the field again.
+  - New [`io.select.singleNative`](/io/select-single-native) keeps the browser's own `<select>`, for short lists.
+
+  ## Theme
+
+  `@awaitio/theme-default@1.1.0`
+
+  - Draws the searchable select and the new `NativeSelect` block.
+
   ## License
 
   All packages
@@ -20,7 +41,18 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
 
   ## Migration guide
 
+  From 1.0.0 to 1.1.0.
+
   <AccordionGroup>
+    <Accordion title="awaitio">
+      Nothing to change. Update `awaitio` and every `@awaitio/*` package to `^1.1.0` together, so the theme draws the new select.
+    </Accordion>
+    <Accordion title="@awaitio/select-single">
+      Nothing to change in code: the call and its answer stay the same, only the field is now a searchable drop-down. To keep the browser's own `<select>`, install `@awaitio/select-single-native`, register it and call `io.select.singleNative` instead.
+    </Accordion>
+    <Accordion title="@awaitio/theme-default">
+      With `@awaitio/theme-default`, nothing to change. A theme of your own that does not build on the default one has to add a `NativeSelect` block before you use `io.select.singleNative`.
+    </Accordion>
     <Accordion title="License">
       Nothing to change in code. Check your user count against the new counting rule and the examples on the [pricing page](https://awaitio.com/pricing).
     </Accordion>
@@ -32,7 +64,7 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
 
   ## Core
 
-  `awaitio` 1.0.0
+  `awaitio@1.0.0`
 
   - New [`maxFailedLogins`](/core/users#too-many-failed-attempts) option: how many failed logins per email lock it, or `false` to turn the lock off.
   - The log out button in the header is a plain icon without a border, so it does not stand out next to the user's name.
@@ -40,7 +72,7 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
 
   ## Components
 
-  Every `@awaitio/*` package 1.0.0
+  `@awaitio/*@1.0.0`, every component
 
   - No changes in behavior. They move to 1.0.0 together with the core.
 
@@ -63,10 +95,10 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
   From 0.1.0 to 1.0.0.
 
   <AccordionGroup>
-    <Accordion title="Core">
+    <Accordion title="awaitio">
       Nothing to change. `maxFailedLogins` is optional and defaults to `10`, the same lock 0.1.0 had built in.
     </Accordion>
-    <Accordion title="Components">
+    <Accordion title="@awaitio/*">
       Nothing to change. Update every `@awaitio/*` package to `^1.0.0` together with `awaitio`.
     </Accordion>
     <Accordion title="License">
@@ -80,7 +112,7 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
 
   ## Core
 
-  `awaitio` 0.1.0
+  `awaitio@0.1.0`
 
   - Actions written as async functions that `await` a person's answer through `io`, served together with the UI by the same Node process.
   - Routing, pages, users with login, environments and themes.
@@ -88,7 +120,7 @@ What changed in each release, grouped by part of AwaitIO. Every package has its 
 
   ## Components
 
-  Every `@awaitio/*` package 0.1.0
+  `@awaitio/*@0.1.0`, every component
 
   - Inputs: text, email, URL, textarea, number, boolean, date and datetime.
   - Selects: single, multiple and table, plus confirm.
