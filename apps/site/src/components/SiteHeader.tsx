@@ -28,8 +28,9 @@ export const SiteHeader: FC = () => {
       <Link href="/demo" className="hover:text-gray-900">
         Demo
       </Link>
-      <a href={`${constants.DOCS_URL}/changelog`} className="hover:text-gray-900">
+      <a href={`${constants.DOCS_URL}/changelog`} className="inline-flex items-center gap-1 hover:text-gray-900">
         Changelog
+        <ArrowIcon />
       </a>
       <a href={constants.DOCS_URL} className="inline-flex items-center gap-1 hover:text-gray-900">
         Docs

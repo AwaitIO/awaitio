@@ -56,6 +56,16 @@ No page scrolls sideways on a phone. The header folds its text links into a menu
 
 ❌ DON'T: add a nav link, a fixed-width row or a code card without checking that it still fits.
 
+## Links outside the site carry an arrow, in header and footer
+
+A link that leaves awaitio.com (docs, changelog, GitHub) shows `ArrowIcon` after its label, in the header, the mobile menu and the footer. Links to the site's own pages have none. The footer lists the site pages first, then the outside links, then the legal pages: Pricing, Demo, Docs, Changelog, GitHub, Terms of use, Privacy.
+
+**Why**: the arrow tells the reader before the click that the link leaves the site, and grouping the footer by kind keeps it scannable.
+
+✅ DO: `<a className="inline-flex items-center gap-1 …">Changelog<ArrowIcon /></a>`
+
+❌ DON'T: add an outside link without the arrow, or put it between the legal pages.
+
 ## Icons live in `src/icons/`, one per file
 
 Every inline SVG icon is its own component in `apps/site/src/icons/<Name>Icon.tsx`, imported where it is drawn. A component file holds its own markup, not helper icons.
