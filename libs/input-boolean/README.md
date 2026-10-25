@@ -30,7 +30,7 @@ export const app = new AwaitIO({
 ```ts
 const sendEmail = await io.input.boolean('Send a confirmation email', {
   defaultValue: true,
-  helpText: 'The customer gets a copy of the change',
+  helpText: 'The customer gets a copy',
 });
 ```
 

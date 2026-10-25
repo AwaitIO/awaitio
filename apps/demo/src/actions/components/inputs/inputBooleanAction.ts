@@ -6,7 +6,7 @@ export const inputBooleanAction = app.defineAction({
   handler: async ({ io }) => {
     const sendEmail = await io.input.boolean('Send a confirmation email', {
       defaultValue: true,
-      helpText: 'The customer gets a copy of the change',
+      helpText: 'The customer gets a copy',
     });
 
     return { sendEmail };
