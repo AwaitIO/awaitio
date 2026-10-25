@@ -56,23 +56,25 @@ No page scrolls sideways on a phone. The header folds its text links into a menu
 
 ❌ DON'T: add a nav link, a fixed-width row or a code card without checking that it still fits.
 
-## Links outside the site carry an arrow, in header and footer
+## Links outside the site carry an arrow and open in a new tab, in header and footer
 
-A link that leaves awaitio.com (docs, changelog, GitHub) shows `ArrowIcon` after its label, in the header, the mobile menu and the footer. Links to the site's own pages have none. The footer lists the site pages first, then the outside links, then the legal pages: Pricing, Demo, Docs, Changelog, GitHub, Terms of use, Privacy.
+A link that leaves awaitio.com (docs, changelog, GitHub, sponsors, contact) shows `ArrowIcon` after its label, in the header, the mobile menu and the footer, and opens in a new tab with `target="_blank" rel="noopener noreferrer"`. The X and GitHub icons in header and footer open in a new tab too. Links to the site's own pages have no arrow and stay in the same tab. In the footer, `FooterLink` with `external` does both.
 
-**Why**: the arrow tells the reader before the click that the link leaves the site, and grouping the footer by kind keeps it scannable.
+**Why**: the arrow tells the reader before the click that the link leaves the site, and the new tab keeps awaitio.com open behind it.
 
-✅ DO: `<a className="inline-flex items-center gap-1 …">Changelog<ArrowIcon /></a>`
+✅ DO: `<a href={constants.DOCS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 …">Docs<ArrowIcon /></a>`
 
-❌ DON'T: add an outside link without the arrow, or put it between the legal pages.
+❌ DON'T: add an outside link without the arrow or opening in the same tab, or open a page of the site in a new tab.
 
-## Icons live in `src/icons/`, one per file
+## Icons live in `src/icons/`, one per file, drawn in square pixels
 
-Every inline SVG icon is its own component in `apps/site/src/icons/<Name>Icon.tsx`, imported where it is drawn. A component file holds its own markup, not helper icons.
+Every icon is its own component in `apps/site/src/icons/<Name>Icon.tsx` with `IconProps` (`size`, `className`), imported where it is drawn. Icons are drawn in the brand's square pixels like the hero sun, the logo and the competitor logos on `/vs`: the icon keeps its vector shapes as `PixelLayer`s and `PixelIcon` turns them into squares. `size="small"` (16 × 16 grid, almost no gap) for icons next to text, `size="medium"` (24 × 24 grid, a small gap) for mid-sized icons of lists and buttons, `size="normal"` (32 × 32 grid with a visible gap) for large icons of cards and sections. No plain line or filled SVG icons on the site.
 
-✅ DO: `import { GitHubIcon } from '../icons/GitHubIcon';`
+**Why**: one pixel language across the site, so the icons read as part of the brand and not as a stock icon set.
 
-❌ DON'T: declare `const GitHubIcon` next to `SiteHeader` in the same file.
+✅ DO: `export const GitHubIcon: FC<IconProps> = ({ size = 'small', className = 'h-4 w-4' }) => { return <PixelIcon layers={layers} size={size} className={className} />; };`
+
+❌ DON'T: declare `const GitHubIcon` next to `SiteHeader` in the same file, or draw an icon as a plain `<svg>` with `stroke`.
 
 ## Every page is wrapped in `<Page>`
 
@@ -105,3 +107,19 @@ Link preview images are made in the Figma file AwaitIO, section "OG images" (one
 ✅ DO: change the frame in Figma and export it again.
 
 ❌ DON'T: edit the PNG or draw a preview in code.
+
+## Just code, against no-code
+
+AwaitIO is "just code", said sharply against no-code, low-code and visual editors. It is the headline and the stance of every marketing text, not one benefit among others; the opposite is named openly.
+
+✅ DO: "Internal tools. Just code." – "No drag-and-drop, no canvas, no widgets to wire."
+
+❌ DON'T: soften it into "code-first" or "with a code escape hatch", or promise anything to people who do not write code.
+
+## Plain words a newcomer understands
+
+Launch and marketing copy is written so that someone who has never heard of AwaitIO understands it on the first read. Start with a concrete situation (support needs to refund an order), then what you do (write a function) and what happens (a form in the browser). Short sentences, no jargon in place of a picture.
+
+✅ DO: "Your team opens Refund order in the browser and sees a form with one field: Order ID."
+
+❌ DON'T: "Every await io asks a person in the browser. The same Node process serves the UI."
