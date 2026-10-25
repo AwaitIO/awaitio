@@ -7,6 +7,7 @@ import { constants } from '../constants';
 import { DiscordIcon } from '../icons/DiscordIcon';
 import { GitHubIcon } from '../icons/GitHubIcon';
 import { XIcon } from '../icons/XIcon';
+import { competitors } from '../utils/competitors';
 import type { FC } from 'react';
 
 // The logo with one line about AwaitIO and GitHub on the right, then the links in columns: the site's pages, outside
@@ -37,7 +38,7 @@ export const SiteFooter: FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4">
             <FooterSection title="Product">
               <FooterLink href="/pricing">Pricing</FooterLink>
               <FooterLink href="/demo">Demo</FooterLink>
@@ -59,6 +60,15 @@ export const SiteFooter: FC = () => {
               </FooterLink>
             </FooterSection>
 
+            <FooterSection title="Compare">
+              {competitors.map((competitor) => {
+                return (
+                  <FooterLink key={competitor.slug} href={`/vs/${competitor.slug}`}>
+                    vs {competitor.name}
+                  </FooterLink>
+                );
+              })}
+            </FooterSection>
 
             <FooterSection title="Company">
               <FooterLink href={`mailto:${constants.CONTACT_EMAIL}`} external>
