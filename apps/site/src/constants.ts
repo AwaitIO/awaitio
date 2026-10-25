@@ -4,6 +4,8 @@ export const constants = {
   GITHUB_URL: 'https://github.com/awaitio/awaitio',
   X_URL: 'https://x.com/heyawaitio',
   DISCORD_URL: 'https://discord.gg/85JPMrY7YP',
+  // The short description of AwaitIO for bios and profiles, shown on /brand. Fits the 160 characters of an X bio.
+  SHORT_DESCRIPTION: 'Internal tools. Just code. Write a TypeScript function, get an admin screen for your team. No drag-and-drop. Free for up to 3 users.',
   UMAMI_WEBSITE_ID: 'd4f42a77-67d2-499e-9c6d-fcae54216335',
   LICENSE_URL: 'https://github.com/awaitio/awaitio/blob/main/LICENSE',
   SPONSORS_URL: 'https://github.com/sponsors/awaitio',

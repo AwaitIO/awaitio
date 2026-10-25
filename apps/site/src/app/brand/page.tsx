@@ -11,6 +11,7 @@ import { Lockup } from '../../components/logos/Lockup';
 import { LogoMark } from '../../components/logos/LogoMark';
 import { FadeIn } from '../../components/motion/FadeIn';
 import { Page } from '../../components/Page';
+import { constants } from '../../constants';
 
 const sections = [
   { id: 'logo', label: 'Logo' },
@@ -18,6 +19,7 @@ const sections = [
   { id: 'states', label: 'States' },
   { id: 'icons', label: 'Icons' },
   { id: 'name', label: 'Name' },
+  { id: 'description', label: 'Description' },
   { id: 'colors', label: 'Colors' },
   { id: 'typography', label: 'Typography' },
 ];
@@ -120,6 +122,13 @@ const BrandingPage = () => {
             <BrandRule verdict="dont" label="Lowercase or all caps in prose">
               <span className="text-3xl font-semibold tracking-[-0.02em] text-gray-400 line-through">Awaitio · AWAITIO</span>
             </BrandRule>
+          </div>
+        </BrandSection>
+
+        <BrandSection id="description" title="Description" description="The short description for bios and profiles. Use it as it is, in full, so AwaitIO is described the same way everywhere.">
+          <div className="offset-card bg-white p-6">
+            <p className="max-w-3xl text-xl leading-relaxed text-gray-900">{constants.SHORT_DESCRIPTION}</p>
+            <p className="mt-4 font-mono text-xs text-gray-500">{constants.SHORT_DESCRIPTION.length} characters, fits the 160 of an X bio</p>
           </div>
         </BrandSection>
 
