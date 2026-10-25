@@ -6,6 +6,7 @@ import { useEffect, useState, type FC } from 'react';
 import { constants } from '../constants';
 import { ArrowIcon } from '../icons/ArrowIcon';
 import { CloseIcon } from '../icons/CloseIcon';
+import { DiscordIcon } from '../icons/DiscordIcon';
 import { GitHubIcon } from '../icons/GitHubIcon';
 import { MenuIcon } from '../icons/MenuIcon';
 import { XIcon } from '../icons/XIcon';
@@ -17,7 +18,7 @@ export const SiteHeader: FC = () => {
   const pathname = usePathname();
 
   useEffect(() => {
-    setIsOpen(false); 
+    setIsOpen(false);
   }, [pathname]);
 
   const links = (
@@ -47,6 +48,9 @@ export const SiteHeader: FC = () => {
         </Link>
         <nav className="flex items-center gap-5 text-sm text-gray-600">
           <div className="hidden items-center gap-5 sm:flex">{links}</div>
+          <a href={constants.DISCORD_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on Discord" className="hover:text-gray-900">
+            <DiscordIcon className="h-5 w-5" />
+          </a>
           <a href={constants.X_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on X" className="hover:text-gray-900">
             <XIcon className="h-5 w-5" />
           </a>

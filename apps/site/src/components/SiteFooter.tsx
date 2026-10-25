@@ -4,6 +4,7 @@ import { FooterSection } from './FooterSection';
 import { Lockup } from './logos/Lockup';
 import { SponsorStrip } from './SponsorStrip';
 import { constants } from '../constants';
+import { DiscordIcon } from '../icons/DiscordIcon';
 import { GitHubIcon } from '../icons/GitHubIcon';
 import { XIcon } from '../icons/XIcon';
 import type { FC } from 'react';
@@ -24,6 +25,9 @@ export const SiteFooter: FC = () => {
               <p className="text-sm text-gray-600">Internal tools written as plain TypeScript functions. Your code awaits, the browser answers.</p>
             </div>
             <div className="flex items-center gap-5 text-gray-600">
+              <a href={constants.DISCORD_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on Discord" className="hover:text-gray-900">
+                <DiscordIcon className="h-7 w-7" />
+              </a>
               <a href={constants.X_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on X" className="hover:text-gray-900">
                 <XIcon className="h-7 w-7" />
               </a>

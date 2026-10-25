@@ -3,6 +3,7 @@ export const constants = {
   DOCS_URL: 'https://docs.awaitio.com',
   GITHUB_URL: 'https://github.com/awaitio/awaitio',
   X_URL: 'https://x.com/heyawaitio',
+  DISCORD_URL: 'https://discord.gg/85JPMrY7YP',
   LICENSE_URL: 'https://github.com/awaitio/awaitio/blob/main/LICENSE',
   SPONSORS_URL: 'https://github.com/sponsors/awaitio',
   DEMO_URL: 'https://demo.awaitio.com',

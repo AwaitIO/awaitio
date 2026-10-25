@@ -11,6 +11,7 @@ import { CrossBadgeIcon } from '../../icons/CrossBadgeIcon';
 import { CrossIcon } from '../../icons/CrossIcon';
 import { CrowdIcon } from '../../icons/CrowdIcon';
 import { CursorIcon } from '../../icons/CursorIcon';
+import { DiscordIcon } from '../../icons/DiscordIcon';
 import { GitHubIcon } from '../../icons/GitHubIcon';
 import { HeadsetIcon } from '../../icons/HeadsetIcon';
 import { HeartIcon } from '../../icons/HeartIcon';
@@ -46,6 +47,7 @@ export const brandIcons: { name: string; Icon: FC<IconProps> }[] = [
   { name: 'Cross', Icon: CrossIcon },
   { name: 'Crowd', Icon: CrowdIcon },
   { name: 'Cursor', Icon: CursorIcon },
+  { name: 'Discord', Icon: DiscordIcon },
   { name: 'GitHub', Icon: GitHubIcon },
   { name: 'Headset', Icon: HeadsetIcon },
   { name: 'Heart', Icon: HeartIcon },
