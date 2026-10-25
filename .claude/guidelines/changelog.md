@@ -56,3 +56,18 @@ From 0.1.0 to 1.0.0.
 ```
 
 ❌ DON'T: write "see the docs" or leave the migration out because nothing broke.
+
+## A Discord message with every release
+
+Whenever a release is added to `apps/docs/changelog.mdx`, also write `discord.md` at the repository root (never committed, overwritten each release; `/prepare-release` writes it on its own) with the same release as a message for the `#releases` channel, ready to copy:
+
+- `## AwaitIO 1.1.0`, then `-# October 22, 2026` (small grey text on Discord), then the scopes as `**Core** · awaitio@1.1.0` (the version in inline code) with the same lines, shortened where the changelog is long.
+- No links inside the lines (doc paths are relative); end with `Full changelog: <https://docs.awaitio.com/changelog>`, in `<>` so Discord shows no preview.
+- The migration guide as one `**Upgrading from 1.0.0:**` line, not accordions.
+- Under 2000 characters, Discord's limit for one message. Several releases at once: one message each, oldest first, separated by an HTML comment the user does not copy.
+
+**Why**: the release is announced on Discord by hand; a message written from the same changelog entry is copied as it is, without rewriting MDX into Discord markdown.
+
+✅ DO: write `discord.md` in the same step as the changelog entry, without being asked.
+
+❌ DON'T: commit `discord.md` or put it anywhere git tracks.

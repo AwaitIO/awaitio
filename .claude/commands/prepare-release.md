@@ -87,6 +87,9 @@ one `<Update>` with the versions `pnpm version-packages` will produce (`pnpm cha
 --verbose` lists them) and new packages at their own version, grouped by scope, with the migration
 guide. Use today's date. Leave it uncommitted.
 
+Then write `discord.md` at the repository root, the same release as a message for the Discord
+`#releases` channel (see "A Discord message with every release" in `changelog.md`).
+
 ## 6. Report and next steps
 
 One line each: install and build passed, the export commit (hash) or no change, the changesets
@@ -99,3 +102,4 @@ for the user to run:
 4. `npm whoami` (`npm login` when it fails).
 5. `pnpm release`
 6. Check the tags on https://github.com/awaitio/awaitio/tags.
+7. Post `discord.md` to the Discord `#releases` channel.
