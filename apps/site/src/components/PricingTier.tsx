@@ -1,3 +1,5 @@
+import { CheckIcon } from '../icons/CheckIcon';
+import { CrossIcon } from '../icons/CrossIcon';
 import type { PricingTierInfo } from '../types/PricingTierInfo';
 import type { FC } from 'react';
 
@@ -6,8 +8,11 @@ export type PricingTierProps = {
 };
 
 export const PricingTier: FC<PricingTierProps> = ({ tier }) => {
+  const Icon = tier.icon;
+
   return (
-    <div className={['flex flex-col gap-3 rounded-2xl border p-6', tier.highlighted && 'border-gray-900 shadow-lg', !tier.highlighted && 'border-gray-200'].filter(Boolean).join(' ')}>
+    <div className={['offset-card flex flex-col gap-3 bg-white p-6', tier.highlighted && 'shadow-[7px_7px_0_var(--color-orange-500)]'].filter(Boolean).join(' ')}>
+      <Icon className="mb-2 h-12 w-12 shrink-0 text-gray-900" />
       <p className="text-sm font-medium text-gray-500">{tier.name}</p>
       <p className="text-4xl font-semibold tracking-[-0.02em]">{tier.price}</p>
       <p className="text-sm text-gray-500">{tier.detail}</p>
@@ -15,18 +20,7 @@ export const PricingTier: FC<PricingTierProps> = ({ tier }) => {
         {tier.features.map((feature) => {
           return (
             <li key={feature} className="flex gap-2">
-              <svg
-                viewBox="0 0 24 24"
-                className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12.5 10 17l9-10" />
-              </svg>
+              <CheckIcon />
               {feature}
             </li>
           );
@@ -34,9 +28,7 @@ export const PricingTier: FC<PricingTierProps> = ({ tier }) => {
         {tier.excluded.map((feature) => {
           return (
             <li key={feature} className="flex gap-2 text-gray-400">
-              <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M7 7l10 10M17 7 7 17" />
-              </svg>
+              <CrossIcon />
               {feature}
             </li>
           );
@@ -46,8 +38,8 @@ export const PricingTier: FC<PricingTierProps> = ({ tier }) => {
         href={tier.cta.href}
         className={[
           'mt-auto self-start rounded-lg px-5 py-3 text-sm font-medium',
-          tier.highlighted && 'border border-gray-900 bg-gray-900 text-white hover:bg-gray-700',
-          !tier.highlighted && 'border border-gray-300 hover:bg-gray-50',
+          tier.highlighted && 'offset-button border border-gray-900 bg-gray-900 text-white hover:bg-gray-700',
+          !tier.highlighted && 'offset-button-secondary border-[1.5px] border-gray-900 bg-white hover:bg-gray-50',
         ]
           .filter(Boolean)
           .join(' ')}

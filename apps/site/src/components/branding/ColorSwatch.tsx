@@ -12,7 +12,7 @@ export const ColorSwatch: FC<ColorSwatchProps> = ({ color }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+    <article className="overflow-hidden offset-card bg-white">
       <div className="h-24 border-b border-gray-200" style={{ backgroundColor: color.hex }} />
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-center justify-between gap-2">

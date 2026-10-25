@@ -1,16 +1,28 @@
-import type { FC, ReactNode } from 'react';
+import { PixelIcon } from './PixelIcon';
+import type { IconSize } from '../types/IconSize';
+import type { PixelLayer } from '../types/PixelLayer';
+import type { FC } from 'react';
 
 export type FeatureIconProps = {
-  children: ReactNode;
+  // `d` attributes of the line icon, drawn in a 24 × 24 box.
+  paths: string[];
+  // The icon drawn by hand on the 16 × 16 grid of `size="small"`, where tracing the paths would blur.
+  small?: string[];
+  size?: IconSize;
+  className?: string;
 };
 
-// The tile around every feature icon: same size, stroke and color for all of them.
-export const FeatureIcon: FC<FeatureIconProps> = ({ children }) => {
-  return (
-    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50 text-orange-500 ring-1 ring-orange-100">
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        {children}
-      </svg>
-    </span>
-  );
+// Every feature icon the way the brand draws it: the line icon alone in ink, in square pixels with the grid showing.
+export const FeatureIcon: FC<FeatureIconProps> = ({ paths, small, size = 'normal', className = 'h-12 w-12 shrink-0 text-gray-900' }) => {
+  const layers: PixelLayer[] = [
+    {
+      className: 'fill-current',
+      shapes: paths.map((d) => {
+        return { d, stroke: 2 };
+      }),
+      small,
+    },
+  ];
+
+  return <PixelIcon layers={layers} size={size} className={className} />;
 };

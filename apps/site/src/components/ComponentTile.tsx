@@ -11,7 +11,7 @@ export const ComponentTile: FC<ComponentTileProps> = ({ component }) => {
   const { Mock } = component;
 
   return (
-    <a href={`${constants.DOCS_URL}${component.docsPath}`} className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-colors hover:border-orange-400">
+    <a href={`${constants.DOCS_URL}${component.docsPath}`} className="group offset-card flex flex-col overflow-hidden bg-white transition-[border-color,box-shadow] hover:border-orange-500 hover:shadow-[5px_5px_0_var(--color-orange-500)]">
       <div className="flex h-40 items-center bg-gray-50 px-6 transition-colors group-hover:bg-orange-50/60">
         <Mock />
       </div>

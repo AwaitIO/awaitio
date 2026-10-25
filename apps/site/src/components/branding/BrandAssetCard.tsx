@@ -12,8 +12,8 @@ export const BrandAssetCard: FC<BrandAssetCardProps> = ({ asset }) => {
   const isDark = asset.tone === 'dark';
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
-      <div className={['flex h-44 items-center justify-center', isDark && 'bg-[#111827]', !isDark && 'bg-white'].filter(Boolean).join(' ')}>
+    <article className="flex flex-col overflow-hidden offset-card bg-white">
+      <div className={['flex h-44 items-center justify-center', isDark && 'bg-gray-900', !isDark && 'bg-paper'].filter(Boolean).join(' ')}>
         {match(asset.kind)
           .with('icon', () => {
             return <Mark size={88} tone={asset.tone} />;

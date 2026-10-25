@@ -1,9 +1,14 @@
 import { FaqItem } from '../../components/FaqItem';
 import { LicenseParagraph } from '../../components/LicenseParagraph';
+import { FadeIn } from '../../components/motion/FadeIn';
 import { Page } from '../../components/Page';
 import { PricingTier } from '../../components/PricingTier';
 import { SupportBanner } from '../../components/SupportBanner';
 import { constants } from '../../constants';
+import { BuildingIcon } from '../../icons/BuildingIcon';
+import { CrowdIcon } from '../../icons/CrowdIcon';
+import { TeamIcon } from '../../icons/TeamIcon';
+import { UserIcon } from '../../icons/UserIcon';
 import type { FaqEntry } from '../../types/FaqEntry';
 import type { PricingTierInfo } from '../../types/PricingTierInfo';
 import { readLicenseExamples } from '../../utils/readLicenseExamples';
@@ -13,6 +18,7 @@ export const LAST_MODIFIED_AT = '2026-10-22';
 
 const tiers: PricingTierInfo[] = [
   {
+    icon: UserIcon,
     name: 'Up to 3 users',
     price: 'Free',
     detail: 'No sign-up, no license key',
@@ -22,6 +28,7 @@ const tiers: PricingTierInfo[] = [
     highlighted: false,
   },
   {
+    icon: TeamIcon,
     name: '4–10 users',
     price: '$50/mo',
     detail: 'Company License',
@@ -31,6 +38,7 @@ const tiers: PricingTierInfo[] = [
     highlighted: true,
   },
   {
+    icon: CrowdIcon,
     name: '11–50 users',
     price: '$250/mo',
     detail: 'Company License',
@@ -40,6 +48,7 @@ const tiers: PricingTierInfo[] = [
     highlighted: false,
   },
   {
+    icon: BuildingIcon,
     name: 'Enterprise',
     price: 'Custom',
     detail: 'Custom agreement',
@@ -67,29 +76,27 @@ const PricingPage = () => {
   const faq = generalGroup?.entries ?? [];
 
   return (
-    <Page
-      title="Pricing – AwaitIO"
-      description="Up to 3 users free. Bigger teams pay one flat price per company."
-      ogImage="pricing"
-      canonicalPath="/pricing/"
-      lastModifiedAt={LAST_MODIFIED_AT}
-    >
+    <Page title="Pricing – AwaitIO" description="Up to 3 users free. Bigger teams pay one flat price per company." ogImage="pricing" canonicalPath="/pricing/" lastModifiedAt={LAST_MODIFIED_AT}>
       <div className="mx-auto max-w-6xl px-4 py-20">
-        <div className="max-w-2xl">
+        <FadeIn on="load" className="max-w-2xl">
           <h1 className="text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Pricing</h1>
           <p className="mt-4 text-lg text-gray-600">
             Users are the real people who have access to your AwaitIO apps at the same time, locally or deployed, however many accounts they have or share. The free and the paid version are the same
             software: no paid features, no license keys, no limits and no telemetry. It works on trust. Try it free for 30 days with any number of users.
           </p>
-        </div>
+        </FadeIn>
         <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {tiers.map((tier) => {
-            return <PricingTier key={tier.name} tier={tier} />;
+          {tiers.map((tier, index) => {
+            return (
+              <FadeIn key={tier.name} on="load" className="grid" delay={0.1 + index * 0.1}>
+                <PricingTier tier={tier} />
+              </FadeIn>
+            );
           })}
         </div>
         <SupportBanner />
-        <div className="mt-20 max-w-2xl">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em]">How to get a Company License</h2>
+        <FadeIn className="mt-20 max-w-2xl">
+          <h2 className="font-pixel text-xl leading-tight sm:text-2xl">How to get a Company License</h2>
           <p className="mt-3 text-gray-600">
             Sponsor AwaitIO on{' '}
             <a href={constants.SPONSORS_URL} className="underline hover:text-gray-900">
@@ -112,17 +119,17 @@ const PricingPage = () => {
             </a>
             .
           </p>
-        </div>
-        <div className="mt-20 max-w-2xl">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em]">Frequently asked questions</h2>
+        </FadeIn>
+        <FadeIn className="mt-20 max-w-2xl">
+          <h2 className="font-pixel text-xl leading-tight sm:text-2xl">Frequently asked questions</h2>
           <div className="mt-4">
             {faq.map((entry) => {
               return <FaqItem key={entry.question} entry={entry} />;
             })}
           </div>
-        </div>
-        <div className="mt-20 max-w-2xl">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em]">Examples</h2>
+        </FadeIn>
+        <FadeIn className="mt-20 max-w-2xl">
+          <h2 className="font-pixel text-xl leading-tight sm:text-2xl">Examples</h2>
           <p className="mt-3 text-gray-600">
             How the license applies to common cases. These examples are part of the{' '}
             <a href={constants.LICENSE_URL} className="underline hover:text-gray-900">
@@ -142,7 +149,7 @@ const PricingPage = () => {
               </div>
             );
           })}
-        </div>
+        </FadeIn>
       </div>
     </Page>
   );

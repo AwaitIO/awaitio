@@ -5,14 +5,15 @@ export type LogoColorsArgs = {
   tone: LogoMarkProps['tone'];
 };
 
-// Ink is the main color, paper the color of the background the mark sits on; the dot is always orange.
+// Ink is the main color, paper the color of the background the mark sits on; the dot is always the sun orange and a
+// finished step always green.
 export const logoColors = ({ tone }: LogoColorsArgs) => {
   return match(tone)
     .with('light', () => {
-      return { ink: '#111827', paper: '#ffffff', accent: '#f97316' };
+      return { ink: '#2B2621', paper: '#EDE8DF', accent: '#D9733F', done: '#3F8A5A' };
     })
     .with('dark', () => {
-      return { ink: '#ffffff', paper: '#111827', accent: '#f97316' };
+      return { ink: '#FBF8F2', paper: '#2B2621', accent: '#D9733F', done: '#5FA878' };
     })
     .exhaustive();
 };

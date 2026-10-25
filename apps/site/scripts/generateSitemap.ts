@@ -19,7 +19,7 @@ const publicDirectory = path.join(process.cwd(), 'public');
     { path: '/' },
     { path: '/pricing/', lastModifiedAt: PRICING_LAST_MODIFIED_AT },
     { path: '/demo/' },
-    { path: '/branding/' },
+    { path: '/brand/' },
     { path: '/terms-of-use/', lastModifiedAt: TERMS_OF_USE_LAST_MODIFIED_AT },
     { path: '/privacy/', lastModifiedAt: PRIVACY_LAST_MODIFIED_AT },
   ];

@@ -1,9 +1,141 @@
 @import 'tailwindcss';
 
-/* Geist Sans for text, Geist Mono for code and small labels, as Vercel uses them; loaded by next/font in the layout. */
+/* Geist Sans for text, Geist Mono for code and small labels, Silkscreen pixels for section headings; loaded by
+   next/font in the layout.
+   The palette is the Sandstone × Dither brand: Tailwind's gray scale is redrawn as the warm ink-to-sand scale and
+   orange as the sun terracotta, so every gray-* and orange-* class on the site follows the brand. White is the warm
+   card surface, paper the sand page behind it, band the strip under the hero horizon, done the green of a finished
+   step. */
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-pixel: var(--font-silkscreen), var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-white: #fbf8f2;
+  --color-paper: #ede8df;
+  --color-band: #e3dacb;
+  --color-done: #3f8a5a;
+
+  --color-gray-50: #f6f2ea;
+  --color-gray-100: #efe9df;
+  --color-gray-200: #e2d9cb;
+  --color-gray-300: #d2c6b4;
+  --color-gray-400: #ada08d;
+  --color-gray-500: #877b6b;
+  --color-gray-600: #6f6458;
+  --color-gray-700: #554b41;
+  --color-gray-800: #3a3129;
+  --color-gray-900: #2b2621;
+  --color-gray-950: #1e1a16;
+
+  --color-orange-50: #fbf0e8;
+  --color-orange-100: #f6dccb;
+  --color-orange-200: #efc0a2;
+  --color-orange-300: #e8a278;
+  --color-orange-400: #e08a58;
+  --color-orange-500: #d9733f;
+  --color-orange-600: #c2602f;
+  --color-orange-700: #9f4d26;
+  --color-orange-800: #7e3e21;
+  --color-orange-900: #66341d;
+
+  /* The hero sun glows: its dithered pixels dim and the gaps light up, in slow waves. */
+  --animate-sun-ember: sun-ember 3.5s ease-in-out infinite;
+  --animate-sun-spark: sun-spark 4.5s ease-in-out infinite;
+
+  @keyframes sun-ember {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.15;
+    }
+  }
+
+  @keyframes sun-spark {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  /* The top of a page rises 30 px and fades in on its first paint, in CSS so it needs no JavaScript and never hides
+     the main content from search engines or slow devices; FadeIn sets the delay of each block. */
+  --animate-rise: rise 0.35s ease-out both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+
+  /* The gliding pointer of the how-it-works demo presses the element it has landed on. */
+  --animate-cursor-press: cursor-press 0.3s ease-out both;
+
+  @keyframes cursor-press {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.8);
+    }
+  }
+
+  /* The pointer of the how-it-works demo: glides in from the lower right, presses and lets go. */
+  --animate-cursor-click: cursor-click 0.7s ease-out both;
+
+  @keyframes cursor-click {
+    0% {
+      opacity: 0;
+      transform: translate(36px, 30px);
+    }
+    20% {
+      opacity: 1;
+    }
+    65% {
+      transform: translate(0, 0) scale(1);
+    }
+    80% {
+      opacity: 1;
+      transform: translate(0, 0) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+  }
+}
+
+/* The brand's cards and buttons: an ink border with a hard shadow shifted down and right. Cards and secondary buttons
+   take the quiet sand shadow, the primary button the orange one. */
+@utility offset-card {
+  border: 1.5px solid var(--color-gray-900);
+  border-radius: 10px;
+  box-shadow: 5px 5px 0 var(--color-gray-400);
+}
+
+@utility offset-button {
+  box-shadow: 3px 3px 0 var(--color-orange-500);
+}
+
+/* Secondary buttons: an ink outline lifted by a sand shadow, quieter than the orange one of the primary button. */
+@utility offset-button-secondary {
+  box-shadow: 3px 3px 0 var(--color-gray-400);
+}
+
+/* The strip under the hero horizon: two faint lines across the whole width that split it into thirds. */
+@utility horizon-band {
+  background-color: var(--color-band);
+  background-image: linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1)), linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1));
+  background-size: 100% 1px;
+  background-position: 0 33.333%, 0 66.667%;
+  background-repeat: no-repeat;
 }
 
 html {
@@ -30,5 +162,12 @@ html {
 @layer base {
   :not(pre) > code {
     white-space: nowrap;
+  }
+}
+
+/* With reduced motion the top of a page is simply there. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
   }
 }

@@ -1,14 +1,18 @@
+import { PixelIcon } from '../components/PixelIcon';
+import type { IconProps } from '../types/IconProps';
+import type { PixelLayer } from '../types/PixelLayer';
 import type { FC } from 'react';
 
-// The official TypeScript mark: white "TS" in the bottom right of a #3178C6 rounded square.
-export const TypeScriptIcon: FC = () => {
-  return (
-    <svg viewBox="0 0 256 256" className="h-5 w-5" aria-hidden="true">
-      <rect width="256" height="256" rx="28" fill="#3178C6" />
-      <path
-        fill="#ffffff"
-        d="M150.5 200.5v27.6c4.5 2.3 9.8 4 15.9 5.2 6.1 1.2 12.6 1.7 19.4 1.7 6.6 0 12.9-.6 18.9-1.9 6-1.3 11.2-3.4 15.7-6.3 4.5-2.9 8.1-6.7 10.7-11.4 2.6-4.7 3.9-10.5 3.9-17.4 0-5-.8-9.4-2.2-13.2-1.5-3.8-3.7-7.2-6.5-10.1-2.8-3-6.2-5.6-10.2-8-4-2.3-8.4-4.6-13.4-6.7-3.7-1.5-6.9-3-9.8-4.4-2.9-1.4-5.3-2.9-7.3-4.3-2-1.5-3.6-3-4.7-4.7-1.1-1.6-1.6-3.5-1.6-5.5 0-1.9.5-3.6 1.5-5.1 1-1.5 2.4-2.8 4.1-3.9 1.8-1.1 4-1.9 6.6-2.5 2.6-.6 5.5-.9 8.7-.9 2.3 0 4.7.2 7.3.5 2.6.3 5.1.9 7.7 1.6 2.6.7 5.1 1.6 7.5 2.7 2.4 1.1 4.7 2.3 6.7 3.7v-25.8c-4.2-1.6-8.8-2.8-13.7-3.6-4.9-.8-10.6-1.2-17-1.2-6.5 0-12.7.7-18.5 2.1-5.8 1.4-10.9 3.6-15.4 6.6-4.4 3-7.9 6.8-10.5 11.4-2.6 4.6-3.8 10.2-3.8 16.6 0 8.2 2.4 15.2 7.1 21 4.7 5.8 11.9 10.7 21.5 14.7 3.8 1.5 7.3 3.1 10.6 4.6 3.3 1.5 6.1 3.1 8.5 4.7 2.4 1.6 4.3 3.4 5.6 5.3 1.4 1.9 2.1 4.1 2.1 6.5 0 1.8-.4 3.5-1.3 5-.9 1.5-2.2 2.9-4 4-1.8 1.1-4 2-6.7 2.6-2.7.6-5.8.9-9.4.9-6.1 0-12.2-1.1-18.2-3.2-6-2.1-11.6-5.3-16.7-9.6zM104 132.4h35.4v-22.7H40v22.7h35.3v101.2H104V132.4z"
-      />
-    </svg>
-  );
+// Drawn pixel by pixel on a 16 × 16 grid, so the letters stay sharp instead of being traced from the vector mark.
+const layers: PixelLayer[] = [
+  { className: 'fill-[#3178C6]', shapes: [{ d: 'M1 0h14v1h1v14h-1v1H1v-1H0V1h1Z' }] },
+  {
+    className: 'fill-white',
+    shapes: [{ d: 'M4 8h5v1h-5Z' }, { d: 'M6 9h1v5h-1Z' }, { d: 'M10 8h4v1h-4Z' }, { d: 'M10 9h1v2h-1Z' }, { d: 'M10 10h4v1h-4Z' }, { d: 'M13 11h1v2h-1Z' }, { d: 'M10 13h4v1h-4Z' }],
+  },
+];
+
+// The TypeScript mark in square pixels: white "TS" in the bottom right of a #3178C6 square.
+export const TypeScriptIcon: FC<IconProps> = ({ size = 'small', className = 'h-5 w-5' }) => {
+  return <PixelIcon layers={layers} size={size} className={className} box={{ x: 0, y: 0, size: 16 }} />;
 };

@@ -1,9 +1,31 @@
+import { PixelIcon } from '../components/PixelIcon';
+import type { IconProps } from '../types/IconProps';
+import type { PixelLayer } from '../types/PixelLayer';
 import type { FC } from 'react';
 
-export const MenuIcon: FC = () => {
-  return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
+// Drawn by hand for the 16 × 16 grid of `size="small"`, where the traced shapes would blur.
+const small = [
+  '................',
+  '................',
+  '................',
+  '..xxxxxxxxxxxx..',
+  '..xxxxxxxxxxxx..',
+  '................',
+  '................',
+  '..xxxxxxxxxxxx..',
+  '..xxxxxxxxxxxx..',
+  '................',
+  '................',
+  '..xxxxxxxxxxxx..',
+  '..xxxxxxxxxxxx..',
+  '................',
+  '................',
+  '................',
+];
+
+const layers: PixelLayer[] = [{ className: 'fill-current', shapes: [{ d: 'M4 7h16M4 12h16M4 17h16', stroke: 2.2 }], small }];
+
+// Three lines that open the menu.
+export const MenuIcon: FC<IconProps> = ({ size = 'small', className = 'h-5 w-5' }) => {
+  return <PixelIcon layers={layers} size={size} className={className} />;
 };

@@ -8,8 +8,8 @@ import { ArrowIcon } from '../icons/ArrowIcon';
 import { CloseIcon } from '../icons/CloseIcon';
 import { GitHubIcon } from '../icons/GitHubIcon';
 import { MenuIcon } from '../icons/MenuIcon';
+import { XIcon } from '../icons/XIcon';
 import { Lockup } from './logos/Lockup';
-import { LogoMark10 } from './logos/LogoMark10';
 
 // Text links in a row from the sm breakpoint up; below it they fold into a menu behind a button, GitHub stays visible.
 export const SiteHeader: FC = () => {
@@ -28,11 +28,11 @@ export const SiteHeader: FC = () => {
       <Link href="/demo" className="hover:text-gray-900">
         Demo
       </Link>
-      <a href={`${constants.DOCS_URL}/changelog`} className="inline-flex items-center gap-1 hover:text-gray-900">
+      <a href={`${constants.DOCS_URL}/changelog`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-gray-900">
         Changelog
         <ArrowIcon />
       </a>
-      <a href={constants.DOCS_URL} className="inline-flex items-center gap-1 hover:text-gray-900">
+      <a href={constants.DOCS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-gray-900">
         Docs
         <ArrowIcon />
       </a>
@@ -43,12 +43,15 @@ export const SiteHeader: FC = () => {
     <header className="sticky top-0 z-30 border-b border-gray-100 bg-white/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <Link href="/" aria-label="AwaitIO home" className="shrink-0">
-          <Lockup size={24} tone="light" Mark={LogoMark10} />
+          <Lockup size={24} tone="light" />
         </Link>
         <nav className="flex items-center gap-5 text-sm text-gray-600">
           <div className="hidden items-center gap-5 sm:flex">{links}</div>
-          <a href={constants.GITHUB_URL} aria-label="AwaitIO on GitHub" className="hover:text-gray-900">
-            <GitHubIcon />
+          <a href={constants.X_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on X" className="hover:text-gray-900">
+            <XIcon className="h-5 w-5" />
+          </a>
+          <a href={constants.GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="AwaitIO on GitHub" className="hover:text-gray-900">
+            <GitHubIcon className="h-5 w-5" />
           </a>
           <button
             type="button"
