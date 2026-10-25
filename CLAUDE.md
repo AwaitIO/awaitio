@@ -69,6 +69,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/changelog.md` – `apps/docs/changelog.mdx`: written at release time, grouped by scope, migration guides.
 - `.claude/guidelines/demo.md` – `apps/demo`: the made-up data, no Czech names.
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
+- `.claude/guidelines/tweets.md` – `.claude/tweets/`: posts for X, file names, text and media.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
 - `.claude/guidelines/final-banner.md` – the closing banner of `/delete-worktree`.
 - `.claude/workbench.md` – how the review workbench groups changes.
@@ -81,6 +82,7 @@ Read the guideline before working in its area:
 - `libs/theme-default/` – the default theme (`@awaitio/theme-default`), the look of the `awaitio/ui` blocks.
 - `apps/docs/` – documentation in Mintlify, English. See `documentation.md`.
 - `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`, only by `/prepare-release` on `main`.
+- `.claude/tweets/` – the posts for the AwaitIO account on X, queued and posted. See `tweets.md`.
 - `roadmap/` – possible future improvements, one Markdown file per idea, listed in `roadmap/README.md`.
 - `reference/` – read-only clones of related open-source projects, gitignored.
 - `apps/demo/` – the public demo at demo.awaitio.com: the backoffice of a made-up store platform, built like a client project, with a Prisma-like `db` over made-up rows that saves nothing. Deployed from `.do/awaitio-demo.yaml`.
