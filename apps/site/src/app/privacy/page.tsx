@@ -3,7 +3,7 @@ import { Page } from '../../components/Page';
 import { constants } from '../../constants';
 
 // Moved whenever the content changes: shown as og:updated_time, as "Last updated" on legal pages and as lastmod in the sitemap.
-export const LAST_MODIFIED_AT = '2026-10-22';
+export const LAST_MODIFIED_AT = '2026-10-25';
 
 // Draft, to be reviewed by a lawyer before launch.
 const PrivacyPage = () => {
@@ -16,7 +16,11 @@ const PrivacyPage = () => {
         </p>
         <h2>This website</h2>
         <ul>
-          <li>The site sets no cookies and uses no analytics or tracking scripts.</li>
+          <li>The site sets no cookies.</li>
+          <li>
+            We count visits with Umami Cloud, a privacy-friendly analytics service by Umami Software, Inc. It uses no cookies and stores no IP addresses or other personal data. It records anonymous
+            page views: the page, the site you came from, your browser, operating system, device type and country. We use these numbers only to see which pages people read.
+          </li>
           <li>Like any website, the hosting provider may keep standard server logs (such as IP address and time of a request) for security and operation.</li>
         </ul>
         <h2>License requests</h2>

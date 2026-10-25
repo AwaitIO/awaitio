@@ -4,6 +4,7 @@ import { MotionSettings } from '../components/motion/MotionSettings';
 import { ScrollToTop } from '../components/ScrollToTop';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
+import { UmamiAnalytics } from '../components/UmamiAnalytics';
 import type { ReactNode } from 'react';
 
 // Both mono fonts fall back to a system mono, not to the Arial-based fallback next/font makes by default: while the
@@ -34,6 +35,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       {/* Browser extensions such as Grammarly add attributes to <body> before React hydrates; ignore that one level. */}
       <body className="min-h-screen bg-paper font-sans text-gray-900 antialiased" suppressHydrationWarning>
         <ScrollToTop />
+        <UmamiAnalytics />
         <MotionSettings>
           <SiteHeader />
           <main>{children}</main>

@@ -4,6 +4,7 @@ export const constants = {
   GITHUB_URL: 'https://github.com/awaitio/awaitio',
   X_URL: 'https://x.com/heyawaitio',
   DISCORD_URL: 'https://discord.gg/85JPMrY7YP',
+  UMAMI_WEBSITE_ID: 'd4f42a77-67d2-499e-9c6d-fcae54216335',
   LICENSE_URL: 'https://github.com/awaitio/awaitio/blob/main/LICENSE',
   SPONSORS_URL: 'https://github.com/sponsors/awaitio',
   DEMO_URL: 'https://demo.awaitio.com',
