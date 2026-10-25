@@ -3,9 +3,15 @@
   "theme": "mint",
   "name": "AwaitIO",
   "colors": {
-    "primary": "#2563EB",
-    "light": "#60A5FA",
-    "dark": "#1D4ED8"
+    "primary": "#D9733F",
+    "light": "#E08A58",
+    "dark": "#C2602F"
+  },
+  "background": {
+    "color": {
+      "light": "#F6F2EA",
+      "dark": "#1E1A16"
+    }
   },
   "logo": {
     "light": "/logo/light.png",
