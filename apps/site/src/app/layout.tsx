@@ -37,9 +37,14 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         <ScrollToTop />
         <UmamiAnalytics />
         <MotionSettings>
-          <SiteHeader />
+          {/* `site-chrome` boxes add nothing to the layout; a page that stands alone (the 404) hides them. */}
+          <div className="site-chrome contents">
+            <SiteHeader />
+          </div>
           <main>{children}</main>
-          <SiteFooter />
+          <div className="site-chrome contents">
+            <SiteFooter />
+          </div>
         </MotionSettings>
       </body>
     </html>

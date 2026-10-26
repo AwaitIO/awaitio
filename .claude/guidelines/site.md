@@ -123,3 +123,18 @@ Launch and marketing copy is written so that someone who has never heard of Awai
 ✅ DO: "Your team opens Refund order in the browser and sees a form with one field: Order ID."
 
 ❌ DON'T: "Every await io asks a person in the browser. The same Node process serves the UI."
+## The 404 page stands alone
+
+`src/app/not-found.tsx` (the export's `404.html`) fills the whole screen with nothing but the dotted "Page not found", one line of text and the way out. Its section carries `data-bare-page`, and a rule in `globals.css` hides everything the layout wraps in `site-chrome` (header, sponsor strip, footer).
+
+✅ DO: keep the 404 to the heading, the text and the two buttons.
+
+❌ DON'T: add the header, footer or other sections back to it, or hide them with JavaScript.
+
+## Short centered text breaks between sentences
+
+A short centered paragraph of two sentences (a 404, an empty state) puts each sentence on its own line and uses `text-balance`, so no line ends with a stray word or two.
+
+✅ DO: `<p className="text-balance"><span className="block">There is nothing at this address.</span><span className="block">The link may be old, or the address has a typo.</span></p>`
+
+❌ DON'T: let one centered paragraph wrap wherever the width ends ("… or the address / has a typo.").

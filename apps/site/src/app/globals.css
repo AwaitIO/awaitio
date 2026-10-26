@@ -63,6 +63,33 @@
     }
   }
 
+  /* The dotted heading of the 404 page: a dim band runs through the letters from left to right, or single dots blink
+     out for a moment like the sun's embers. */
+  --animate-dot-wave: dot-wave 4s ease-in-out infinite;
+  --animate-dot-twinkle: dot-twinkle 4s ease-in-out infinite;
+
+  @keyframes dot-wave {
+    0%,
+    30%,
+    100% {
+      opacity: 1;
+    }
+    15% {
+      opacity: 0.25;
+    }
+  }
+
+  @keyframes dot-twinkle {
+    0%,
+    85%,
+    100% {
+      opacity: 1;
+    }
+    92% {
+      opacity: 0.15;
+    }
+  }
+
   /* The top of a page rises 30 px and fades in on its first paint, in CSS so it needs no JavaScript and never hides
      the main content from search engines or slow devices; FadeIn sets the delay of each block. */
   --animate-rise: rise 0.35s ease-out both;
@@ -163,6 +190,12 @@ html {
   :not(pre) > code {
     white-space: nowrap;
   }
+}
+
+/* A page marked `data-bare-page` (the 404) stands alone, without the header, the sponsor strip and the footer. In CSS,
+   so the static 404.html is bare from its first paint. */
+body:has([data-bare-page]) .site-chrome {
+  display: none;
 }
 
 /* With reduced motion the top of a page is simply there. */
