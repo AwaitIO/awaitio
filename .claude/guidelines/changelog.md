@@ -12,6 +12,23 @@ The page is updated only when releasing, never in an ordinary commit. Before `pn
 
 ❌ DON'T: add an `Unreleased` block or a line to `apps/docs/changelog.mdx` in a feature commit.
 
+## A release image at the top of every release
+
+Every `<Update>` opens with its release image from the Figma file AwaitIO, page Changelog (frame `Release 1.1` for `1.1.0` and so on), with the big number written as the full version (`1.1.0`, never `1.1`), exported as PNG at 2× (2400×1260) to `apps/docs/images/changelog/<version>.png`. It is the first line inside the `<Update>`, above any text, as a plain `<img>` with `style={{ marginTop: 0, borderRadius: 12 }}` and an alt text naming the release and its packages.
+
+**Why**: Mintlify gives images a top margin; without `marginTop: 0` the image sits lower than the version label beside it. The 12 px radius softens the corners of the full-bleed image.
+
+✅ DO:
+
+```mdx
+<Update label="1.1.0" description="October 22, 2026" tags={["Core"]}>
+  <img src="/images/changelog/1.1.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.1 release: …" />
+
+  ## Core
+```
+
+❌ DON'T: put the image below the first paragraph or leave out `marginTop: 0` and `borderRadius: 12`.
+
 ## Grouped by scope, not by package
 
 Inside each `<Update>` the lines are grouped under `##` headings by scope, in this order, a heading with nothing under it left out:
