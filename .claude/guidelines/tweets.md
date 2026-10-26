@@ -17,8 +17,10 @@
 - **AwaitIO** always written this way, never "Await IO" or "Awaitio".
 - Each post fits in 280 characters (a URL counts as 23). The account has no Premium.
 - Code goes into an image, not into the text: X breaks the formatting.
+- No dotted API names in the text (`io.select.single`, `app.listen`): X reads them as web addresses and turns them into links, because `.select`, `.app` and many others are real domains. Name the feature in plain words, the exact name goes into the image.
 - Single posts by default. A thread is the exception, for a launch or a release worth several posts; its posts are separated by `-----` in one file.
 - A link goes into the last post of a thread or into a reply under a single post, never into the first post: X shows posts with links to fewer people.
+- A link reply is a full sentence that says what is behind the link, ending with a period, and the URL alone on the next line. No colon before the URL: ✅ `The full list of changes in 1.1 is in the docs.` + URL, ❌ `Everything in 1.1: <URL>`.
 - Bullet lists use `•` and follow their lead-in line directly, with no blank line between.
 
 ## Voice
