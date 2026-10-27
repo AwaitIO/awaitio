@@ -319,3 +319,16 @@ Quick description: a menu item that would change nothing right now is left out, 
 ❌ DON'T: `{ label: 'Select all', disabled: everyRowPicked }` in the menu.
 
 Buttons outside a menu (Prev and Next of a pager, Continue) stay in place and get `disabled`, so the layout does not jump.
+
+## Long Values Wrap, Never Scroll Sideways
+
+A value that comes from an action (a URL with a token, a list of emails, a JWT) wraps inside its card or table, breaking mid-word when it has to. Nothing on a screen scrolls sideways or runs out of its card.
+
+**Why**: actions return values of any length, and a sideways scroll hides the end of the value, which is often the part that matters.
+
+- The page (`main` in `App.tsx`) has `wrap-break-word`, so plain blocks break a long word only when it would overflow.
+- Table cells and boxes with returned values use `wrap-anywhere`: a long token then no longer sets the table's minimum width, so the table fits the box instead of widening it.
+
+✅ DO: `<td className="px-4 py-2.5 wrap-anywhere">`, `<pre className="whitespace-pre-wrap wrap-anywhere">`
+
+❌ DON'T: let `overflow-x-auto` handle a long value (`<td className="px-4 py-2.5">` in a scrolling wrapper, `<pre className="overflow-x-auto">` for JSON). A scrolling wrapper stays only as a fallback for many columns, whose headers do not wrap.

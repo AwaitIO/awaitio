@@ -31,7 +31,8 @@ export const App: FC = () => {
         .otherwise(() => {
           return null;
         })}
-      <main className="mx-auto max-w-7xl px-4 py-10">
+      {/* A long value without spaces (a URL with a token) breaks mid-word instead of running out of its card. */}
+      <main className="mx-auto max-w-7xl px-4 py-10 wrap-break-word">
         {match(session)
           .with({ status: 'LOADING' }, () => {
             return <p className="text-sm text-gray-500">Loading…</p>;

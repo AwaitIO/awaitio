@@ -167,7 +167,7 @@ export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable
                     )}
                     {columns.map((column) => {
                       return (
-                        <td key={column.key} className="px-4 py-2.5">
+                        <td key={column.key} className="px-4 py-2.5 wrap-anywhere">
                           {row.cells[column.key]}
                         </td>
                       );
