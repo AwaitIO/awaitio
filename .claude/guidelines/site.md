@@ -68,7 +68,7 @@ A link that leaves awaitio.com (docs, changelog, GitHub, sponsors, contact) show
 
 ## Icons live in `src/icons/`, one per file, drawn in square pixels
 
-Every icon is its own component in `apps/site/src/icons/<Name>Icon.tsx` with `IconProps` (`size`, `className`), imported where it is drawn. Icons are drawn in the brand's square pixels like the hero sun, the logo and the competitor logos on `/vs`: the icon keeps its vector shapes as `PixelLayer`s and `PixelIcon` turns them into squares. `size="small"` (16 × 16 grid, almost no gap) for icons next to text, `size="medium"` (24 × 24 grid, a small gap) for mid-sized icons of lists and buttons, `size="normal"` (32 × 32 grid with a visible gap) for large icons of cards and sections. No plain line or filled SVG icons on the site.
+Every icon is its own component in `apps/site/src/icons/<Name>Icon.tsx` with `IconProps` (`size`, `className`), imported where it is drawn. Icons are drawn in the brand's square pixels like the hero sun, the logo and the competitor logos on `/vs`: the icon keeps its vector shapes as `PixelLayer`s and `PixelIcon` turns them into squares. `size="coarse"` (10 × 10 grid, drawn by hand in the icon's `coarse` bitmap) for big blocky icons such as the option cards of the component pages, `size="small"` (16 × 16 grid, almost no gap) for icons next to text, `size="medium"` (24 × 24 grid, a small gap) for mid-sized icons of lists and buttons, `size="normal"` (32 × 32 grid with a visible gap) for large icons of cards and sections. No plain line or filled SVG icons on the site.
 
 **Why**: one pixel language across the site, so the icons read as part of the brand and not as a stock icon set.
 
