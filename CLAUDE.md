@@ -32,7 +32,6 @@ Read the guideline before working in its area:
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/tweets.md` – `.claude/tweets/`: posts for X, file names, text and media.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
-- `.claude/guidelines/final-banner.md` – the shape of the closing banner a command ends its run with.
 - `.claude/workbench.md` – how the review workbench groups changes.
 
 ## Repository map
