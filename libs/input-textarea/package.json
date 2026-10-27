@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/input-textarea",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Multi-line text input for AwaitIO: io.input.textarea().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

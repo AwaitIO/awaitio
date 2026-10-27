@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/layout-basic",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The basic page layout for AwaitIO: io.layout.basic(), a title, a description and the display components below each other.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

@@ -1,5 +1,16 @@
 # @awaitio/theme-default
 
+## 1.2.0
+
+### Minor Changes
+
+- Moves with awaitio to 1.2.
+
+### Patch Changes
+
+- e0af1b8: io.select.table with several rows gets a … menu next to the pager with Select all and Clear all for the rows that match the filter, offering only what would change something; RowMenu items can now run an onClick instead of linking to an href.
+- 5b242a8: Long values without spaces, such as a login link with a token, wrap inside their card and table instead of running out of it or scrolling sideways.
+
 ## 1.1.0
 
 ### Minor Changes

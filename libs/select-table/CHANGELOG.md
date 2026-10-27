@@ -1,5 +1,15 @@
 # @awaitio/select-table
 
+## 1.2.0
+
+### Minor Changes
+
+- Moves with awaitio to 1.2.
+
+### Patch Changes
+
+- e0af1b8: io.select.table with several rows gets a … menu next to the pager with Select all and Clear all for the rows that match the filter, offering only what would change something; RowMenu items can now run an onClick instead of linking to an href.
+
 ## 1.1.0
 
 ### Minor Changes

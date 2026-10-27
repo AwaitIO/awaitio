@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/display-table",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Table display component for AwaitIO: io.display.table().",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

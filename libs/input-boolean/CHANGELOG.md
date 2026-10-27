@@ -1,5 +1,11 @@
 # @awaitio/input-boolean
 
+## 1.2.0
+
+### Minor Changes
+
+- Moves with awaitio to 1.2.
+
 ## 1.1.0
 
 ### Minor Changes

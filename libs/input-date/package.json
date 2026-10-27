@@ -1,6 +1,6 @@
 {
   "name": "@awaitio/input-date",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Date input for AwaitIO: io.input.date(), returns a luxon DateTime.",
   "license": "SEE LICENSE IN LICENSE",
   "main": "dist/index.js",

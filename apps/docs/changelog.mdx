@@ -6,6 +6,46 @@ rss: true
 
 What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
 
+<Update label="1.2.0" description="October 27, 2026" tags={["Core", "Components", "Theme"]}>
+  <img src="/images/changelog/1.2.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.2.0 release: awaitio, @awaitio/select-table, @awaitio/theme-default and every component at 1.2.0" />
+
+  ## Core
+
+  `awaitio@1.2.0`
+
+  - Long values without spaces, such as a login link with a token, wrap inside their card and table instead of running out of it or scrolling sideways.
+  - Items of the [theme](/core/theme)'s `RowMenu` block can run an `onClick` instead of linking to an `href`, and the block takes a `label` for screen readers.
+
+  ## Components
+
+  `@awaitio/*@1.2.0`, every component
+
+  - [`io.select.table`](/io/select-table#several-rows) with several rows gets a _…_ menu next to the pager: _Select all_ picks every row that matches the filter, on all pages, and _Clear all_ unpicks them. It offers only what would change something and leaves out _Select all_ when the rows would go past `maxSelections`.
+  - Every other component moves to 1.2.0 with `awaitio`, without changes in behavior.
+
+  ## Theme
+
+  `@awaitio/theme-default@1.2.0`
+
+  - Draws the _…_ menu above the table and wraps long values inside cards and table cells.
+
+  ## Migration guide
+
+  From 1.1.0 to 1.2.0.
+
+  <AccordionGroup>
+    <Accordion title="awaitio">
+      Nothing to change. Update `awaitio` and every `@awaitio/*` package to `^1.2.0` together, so the theme draws the new table menu.
+    </Accordion>
+    <Accordion title="@awaitio/select-table">
+      Nothing to change: the call and its answer stay the same. With `maxSelections` above 1 the menu appears on its own.
+    </Accordion>
+    <Accordion title="@awaitio/theme-default">
+      With `@awaitio/theme-default`, nothing to change. A theme of your own with its own `RowMenu` block has to draw items with `onClick` as buttons: `RowMenuItem` is now `{ label, href }` or `{ label, onClick }`, so code that reads `item.href` without checking for it no longer type-checks.
+    </Accordion>
+  </AccordionGroup>
+</Update>
+
 <Update label="1.1.0" description="October 22, 2026" tags={["Core", "Components", "Theme", "License"]}>
   <img src="/images/changelog/1.1.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.1.0 release: awaitio, the new @awaitio/select-single-native, @awaitio/theme-default and every component at 1.1.0" />
 
