@@ -122,6 +122,7 @@ export const selectTable = withSignature<SelectTableSignature>()(
               onChange(selected);
             },
             disabled,
+            maxSelections: props.maxSelections,
           }}
         />
       );

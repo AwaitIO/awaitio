@@ -26,12 +26,15 @@ export type TableProps = {
   filterable?: boolean;
   // Shown when there are no rows.
   emptyText?: string;
-  // A checkbox (or radio in single mode) in front of every row, e.g. for io.select.table.
+  // A checkbox (or radio in single mode) in front of every row, e.g. for io.select.table. In multiple mode the "…" menu
+  // above the table selects or clears all rows that match the filter.
   selection?: {
     mode: 'single' | 'multiple';
     selected: number[];
     onChange: (selected: number[]) => void;
     disabled?: boolean;
+    // The most rows that may be selected; "Select all" is left out when the matching rows would go past it.
+    maxSelections?: number;
   };
 };
 

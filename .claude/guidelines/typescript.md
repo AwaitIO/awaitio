@@ -502,6 +502,18 @@ const url = baseUrl + '/api/actions/' + slug;
 - They support multi-line strings and complex expressions
 - They are the modern JavaScript/TypeScript standard
 
+## One Name for One Value Across Layers
+
+Quick description: a value that travels from a component's props down to a uikit block or a helper keeps the name it has in the public props. `maxSelections` of `io.select.table` is `selection.maxSelections` in `TableProps`, not `max` or `limit`.
+
+**Why**: the same thing under two names makes the reader check whether it is the same thing, and a search for the prop finds only half of the places it is used.
+
+✅ DO: `selection={{ …, maxSelections: props.maxSelections }}`
+
+❌ DON'T: `selection={{ …, max: props.maxSelections }}`
+
+A different name is fine when the value means something else in the new place, e.g. a block that is not about selection at all and takes a general `limit`, or a name that would clash with another prop there. Shortening the name is not such a reason.
+
 ## Variable Naming in Callbacks and Functions
 
 Quick description: Never use single-letter or abbreviated variable names in callbacks, event handlers, or any functions. Always use descriptive, full names.

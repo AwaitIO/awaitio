@@ -6,9 +6,9 @@ type MenuPosition = {
   right: number;
 };
 
-// The "…" button at the end of a table row with links for that row. The list is fixed to the window, so the table's
+// The "…" button at the end of a table row with links for that row, or above the table with actions for all rows. The list is fixed to the window, so the table's
 // sideways scroll box cannot cut it off at the last rows; it closes on a click outside, Escape or scrolling.
-export const RowMenu: FC<RowMenuProps> = ({ items }) => {
+export const RowMenu: FC<RowMenuProps> = ({ items, label = 'Row actions' }) => {
   const [position, setPosition] = useState<MenuPosition | null>(null);
   const root = useRef<HTMLDivElement>(null);
 
@@ -42,7 +42,7 @@ export const RowMenu: FC<RowMenuProps> = ({ items }) => {
     <div ref={root} className="flex justify-end">
       <button
         type="button"
-        aria-label="Row actions"
+        aria-label={label}
         aria-expanded={position !== null}
         onClick={(event) => {
           const rect = event.currentTarget.getBoundingClientRect();
@@ -59,10 +59,28 @@ export const RowMenu: FC<RowMenuProps> = ({ items }) => {
       {position && (
         <div style={{ top: position.top, right: position.right }} className="fixed z-20 flex min-w-40 flex-col rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
           {items.map((item) => {
+            const itemClass = 'px-3 py-2 text-left text-sm whitespace-nowrap text-gray-700 hover:bg-gray-50 hover:text-gray-900';
+
+            if ('href' in item) {
+              return (
+                <Link key={item.label} href={item.href} className={itemClass}>
+                  {item.label}
+                </Link>
+              );
+            }
+
             return (
-              <Link key={item.label} href={item.href} className="px-3 py-2 text-sm whitespace-nowrap text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  setPosition(null);
+                  item.onClick();
+                }}
+                className={itemClass}
+              >
                 {item.label}
-              </Link>
+              </button>
             );
           })}
         </div>

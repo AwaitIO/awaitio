@@ -44,17 +44,31 @@ const [user] = await io.select.table('User', {
 
 ## Props
 
-| Prop            | Type                                              | Required | Description                                                                                                                   |
-| --------------- | ------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `data`          | `TRow[]`                                          | Required | The records to pick from; none shows `emptyText`, see [An empty table](#an-empty-table).                                      |
-| `columns`       | `(key \| { label, accessorKey?, renderCell? })[]` | Required | The columns, see [Display Table](/io/display-table#columns).                                                                  |
-| `defaultValue`  | `TRow[]`                                          | Optional | Items of `data` picked at the start: the same objects, or copies with the same values.                                        |
-| `minSelections` | `number`                                          | Optional | At least this many rows, or all of them when there are fewer. Defaults to 1.                                                  |
-| `maxSelections` | `number`                                          | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored. |
-| `pageSize`      | `number`                                          | Optional | Rows per page. Defaults to 10.                                                                                                |
-| `emptyText`     | `string`                                          | Optional | Shown instead of the table when there are no rows. Defaults to _Nothing to show._                                             |
-| `helpText`      | `string`                                          | Optional | Secondary text under the table.                                                                                               |
-| `disabled`      | `boolean`                                         | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                   |
+| Prop            | Type                                              | Required | Description                                                                                                                                                      |
+| --------------- | ------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data`          | `TRow[]`                                          | Required | The records to pick from; none shows `emptyText`, see [An empty table](#an-empty-table).                                                                         |
+| `columns`       | `(key \| { label, accessorKey?, renderCell? })[]` | Required | The columns, see [Display Table](/io/display-table#columns).                                                                                                     |
+| `defaultValue`  | `TRow[]`                                          | Optional | Items of `data` picked at the start: the same objects, or copies with the same values.                                                                           |
+| `minSelections` | `number`                                          | Optional | At least this many rows, or all of them when there are fewer. Defaults to 1.                                                                                     |
+| `maxSelections` | `number`                                          | Optional | At most this many rows. Defaults to 1, which shows radios instead of checkboxes; with more, a pick past the limit is ignored, see [Several rows](#several-rows). |
+| `pageSize`      | `number`                                          | Optional | Rows per page. Defaults to 10.                                                                                                                                   |
+| `emptyText`     | `string`                                          | Optional | Shown instead of the table when there are no rows. Defaults to _Nothing to show._                                                                                |
+| `helpText`      | `string`                                          | Optional | Secondary text under the table.                                                                                                                                  |
+| `disabled`      | `boolean`                                         | Optional | Shows the starting value without letting it change; the handler gets that value whatever the browser sends.                                                      |
+
+## Several rows
+
+With `maxSelections` above 1 every row gets a checkbox, and a _…_ menu next to the pager picks rows in bulk: _Select all_ picks every row that matches the filter, on all pages, and _Clear all_ unpicks them. The menu offers only what would change something: no _Select all_ when every matching row is picked or the rows would go past `maxSelections`, no _Clear all_ when none is picked.
+
+```ts
+const notified = await io.select.table('Users to notify', {
+  data: users,
+  columns: [{ label: 'Name', accessorKey: 'name' }, 'email'],
+  minSelections: 0,
+  maxSelections: users.length,
+  pageSize: 5,
+});
+```
 
 ## An empty table
 

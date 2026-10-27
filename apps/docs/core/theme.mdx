@@ -13,7 +13,7 @@ Themes are in preview. A theme restyles the [blocks](#blocks), but the frame of 
 - The result of an action: the text, key and value table, record table or JSON the handler returned.
 - The login and account request pages, apart from the `Card`, `Field`, `Input` and `Button` blocks in them.
 - Status texts such as _Loading…_ and _Connecting…_ and error messages outside a `Field`.
-</Info>
+  </Info>
 
 Everything AwaitIO draws is built from a small set of blocks: `Field`, `Label`, `Input`, `Button`, `Table` and the rest. The core only knows their props; a **theme** gives each block its look. Components never style themselves, so a theme restyles every form, table and page at once.
 
@@ -124,7 +124,7 @@ export default defineConfig(componentBuildConfig({ root: import.meta.url, entry:
 | `Label`        | The label of a form field.                                                                                    |
 | `Link`         | A link to another page of the UI, e.g. in a table cell, or with `external` to a page outside it in a new tab. |
 | `Metadata`     | Label and value tiles.                                                                                        |
-| `RowMenu`      | The _…_ menu at the end of a table row.                                                                       |
+| `RowMenu`      | The _…_ menu at the end of a table row, or next to the pager with _Select all_ and _Clear all_.               |
 | `Select`       | A searchable drop-down, with a × to empty it when `clearable` is set (`io.select.single`).                    |
 | `MultiSelect`  | A drop-down with the chosen options under it in one frame (`io.select.multiple`).                             |
 | `NativeSelect` | The browser's own drop-down, without search or clearing (`io.select.singleNative`).                           |

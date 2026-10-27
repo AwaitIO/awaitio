@@ -1,7 +1,8 @@
-import { RowMenu, type TableProps } from 'awaitio/ui';
+import { RowMenu, type RowMenuItem, type TableProps } from 'awaitio/ui';
 import { useState, type FC } from 'react';
 
 // A data table for layouts: an optional filter, a header row, one row per record with an optional "…" menu, and a pager.
+// With multiple selection a "…" menu next to the pager selects or clears all rows that match the filter.
 // Filtering and paging happen in the browser, on the rows the page sent.
 export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable = true, emptyText = 'Nothing to show.', selection }) => {
   const [filter, setFilter] = useState('');
@@ -20,7 +21,46 @@ export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable
   const hasMenu = rows.some((row) => {
     return (row.menu ?? []).length > 0;
   });
-  const hasToolbar = filterable || matching.length > pageSize;
+  const isMultiple = selection?.mode === 'multiple';
+  const hasToolbar = filterable || matching.length > pageSize || isMultiple;
+  const matchingIds = matching.flatMap((row) => {
+    return row.id === undefined ? [] : [row.id];
+  });
+  const selected = selection?.selected ?? [];
+  const withMatching = [...new Set([...selected, ...matchingIds])];
+  // Only the actions that would change something: no "Select all" when every matching row is picked or the limit is in
+  // the way, no "Clear all" when none is picked, and no menu at all for a locked table.
+  const bulkItems: RowMenuItem[] =
+    selection && isMultiple && !isDisabled
+      ? [
+          ...(withMatching.length > selected.length && withMatching.length <= (selection.maxSelections ?? Infinity)
+            ? [
+                {
+                  label: 'Select all',
+                  onClick: () => {
+                    selection.onChange(withMatching);
+                  },
+                },
+              ]
+            : []),
+          ...(matchingIds.some((id) => {
+            return selected.includes(id);
+          })
+            ? [
+                {
+                  label: 'Clear all',
+                  onClick: () => {
+                    selection.onChange(
+                      selected.filter((id) => {
+                        return !matchingIds.includes(id);
+                      }),
+                    );
+                  },
+                },
+              ]
+            : []),
+        ]
+      : [];
   const pagerButton = 'rounded-md border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40';
 
   return (
@@ -72,6 +112,7 @@ export const Table: FC<TableProps> = ({ columns, rows, pageSize = 20, filterable
                   </button>
                 </>
               )}
+              {bulkItems.length > 0 && <RowMenu label="Table actions" items={bulkItems} />}
             </div>
           )}
         </div>

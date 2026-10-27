@@ -307,3 +307,15 @@ Quick description: Never use manual margin classes like `mb-4`, `mt-2`, etc. Lay
 - **space-y-2/space-y-1** for tight spacing within a section
 - **Never** use manual margin classes - they break consistency
 - Centering with `mx-auto` on a page container is the only accepted margin
+
+## Menus Show Only the Actions That Would Do Something
+
+Quick description: a menu item that would change nothing right now is left out, not shown greyed out. "Select all" is gone when every row is already picked, "Clear all" when none is. A menu with no item left is not drawn at all, its "…" button included.
+
+**Why**: a disabled item in a menu reads as broken or as an option the user lacks the rights for; leaving it out says plainly that there is nothing to do.
+
+✅ DO: `{bulkItems.length > 0 && <RowMenu items={bulkItems} />}` with the items filtered to those that change something.
+
+❌ DON'T: `{ label: 'Select all', disabled: everyRowPicked }` in the menu.
+
+Buttons outside a menu (Prev and Next of a pager, Continue) stay in place and get `disabled`, so the layout does not jump.
