@@ -32,7 +32,7 @@ Rules for the io component packages: `libs/input-*`, `libs/select-*`, `libs/disp
 
 ## New component
 
-Copy `libs/input-text`, rename the package, the folder and the file, then change the one `.tsx`: schemas, `validate`, `component`. Add a `README.md` for its npm page; its version is set as below.
+Copy `libs/input-text`, rename the package, the folder and the file, then change the one `.tsx`: schemas, `validate`, `component`. Add a `README.md` for its npm page and a page on the site (see below); its version is set as below.
 
 ## A new component starts at the version of the SDK
 
@@ -43,3 +43,13 @@ A new package in `libs/` gets the current version of `libs/sdk/package.json` in 
 ✅ DO: SDK `1.0.0`, new `@awaitio/select-single-native` with `"version": "1.0.0"` and no changeset.
 
 ❌ DON'T: start it at `0.0.0` and add a `minor` changeset that releases it as `0.1.0`.
+
+## The component's page on awaitio.com changes with its docs
+
+Every io component has a presentation page on the site, `apps/site/src/utils/componentPages/<name>Page.ts` (shown at `/components/<slug>`). When a change touches the component's docs page (`apps/docs/io/<slug>.mdx`) or its package `README.md` (a new prop, a renamed one, a new check, a changed default), the same change updates its site page: the option cards, the example and the intro. Then raise its `lastModifiedAt` to the day of the change; it is the page's `og:updated_time` and its `lastmod` in the sitemap. A new component gets a page of its own, a tile in `utils/componentShowcases.ts` and an entry in `utils/componentPages.ts`.
+
+**Why**: the site page sells what the docs promise; a prop that is gone or a default that changed on the site misleads a reader before they ever open the docs.
+
+✅ DO: add `clearable` to `select-single.mdx`, the README and an option card in `selectSinglePage.ts`, and set `lastModifiedAt: '<today>'`.
+
+❌ DON'T: change the docs and the README and leave the site page with the old props and the old date.

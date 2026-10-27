@@ -1,0 +1,117 @@
+import { InputNumberOutput } from '../../components/componentPages/inputNumber/InputNumberOutput';
+import type { ComponentPage } from '../../types/ComponentPage';
+import { codeColors } from '../codeColors';
+import { codeToken as t } from '../codeToken';
+
+const { keyword, string, fn, prop } = codeColors;
+
+export const inputNumberPage: ComponentPage = {
+  slug: 'input-number',
+  method: 'io.input.number',
+  picture: {
+    label: 'A number field drawn in dots: a label, the field with 120 and an orange cursor, the up and down arrows, and help text under it',
+    className: 'w-full max-w-xl',
+    rows: [
+      '..................................................................',
+      '..................................................................',
+      '..................................................................',
+      '...oooooooooooooooooooo...........................................',
+      '...oooooooooooooooooooo...........................................',
+      '..................................................................',
+      '..................................................................',
+      '...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...',
+      '...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...',
+      '...xx.......................................xx....-..........xx...',
+      '...xx........oo........oooooo......oooooo...xx....-..........xx...',
+      '...xx........oo........oooooo......oooooo...xx....-....x.....xx...',
+      '...xx......oooo......oo......oo..oo......oo.xx....-...xxx....xx...',
+      '...xx......oooo......oo......oo..oo......oo.xx....-..xxxxx...xx...',
+      '...xx........oo..............oo..oo....oooo.xx....-.xxxxxxx..xx...',
+      '...xx........oo..............oo..oo....oooo.xx....-xxxxxxxxx.xx...',
+      '...xx........oo............oo....oo..oo..oo.xx....-----------xx...',
+      '...xx........oo............oo....oo..oo..oo.xx....-..........xx...',
+      '...xx........oo..........oo......oooo....oo.xx....-..........xx...',
+      '...xx........oo..........oo......oooo....oo.xx....-xxxxxxxxx.xx...',
+      '...xx........oo........oo........oo......oo.xx....-.xxxxxxx..xx...',
+      '...xx........oo........oo........oo......oo.xx....-..xxxxx...xx...',
+      '...xx......oooooo....oooooooooo....oooooo...xx....-...xxx....xx...',
+      '...xx......oooooo....oooooooooo....oooooo...xx....-....x.....xx...',
+      '...xx.......................................xx....-..........xx...',
+      '...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...',
+      '...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...',
+      '..................................................................',
+      '...oooooooooooooooooooooooooooooooo...............................',
+      '..................................................................',
+      '..................................................................',
+      '..................................................................',
+    ],
+  },
+  headline: 'A number, within the limits you set.',
+  summary: 'io.input.number asks for a number, with a smallest and largest value, decimal places and help text, checked again on the server.',
+  intro:
+    '`io.input.number` asks a person for a number and hands it to your code. Set the smallest and largest value it accepts. Whole numbers only unless you allow decimal places. The server checks every answer again.',
+  options: [
+    {
+      title: 'Limits.',
+      body: 'The smallest and largest number accepted. Anything outside gets a message under the field.',
+      code: [t('min', prop), t(': 0, '), t('max', prop), t(': 500')],
+      icon: 'limits',
+    },
+    {
+      title: 'Decimal places.',
+      body: 'Whole numbers by default. Allow as many decimal places as you need; typing `49.90` gives `49.9`.',
+      code: [t('decimals', prop), t(': 2')],
+      icon: 'number',
+    },
+    {
+      title: 'Help text.',
+      body: 'A line under the field says what the number means, such as the currency.',
+      code: [t('helpText', prop), t(': '), t("'In euros, up to 500'", string)],
+      icon: 'help',
+    },
+    {
+      title: 'Optional.',
+      body: 'The field is required by default. With `.optional()` it can stay empty and the handler gets `undefined`.',
+      code: [t("io.input.number('Discount')."), t('optional', fn), t('()')],
+      icon: 'optional',
+    },
+    {
+      title: 'Your own check.',
+      body: '`.validate()` runs on the server and can ask your database. It returns a message to show, or nothing when the number is fine.',
+      code: [t('.'), t('validate', fn), t('((amount) => '), t('checkTotal', fn), t('(amount))')],
+      icon: 'validate',
+    },
+    {
+      title: 'Next to other fields.',
+      body: 'Inside `io.group` the number shares one form with other fields. The handler gets all the values together.',
+      code: [t('amount', prop), t(': io.input.'), t('number', fn), t('('), t("'Amount'", string), t('),')],
+      icon: 'group',
+    },
+  ],
+  example: {
+    file: 'src/actions/orders/refundOrderAction.ts',
+    lines: [
+      [t('import', keyword), t(' { app } '), t('from', keyword), t(" '../../app'", string), t(';')],
+      [],
+      [t('export const', keyword), t(' refundOrderAction = app.'), t('defineAction', fn), t('({')],
+      [t('  name', prop), t(': '), t("'Refund order'", string), t(',')],
+      [t('  handler', prop), t(': '), t('async', keyword), t(' ({ io }) => {')],
+      [t('    const', keyword), t(' amount = '), t('await', keyword), t(' io.input.'), t('number', fn), t('('), t("'Refund amount'", string), t(', {')],
+      [t('      max', prop), t(': 500,')],
+      [t('      decimals', prop), t(': 2,')],
+      [t('      helpText', prop), t(': '), t("'In euros, up to 500'", string), t(',')],
+      [t('    });')],
+      [t('  },')],
+      [t('});')],
+    ],
+    focus: [5, 6, 7, 8, 9],
+  },
+  Output: InputNumberOutput,
+  outputUrl: 'tools.example.com/actions/orders/refund_order',
+  docs: [
+    { label: 'Input Number', path: '/io/input-number', description: 'Every prop, what it returns and the messages of the built-in checks.' },
+    { label: 'Input components', path: '/core/input-components', description: 'Optional fields, your own checks and disabled fields, the same for every input.' },
+    { label: 'io.group', path: '/io/group', description: 'Ask for several values on one form and check them together.' },
+  ],
+  lastModifiedAt: '2026-10-27',
+};

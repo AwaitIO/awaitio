@@ -1,0 +1,110 @@
+import { InputEmailOutput } from '../../components/componentPages/inputEmail/InputEmailOutput';
+import type { ComponentPage } from '../../types/ComponentPage';
+import { codeColors } from '../codeColors';
+import { codeToken as t } from '../codeToken';
+
+const { keyword, string, fn, prop } = codeColors;
+
+export const inputEmailPage: ComponentPage = {
+  slug: 'input-email',
+  method: 'io.input.email',
+  picture: {
+    label: 'An email field drawn in dots: a label above, an orange frame with an envelope, an address with an at sign, and help text under it',
+    className: 'w-full max-w-2xl',
+    rows: [
+      '........................................................................',
+      '........................................................................',
+      '........................................................................',
+      '...oooooooooooooooooooo.................................................',
+      '...oooooooooooooooooooo.................................................',
+      '........................................................................',
+      '........................................................................',
+      '....xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx....',
+      '...x..............................xxxxx.............................x...',
+      '...x...xxxxxxxxxxx...............x.....x............................x...',
+      '...x...xx.......xx..............x..xxx..x...........................x...',
+      '...x...x.x.....x.x...ooooooooo..x.x..x..x..oooooooooo.o.oooooo......x...',
+      '...x...x..x...x..x...ooooooooo..x.x..x..x..oooooooooo.o.oooooo......x...',
+      '...x...x...x.x...x...ooooooooo..x..xxx.x...oooooooooo.o.oooooo......x...',
+      '...x...x....x....x...ooooooooo..x..........oooooooooo.o.oooooo......x...',
+      '...x...x.........x...............x..................................x...',
+      '...x...xxxxxxxxxxx................xxxxxx............................x...',
+      '...x................................................................x...',
+      '....xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx....',
+      '........................................................................',
+      '........................................................................',
+      '...-----------..--------..------------..................................',
+      '...-----------..--------..------------..................................',
+      '........................................................................',
+      '........................................................................',
+      '........................................................................',
+    ],
+  },
+  headline: 'An email address, checked before you get it.',
+  summary: 'io.input.email asks a person for an email address and returns it as a string, checked in the browser and again on the server.',
+  intro: '`io.input.email` asks a person for an email address. The browser checks the format before sending. The server checks it again. The handler gets a `string` it can send mail to.',
+  options: [
+    {
+      title: 'Checked twice.',
+      body: 'Something that is not an address comes back with a message. The server checks every answer, so the browser cannot skip it.',
+      code: [t('await', keyword), t(' io.input.'), t('email', fn), t('('), t("'Work email'", string), t(')')],
+      icon: 'server',
+    },
+    {
+      title: 'No stray spaces.',
+      body: 'The handler gets a `string`. The spaces around the address are gone.',
+      code: [t('const', keyword), t(' email = '), t('await', keyword), t(' io.input.'), t('email', fn), t('('), t("'Email'", string), t(')')],
+      icon: 'returns',
+    },
+    {
+      title: 'Your own rule.',
+      body: '`.validate()` runs on the server after the format check. Return a message to turn the address down, such as one outside your company.',
+      code: [t('.'), t('validate', fn), t('(isWorkEmail)')],
+      icon: 'validate',
+    },
+    {
+      title: 'A hint inside and under.',
+      body: '`placeholder` shows in the empty field. `helpText` says what the address is for.',
+      code: [t('helpText', prop), t(': '), t("'Gets the invitation'", string)],
+      icon: 'help',
+    },
+    {
+      title: 'Or optional.',
+      body: '`.optional()` lets the field stay empty. The handler then gets `string | undefined`.',
+      code: [t('io.input.'), t('email', fn), t('('), t("'Backup email'", string), t(').'), t('optional', fn), t('()')],
+      icon: 'optional',
+    },
+    {
+      title: 'Shown, not changed.',
+      body: '`defaultValue` fills the field in. With `disabled` it shows the address and the handler gets it whatever the browser sends.',
+      code: [t('defaultValue', prop), t(': email, '), t('disabled', prop), t(': '), t('true', keyword)],
+      icon: 'lock',
+    },
+  ],
+  example: {
+    file: 'src/actions/stores/inviteOwnerAction.ts',
+    lines: [
+      [t('import', keyword), t(' { app } '), t('from', keyword), t(" '../../app'", string), t(';')],
+      [],
+      [t('export const', keyword), t(' inviteOwnerAction = app.'), t('defineAction', fn), t('({')],
+      [t('  name', prop), t(': '), t("'Invite owner'", string), t(',')],
+      [t('  handler', prop), t(': '), t('async', keyword), t(' ({ io }) => {')],
+      [t('    const', keyword), t(' owner = '), t('await', keyword), t(' io.input.'), t('email', fn), t('('), t("'Owner email'", string), t(', {')],
+      [t('      helpText', prop), t(': '), t("'Gets the invitation'", string), t(',')],
+      [t('    });')],
+      [],
+      [t('    return', keyword), t(' '), t('`Owner: ${owner}`', string), t(';')],
+      [t('  },')],
+      [t('});')],
+    ],
+    focus: [5, 6, 7],
+  },
+  Output: InputEmailOutput,
+  outputUrl: 'tools.example.com/actions/stores/invite_owner',
+  docs: [
+    { label: 'Input Email', path: '/io/input-email', description: 'Every prop, what it returns and the message of the built-in check.' },
+    { label: 'Input components', path: '/core/input-components', description: 'Optional fields, your own checks and disabled fields, the same for every input.' },
+    { label: 'io.group', path: '/io/group', description: 'Ask for the address next to other fields in one form with one Continue.' },
+  ],
+  lastModifiedAt: '2026-10-27',
+};

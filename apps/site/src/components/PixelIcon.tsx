@@ -16,15 +16,16 @@ export type PixelIconProps = {
 const defaultBox = { x: 0, y: 0, size: 24 };
 
 // Draws every icon of the site in the brand's square pixels, like the hero sun and the logo: each layer of vector
-// shapes becomes squares on the grid of the chosen size, in its own color. A layer with a hand-drawn `small` bitmap uses
-// it on the 16 × 16 grid instead.
+// shapes becomes squares on the grid of the chosen size, in its own color. A layer with a hand-drawn `small` or `coarse`
+// bitmap uses it on the 16 × 16 or 10 × 10 grid instead.
 export const PixelIcon: FC<PixelIconProps> = ({ layers, size, className, box = defaultBox }) => {
   const { cells, inset } = iconCells[size];
 
   return (
     <svg viewBox={`0 0 ${cells} ${cells}`} className={className} aria-hidden="true">
       {layers.map((layer, index) => {
-        const d = size === 'small' && layer.small ? bitmapPath({ rows: layer.small, inset }) : pixelShapesPath({ shapes: layer.shapes, box, cells, inset });
+        const bitmap = { coarse: layer.coarse, small: layer.small, medium: undefined, normal: undefined }[size];
+        const d = bitmap ? bitmapPath({ rows: bitmap, inset }) : pixelShapesPath({ shapes: layer.shapes, box, cells, inset });
 
         return <path key={index} d={d} className={layer.className} />;
       })}

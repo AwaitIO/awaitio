@@ -5,6 +5,7 @@ import { LAST_MODIFIED_AT as PRIVACY_LAST_MODIFIED_AT } from '../src/app/privacy
 import { LAST_MODIFIED_AT as TERMS_OF_USE_LAST_MODIFIED_AT } from '../src/app/terms-of-use/page';
 import { constants } from '../src/constants';
 import { competitors } from '../src/utils/competitors';
+import { componentPages } from '../src/utils/componentPages';
 import { getSiteUrl } from '../src/utils/getSiteUrl';
 
 // Writes public/sitemap.xml and public/robots.txt on every build. Both are committed, so a diff shows which
@@ -21,6 +22,8 @@ const publicDirectory = path.join(process.cwd(), 'public');
     { path: '/pricing/', lastModifiedAt: PRICING_LAST_MODIFIED_AT },
     { path: '/demo/' },
     { path: '/brand/' },
+    { path: '/components/' },
+    ...componentPages.map((component) => ({ path: `/components/${component.slug}/`, lastModifiedAt: component.lastModifiedAt })),
     { path: '/vs/' },
     ...competitors.map((competitor) => ({ path: `/vs/${competitor.slug}/`, lastModifiedAt: competitor.lastModifiedAt })),
     { path: '/terms-of-use/', lastModifiedAt: TERMS_OF_USE_LAST_MODIFIED_AT },

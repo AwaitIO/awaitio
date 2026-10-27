@@ -7,7 +7,7 @@ import type { FC } from 'react';
 // Every io method with a sketch of how it looks, and the dashed tile for your own.
 export const ComponentsSection: FC = () => {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-24">
+    <section id="components" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-24">
       <FadeIn className="mx-auto max-w-3xl text-center">
         <p className="font-pixel text-xl text-orange-500 uppercase">Components</p>
         <h2 className="mt-4 text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">Everything you can await</h2>
