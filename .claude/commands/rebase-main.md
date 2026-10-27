@@ -275,8 +275,7 @@ No prose summary on top of it.
 - **A stash is always given back.** Step 5 runs even when an earlier step stopped, except while a
   rebase is still in progress — and then the report names the stash ref.
 - **Nothing is merged and nothing is deleted here.** Merging is
-  [`/merge-worktree-to-main`](./merge-worktree-to-main.md); closing the worktree is
-  [`/delete-worktree`](./delete-worktree.md).
+  [`/merge-worktree-to-main`](./merge-worktree-to-main.md); closing the worktree happens in Orca.
 - **In the main checkout it does nothing** — it aborts at step 1.
 - `git rebase --abort` is always available while the rebase is in progress, and the command says so
   before it starts. It does not touch the stash.

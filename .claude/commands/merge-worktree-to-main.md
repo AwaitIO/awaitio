@@ -15,8 +15,7 @@ merge from.
 
 It is the middle of the end-of-worktree chain on its own — no commit at the front, no deletion at
 the back. Committing is `/commit-fast`, the rebase itself is
-[`/rebase-main`](./rebase-main.md), and removing the worktree afterwards is
-[`/delete-worktree`](./delete-worktree.md). When their rules change, they change here too; this
+[`/rebase-main`](./rebase-main.md), and removing the worktree afterwards happens in Orca. When their rules change, they change here too; this
 file composes them, it does not restate them as its own policy.
 
 The worktree is going to stay alive — the work lands on main and the branch carries on.
@@ -298,13 +297,13 @@ table.
 ### 7. Report
 
 The report is the final table, printed one last time, and then **`/worktree-status`**, run as written.
-Nothing else: no summary of where the work landed, no list of restored stashes, no offer to run
-`/delete-worktree`. The status report says whether the worktree can be deleted and lists what is
+Nothing else: no summary of where the work landed, no list of restored stashes, no offer to remove
+the worktree (that happens in Orca). The status report says whether the worktree can be deleted and lists what is
 still needed.
 
 The only extra lines, short and above `/worktree-status`, are problems the user has to act on: a
 stash still sitting there because the chain stopped (with its ref), a conflict resolved in a pop
-(file and side taken), a squash after which `/delete-worktree` will list the commits as unmerged.
+(file and side taken), a squash after which git no longer recognises the branch's commits as merged.
 
 **Why**: the table already shows what happened, and `/worktree-status` shows what comes next; a
 paragraph repeating both is read by nobody.
@@ -324,8 +323,8 @@ paragraph repeating both is read by nobody.
   rebase, a collision that survived its stash, a merge that did not land, an unresolvable conflict in
   a pop. It never forces its way past one, and it never rolls back the steps that already succeeded;
   it reports where it got to.
-- **It never commits and it never deletes.** Committing is `/commit-fast`, deleting is
-  `/delete-worktree`.
+- **It never commits and it never deletes.** Committing is `/commit-fast`, deleting the worktree
+  happens in Orca.
 - **The worktree survives.** The dev servers keep running, the branch stays, and work can continue
-  here; removing it is `/delete-worktree`'s job.
+  here; removing it happens in Orca.
 - **In the main checkout it does nothing** — it aborts at step 1.
