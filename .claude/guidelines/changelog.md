@@ -29,6 +29,16 @@ Every `<Update>` opens with its release image from the Figma file AwaitIO, page 
 
 ❌ DON'T: put the image below the first paragraph or leave out `marginTop: 0` and `borderRadius: 12`.
 
+## The release image is made without being asked
+
+When the frame for a release is not in Figma yet, make it straight away when the changelog entry is written (`/prepare-release` does it): duplicate the last `Release <major>.<minor>` frame on the Changelog page next to it, rename it, change the big number and the package chips to what goes out (a `NEW` tag only on a package released for the first time), and draw a new pixel illustration of the release's main change in the same 12 px grid and colors. Export it at 2× to `apps/docs/images/changelog/<version>.png` and give the user the link to the frame (`https://www.figma.com/design/<file>/AwaitIO?node-id=<id>`) to check.
+
+**Why**: the release is not ready without its image, and the user only wants to look at it, not ask for it.
+
+✅ DO: send the Figma link together with the release report.
+
+❌ DON'T: report the image as missing and wait to be asked to make it.
+
 ## Grouped by scope, not by package
 
 Inside each `<Update>` the lines are grouped under `##` headings by scope, in this order, a heading with nothing under it left out:
@@ -88,3 +98,7 @@ Whenever a release is added to `apps/docs/changelog.mdx`, also write `discord.md
 ✅ DO: write `discord.md` in the same step as the changelog entry, without being asked.
 
 ❌ DON'T: commit `discord.md` or put it anywhere git tracks.
+
+## A tweet next to the Discord message
+
+Every release that gets `discord.md` also gets its tweet in `.claude/tweets/`, in the same step, as "A tweet with every release" in `tweets.md` says.

@@ -87,13 +87,19 @@ one `<Update>` with the versions `pnpm version-packages` will produce (`pnpm cha
 --verbose` lists them) and new packages at their own version, grouped by scope, with the migration
 guide. Use today's date. Leave it uncommitted.
 
+The `<Update>` opens with the release image. When `apps/docs/images/changelog/<version>.png` does not
+exist, make the Figma frame and export it yourself ("The release image is made without being asked"
+in `changelog.md`), and put the link to the frame in the report.
+
 Then write `discord.md` at the repository root, the same release as a message for the Discord
 `#releases` channel (see "A Discord message with every release" in `changelog.md`).
+
+Then write the release tweet in `.claude/tweets/` (see "A tweet with every release" in `tweets.md`).
 
 ## 6. Report and next steps
 
 One line each: install and build passed, the export commit (hash) or no change, the changesets
-written, the packages and versions going out. Then the remaining steps from `CLAUDE.md`, numbered,
+written, the packages and versions going out, the link to the release image's Figma frame. Then the remaining steps from `CLAUDE.md`, numbered,
 for the user to run:
 
 1. Review the changesets and `apps/docs/changelog.mdx`.
@@ -103,3 +109,4 @@ for the user to run:
 5. `pnpm release`
 6. Check the tags on https://github.com/awaitio/awaitio/tags.
 7. Post `discord.md` to the Discord `#releases` channel.
+8. Post the release tweet from `.claude/tweets/` and tell me, so it gets its posted name.
