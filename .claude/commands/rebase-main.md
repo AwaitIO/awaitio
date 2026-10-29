@@ -13,7 +13,7 @@ sitting on top of the latest main, ready to be built, tested or merged.
 **This command only makes sense inside a linked worktree.** In the main checkout there is nothing to
 rebase onto itself.
 
-The rebase rules live here, and [`/merge-worktree-to-main`](./merge-worktree-to-main.md) composes
+The rebase rules live here, and `/merge-worktree-to-main` composes
 them. It can be run at any point during the work — not only when the worktree is about to be
 merged. When these rules change, they change there too.
 
@@ -275,7 +275,7 @@ No prose summary on top of it.
 - **A stash is always given back.** Step 5 runs even when an earlier step stopped, except while a
   rebase is still in progress — and then the report names the stash ref.
 - **Nothing is merged and nothing is deleted here.** Merging is
-  [`/merge-worktree-to-main`](./merge-worktree-to-main.md); closing the worktree happens in Orca.
+  `/merge-worktree-to-main`; closing the worktree happens in Orca.
 - **In the main checkout it does nothing** — it aborts at step 1.
 - `git rebase --abort` is always available while the rebase is in progress, and the command says so
   before it starts. It does not touch the stash.
