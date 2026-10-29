@@ -48,7 +48,9 @@ built again here:
 git status --porcelain apps/site/out
 ```
 
-When `apps/site/out/` changed, stage it alone and commit it as exactly `[site] static export`. This is
+When `apps/site/out/` changed, stage it alone with `git add -A apps/site/out`, new files included (every
+build writes new hashed chunks and pages, and an export without them breaks the live site), check that
+`git status --short apps/site/out` shows nothing untracked, and commit it as exactly `[site] static export`. This is
 the one place Claude builds and commits the export, because the user ran this command on `main`.
 When nothing changed, say so in one line.
 
