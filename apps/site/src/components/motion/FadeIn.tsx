@@ -1,6 +1,7 @@
 'use client';
 
 import { Div } from './Div';
+import styles from './FadeIn.module.css';
 import type { FC, ReactNode } from 'react';
 
 export type FadeInProps = {
@@ -18,7 +19,7 @@ export const FadeIn: FC<FadeInProps> = ({ children, className, delay = 0, on = '
   if (on === 'load') {
     // Plain CSS, so the block is in the first paint and shows even before or without JavaScript.
     return (
-      <div className={[className, 'animate-rise'].filter(Boolean).join(' ')} style={{ animationDelay: `${delay * 0.6}s` }}>
+      <div className={[className, styles.rise].filter(Boolean).join(' ')} style={{ animationDelay: `${delay * 0.6}s` }}>
         {children}
       </div>
     );

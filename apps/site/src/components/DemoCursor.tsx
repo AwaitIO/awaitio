@@ -1,3 +1,4 @@
+import styles from './DemoCursor.module.css';
 import { CursorIcon } from '../icons/CursorIcon';
 import type { FC } from 'react';
 
@@ -10,7 +11,7 @@ export type DemoCursorProps = {
 // ends at its center.
 export const DemoCursor: FC<DemoCursorProps> = ({ delay }) => {
   return (
-    <span className="pointer-events-none absolute top-1/2 left-1/2 z-10 animate-cursor-click opacity-0" style={{ animationDelay: `${delay}ms` }}>
+    <span className={`pointer-events-none absolute top-1/2 left-1/2 z-10 opacity-0 ${styles.click}`} style={{ animationDelay: `${delay}ms` }}>
       <CursorIcon />
     </span>
   );

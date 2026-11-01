@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styles from './GlideCursor.module.css';
 import { CursorIcon } from '../icons/CursorIcon';
 import type { FC, RefObject } from 'react';
 
@@ -58,7 +59,7 @@ export const GlideCursor: FC<GlideCursorProps> = ({ containerRef, targetRef, cli
       className={['pointer-events-none absolute z-10 transition-[left,top,opacity] duration-500 ease-in-out', !position.visible && 'opacity-0'].filter(Boolean).join(' ')}
       style={{ left: position.x, top: position.y }}
     >
-      <span key={clickKey} className="block origin-top-left animate-cursor-press" style={{ animationDelay: `${delay + glideDuration}ms` }}>
+      <span key={clickKey} className={`block origin-top-left ${styles.press}`} style={{ animationDelay: `${delay + glideDuration}ms` }}>
         <CursorIcon />
       </span>
     </span>

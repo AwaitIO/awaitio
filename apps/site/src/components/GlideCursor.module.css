@@ -1,0 +1,14 @@
+/* The gliding pointer of the how-it-works demo presses the element it has landed on. */
+.press {
+  animation: cursor-press 0.3s ease-out both;
+}
+
+@keyframes cursor-press {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+}

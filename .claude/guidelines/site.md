@@ -138,3 +138,13 @@ A short centered paragraph of two sentences (a 404, an empty state) puts each se
 ✅ DO: `<p className="text-balance"><span className="block">There is nothing at this address.</span><span className="block">The link may be old, or the address has a typo.</span></p>`
 
 ❌ DON'T: let one centered paragraph wrap wherever the width ends ("… or the address / has a typo.").
+
+## CSS of one component lives in its own module
+
+CSS that only one component uses (keyframes, a one-off background) lives in `<Component>.module.css` next to the component and is imported as `styles`. `globals.css` keeps only the theme (`@theme` colors and fonts) and what several components or the whole site share (`offset-card`, `offset-button`, `code-scroll`, the bare 404 rule). An entrance animation is CSS, not `motion`, so it runs on the first paint instead of waiting for JavaScript.
+
+**Why**: the animation sits next to the markup it moves, and `globals.css` does not grow with every component.
+
+✅ DO: `HeroSun.module.css` with the sun's keyframes, ``className={`fill-orange-500 ${styles.ember}`}`` in `HeroSun.tsx`.
+
+❌ DON'T: add `--animate-sun-ember` and its `@keyframes` to `globals.css` for one component.

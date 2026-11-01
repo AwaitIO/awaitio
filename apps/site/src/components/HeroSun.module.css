@@ -1,0 +1,30 @@
+/* The hero sun glows: its dithered pixels dim and the gaps light up, in slow waves. Still with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .ember {
+    animation: sun-ember 3.5s ease-in-out infinite;
+  }
+
+  .spark {
+    animation: sun-spark 4.5s ease-in-out infinite;
+  }
+}
+
+@keyframes sun-ember {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes sun-spark {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}

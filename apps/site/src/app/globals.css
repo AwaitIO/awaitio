@@ -38,105 +38,6 @@
   --color-orange-700: #9f4d26;
   --color-orange-800: #7e3e21;
   --color-orange-900: #66341d;
-
-  /* The hero sun glows: its dithered pixels dim and the gaps light up, in slow waves. */
-  --animate-sun-ember: sun-ember 3.5s ease-in-out infinite;
-  --animate-sun-spark: sun-spark 4.5s ease-in-out infinite;
-
-  @keyframes sun-ember {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.15;
-    }
-  }
-
-  @keyframes sun-spark {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 0.7;
-    }
-  }
-
-  /* The dotted heading of the 404 page: a dim band runs through the letters from left to right, or single dots blink
-     out for a moment like the sun's embers. */
-  --animate-dot-wave: dot-wave 4s ease-in-out infinite;
-  --animate-dot-twinkle: dot-twinkle 4s ease-in-out infinite;
-
-  @keyframes dot-wave {
-    0%,
-    30%,
-    100% {
-      opacity: 1;
-    }
-    15% {
-      opacity: 0.25;
-    }
-  }
-
-  @keyframes dot-twinkle {
-    0%,
-    85%,
-    100% {
-      opacity: 1;
-    }
-    92% {
-      opacity: 0.15;
-    }
-  }
-
-  /* The top of a page rises 30 px and fades in on its first paint, in CSS so it needs no JavaScript and never hides
-     the main content from search engines or slow devices; FadeIn sets the delay of each block. */
-  --animate-rise: rise 0.35s ease-out both;
-
-  @keyframes rise {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-  }
-
-  /* The gliding pointer of the how-it-works demo presses the element it has landed on. */
-  --animate-cursor-press: cursor-press 0.3s ease-out both;
-
-  @keyframes cursor-press {
-    0%,
-    100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(0.8);
-    }
-  }
-
-  /* The pointer of the how-it-works demo: glides in from the lower right, presses and lets go. */
-  --animate-cursor-click: cursor-click 0.7s ease-out both;
-
-  @keyframes cursor-click {
-    0% {
-      opacity: 0;
-      transform: translate(36px, 30px);
-    }
-    20% {
-      opacity: 1;
-    }
-    65% {
-      transform: translate(0, 0) scale(1);
-    }
-    80% {
-      opacity: 1;
-      transform: translate(0, 0) scale(0.8);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(0, 0) scale(1);
-    }
-  }
 }
 
 /* The brand's cards and buttons: an ink border with a hard shadow shifted down and right. Cards and secondary buttons
@@ -154,15 +55,6 @@
 /* Secondary buttons: an ink outline lifted by a sand shadow, quieter than the orange one of the primary button. */
 @utility offset-button-secondary {
   box-shadow: 3px 3px 0 var(--color-gray-400);
-}
-
-/* The strip under the hero horizon: two faint lines across the whole width that split it into thirds. */
-@utility horizon-band {
-  background-color: var(--color-band);
-  background-image: linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1)), linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1));
-  background-size: 100% 1px;
-  background-position: 0 33.333%, 0 66.667%;
-  background-repeat: no-repeat;
 }
 
 html {
@@ -196,11 +88,4 @@ html {
    so the static 404.html is bare from its first paint. */
 body:has([data-bare-page]) .site-chrome {
   display: none;
-}
-
-/* With reduced motion the top of a page is simply there. */
-@media (prefers-reduced-motion: reduce) {
-  .animate-rise {
-    animation: none;
-  }
 }

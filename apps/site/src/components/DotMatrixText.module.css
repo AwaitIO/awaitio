@@ -1,0 +1,33 @@
+/* The dotted heading of the 404 page: a dim band runs through the letters from left to right, or single dots blink out
+   for a moment like the sun's embers. Still with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .wave {
+    animation: dot-wave 4s ease-in-out infinite;
+  }
+
+  .twinkle {
+    animation: dot-twinkle 4s ease-in-out infinite;
+  }
+}
+
+@keyframes dot-wave {
+  0%,
+  30%,
+  100% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes dot-twinkle {
+  0%,
+  85%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.15;
+  }
+}

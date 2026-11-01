@@ -1,0 +1,8 @@
+/* The strip under the hero horizon: two faint lines across the whole width that split it into thirds. */
+.horizonBand {
+  background-color: var(--color-band);
+  background-image: linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1)), linear-gradient(rgb(43 38 33 / 0.1), rgb(43 38 33 / 0.1));
+  background-size: 100% 1px;
+  background-position: 0 33.333%, 0 66.667%;
+  background-repeat: no-repeat;
+}

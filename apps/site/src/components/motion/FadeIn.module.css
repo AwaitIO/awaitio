@@ -1,0 +1,19 @@
+/* The top of a page rises 30 px and fades in on its first paint, in CSS so it needs no JavaScript and never hides the
+   main content from search engines or slow devices; FadeIn sets the delay of each block. With reduced motion it is
+   simply there. */
+.rise {
+  animation: rise 0.35s ease-out both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise {
+    animation: none;
+  }
+}

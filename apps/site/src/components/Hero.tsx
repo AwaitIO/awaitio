@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import styles from './Hero.module.css';
 import { HeroAppScreenshot } from './HeroAppScreenshot';
 import { HeroSun } from './HeroSun';
 import { constants } from '../constants';
@@ -38,7 +39,7 @@ export const Hero: FC = () => {
       </div>
       {/* The horizon runs across the whole width under the buttons, the sun sits on it on the right and the app window
           reaches up over it. */}
-      <div className="horizon-band relative border-t border-gray-900">
+      <div className={`${styles.horizonBand} relative border-t border-gray-900`}>
         <HeroSun className="absolute right-[5%] bottom-full w-32 sm:w-44 lg:w-56 xl:-right-[6%] xl:w-[32rem]" />
         <div className="relative mx-auto -mt-[125.5px] max-w-5xl px-4 pb-20">
           <FadeIn on="load" delay={0.4}>

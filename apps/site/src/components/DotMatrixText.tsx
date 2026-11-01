@@ -1,3 +1,4 @@
+import styles from './DotMatrixText.module.css';
 import { dotMatrixCells } from '../utils/dotMatrixCells';
 import type { FC } from 'react';
 
@@ -40,11 +41,7 @@ export const DotMatrixText: FC<DotMatrixTextProps> = ({
         const hash = (Math.imul(cell.x, 73856093) ^ Math.imul(cell.y, 19349663)) >>> 0;
         const animated = cell.lit && animation !== 'none';
         const style = animated ? { animationDelay: animation === 'wave' ? `${(cell.x - width) * 0.05}s` : `${-(hash % 40) * 0.1}s` } : undefined;
-        const fillClassName = [
-          cell.lit ? litClassName : unlitClassName,
-          animated && animation === 'wave' && 'motion-safe:animate-dot-wave',
-          animated && animation === 'twinkle' && 'motion-safe:animate-dot-twinkle',
-        ]
+        const fillClassName = [cell.lit ? litClassName : unlitClassName, animated && animation === 'wave' && styles.wave, animated && animation === 'twinkle' && styles.twinkle]
           .filter(Boolean)
           .join(' ');
 

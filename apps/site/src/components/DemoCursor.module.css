@@ -1,0 +1,25 @@
+/* The pointer of the how-it-works demo: glides in from the lower right, presses and lets go. */
+.click {
+  animation: cursor-click 0.7s ease-out both;
+}
+
+@keyframes cursor-click {
+  0% {
+    opacity: 0;
+    transform: translate(36px, 30px);
+  }
+  20% {
+    opacity: 1;
+  }
+  65% {
+    transform: translate(0, 0) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
