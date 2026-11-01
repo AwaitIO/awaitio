@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { AppScreenshot } from './AppScreenshot';
+import { HeroAppScreenshot } from './HeroAppScreenshot';
 import { HeroSun } from './HeroSun';
 import { constants } from '../constants';
 import { TypeScriptIcon } from '../icons/TypeScriptIcon';
@@ -42,7 +42,12 @@ export const Hero: FC = () => {
         <HeroSun className="absolute right-[5%] bottom-full w-32 sm:w-44 lg:w-56 xl:-right-[6%] xl:w-[32rem]" />
         <div className="relative mx-auto -mt-[125.5px] max-w-5xl px-4 pb-20">
           <FadeIn on="load" delay={0.4}>
-            <AppScreenshot src="/preview.png" alt="The demo backoffice: the Users page with its actions, stats and a table of users" url="demo.awaitio.com/groups/users" />
+            <HeroAppScreenshot
+              src="/preview.png"
+              alt="The demo backoffice: the Users page with its actions, stats and a table of users"
+              url="demo.awaitio.com/groups/users"
+              videoId={constants.DEMO_VIDEO_ID}
+            />
           </FadeIn>
         </div>
       </div>

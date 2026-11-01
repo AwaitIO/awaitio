@@ -1,4 +1,4 @@
-import { AppScreenshot } from '../../components/AppScreenshot';
+import { HeroAppScreenshot } from '../../components/HeroAppScreenshot';
 import { FadeIn } from '../../components/motion/FadeIn';
 import { Page } from '../../components/Page';
 import { constants } from '../../constants';
@@ -41,7 +41,7 @@ const DemoPage = () => {
             </FadeIn>
             {/* On wide screens the window reaches up over the top line, as the hero screenshot reaches over the horizon. */}
             <FadeIn on="load" delay={0.2} className="min-w-0 lg:-mt-28">
-              <AppScreenshot
+              <HeroAppScreenshot
                 src="/screenshots/create-account.png"
                 alt="The Create account action in the demo, its form filled in for Juniper Tea"
                 url="demo.awaitio.com/actions/accounts/create_account"
