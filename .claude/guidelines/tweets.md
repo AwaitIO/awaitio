@@ -23,6 +23,16 @@
 - A link reply is a full sentence that says what is behind the link, ending with a period, then a blank line and the URL alone on its own line. The blank line keeps the URL apart from the sentence on X. No colon before the URL: ✅ `The full list of changes in 1.1 is in the docs.` + blank line + URL, ❌ `Everything in 1.1: <URL>`, ❌ the URL straight on the next line.
 - Bullet lists use `•` and follow their lead-in line directly, with no blank line between.
 
+## A posted tweet is saved as it went out
+
+The `.md` of a posted tweet holds the text exactly as X shows it, with the URLs fully expanded and nothing added. Editors that format pasted text as Markdown turn a URL into `[url](url)` and add blank lines, so check the file after pasting.
+
+**Why**: the folder is the record of what was posted; a Markdown link or extra line is text that never went out.
+
+✅ DO: `We are live on @ProductHunt` + newline + `https://www.producthunt.com/products/awaitio`
+
+❌ DON'T: `[https://www.producthunt.com/products/awaitio](https://www.producthunt.com/products/awaitio)`, extra blank lines the post does not have
+
 ## Voice
 
 - Who reads it: developers who build admin screens and internal tools for their team.
