@@ -14,7 +14,7 @@ import type { PricingTierInfo } from '../../types/PricingTierInfo';
 import { readLicenseExamples } from '../../utils/readLicenseExamples';
 
 // Moved whenever the content changes: shown as og:updated_time, as "Last updated" on legal pages and as lastmod in the sitemap.
-export const LAST_MODIFIED_AT = '2026-10-22';
+export const LAST_MODIFIED_AT = '2026-11-01';
 
 const tiers: PricingTierInfo[] = [
   {

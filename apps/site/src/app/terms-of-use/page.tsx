@@ -3,7 +3,7 @@ import { Page } from '../../components/Page';
 import { constants } from '../../constants';
 
 // Moved whenever the content changes: shown as og:updated_time, as "Last updated" on legal pages and as lastmod in the sitemap.
-export const LAST_MODIFIED_AT = '2026-10-22';
+export const LAST_MODIFIED_AT = '2026-11-01';
 
 // Draft, to be reviewed by a lawyer before launch.
 const TermsPage = () => {
@@ -27,7 +27,8 @@ const TermsPage = () => {
           A Company License costs 50 USD per month per organization for 4 to 10 users and 250 USD per month for 11 to 50 users; more than 50 users need an Enterprise agreement. It is paid as a monthly
           sponsorship with the Company License tier for your number of users on <a href={constants.SPONSORS_URL}>GitHub Sponsors</a> and is valid while the sponsorship is active. We issue an invoice
           for every payment on request. A written contract, an SLA or custom terms are agreed by email as an Enterprise agreement. Prices may change; a change does not affect a month already paid.
-          Other sponsorships, one-time or monthly, are gifts that support AwaitIO and do not grant a Company License.
+          Missed months can be paid later, at once as a one-time sponsorship or as agreed by email. Other sponsorships, one-time or monthly, are gifts that support AwaitIO and do not grant a
+          Company License.
         </p>
         <h2>The website</h2>
         <ul>

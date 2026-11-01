@@ -58,7 +58,7 @@ The Free License and the Company License cover exactly the same software. AwaitI
 
 ## Sponsoring
 
-Anyone may sponsor AwaitIO on GitHub Sponsors, once or monthly, with any amount, to support its development. A sponsorship other than a monthly Company License tier is a gift and does not grant a Company License.
+Anyone may sponsor AwaitIO on GitHub Sponsors, once or monthly, with any amount, to support its development. A sponsorship other than a monthly Company License tier is a gift and does not grant a Company License, unless it pays for months of a Company License that were missed.
 
 ## What nobody may do
 
@@ -97,6 +97,16 @@ The license belongs to the organization, not to that person's GitHub account. If
 #### What if we are a larger team but cannot afford the license right now?
 
 Write to license@awaitio.com. The Licensor has been in that situation too and understands it. It would not want you to stop using AwaitIO only because you have no budget for the license right now. An exception or individual terms are agreed case by case.
+
+#### What if we forgot to pay the license for several months?
+
+That happens, and it is no problem. Nobody will hold it against you.
+
+Write to license@awaitio.com and the Licensor will agree with you how to settle the missed months.
+
+Or simply pay the missed amount at once as a one-time sponsorship on [GitHub Sponsors](https://github.com/sponsors/awaitio). For example, 5 missed months of the 4 to 10 users tier are 250 USD. Such a payment counts as the Company License for those months, not as a gift.
+
+Then renew the monthly Company License tier and you are covered again.
 
 #### What if I am not sure whether or which license I need?
 
