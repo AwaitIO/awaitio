@@ -20,18 +20,9 @@
 - No dotted API names in the text (`io.select.single`, `app.listen`): X reads them as web addresses and turns them into links, because `.select`, `.app` and many others are real domains. Name the feature in plain words, the exact name goes into the image.
 - Single posts by default. A thread is the exception, for a launch or a release worth several posts; its posts are separated by `-----` in one file.
 - A link goes into the last post of a thread or into a reply under a single post, never into the first post: X shows posts with links to fewer people.
+- The exception is a single post whose whole point is the link, like a YouTube video or a Product Hunt page: the link goes right into that post, at the end on its own line, and X shows its preview card under the text. No image then, it would replace the card.
 - A link reply is a full sentence that says what is behind the link, ending with a period, then a blank line and the URL alone on its own line. The blank line keeps the URL apart from the sentence on X. No colon before the URL: ✅ `The full list of changes in 1.1 is in the docs.` + blank line + URL, ❌ `Everything in 1.1: <URL>`, ❌ the URL straight on the next line.
 - Bullet lists use `•` and follow their lead-in line directly, with no blank line between.
-
-## A posted tweet is saved as it went out
-
-The `.md` of a posted tweet holds the text exactly as X shows it, with the URLs fully expanded and nothing added. Editors that format pasted text as Markdown turn a URL into `[url](url)` and add blank lines, so check the file after pasting.
-
-**Why**: the folder is the record of what was posted; a Markdown link or extra line is text that never went out.
-
-✅ DO: `We are live on @ProductHunt` + newline + `https://www.producthunt.com/products/awaitio`
-
-❌ DON'T: `[https://www.producthunt.com/products/awaitio](https://www.producthunt.com/products/awaitio)`, extra blank lines the post does not have
 
 ## Voice
 
