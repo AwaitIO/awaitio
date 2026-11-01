@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { TrafficLights } from './TrafficLights';
 import { constants } from '../constants';
 import styles from './HeroAppScreenshot.module.css';
+import { BrowserFrame } from './variants/BrowserFrame';
 import { PlayIcon } from '../icons/PlayIcon';
 import type { FC } from 'react';
 
@@ -11,11 +11,12 @@ export type HeroAppScreenshotProps = {
   src: string;
   alt: string;
   url: string;
-  // A YouTube video ID: the screenshot becomes its thumbnail with a play button, and a click plays it in the window.
-  videoId?: string;
+  // The YouTube video that plays in the window; the screenshot is its thumbnail.
+  videoId: string;
 };
 
-// The demo app in a browser window, as a screenshot or as the thumbnail of a demo video that plays in the same window.
+// The app window of the hero: a screenshot with a play button that plays the demo video in the same window, and the
+// Product Hunt sticker on its corner.
 export const HeroAppScreenshot: FC<HeroAppScreenshotProps> = ({ src, alt, url, videoId }) => {
   const [playing, setPlaying] = useState(false);
 
@@ -39,12 +40,8 @@ export const HeroAppScreenshot: FC<HeroAppScreenshotProps> = ({ src, alt, url, v
           />
         </span>
       </a>
-      <div className="offset-card overflow-hidden bg-white">
-        <div className="flex items-center gap-3 border-b border-gray-100 bg-gray-50 px-4 py-3">
-          <TrafficLights />
-          <span className="flex-1 truncate rounded-md bg-white px-2 py-0.5 text-left font-mono text-[11px] text-gray-500 ring-1 ring-gray-200">{url}</span>
-        </div>
-        {videoId && playing ? (
+      <BrowserFrame flush url={url}>
+        {playing ? (
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
             title="AwaitIO demo video"
@@ -52,7 +49,7 @@ export const HeroAppScreenshot: FC<HeroAppScreenshotProps> = ({ src, alt, url, v
             allowFullScreen
             className="block aspect-video w-full bg-gray-950"
           />
-        ) : videoId ? (
+        ) : (
           <button
             type="button"
             onClick={() => {
@@ -74,10 +71,8 @@ export const HeroAppScreenshot: FC<HeroAppScreenshotProps> = ({ src, alt, url, v
               </span>
             </span>
           </button>
-        ) : (
-          <img src={src} alt={alt} className="aspect-[2/1] w-full object-cover object-top" />
         )}
-      </div>
+      </BrowserFrame>
     </div>
   );
 };
