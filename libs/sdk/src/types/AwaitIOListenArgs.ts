@@ -6,4 +6,6 @@ export type AwaitIOListenArgs = {
   // The path AwaitIO is served under when it shares a domain with another app, e.g. '/backoffice' for
   // example.com/backoffice. The UI, the API and the session cookie all live under it. Defaults to the root.
   basePath?: string;
+  // Print 'AwaitIO server is running at http://localhost:3000' once the port is open. Defaults to true.
+  log?: boolean;
 };

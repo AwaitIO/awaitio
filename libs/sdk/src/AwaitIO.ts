@@ -24,10 +24,12 @@ import { createLayoutRegistry } from './utils/createLayoutRegistry';
 import { isPage } from './utils/isPage';
 import { loadActionsDirectory } from './utils/loadActionsDirectory';
 import { normalizeBasePath } from './utils/normalizeBasePath';
+import { serverUrl } from './utils/serverUrl';
 import { toThemeScripts } from './utils/toThemeScripts';
 import { validateEnvironments } from './utils/validateEnvironments';
 import { walkPages } from './utils/walkPages';
 import { walkRoutes } from './utils/walkRoutes';
+import type { AddressInfo } from 'net';
 
 // The whole product in one object: component registry, action runtime, HTTP API and the UI.
 // Components are fixed here so action files can import the instance and get a typed io from app.defineAction();
@@ -35,7 +37,7 @@ import { walkRoutes } from './utils/walkRoutes';
 type AwaitIOServeArgs = {
   routes: Record<string, AwaitIORoutes<unknown>[string] | Page<unknown>>;
   port: number;
-  host?: string;
+  host: string;
   basePath: string;
 };
 
@@ -78,7 +80,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).
-  async listen({ port, host, basePath }: AwaitIOListenArgs) {
+  async listen({ port, host = constants.DEFAULT_HOST, basePath, log = true }: AwaitIOListenArgs) {
     if (this.running || this.isStarting) {
       throw new Error('This AwaitIO app is already listening.');
     }
@@ -88,7 +90,14 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
     this.isStarting = true;
 
     try {
-      return await this.serve({ routes: await loadActionsDirectory({ directory: this.actionsDirectory }), port, host, basePath: normalizedBasePath });
+      const server = await this.serve({ routes: await loadActionsDirectory({ directory: this.actionsDirectory }), port, host, basePath: normalizedBasePath });
+
+      if (log) {
+        // The real port, so port 0 prints the one that was picked.
+        console.info(`AwaitIO server is running at ${serverUrl({ host, port: (server.address() as AddressInfo).port, basePath: normalizedBasePath })}`);
+      }
+
+      return server;
     } finally {
       this.isStarting = false;
     }
@@ -131,7 +140,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
       };
 
       server.once('error', fail);
-      server.listen(port, host ?? constants.DEFAULT_HOST, () => {
+      server.listen(port, host, () => {
         server.off('error', fail);
         resolve(server);
       });

@@ -1,7 +1,7 @@
 import { mkdtempSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
-import { afterAll, beforeAll, expect, test } from 'vitest';
+import { afterAll, beforeAll, expect, test, vi } from 'vitest';
 import { z } from 'zod/v4';
 import { AwaitIO } from './AwaitIO';
 import { defineComponent } from './defineComponent';
@@ -559,6 +559,32 @@ test('Should allow listen() again after the port was taken', async () => {
   expect(server.listening).toBe(true);
 
   await another.close();
+});
+
+test('Should print the address once the port is open, unless log is false or the port is taken', async () => {
+  const info = vi.spyOn(console, 'info').mockImplementation(() => {
+    return undefined;
+  });
+  const logged = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
+
+  try {
+    await expect(logged.listen({ port: Number(new URL(baseUrl).port) })).rejects.toMatchObject({ code: 'EADDRINUSE' });
+
+    expect(info).not.toHaveBeenCalled();
+
+    await logged.listen({ port: 0, log: false });
+
+    expect(info).not.toHaveBeenCalled();
+
+    await logged.close();
+
+    const server = await logged.listen({ port: 0, host: '0.0.0.0', basePath: '/backoffice/' });
+
+    expect(info.mock.calls).toEqual([[`AwaitIO server is running at http://localhost:${(server.address() as AddressInfo).port}/backoffice`]]);
+  } finally {
+    info.mockRestore();
+    await logged.close();
+  }
 });
 
 test('Should run an action from a nested folder by its encoded slug', async () => {

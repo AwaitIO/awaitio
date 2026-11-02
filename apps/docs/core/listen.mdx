@@ -11,10 +11,11 @@ import { app } from './app';
 void app.listen({ port: 3000 });
 ```
 
-| Option     | Description                                                                                                                                                                    |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `port`     | The port to listen on. `0` picks a free one (read it from `server.address()`).                                                                                                 |
-| `host`     | Optional. The interface to listen on. Defaults to `127.0.0.1`, so only this machine can reach the server; use `'0.0.0.0'` in a container or behind a proxy on another machine. |
-| `basePath` | Optional. The path AwaitIO is served under, e.g. `'/backoffice'` for `example.com/backoffice`. Defaults to the root. See [Deployment](/deployment#serve-under-a-path).         |
+| Option     | Description                                                                                                                                                                      |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `port`     | The port to listen on. `0` picks a free one (read it from `server.address()`).                                                                                                   |
+| `host`     | Optional. The interface to listen on. Defaults to `127.0.0.1`, so only this machine can reach the server; use `'0.0.0.0'` in a container or behind a proxy on another machine.   |
+| `basePath` | Optional. The path AwaitIO is served under, e.g. `'/backoffice'` for `example.com/backoffice`. Defaults to the root. See [Deployment](/deployment#serve-under-a-path).           |
+| `log`      | Optional. Prints `AwaitIO server is running at http://localhost:3000` (with the real port and the `basePath`) once the port is open. Defaults to `true`; `false` prints nothing. |
 
-`listen()` returns a promise of the Node `http.Server`, resolved once the port is open. If the port is taken, the promise rejects and `listen()` can be called again. `app.close()` stops the server and cancels every running action.
+`listen()` returns a promise of the Node `http.Server`, resolved once the port is open. If the port is taken, nothing is printed, the promise rejects and `listen()` can be called again. `app.close()` stops the server and cancels every running action.
