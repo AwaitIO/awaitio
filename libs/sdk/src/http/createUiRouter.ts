@@ -8,9 +8,11 @@ const indexHtml = resolve(uiDirectory, 'index.html');
 
 export type CreateUiRouterArgs = {
   basePath: string;
+  // HTML added before </head>, '' for none.
+  head: string;
 };
 
-export const createUiRouter = ({ basePath }: CreateUiRouterArgs): IRouter => {
+export const createUiRouter = ({ basePath, head }: CreateUiRouterArgs): IRouter => {
   const router = Router();
 
   router.use(express.static(uiDirectory, { index: false }));
@@ -22,7 +24,12 @@ export const createUiRouter = ({ basePath }: CreateUiRouterArgs): IRouter => {
       return res.status(500).type('text').send('The UI is not built. Run `pnpm build` in libs/sdk.');
     }
 
-    return res.type('html').send(readFileSync(indexHtml, 'utf8').replace('<head>', `<head>\n    <base href="${basePath}/" />`));
+    // Replacer functions, so a `$&` or `$1` in the head is sent as written.
+    return res.type('html').send(
+      readFileSync(indexHtml, 'utf8')
+        .replace('<head>', () => `<head>\n    <base href="${basePath}/" />`)
+        .replace('</head>', () => (head ? `  ${head}\n  </head>` : '</head>')),
+    );
   });
 
   return router;

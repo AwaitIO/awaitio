@@ -42,5 +42,19 @@ export const app = new AwaitIO({
 | `components`       | `object`               | Optional | What `io` offers, see [Input components](/core/input-components) and [Display components](/core/display-components). |
 | `environments`     | `AwaitIOEnvironment[]` | Optional | Your production, staging and local servers, see [Environments](/core/environments).                                  |
 | `layouts`          | `object`               | Optional | The frames of folder pages, see [Layout components](/core/layout-components).                                        |
+| `head`             | `string`               | Optional | HTML added to the end of the page's `<head>`, see [Extra tags in the head](#extra-tags-in-the-head).                 |
 
 The app checks the options when it is created and throws with a message naming the one that is wrong, so a typo stops the server before anyone logs in.
+
+## Extra tags in the head
+
+`head` is HTML the server adds, as written, to the end of the `<head>` of every page it sends: an analytics script, Open Graph tags for link previews, your own favicon.
+
+```ts app.ts
+export const app = new AwaitIO({
+  // …
+  head: ['<script defer src="https://analytics.example.com/script.js" data-website-id="…"></script>', '<meta property="og:image" content="https://tools.example.com/og.png" />'].join('\n'),
+});
+```
+
+Anyone who opens the page can read it, logged in or not, so keep secrets out of it. The tab title still comes from `name`.

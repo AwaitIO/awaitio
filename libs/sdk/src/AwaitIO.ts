@@ -49,10 +49,11 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   private readonly actionsDirectory: string;
   private readonly environments: AwaitIOEnvironment[];
   private readonly themeScripts: ThemeScripts;
+  private readonly head: string;
   private running: { server: Server; manager: RunManager } | null = null;
   private isStarting = false;
 
-  constructor({ name, actionsDirectory, environments = [], secret, users, maxFailedLogins, components, layouts, theme }: AwaitIOOptions<T, L>) {
+  constructor({ name, actionsDirectory, environments = [], secret, users, maxFailedLogins, components, layouts, theme, head = '' }: AwaitIOOptions<T, L>) {
     if (name.trim().length === 0) {
       throw new Error('The name must not be empty.');
     }
@@ -62,6 +63,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
     this.name = name.trim();
     this.actionsDirectory = actionsDirectory;
     this.environments = environments;
+    this.head = head;
     this.sessions = new Sessions({ secret, users, maxFailedLogins });
     this.registry = createComponentRegistry({ tree: components ?? {} });
     this.layoutRegistry = createLayoutRegistry({ tree: layouts ?? {} });
@@ -122,6 +124,7 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
         registry: this.registry,
         layoutRegistry: this.layoutRegistry,
         themeScripts: this.themeScripts,
+        head: this.head,
       }),
     );
     const running = { server, manager };

@@ -27,4 +27,7 @@ export type AwaitIOOptions<T extends ComponentTree, L extends LayoutTree> = {
   theme: Theme;
   // Layouts pages can show, e.g. { table: layoutTable } for layout.table() in app.definePage().
   layouts?: L;
+  // HTML added to the end of the page's <head>, as written: analytics scripts, Open Graph meta tags, a favicon.
+  // The server sends it with every page, so it must not hold anything secret.
+  head?: string;
 };

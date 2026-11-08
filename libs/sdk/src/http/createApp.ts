@@ -20,7 +20,6 @@ import type { ThemeScripts } from '../types/ThemeScripts';
 
 export type CreateAppArgs = {
   name: string;
-  // '' at the root, otherwise '/backoffice': everything below is served under it.
   basePath: string;
   environments: AwaitIOEnvironment[];
   sessions: Sessions;
@@ -30,9 +29,10 @@ export type CreateAppArgs = {
   registry: ComponentRegistry;
   layoutRegistry: LayoutRegistry;
   themeScripts: ThemeScripts;
+  head: string;
 };
 
-export const createApp = ({ name, basePath, environments, sessions, actions, pages, manager, registry, layoutRegistry, themeScripts }: CreateAppArgs): Express => {
+export const createApp = ({ name, basePath, environments, sessions, actions, pages, manager, registry, layoutRegistry, themeScripts, head }: CreateAppArgs): Express => {
   return express()
     .disable('x-powered-by')
     .use(
@@ -75,6 +75,6 @@ export const createApp = ({ name, basePath, environments, sessions, actions, pag
         .use('/layouts', createAuthMiddleware({ sessions }))
         .use(createUiScriptsRouter({ kind: 'layouts', definitions: layoutRegistry.byType }))
         // The page and its assets hold no data; without a session the UI shows the login form.
-        .use(createUiRouter({ basePath })),
+        .use(createUiRouter({ basePath, head })),
     );
 };

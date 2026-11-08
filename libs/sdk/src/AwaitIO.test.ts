@@ -541,6 +541,17 @@ test('Should serve the UI, the API and the session cookie under a basePath and n
   await prefixed.close();
 });
 
+test('Should add the head option to the end of the page head as written', async () => {
+  const withHead = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users, head: '<meta property="og:title" content="$& Tools" />' });
+  const server = await withHead.listen({ port: 0 });
+  const html = await (await fetch(`http://localhost:${(server.address() as AddressInfo).port}/runs/1`)).text();
+
+  expect(html).toMatch(/<meta property="og:title" content="\$& Tools" \/>\s*<\/head>/);
+  expect(html).toContain('<base href="/" />');
+
+  await withHead.close();
+});
+
 test('Should refuse a basePath that is not a plain path', async () => {
   const prefixed = new AwaitIO({ name: 'Test app', actionsDirectory: emptyActionsDirectory, theme: testTheme, secret, users });
 
