@@ -32,6 +32,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/tweets.md` – `.claude/tweets/`: posts for X, file names, text and media.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
+- `.claude/guidelines/ci.md` – GitHub workflows that hold secrets: actions pinned to a SHA, secrets per step.
 - `.claude/workbench.md` – how the review workbench groups changes.
 
 ## Repository map

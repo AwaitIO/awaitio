@@ -9,6 +9,10 @@
 # Secrets: KAMAL_SSH_KEY (private key of the CI key in the Droplet's root authorized_keys),
 # KAMAL_HOST (the Droplet's address), KAMAL_REGISTRY (host name of the registry on the Droplet) and
 # KAMAL_REGISTRY_PASSWORD (its password). Secrets, not variables, so the logs mask them.
+#
+# The job holds root access to the production server, so third-party actions are pinned to a commit
+# SHA (a moved tag cannot swap their code) and the secrets are passed only to the steps that use
+# them, never to the whole job.
 name: Deploy
 
 on:
@@ -23,19 +27,14 @@ concurrency:
 permissions:
   contents: read
 
-env:
-  KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
-  KAMAL_REGISTRY: ${{ secrets.KAMAL_REGISTRY }}
-  KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
         with:
           ruby-version: '3.3'
 
@@ -43,26 +42,41 @@ jobs:
         run: gem install kamal -v 2.12.0 --no-document
 
       - name: SSH access to the Droplet
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@dc588b651fe13675774614f8e6a936a468676387 # v0.9.0
         with:
           ssh-private-key: ${{ secrets.KAMAL_SSH_KEY }}
 
       - name: Trust the Droplet host key
+        env:
+          KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
         run: ssh-keyscan -t ed25519 "$KAMAL_HOST" >> ~/.ssh/known_hosts
 
       # The remote builder on the Droplet pushes with the credentials of the machine running Kamal
       - name: Log in to the registry
+        env:
+          KAMAL_REGISTRY: ${{ secrets.KAMAL_REGISTRY }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
         run: echo "$KAMAL_REGISTRY_PASSWORD" | docker login "$KAMAL_REGISTRY" -u kamal --password-stdin
 
       - name: Remember the running version
         id: previous
+        env:
+          KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
         run: |
           name=$(ssh "root@$KAMAL_HOST" "docker ps --filter label=service=awaitio --filter label=role=site --format '{{.Names}}'" | head -1)
           echo "version=${name#awaitio-site-}" >> "$GITHUB_OUTPUT"
 
       - name: Deploy
+        env:
+          KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
+          KAMAL_REGISTRY: ${{ secrets.KAMAL_REGISTRY }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
         run: kamal deploy -c .kamal/deploy.yml
 
       - name: Roll back
         if: failure() && steps.previous.outputs.version != ''
+        env:
+          KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
+          KAMAL_REGISTRY: ${{ secrets.KAMAL_REGISTRY }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
         run: kamal rollback "${{ steps.previous.outputs.version }}" -c .kamal/deploy.yml
