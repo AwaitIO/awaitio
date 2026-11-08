@@ -6,7 +6,6 @@ export const constants = {
   DISCORD_URL: 'https://discord.gg/85JPMrY7YP',
   // The short description of AwaitIO for bios and profiles, shown on /brand. Fits the 160 characters of an X bio.
   SHORT_DESCRIPTION: 'Internal tools. Just code. Write a TypeScript function, get an admin screen for your team. No drag-and-drop. Free for up to 3 users.',
-  UMAMI_WEBSITE_ID: 'd4f42a77-67d2-499e-9c6d-fcae54216335',
   LICENSE_URL: 'https://github.com/awaitio/awaitio/blob/main/LICENSE',
   PRODUCT_HUNT_URL: 'https://www.producthunt.com/products/awaitio?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-awaitio',
   // The "Featured on Product Hunt" badge, light theme, drawn by Product Hunt.
