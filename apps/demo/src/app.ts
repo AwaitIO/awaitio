@@ -63,4 +63,16 @@ export const app = new AwaitIO({
     confirm,
   },
   layouts: { basic: layoutBasic },
+  head: [
+    '<script defer src="https://analytics.orukami.cz/script.js" data-website-id="6a32f8e9-c187-49db-adab-331e242f9df6" data-domains="demo.awaitio.com"></script>',
+    '<meta name="description" content="Click through a real backoffice and try every component before you write a single line of code." />',
+    '<meta property="og:type" content="website" />',
+    '<meta property="og:title" content="Demo – AwaitIO" />',
+    '<meta property="og:description" content="Click through a real backoffice and try every component before you write a single line of code." />',
+    '<meta property="og:url" content="https://demo.awaitio.com/" />',
+    '<meta property="og:image" content="https://awaitio.com/og/demo.png" />',
+    '<meta property="og:image:width" content="1200" />',
+    '<meta property="og:image:height" content="630" />',
+    '<meta name="twitter:card" content="summary_large_image" />',
+  ].join('\n    '),
 });
