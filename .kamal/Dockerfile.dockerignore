@@ -1,0 +1,19 @@
+# Build context for .kamal/Dockerfile. Allow-list: everything is excluded, then only what the image
+# builds from is let back in, so the context stays small and never carries .kamal/secrets.
+*
+
+!.kamal/nginx.conf
+
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!tsconfig.json
+
+!libs
+!apps/demo
+!apps/site/out
+
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+**/.DS_Store

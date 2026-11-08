@@ -1,0 +1,64 @@
+# Kamal deploy of everything AwaitIO runs: the static site (awaitio.com) and the demo
+# (demo.awaitio.com), both from one image (.kamal/Dockerfile) on one Droplet.
+#
+#   kamal deploy -c .kamal/deploy.yml              # everything
+#   kamal deploy -c .kamal/deploy.yml -r demo      # one role only
+#
+# The Droplet's address and its registry come from the environment (KAMAL_HOST, KAMAL_REGISTRY), so
+# the public repository names neither. The image is built on the Droplet and pushed to the registry
+# running there, so it never leaves the server.
+service: awaitio
+
+image: awaitio
+
+servers:
+  site:
+    hosts:
+      - <%= ENV.fetch("KAMAL_HOST") %>
+    cmd: nginx -g "daemon off;"
+    proxy:
+      host: awaitio.com
+      ssl: true
+      app_port: 8080
+      healthcheck:
+        path: /
+  # One container only: runs live in the memory of the process.
+  demo:
+    hosts:
+      - <%= ENV.fetch("KAMAL_HOST") %>
+    cmd: node dist/server.js
+    env:
+      clear:
+        HOST: 0.0.0.0
+        PORT: "8080"
+      secret:
+        - SESSION_SECRET
+    proxy:
+      host: demo.awaitio.com
+      ssl: true
+      app_port: 8080
+      healthcheck:
+        path: /health
+
+primary_role: site
+
+ssh:
+  user: root
+
+registry:
+  # Runs on the Droplet itself (kamal-registry container behind kamal-proxy)
+  server: <%= ENV.fetch("KAMAL_REGISTRY") %>
+  username: kamal
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+builder:
+  arch: amd64
+  remote: ssh://root@<%= ENV.fetch("KAMAL_HOST") %>
+  local: false
+  context: .
+  dockerfile: .kamal/Dockerfile
+
+env:
+  clear:
+    NODE_ENV: production

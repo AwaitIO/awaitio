@@ -1,0 +1,68 @@
+# Deploys awaitio.com and demo.awaitio.com with Kamal (.kamal/deploy.yml) on every push to main.
+#
+# The repository is public, so the job runs on a GitHub-hosted runner, never on the self-hosted
+# runner of the Droplet: a pull request from a fork must not get a way to run code on the production
+# server. The runner only drives Kamal over SSH; the image is still built on the Droplet, where the
+# build cache lives. Every commit gets a check with the deploy log. When the deploy fails, every role
+# is rolled back to the version that ran before.
+#
+# Secrets: KAMAL_SSH_KEY (private key of the CI key in the Droplet's root authorized_keys),
+# KAMAL_HOST (the Droplet's address), KAMAL_REGISTRY (host name of the registry on the Droplet) and
+# KAMAL_REGISTRY_PASSWORD (its password). Secrets, not variables, so the logs mask them.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  KAMAL_HOST: ${{ secrets.KAMAL_HOST }}
+  KAMAL_REGISTRY: ${{ secrets.KAMAL_REGISTRY }}
+  KAMAL_REGISTRY_PASSWORD: ${{ secrets.KAMAL_REGISTRY_PASSWORD }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Install Kamal
+        run: gem install kamal -v 2.12.0 --no-document
+
+      - name: SSH access to the Droplet
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.KAMAL_SSH_KEY }}
+
+      - name: Trust the Droplet host key
+        run: ssh-keyscan -t ed25519 "$KAMAL_HOST" >> ~/.ssh/known_hosts
+
+      # The remote builder on the Droplet pushes with the credentials of the machine running Kamal
+      - name: Log in to the registry
+        run: echo "$KAMAL_REGISTRY_PASSWORD" | docker login "$KAMAL_REGISTRY" -u kamal --password-stdin
+
+      - name: Remember the running version
+        id: previous
+        run: |
+          name=$(ssh "root@$KAMAL_HOST" "docker ps --filter label=service=awaitio --filter label=role=site --format '{{.Names}}'" | head -1)
+          echo "version=${name#awaitio-site-}" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy
+        run: kamal deploy -c .kamal/deploy.yml
+
+      - name: Roll back
+        if: failure() && steps.previous.outputs.version != ''
+        run: kamal rollback "${{ steps.previous.outputs.version }}" -c .kamal/deploy.yml
