@@ -10,7 +10,7 @@
     "tsc": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate:sitemap": "TSX_TSCONFIG_PATH=scripts/tsconfig.json node --import tsx scripts/generateSitemap.ts"
+    "generate:sitemap": "TSX_TSCONFIG_PATH=scripts/tsconfig.json node --require ./scripts/stubCssModules.cjs --import tsx scripts/generateSitemap.ts"
   },
   "dependencies": {
     "motion": "^12.23.24",
