@@ -39,9 +39,31 @@ export const usersPage = app.definePage({
 - Returning just the array, `return [io.display.table(…)]`, puts it into the layout registered as `basic`.
 - Props are typed by each component's schema, and the server checks them again before they reach the browser: props that do not fit show an error instead of the page.
 - The handler runs every time someone opens the folder; nothing is kept between visits.
-- The handler gets `ctx` like an action: [`ctx.user`](/ctx/user) is who opened the page and `ctx.params` the query string of the link (`/groups/users?role=admin`). `ctx.page.slug` is the folder the page stands for: `users`.
+- The handler gets `ctx` like an action: [`ctx.user`](/ctx/user) is who opened the page and `ctx.params` the query string of the link (`/groups/users?role=admin`), see [Params](#params). `ctx.page.slug` is the folder the page stands for: `users`.
 - `app.definePage()` belongs only in a folder's `index.ts`; anywhere else it stops the app at start.
 - Its const ends in `Page`, `usersPage`, as an action's ends in `Action`; the file stays `index.ts`.
+
+## Params
+
+Describe the query string the page expects with a zod schema in `params`, as an [action does](/ctx/params). The server checks the link against it before the handler runs, and `ctx.params` gets the parsed, typed value:
+
+```ts actions/users/index.ts
+import { z } from 'zod/v4';
+
+export const usersPage = app.definePage({
+  params: z.object({ role: z.enum(['admin', 'member']).optional() }),
+  handler: async ({ io, ctx }) => {
+    // ctx.params is { role?: 'admin' | 'member' }
+    const users = await prisma.user.findMany({ where: { role: ctx.params.role } });
+
+    return [io.display.table('Users', { data: users, columns: ['name', 'email', 'role'] })];
+  },
+});
+```
+
+- A link that does not fit shows _The link does not fit this page_ with what is wrong, instead of the page.
+- Without `params`, `ctx.params` is every key of the query string as a string.
+- The schema also types `usersPage.route()`, the link an action opens with [`ctx.redirect()`](/ctx/redirect#redirect-to-a-page): `usersPage.route({ params: { role: 'admin' } })`.
 
 ## Layouts
 

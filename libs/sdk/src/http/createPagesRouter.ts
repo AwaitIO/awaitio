@@ -40,8 +40,14 @@ export const createPagesRouter = ({ pages, registry, layoutRegistry }: CreatePag
       return res.status(400).json({ error: 'INVALID_PARAMS', message: formatZodError({ error: params.error }) });
     }
 
+    const parsed = page.params ? page.params.safeParse(params.data) : { success: true as const, data: params.data };
+
+    if (!parsed.success) {
+      return res.status(400).json({ error: 'INVALID_PARAMS', message: `The link does not fit this page. ${formatZodError({ error: parsed.error })}` });
+    }
+
     try {
-      const result = await page.handler({ io, ctx: { page: { slug: page.slug }, params: params.data, user: getSessionUser({ res }) } });
+      const result = await page.handler({ io, ctx: { page: { slug: page.slug }, params: parsed.data, user: getSessionUser({ res }) } });
       const body: PageContent = toPageContent({ page, result, registry, layoutRegistry });
 
       return res.json(body);

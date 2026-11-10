@@ -77,8 +77,8 @@ export class AwaitIO<T extends ComponentTree = Record<string, never>, L extends 
   // What a folder shows next to its actions; export it from the folder's index file. The handler returns a layout with
   // display components in it, io.layout.basic({ children: [io.display.table('Users', { data, columns })] }), or just the
   // display components; nothing is asked.
-  definePage(options: PageOptions<PageIO<T, L>>) {
-    return new Page<PageIO<T, L>>(options);
+  definePage<TSchema extends ActionParamsSchema | undefined = undefined>(options: PageOptions<PageIO<T, L>, TSchema>) {
+    return new Page<PageIO<T, L>, TSchema>(options);
   }
 
   // Resolves once the port is open. Pass port 0 to get a free port (see server.address()).

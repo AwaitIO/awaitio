@@ -34,7 +34,7 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
     }
   }, [runState.state, slug, runId]);
 
-  // ctx.redirect() ended the run: open the action it named. Replace, so Back skips the finished run instead of looping.
+  // ctx.redirect() ended the run: open the action or page it named. Replace, so Back skips the finished run instead of looping.
   useEffect(() => {
     if (runState.state?.redirect) {
       navigate(runState.state.redirect, { replace: true });
@@ -143,8 +143,11 @@ export const RunPage: FC<RunPageProps> = ({ slug, runId }) => {
             </div>
           );
         })
-        .with({ state: { status: 'REDIRECTED' } }, () => {
-          return <p className="text-sm text-gray-500">Opening the next action…</p>;
+        .with({ state: { status: 'REDIRECTED' } }, ({ state: { redirect } }) => {
+          // A page is a folder of the action list: /groups/users?role=admin.
+          const isPage = routes.parse({ pathname: (redirect ?? '').replace(/\?.*$/, '') }).kind === 'list';
+
+          return <p className="text-sm text-gray-500">{isPage ? 'Opening the page…' : 'Opening the next action…'}</p>;
         })
         .with({ state: { status: 'CANCELED' } }, ({ state: { finishedAt } }) => {
           return <RunOutcome status="CANCELED" finishedAt={finishedAt} />;

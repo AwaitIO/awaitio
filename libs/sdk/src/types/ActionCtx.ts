@@ -1,6 +1,7 @@
 import type { LoadingStartArgs } from './LoadingStartArgs';
 import type { LoadingUpdateArgs } from './LoadingUpdateArgs';
 import type { ActionRoute } from '../shared/types/ActionRoute';
+import type { PageRoute } from '../shared/types/PageRoute';
 import type { RunParams } from '../shared/types/RunParams';
 import type { SessionUser } from '../shared/types/SessionUser';
 
@@ -24,7 +25,7 @@ export type ActionCtx<TParams = Readonly<RunParams>> = {
     // Every item of itemsInQueue is done, e.g. when the loop ends early; does nothing without itemsInQueue.
     completeAll: () => void;
   };
-  // Ends the run and opens another action in the same browser tab: ctx.redirect(changeRole.route({ params: { id } })).
-  // An io call after it throws, like after a cancel.
-  redirect: (route: ActionRoute) => Promise<void>;
+  // Ends the run and opens another action or a folder's page in the same browser tab:
+  // ctx.redirect(changeRole.route({ params: { id } })), ctx.redirect(usersPage.route()). An io call after it throws, like after a cancel.
+  redirect: (route: ActionRoute | PageRoute) => Promise<void>;
 };

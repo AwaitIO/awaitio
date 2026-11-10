@@ -377,6 +377,17 @@ test('Should give the handler the params the run was opened with', async () => {
   expect([run.current.params, (await waitForFinish({ run })).result]).toEqual([{ id: '42' }, { status: 'SUCCESS', data: { id: '42' } }]);
 });
 
+test('Should end the run and send the browser to the page ctx.redirect names', async () => {
+  const run = startRun({
+    handler: async ({ ctx }) => {
+      await ctx.redirect({ label: 'Users', page: 'users', params: { role: 'admin' } });
+    },
+  });
+  const state = await waitForFinish({ run });
+
+  expect([state.status, state.redirect, state.result]).toEqual(['REDIRECTED', '/groups/users?role=admin', null]);
+});
+
 test('Should end the run and send the browser to the action ctx.redirect names', async () => {
   let afterRedirect: unknown = null;
   const run = startRun({

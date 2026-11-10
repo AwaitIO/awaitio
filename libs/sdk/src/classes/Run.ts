@@ -2,12 +2,14 @@ import { DateTime } from 'luxon';
 import { IOError } from './IOError';
 import { createIO } from '../io/createIO';
 import type { ActionRoute } from '../shared/types/ActionRoute';
+import type { PageRoute } from '../shared/types/PageRoute';
 import type { RunParams } from '../shared/types/RunParams';
 import type { RunState } from '../shared/types/RunState';
 import type { SessionUser } from '../shared/types/SessionUser';
 import type { StepComponent } from '../shared/types/StepComponent';
 import type { StepResponse } from '../shared/types/StepResponse';
 import { actionHref } from '../shared/utils/actionHref';
+import { pageHref } from '../shared/utils/pageHref';
 import type { ComponentRegistry } from '../types/ComponentRegistry';
 import type { PendingStep } from '../types/PendingStep';
 import type { RegisteredAction } from '../types/RegisteredAction';
@@ -250,8 +252,8 @@ export class Run {
     });
   }
 
-  // Like a finish, but the browser opens the given action instead of showing a result.
-  private redirect(route: ActionRoute) {
+  // Like a finish, but the browser opens the given action or page instead of showing a result.
+  private redirect(route: ActionRoute | PageRoute) {
     if (this.state.status !== 'RUNNING') {
       return;
     }
@@ -259,7 +261,7 @@ export class Run {
     const pending = this.pending;
     this.pending = null;
     this.finishedAt = DateTime.now();
-    this.update({ status: 'REDIRECTED', step: null, loading: null, result: null, redirect: actionHref(route), finishedAt: this.finishedAt.toISO() });
+    this.update({ status: 'REDIRECTED', step: null, loading: null, result: null, redirect: 'page' in route ? pageHref(route) : actionHref(route), finishedAt: this.finishedAt.toISO() });
     pending?.reject(new IOError('RUN_CLOSED'));
   }
 

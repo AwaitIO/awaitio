@@ -8,6 +8,7 @@ test('Should refuse bare display components when no layout is registered as basi
     slug: 'reports',
     name: 'Reports',
     description: null,
+    params: null,
     handler: async () => {
       return [];
     },

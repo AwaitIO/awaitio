@@ -1,11 +1,11 @@
 ---
 title: 'ctx.redirect'
 sidebarTitle: 'Redirect'
-description: 'Ends the run and opens another action.'
+description: 'Ends the run and opens another action or a page.'
 icon: 'share'
 ---
 
-Ends the run and opens another action in the same browser tab, e.g. the detail of the record the action just created.
+Ends the run and opens another action or a folder's [page](/core/pages) in the same browser tab, e.g. the detail of the record the action just created, or the table it was added to.
 
 ## Usage
 
@@ -27,6 +27,27 @@ export const createAccountAction = app.defineAction({
 
 The browser opens `/actions/accounts/extend_trial?company=Acme+Inc.` and Extend trial starts with `ctx.params.company` filled in.
 
+## Redirect to a page
+
+A page has `route()` too. Import it from the folder's `index.ts`; its `params` are typed by the page's [params schema](/core/pages#params):
+
+```ts actions/users/inviteUserAction.ts
+import { usersPage } from './index';
+import { app } from '../../app';
+
+export const inviteUserAction = app.defineAction({
+  name: 'Invite user',
+  handler: async ({ io, ctx }) => {
+    const email = await io.input.email('Email');
+    await prisma.user.create({ data: { email, role: 'member' } });
+
+    await ctx.redirect(usersPage.route({ params: { role: 'member' } }));
+  },
+});
+```
+
+The browser opens `/groups/users?role=member`: the Users folder with its page, which gets `ctx.params.role`.
+
 ## Routes
 
 `action.route()` returns the link to that action, an `ActionRoute`. The same object is what a table's [row menu](/io/display-table#row-menu) lists, so one action can be opened from a redirect and from a table alike:
@@ -42,10 +63,17 @@ changeRoleAction.route({ params: { id: user.id }, label: 'Change role' });
 | `action` | `string`                 | The action's slug, its path in the actions folder, see [Routing](/core/routing).                    |
 | `params` | `Record<string, string>` | The query string, which becomes the action's `ctx.params`. Numbers and dates are turned to strings. |
 
-An action without a params schema takes no params: `clearCacheAction.route()`. When every param of its schema is optional, the params can be left out too: `createIntegratorAction.route({ label: 'Create integrator' })`. `route()` works once `listen()` has loaded the actions folder, so call it inside a handler, not at the top of a file.
+`page.route()` returns a `PageRoute`, the same fields with `page` instead of `action`: the folder the page stands for, `users`. Its `label` defaults to the page's `name`, or the folder's name in words. `ctx.redirect()` takes both; a table's row menu lists only actions.
+
+```ts
+usersPage.route({ params: { role: 'admin' } });
+// { label: 'Users', page: 'users', params: { role: 'admin' } }
+```
+
+An action or page without a params schema takes no params: `clearCacheAction.route()`. When every param of its schema is optional, the params can be left out too: `createIntegratorAction.route({ label: 'Create integrator' })`. `route()` works once `listen()` has loaded the actions folder, so call it inside a handler, not at the top of a file.
 
 ## Behaviour
 
-- The run ends with the redirect: the run page opens the other action instead of showing a result, and **Back** skips the finished run.
+- The run ends with the redirect: the run page opens the other action or the page instead of showing a result, and **Back** skips the finished run.
 - The handler goes on after `await ctx.redirect()`, but any io call after it throws, like after a cancel, and what it returns is ignored. Put the redirect last.
 - After the run has ended, the call does nothing.

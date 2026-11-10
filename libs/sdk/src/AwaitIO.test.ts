@@ -644,6 +644,12 @@ test('Should refuse display props that do not fit and an unknown page', async ()
   expect((await fetch(`${baseUrl}/api/pages/missing`, authorized())).status).toBe(404);
 });
 
+test('Should refuse a link that does not fit the params schema of the page', async () => {
+  const response = await fetch(`${baseUrl}/api/pages/reports?layout=rows`, authorized());
+
+  expect([response.status, await response.json()]).toEqual([400, { error: 'INVALID_PARAMS', message: 'The link does not fit this page. layout: Invalid input: expected "columns".' }]);
+});
+
 test('Should serve the UI script of a registered layout behind the login', async () => {
   expect(await (await fetch(`${baseUrl}/layouts/columns/ui.js`, authorized())).text()).toBe('window.testLayoutLoaded = true;');
 

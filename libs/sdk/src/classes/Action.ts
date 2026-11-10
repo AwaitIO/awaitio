@@ -3,6 +3,7 @@ import type { ActionInit } from '../types/ActionInit';
 import type { ActionParamsSchema } from '../types/ActionParamsSchema';
 import type { ActionRouteArgs } from '../types/ActionRouteArgs';
 import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
+import { toRouteParams } from '../utils/toRouteParams';
 
 // Created through app.defineAction(), which fills in the io type from the registered components.
 export class Action<TIO, TSchema extends ActionParamsSchema | undefined = ActionParamsSchema | undefined> {
@@ -31,16 +32,6 @@ export class Action<TIO, TSchema extends ActionParamsSchema | undefined = Action
       throw new Error(`The action "${this.name}" has no route: it is not in the actions directory, or listen() has not loaded it yet.`);
     }
 
-    const params = Object.fromEntries(
-      Object.entries((args && 'params' in args ? args.params : {}) as Record<string, unknown>)
-        .filter(([, value]) => {
-          return value !== undefined && value !== null;
-        })
-        .map(([key, value]) => {
-          return [key, value instanceof Date ? value.toISOString() : String(value)];
-        }),
-    );
-
-    return { label: args?.label ?? this.name, action: this.slug, params };
+    return { label: args?.label ?? this.name, action: this.slug, params: toRouteParams({ params: args && 'params' in args ? (args.params as Record<string, unknown>) : undefined }) };
   }
 }
