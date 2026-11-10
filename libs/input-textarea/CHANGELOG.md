@@ -1,5 +1,15 @@
 # @awaitio/input-textarea
 
+## 1.3.0
+
+### Minor Changes
+
+- Moves to 1.3 with `awaitio`, without changes of its own.
+
+### Patch Changes
+
+- 7a5e1ab: License: missed months of a Company License can be paid later, at once as a one-time sponsorship or as agreed at license@awaitio.com.
+
 ## 1.2.0
 
 ### Minor Changes

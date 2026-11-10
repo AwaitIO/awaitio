@@ -6,6 +6,51 @@ rss: true
 
 What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
 
+<Update label="1.3.0" description="November 10, 2026" tags={["Core", "Components", "Theme", "License"]}>
+  <img src="/images/changelog/1.3.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.3.0 release: awaitio with typed page links, unlisted pages and the head option, @awaitio/theme-default and every component at 1.3.0" />
+
+  ## Core
+
+  `awaitio@1.3.0`
+
+  - A page takes a [`params`](/core/pages#params) schema like an action: the link is checked before the handler runs, `ctx.params` is typed, and a link that does not fit shows what is wrong instead of the page.
+  - [`ctx.redirect()`](/ctx/redirect#redirect-to-a-page) can open a folder's page, with the link built by `page.route()` and its params typed by the page's schema.
+  - [`unlisted: true`](/core/pages#unlisted-pages) keeps a page, such as the detail of one record, out of the tabs and folder cards. It still opens from its URL and from `ctx.redirect()`.
+  - The new [`head`](/core/app#extra-tags-in-the-head) option of `new AwaitIO()` adds your own HTML to the end of every page's `<head>`, such as an analytics script or link preview tags.
+  - [`listen()`](/core/listen) prints `AwaitIO server is running at http://localhost:<port>` once the port is open. `log: false` turns it off.
+
+  ## Components
+
+  `@awaitio/*@1.3.0`, every component
+
+  - Every component moves to 1.3.0 with `awaitio`, without changes in behavior.
+
+  ## Theme
+
+  `@awaitio/theme-default@1.3.0`
+
+  - Moves to 1.3.0 with `awaitio`, without changes in look.
+
+  ## License
+
+  All packages
+
+  - Months of a Company License that were missed can be paid later, at once as a one-time sponsorship on GitHub Sponsors or as agreed at license@awaitio.com. Such a payment counts as the license for those months, not as a gift.
+
+  ## Migration guide
+
+  From 1.2.0 to 1.3.0.
+
+  <AccordionGroup>
+    <Accordion title="awaitio">
+      Nothing to change. Update `awaitio` and every `@awaitio/*` package to `^1.3.0` together. Your server now prints its address once on start; when your own code already prints it, drop that line or pass `log: false` to `listen()`. A page without `params` gets `ctx.params` as strings, as before.
+    </Accordion>
+    <Accordion title="@awaitio/*">Nothing to change.</Accordion>
+    <Accordion title="@awaitio/theme-default">Nothing to change.</Accordion>
+    <Accordion title="License">Nothing to change. The new paragraph only adds a way to settle missed months.</Accordion>
+  </AccordionGroup>
+</Update>
+
 <Update label="1.2.0" description="October 27, 2026" tags={["Core", "Components", "Theme"]}>
   <img src="/images/changelog/1.2.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.2.0 release: awaitio, @awaitio/select-table, @awaitio/theme-default and every component at 1.2.0" />
 

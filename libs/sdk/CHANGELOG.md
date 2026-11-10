@@ -1,5 +1,18 @@
 # awaitio
 
+## 1.3.0
+
+### Minor Changes
+
+- bad5b3f: `ctx.redirect()` can open a folder's page: `app.definePage()` takes a `params` schema like an action, which parses and types the page's `ctx.params` and refuses a link that does not fit, and `page.route()` builds the link with the params typed by it.
+- b3c254d: `new AwaitIO({ head })` adds your own HTML to the end of the page's `<head>`, e.g. an analytics script or Open Graph tags.
+- 8014094: `app.definePage()` takes `unlisted: true`, like an action: the page does not put its folder into the navigation, and it still opens from its URL and `ctx.redirect()`.
+
+### Patch Changes
+
+- 7a5e1ab: License: missed months of a Company License can be paid later, at once as a one-time sponsorship or as agreed at license@awaitio.com.
+- 1e84df6: `listen()` prints `AwaitIO server is running at http://localhost:<port>` once the port is open; `log: false` turns it off.
+
 ## 1.2.0
 
 ### Minor Changes
