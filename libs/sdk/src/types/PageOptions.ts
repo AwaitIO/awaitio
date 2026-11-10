@@ -6,6 +6,9 @@ export type PageOptions<TIO, TSchema extends ActionParamsSchema | undefined = un
   // Shown as the page's title. Defaults to the folder's name in words.
   name?: string;
   description?: string;
+  // Does not put its folder into the navigation (a tab or a folder card); the page still opens from its URL and
+  // ctx.redirect(), e.g. a detail of one record. A folder with listed actions is still shown for them.
+  unlisted?: boolean;
   // The query string the page expects, e.g. z.object({ role: z.enum(['admin', 'member']).optional() }); a link that
   // does not match shows an error instead of the page, and ctx.params gets the parsed value.
   params?: TSchema;

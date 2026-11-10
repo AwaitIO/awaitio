@@ -12,14 +12,16 @@ export class Page<TIO, TSchema extends ActionParamsSchema | undefined = ActionPa
   readonly kind = 'awaitio-page';
   readonly name: string | undefined;
   readonly description: string | undefined;
+  readonly unlisted: boolean;
   readonly params: ActionParamsSchema | null;
   readonly handler: PageHandler<TIO, never>;
   // The folder the page stands for, filled in when listen() loads the folder.
   slug: string | null = null;
 
-  constructor({ name, description, params, handler }: PageInit<TIO>) {
+  constructor({ name, description, unlisted = false, params, handler }: PageInit<TIO>) {
     this.name = name;
     this.description = description;
+    this.unlisted = unlisted;
     this.params = params ?? null;
     this.handler = handler;
   }

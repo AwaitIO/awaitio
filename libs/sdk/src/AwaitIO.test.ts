@@ -330,6 +330,7 @@ test('Should list the actions in folder order, files before subfolders', async (
           "description": "Monthly numbers",
           "name": "Reports",
           "slug": "reports",
+          "unlisted": false,
         },
       ],
     }
@@ -611,7 +612,7 @@ test('Should run an action from a nested folder by its encoded slug', async () =
 test('Should serve a folder page: display components in the layout registered as basic, titled by the page', async () => {
   const { pages } = await (await fetch(`${baseUrl}/api/actions`, authorized())).json();
 
-  expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers' }]);
+  expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers', unlisted: false }]);
 
   const page = await (await fetch(`${baseUrl}/api/pages/reports?month=March`, authorized())).json();
 

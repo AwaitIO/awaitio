@@ -6,4 +6,6 @@ export type RegisteredPage = ActionDefinition & {
   // The layout shape and ctx.params are checked where the page is defined (app.definePage); here it is the object built from the registry.
   handler: PageHandler<unknown, unknown>;
   params: ActionParamsSchema | null;
+  // Opens from its URL but does not put its folder into the navigation.
+  unlisted: boolean;
 };

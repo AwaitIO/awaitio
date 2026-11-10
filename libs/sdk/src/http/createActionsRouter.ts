@@ -26,8 +26,9 @@ export const createActionsRouter = ({ actions, pages, manager }: CreateActionsRo
         .map(({ slug, name, description }) => {
           return { slug, name, description };
         }),
-      pages: [...pages.values()].map(({ slug, name, description }) => {
-        return { slug, name, description };
+      // An unlisted page stays here, so its folder can show it when opened by its URL; the UI leaves its folder out of the navigation.
+      pages: [...pages.values()].map(({ slug, name, description, unlisted }) => {
+        return { slug, name, description, unlisted };
       }),
     };
 

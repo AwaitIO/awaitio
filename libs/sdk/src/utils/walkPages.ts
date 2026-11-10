@@ -19,7 +19,14 @@ export const walkPages = ({ routes }: WalkPagesArgs) => {
 
     // The typed layout object was checked where the page was defined; at run time it is built from the same registry.
     const handler = route.handler as PageHandler<unknown, unknown>;
-    pages.set(slug, { slug, name: route.name ?? slugToName({ slug: slug.split('/').at(-1) ?? slug }), description: route.description ?? null, handler, params: route.params ?? null });
+    pages.set(slug, {
+      slug,
+      name: route.name ?? slugToName({ slug: slug.split('/').at(-1) ?? slug }),
+      description: route.description ?? null,
+      unlisted: route.unlisted === true,
+      handler,
+      params: route.params ?? null,
+    });
   });
 
   return pages;
