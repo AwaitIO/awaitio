@@ -1,10 +1,11 @@
 import type { ActionDefinition } from '../../shared/types/ActionDefinition';
+import type { PageDefinition } from '../../shared/types/PageDefinition';
 import type { FolderEntry } from '../types/FolderEntry';
 
 export type ListFolderArgs = {
   actions: ActionDefinition[];
-  // Folders with an index page; a folder that holds only its page is still a folder.
-  pages: ActionDefinition[];
+  // Folders with an index page; a folder that holds only its page is still a folder, unless the page is unlisted.
+  pages: PageDefinition[];
   // '' for the top of the actions directory.
   folder: string;
 };
@@ -19,7 +20,7 @@ export const listFolder = ({ actions, pages, folder }: ListFolderArgs) => {
   });
   const pagesInside = pages
     .filter((page) => {
-      return page.slug.startsWith(prefix) && page.slug !== folder;
+      return !page.unlisted && page.slug.startsWith(prefix) && page.slug !== folder;
     })
     .map((page) => {
       return [...page.slug.slice(prefix.length).split('/'), ''];

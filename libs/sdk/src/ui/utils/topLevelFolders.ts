@@ -5,7 +5,7 @@ export type TopLevelFoldersArgs = {
 };
 
 // The folders directly in the actions directory, in the order the server lists their actions; a folder with only a
-// page counts too.
+// page counts too, unless the page is unlisted.
 export const topLevelFolders = ({ list }: TopLevelFoldersArgs) => {
   return [
     ...new Set(
@@ -13,7 +13,9 @@ export const topLevelFolders = ({ list }: TopLevelFoldersArgs) => {
         ...list.actions.filter((action) => {
           return action.slug.includes('/');
         }),
-        ...list.pages,
+        ...list.pages.filter((page) => {
+          return !page.unlisted;
+        }),
       ].map((route) => {
         return route.slug.split('/')[0] ?? '';
       }),

@@ -27,7 +27,17 @@ test('Should show a folder with its index action first and its subfolders closed
 });
 
 test('Should show a folder that holds only its page', () => {
-  const shown = listFolder({ actions, pages: [{ slug: 'reports', name: 'Reports', description: null }], folder: '' });
+  const shown = listFolder({ actions, pages: [{ slug: 'reports', name: 'Reports', description: null, unlisted: false }], folder: '' });
 
   expect(shown.folders.map((folder) => folder.path)).toEqual(['forms', 'users', 'reports']);
+});
+
+test('Should leave out a folder that holds only an unlisted page, but keep one with listed actions', () => {
+  const pages = [
+    { slug: 'reports', name: 'Reports', description: null, unlisted: true },
+    { slug: 'forms', name: 'Forms', description: null, unlisted: true },
+  ];
+  const shown = listFolder({ actions, pages, folder: '' });
+
+  expect(shown.folders.map((folder) => folder.path)).toEqual(['forms', 'users']);
 });

@@ -65,6 +65,23 @@ export const usersPage = app.definePage({
 - Without `params`, `ctx.params` is every key of the query string as a string.
 - The schema also types `usersPage.route()`, the link an action opens with [`ctx.redirect()`](/ctx/redirect#redirect-to-a-page): `usersPage.route({ params: { role: 'admin' } })`.
 
+## Unlisted pages
+
+A page that only makes sense for one record, such as the detail of a user opened from a table or after an action, can stay out of the navigation. Pass `unlisted: true`: its folder is not a tab or a folder card because of the page, but the page still opens from its URL and from [`ctx.redirect()`](/ctx/redirect#redirect-to-a-page):
+
+```ts actions/userDetail/index.ts
+export const userDetailPage = app.definePage({
+  unlisted: true,
+  params: z.object({ id: z.string() }),
+  handler: async ({ io, ctx }) => {
+    // …
+  },
+});
+```
+
+- A folder with listed actions is still shown for them, and opening it shows the page as usual.
+- It is not a permission: anyone who can log in can still open its URL.
+
 ## Layouts
 
 The handler returns the display components inside a layout, the frame that places them. Every layout is a package registered in `layouts`, the basic one too:
