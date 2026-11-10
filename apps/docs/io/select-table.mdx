@@ -60,7 +60,7 @@ const [user] = await io.select.table('User', {
 
 With `maxSelections` above 1 every row gets a checkbox, and a _…_ menu next to the pager picks rows in bulk: _Select all_ picks every row that matches the filter, on all pages, and _Clear all_ unpicks them. The menu offers only what would change something: no _Select all_ when every matching row is picked or the rows would go past `maxSelections`, no _Clear all_ when none is picked.
 
-```ts
+```ts {5}
 const notified = await io.select.table('Users to notify', {
   data: users,
   columns: [{ label: 'Name', accessorKey: 'name' }, 'email'],
@@ -74,7 +74,7 @@ const notified = await io.select.table('Users to notify', {
 
 `data` can be empty, e.g. for an account without devices. The person then sees `emptyText` instead of the table and continues with nothing picked: `minSelections` never asks for more rows than the table has, so the handler gets `[]`.
 
-```ts
+```ts {5}
 const devices = await io.select.table('Devices to restart', {
   data: account.devices,
   columns: ['name', 'status'],

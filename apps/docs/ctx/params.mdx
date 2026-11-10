@@ -11,7 +11,7 @@ The query string of the link that started the run, as an object of strings. Open
 
 Describe the params the action expects with a zod schema in `params`. The server checks the link against it before the handler runs, and `ctx.params` gets the parsed, typed value:
 
-```ts
+```ts {5}
 import { z } from 'zod/v4';
 
 export const couponDetailAction = app.defineAction({

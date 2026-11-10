@@ -11,7 +11,7 @@ Ends the run and opens another action or a folder's [page](/core/pages) in the s
 
 Import the action you want to open and ask it for its route. Its `params` are typed by that action's [params schema](/ctx/params):
 
-```ts actions/accounts/createAccountAction.ts
+```ts actions/accounts/createAccountAction.ts {9}
 import { extendTrialAction } from './extendTrialAction';
 import { app } from '../../app';
 
@@ -31,7 +31,7 @@ The browser opens `/actions/accounts/extend_trial?company=Acme+Inc.` and Extend 
 
 A page has `route()` too. Import it from the folder's `index.ts`; its `params` are typed by the page's [params schema](/core/pages#params):
 
-```ts actions/users/inviteUserAction.ts
+```ts actions/users/inviteUserAction.ts {10}
 import { usersPage } from './index';
 import { app } from '../../app';
 

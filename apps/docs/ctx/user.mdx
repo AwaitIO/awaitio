@@ -8,7 +8,7 @@ Every run knows who started it: the handler gets that user in `ctx.user`.
 
 ## Usage
 
-```ts
+```ts {4,6}
 export const helloAction = app.defineAction({
   name: 'Hello',
   handler: async ({ io, ctx }) => {

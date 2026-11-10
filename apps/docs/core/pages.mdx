@@ -47,7 +47,7 @@ export const usersPage = app.definePage({
 
 Describe the query string the page expects with a zod schema in `params`, as an [action does](/ctx/params). The server checks the link against it before the handler runs, and `ctx.params` gets the parsed, typed value:
 
-```ts actions/users/index.ts
+```ts actions/users/index.ts {4}
 import { z } from 'zod/v4';
 
 export const usersPage = app.definePage({
@@ -69,7 +69,7 @@ export const usersPage = app.definePage({
 
 A page that only makes sense for one record, such as the detail of a user opened from a table or after an action, can stay out of the navigation. Pass `unlisted: true`: its folder is not a tab or a folder card because of the page, but the page still opens from its URL and from [`ctx.redirect()`](/ctx/redirect#redirect-to-a-page):
 
-```ts actions/userDetail/index.ts
+```ts actions/userDetail/index.ts {2}
 export const userDetailPage = app.definePage({
   unlisted: true,
   params: z.object({ id: z.string() }),

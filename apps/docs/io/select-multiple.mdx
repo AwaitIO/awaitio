@@ -47,7 +47,7 @@ const channels = await io.select.multiple('Tell them by', {
 
 Options can be records, identified and named by `key` and `label`; the defaults can be their keys:
 
-```ts
+```ts {3,4}
 const admins = await io.select.multiple('Admin users', {
   options: await prisma.user.findMany(),
   key: (user) => user.id,

@@ -10,6 +10,16 @@
 - `ctx/` – one page per part of `ctx`.
 - Screenshots live in `images/`, see **Screenshots** below.
 
+## Highlight the line a code example is about
+
+When a code block shows one option or call inside a larger snippet, mark that line with Mintlify's line highlight after the file name: ` ```ts app.ts {6}`, several lines as `{2,3}` or `{4-6}`. The number counts every line of the block, blank lines and imports included.
+
+**Why**: the reader sees at once which line the section explains, instead of reading the whole snippet to find it.
+
+✅ DO: ` ```ts actions/userDetail/index.ts {2}` with `unlisted: true,` on line 2 under **Unlisted pages**.
+
+❌ DON'T: leave the line the section is about unmarked, or highlight the whole block.
+
 ## Screenshots
 
 Every image in `apps/docs/images` is taken from the demo (`apps/demo`) in a browser at locale en-US and 2×. A component is shot from its action in the demo's Components tab, which uses the props of the example on its docs page. Screens of the app (introduction, pages, routing) come from the demo's own tabs.

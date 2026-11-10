@@ -17,7 +17,7 @@ Information about the action the handler belongs to.
 
 Shared code can tell which action called it, for a log line or an audit record:
 
-```ts actions/_shared/audit.ts
+```ts actions/_shared/audit.ts {9}
 import type { ActionCtx } from 'awaitio';
 
 type AuditArgs = {

@@ -9,7 +9,7 @@ A unique id of this run of the action, a random UUID. It is the last part of the
 
 ## Usage
 
-```ts
+```ts {4}
 export const importOrdersAction = app.defineAction({
   name: 'Import orders',
   handler: async ({ io, ctx }) => {

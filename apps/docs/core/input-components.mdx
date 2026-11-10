@@ -71,7 +71,7 @@ Each card is one package and opens its page: all its props, what it returns and 
 
 Every input is required unless you chain `.optional()` to it. The field is marked _optional_ next to its label, can be left empty, and the handler gets `undefined` for it; the component's own checks, such as `minLength`, run only when something was filled in:
 
-```ts
+```ts {3}
 const { company, note } = await io.group({
   company: io.input.text('Company name'),
   note: io.input.textarea('Note').optional(), // string | undefined
@@ -101,7 +101,7 @@ const code = await io.input.text('Discount code').validate(async (code) => {
 
 Every input takes `disabled: true` next to its own props. The field shows its starting value, usually `defaultValue`, and cannot be changed, and the server hands the handler that value whatever the browser sends:
 
-```ts
+```ts {2}
 const { plan, note } = await io.group({
   plan: io.input.text('Plan', { defaultValue: account.plan, disabled: true }),
   note: io.input.textarea('Note'),
@@ -251,7 +251,7 @@ By default AwaitIO puts your control into a `Field`: the label above it, the hel
 
 This is the rating unwrapped, drawn with `Field` and `Hint` from `awaitio/ui`, with the score under the stars:
 
-```tsx components/rating/src/rating.tsx
+```tsx components/rating/src/rating.tsx {15}
 import { defineComponent } from 'awaitio';
 import { Field, Hint } from 'awaitio/ui';
 import { z } from 'zod/v4';

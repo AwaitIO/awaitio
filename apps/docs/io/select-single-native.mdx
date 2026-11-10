@@ -49,7 +49,7 @@ const role = await io.select.singleNative('New role', {
 
 Options can be records as they come from the database. Say how to identify and name them with `key` and `label`; the handler gets the record back, relations and dates included:
 
-```ts
+```ts {3,4}
 const account = await io.select.singleNative('Account', {
   options: await prisma.account.findMany({ include: { integrator: true } }),
   key: (account) => account.id,

@@ -50,7 +50,7 @@ The app checks the options when it is created and throws with a message naming t
 
 `head` is HTML the server adds, as written, to the end of the `<head>` of every page it sends: an analytics script, Open Graph tags for link previews, your own favicon.
 
-```ts app.ts
+```ts app.ts {3}
 export const app = new AwaitIO({
   // …
   head: ['<script defer src="https://analytics.example.com/script.js" data-website-id="…"></script>', '<meta property="og:image" content="https://tools.example.com/og.png" />'].join('\n'),

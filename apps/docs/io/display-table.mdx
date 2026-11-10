@@ -101,7 +101,7 @@ io.display.table('Devices', {
 
 `rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()`: the same routes [`ctx.redirect()`](/ctx/redirect) takes, labelled with the action's name unless you pass one. An empty array leaves the row without a menu:
 
-```ts
+```ts {4-8}
 io.display.table('Versions', {
   data: versions,
   columns: ['name', 'createdAt'],

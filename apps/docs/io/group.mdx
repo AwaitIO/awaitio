@@ -42,7 +42,7 @@ Every field is checked on the server when the form is sent, and all errors come 
 
 For a check across fields, chain `.validate()` to the group. The function gets the values as the handler would get them and returns a message, or nothing when they are fine. The message shows above **Continue**, not under one field:
 
-```ts
+```ts {7-9}
 const { startsAt, endsAt } = await io
   .group({
     code: io.input.text('Discount code'),
