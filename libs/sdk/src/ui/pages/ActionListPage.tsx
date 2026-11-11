@@ -43,15 +43,20 @@ export const ActionListPage: FC<ActionListPageProps> = ({ group }) => {
   );
 
   // A folder with a page: its subfolders and actions in a narrow column, the page's layout (with its title) in the rest.
+  // With nothing to list, such as only unlisted actions, the column is left out and the page takes the full width.
   if (page) {
+    const hasSidebar = shown.folders.length + shown.actions.length > 0;
+
     return (
       <div className="flex flex-col gap-6">
         {folder.includes('/') && <Breadcrumbs slug={folder} />}
         {status}
         <div className="flex flex-col gap-8 md:flex-row">
-          <aside className="shrink-0 md:w-1/5 md:min-w-52">
-            <FolderSidebar folders={shown.folders} actions={shown.actions} />
-          </aside>
+          {hasSidebar && (
+            <aside className="shrink-0 md:w-1/5 md:min-w-52">
+              <FolderSidebar folders={shown.folders} actions={shown.actions} />
+            </aside>
+          )}
           <section className="min-w-0 flex-1">
             <PageView key={page.slug} slug={page.slug} />
           </section>
