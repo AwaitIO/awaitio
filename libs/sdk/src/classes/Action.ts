@@ -12,15 +12,17 @@ export class Action<TIO, TSchema extends ActionParamsSchema | undefined = Action
   readonly name: string;
   readonly description: string | undefined;
   readonly unlisted: boolean;
+  readonly order: number | null;
   readonly params: ActionParamsSchema | null;
   readonly handler: AwaitIOActionHandler<TIO, never>;
   // Its path in the actions directory, filled in when listen() loads the folder.
   slug: string | null = null;
 
-  constructor({ name, description, unlisted = false, params, handler }: ActionInit<TIO>) {
+  constructor({ name, description, unlisted = false, order, params, handler }: ActionInit<TIO>) {
     this.name = name;
     this.description = description;
     this.unlisted = unlisted;
+    this.order = order ?? null;
     this.params = params ?? null;
     this.handler = handler;
   }

@@ -1,5 +1,6 @@
 import { isPage } from './isPage';
 import { slugToName } from './slugToName';
+import { toOrder } from './toOrder';
 import type { PageHandler } from '../types/PageHandler';
 import type { RegisteredPage } from '../types/RegisteredPage';
 
@@ -23,6 +24,7 @@ export const walkPages = ({ routes }: WalkPagesArgs) => {
       slug,
       name: route.name ?? slugToName({ slug: slug.split('/').at(-1) ?? slug }),
       description: route.description ?? null,
+      order: toOrder({ order: route.order, owner: `The page "${slug}"` }),
       unlisted: route.unlisted === true,
       handler,
       params: route.params ?? null,

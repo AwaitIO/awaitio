@@ -292,36 +292,43 @@ test('Should list the actions in folder order, files before subfolders', async (
         {
           "description": null,
           "name": "Echo params",
+          "order": null,
           "slug": "echo_params",
         },
         {
           "description": "Two fields",
           "name": "Full name",
+          "order": null,
           "slug": "full_name",
         },
         {
           "description": null,
           "name": "Hello",
+          "order": null,
           "slug": "hello",
         },
         {
           "description": null,
           "name": "Next ID",
+          "order": null,
           "slug": "next_id",
         },
         {
           "description": null,
           "name": "Who am I",
+          "order": null,
           "slug": "who_am_i",
         },
         {
           "description": null,
           "name": "Send reminder",
+          "order": null,
           "slug": "billing/invoices/send_reminder",
         },
         {
           "description": null,
           "name": "Monthly",
+          "order": null,
           "slug": "reports/monthly",
         },
       ],
@@ -329,6 +336,7 @@ test('Should list the actions in folder order, files before subfolders', async (
         {
           "description": "Monthly numbers",
           "name": "Reports",
+          "order": 1,
           "slug": "reports",
           "unlisted": false,
         },
@@ -612,7 +620,7 @@ test('Should run an action from a nested folder by its encoded slug', async () =
 test('Should serve a folder page: display components in the layout registered as basic, titled by the page', async () => {
   const { pages } = await (await fetch(`${baseUrl}/api/actions`, authorized())).json();
 
-  expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers', unlisted: false }]);
+  expect(pages).toEqual([{ slug: 'reports', name: 'Reports', description: 'Monthly numbers', order: 1, unlisted: false }]);
 
   const page = await (await fetch(`${baseUrl}/api/pages/reports?month=March`, authorized())).json();
 

@@ -116,7 +116,36 @@ The top level of `actions/` has no index file; an `index.ts` there stops the app
 
 - **Every action needs a `name`**: the action list and the run page show it. An action without one stops the app at start.
 - **Folders are named after themselves**, in words: `billing` reads _Billing_, `auditLogs` and `audit_logs` both read _Audit logs_.
-- **The order** is alphabetical by file name. In the list, a folder's subfolders come before its actions, and its `index.ts` leads the actions.
+- **The order** is alphabetical by file name, unless you set `order` (see below). In the list, a folder's subfolders come before its actions, and its `index.ts` leads the actions.
+
+## Order
+
+Pass `order` to put an action higher in its folder's list and column. Actions with an `order` come first, lower numbers first; the ones without it follow, alphabetical by file name:
+
+```ts actions/tools/purgeCacheAction.ts {3}
+export const purgeCacheAction = app.defineAction({
+  name: 'Purge cache',
+  order: 1,
+  handler: async ({ io }) => {
+    // …
+  },
+});
+```
+
+A folder, a tab at the top or a subfolder in a list, takes the `order` of its `index.ts`, a page or an action:
+
+```ts actions/queue/index.ts {2}
+export const queuePage = app.definePage({
+  order: 1,
+  handler: async ({ io }) => {
+    // …
+  },
+});
+```
+
+- A folder without an `index.ts` has no order, so it comes after the ordered ones, alphabetical.
+- Two entries with the same `order` stay alphabetical.
+- The `index.ts` action still leads its folder's actions; its `order` places the folder.
 
 ## Unlisted actions
 

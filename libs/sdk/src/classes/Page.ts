@@ -13,15 +13,17 @@ export class Page<TIO, TSchema extends ActionParamsSchema | undefined = ActionPa
   readonly name: string | undefined;
   readonly description: string | undefined;
   readonly unlisted: boolean;
+  readonly order: number | null;
   readonly params: ActionParamsSchema | null;
   readonly handler: PageHandler<TIO, never>;
   // The folder the page stands for, filled in when listen() loads the folder.
   slug: string | null = null;
 
-  constructor({ name, description, unlisted = false, params, handler }: PageInit<TIO>) {
+  constructor({ name, description, unlisted = false, order, params, handler }: PageInit<TIO>) {
     this.name = name;
     this.description = description;
     this.unlisted = unlisted;
+    this.order = order ?? null;
     this.params = params ?? null;
     this.handler = handler;
   }

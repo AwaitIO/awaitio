@@ -24,3 +24,22 @@ test('Should refuse an action without a name', () => {
     return walkRoutes({ routes: { refund: new Action({ name: '  ', handler }) } });
   }).toThrow('The action "refund" has no name.');
 });
+
+test('Should send the order of an action, and null without one', () => {
+  const actions = walkRoutes({ routes: { purge: new Action({ name: 'Purge', order: 2, handler }), archive: new Action({ name: 'Archive', handler }) } });
+
+  expect([actions.get('purge')?.order, actions.get('archive')?.order]).toEqual([2, null]);
+});
+
+test('Should refuse an order that is not a number', () => {
+  // Plain JavaScript, or a value read from an env variable, gets past the type.
+  const stringOrder = new Action({ name: 'Purge', order: '1' as unknown as number, handler });
+
+  expect(() => {
+    return walkRoutes({ routes: { purge: stringOrder } });
+  }).toThrow('The action "purge" has order "1"; use a number, e.g. order: 1.');
+
+  expect(() => {
+    return walkRoutes({ routes: { purge: new Action({ name: 'Purge', order: Number.NaN, handler }) } });
+  }).toThrow('The action "purge" has order NaN');
+});

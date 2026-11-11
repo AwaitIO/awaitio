@@ -9,6 +9,9 @@ export type ActionOptions<TIO, TSchema extends ActionParamsSchema | undefined = 
   // Left out of the action list and the folder's column; it still runs from a link, ctx.redirect() or a table's row
   // menu, e.g. an edit screen that only makes sense for one record.
   unlisted?: boolean;
+  // Where the action stands among its folder's actions: lower first, e.g. order: 1. Actions without an order follow,
+  // alphabetical by file name.
+  order?: number;
   // The query string the action expects, e.g. z.object({ id: z.string() }); a link that does not match is refused
   // before the handler runs, and ctx.params gets the parsed value.
   params?: TSchema;

@@ -4,6 +4,7 @@ import { testApp } from '../../testApp';
 // A folder page: display components in a layout, built from the link's query string.
 export const reportsPage = testApp.definePage({
   description: 'Monthly numbers',
+  order: 1,
   params: z.object({ month: z.string().optional(), layout: z.enum(['columns']).optional(), fail: z.enum(['props']).optional() }),
   handler: async ({ io, ctx }) => {
     if (ctx.params.fail === 'props') {

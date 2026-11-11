@@ -42,7 +42,7 @@ type StartRunArgs = {
 const startRun = ({ handler }: StartRunArgs) => {
   const run = new Run({
     id: 'run-1',
-    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null, unlisted: false },
+    action: { slug: 'test', name: 'Test', description: null, order: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null, unlisted: false },
     user: { email: 'petr@example.com', name: 'Petr' },
     params: { id: '42' },
     registry: createComponentRegistry({ tree: components }),
@@ -580,7 +580,7 @@ test('Should hand the handler and its validators the value from toValue, alone a
   };
   const run = new Run({
     id: 'run-pick',
-    action: { slug: 'test', name: 'Test', description: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null, unlisted: false },
+    action: { slug: 'test', name: 'Test', description: null, order: null, handler: handler as AwaitIOActionHandler<unknown, unknown>, params: null, unlisted: false },
     user: { email: 'petr@example.com', name: 'Petr' },
     params: {},
     registry: createComponentRegistry({ tree: pickTree }),

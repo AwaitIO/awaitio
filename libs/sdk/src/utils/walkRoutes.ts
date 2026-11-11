@@ -1,5 +1,6 @@
 import { isAction } from './isAction';
 import { slugToName } from './slugToName';
+import { toOrder } from './toOrder';
 import { Action } from '../classes/Action';
 import { constants } from '../constants';
 import type { AwaitIOActionHandler } from '../types/AwaitIOActionHandler';
@@ -28,7 +29,7 @@ export const walkRoutes = <TIO>({ routes }: WalkRoutesArgs<TIO>) => {
 
     // The typed io was checked where the action was defined; at run time io is built from the same registry.
     const handler = action.handler as unknown as AwaitIOActionHandler<unknown, unknown>;
-    actions.set(slug, { slug, name: action.name.trim(), description: action.description ?? null, unlisted: action.unlisted === true, handler, params: action.params });
+    actions.set(slug, { slug, name: action.name.trim(), description: action.description ?? null, order: toOrder({ order: action.order, owner: `The action "${slug}"` }), unlisted: action.unlisted === true, handler, params: action.params });
   });
 
   return actions;
