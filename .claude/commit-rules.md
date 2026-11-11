@@ -50,7 +50,7 @@ Runs before every commit, whatever is staged. The repository is public on GitHub
 
 - Go through **the whole** staged diff (`git diff --cached`, every file, every line, new files in full) and the commit message. Open staged images (screenshots, media) and look at them too.
 - Look for:
-  - **Secrets**: API keys, tokens, passwords, private keys, session secrets, cookies, connection strings, `.env` files with real values, `npm` or cloud credentials, secrets in deploy specs (`.do/*.yaml` names a secret, it never holds its value). Placeholders in example `.env` files are fine.
+  - **Secrets**: API keys, tokens, passwords, private keys, session secrets, cookies, connection strings, `.env` files with real values, `npm` or cloud credentials, values in `.kamal/secrets` (it holds only commands that read them, never the values). Placeholders in example `.env` files are fine.
   - **Other projects**: names, links, code, paths or data from other projects, clients or employers; anything taken from `reference/` (it stays local, so a path into it or code copied from it does not belong in the repository).
   - **Competitors**: any product that does what AwaitIO does, named, linked, compared or used as a model ("like X", "unlike X", "inspired by X"), in code, comments, docs, site copy, roadmap, changesets, `CLAUDE.md`, `.claude/` or the commit message.
     - **The exception — comparison pages.** The `/vs` pages of awaitio.com (`apps/site/src/app/vs/`, `apps/site/src/competitors/`, `apps/site/src/components/vs/` and their types and utilities) and the footer's Compare links name the tools they compare. That is their purpose, so it is not a finding there. Links to those tools' own sites stay out.

@@ -32,7 +32,7 @@ Read the guideline before working in its area:
 - `.claude/guidelines/site.md` – `apps/site`: static export build, marketing copy.
 - `.claude/guidelines/tweets.md` – `.claude/tweets/`: posts for X, file names, text and media.
 - `.claude/guidelines/license.md` – every place the license and prices are written, changed together.
-- `.claude/guidelines/ci.md` – GitHub workflows that hold secrets: actions pinned to a SHA, secrets per step.
+- `.claude/guidelines/deploy.md` – deploying awaitio.com and the demo: by hand with Kamal on the deploying machine, never from CI.
 - `.claude/workbench.md` – how the review workbench groups changes.
 
 ## Repository map
@@ -45,8 +45,9 @@ Read the guideline before working in its area:
 - `apps/site/` – awaitio.com in Next.js as a **static export** (`output: 'export'`; `pnpm --filter @awaitio/site build` writes `apps/site/out/`). The export lives in git and is always committed on its own as `[site] static export`, only by `/prepare-release` on `main`.
 - `.claude/tweets/` – the posts for the AwaitIO account on X, queued and posted. See `tweets.md`.
 - `roadmap/` – possible future improvements, one Markdown file per idea, listed in `roadmap/README.md`.
+- `.kamal/` – the Kamal deploy of awaitio.com and demo.awaitio.com: `deploy.yml` (roles `site` and `demo`), one `Dockerfile` for both, `secrets` (commands only, the registry password from the Keychain or a file). See `deploy.md`.
 - `reference/` – read-only clones of related open-source projects, gitignored.
-- `apps/demo/` – the public demo at demo.awaitio.com: the backoffice of a made-up store platform, built like a client project, with a Prisma-like `db` over made-up rows that saves nothing. Deployed from `.do/awaitio-demo.yaml`.
+- `apps/demo/` – the public demo at demo.awaitio.com: the backoffice of a made-up store platform, built like a client project, with a Prisma-like `db` over made-up rows that saves nothing. Deployed together with the site, see below.
 
 ## Versions and releases
 
@@ -65,9 +66,14 @@ How to release (steps 4 to 7 start with [`/prepare-release`](./.claude/commands/
 5. Log in to npm once (`npm login`, check with `npm whoami`).
 6. Run `pnpm release`: `pnpm build`, `changeset publish` (publishes only versions not yet on npm and tags each `<package>@<version>`), then `git push --follow-tags`.
 7. Check the tags on https://github.com/awaitio/awaitio/tags. `changeset tag` and `changeset publish` create git tags only, not GitHub Releases.
+8. Deploy on the deploying machine: `kamal deploy -c .kamal/deploy.yml` on a clean `main`. Pushing deploys nothing; see `deploy.md`.
 
 Rules:
 
 - A release is run by hand, never by Claude unasked. `commit-fast` never bumps versions, tags or publishes.
 - No `release:all` any more: it published all packages every time. Do not use the per-package `release` scripts in `libs/*`, they skip tags and changelogs.
 - Every release is listed in `apps/docs/changelog.mdx` with a collapsed migration guide, written when the release is cut, never in an ordinary commit. See `changelog.md`.
+
+## Deploys
+
+awaitio.com and demo.awaitio.com are deployed only by hand with `kamal deploy -c .kamal/deploy.yml` on the deploying machine. The image is built on the Droplet's remote builder. There is no deploy workflow in GitHub Actions and none gets added. Claude deploys only when the user asks. See `.claude/guidelines/deploy.md`.

@@ -1,12 +1,13 @@
 # Kamal deploy of everything AwaitIO runs: the static site (awaitio.com) and the demo
 # (demo.awaitio.com), both from one image (.kamal/Dockerfile) on one Droplet.
 #
+# Deployed by hand on the deploying machine, from a clean main (see .claude/guidelines/deploy.md):
+#
 #   kamal deploy -c .kamal/deploy.yml              # everything
 #   kamal deploy -c .kamal/deploy.yml -r demo      # one role only
 #
-# The Droplet's address and its registry come from the environment (KAMAL_HOST, KAMAL_REGISTRY), so
-# the public repository names neither. The image is built on the Droplet and pushed to the registry
-# running there, so it never leaves the server.
+# The image is built on the Droplet (remote builder) and pushed to the registry running there, so it
+# never leaves the server; the deploying machine only sends the build context.
 service: awaitio
 
 image: awaitio
@@ -14,7 +15,7 @@ image: awaitio
 servers:
   site:
     hosts:
-      - <%= ENV.fetch("KAMAL_HOST") %>
+      - 168.144.4.121
     cmd: nginx -g "daemon off;"
     proxy:
       # www only redirects to the bare domain (.kamal/nginx.conf)
@@ -28,7 +29,7 @@ servers:
   # One container only: runs live in the memory of the process.
   demo:
     hosts:
-      - <%= ENV.fetch("KAMAL_HOST") %>
+      - 168.144.4.121
     cmd: node dist/server.js
     env:
       clear:
@@ -50,14 +51,14 @@ ssh:
 
 registry:
   # Runs on the Droplet itself (kamal-registry container behind kamal-proxy)
-  server: <%= ENV.fetch("KAMAL_REGISTRY") %>
+  server: registry.kamal.homoky.cz
   username: kamal
   password:
     - KAMAL_REGISTRY_PASSWORD
 
 builder:
   arch: amd64
-  remote: ssh://root@<%= ENV.fetch("KAMAL_HOST") %>
+  remote: ssh://root@168.144.4.121
   local: false
   context: .
   dockerfile: .kamal/Dockerfile

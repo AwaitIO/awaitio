@@ -112,3 +112,4 @@ for the user to run:
 6. Check the tags on https://github.com/awaitio/awaitio/tags.
 7. Post `discord.md` to the Discord `#releases` channel.
 8. Post the release tweet from `.claude/tweets/` and tell me, so it gets its posted name.
+9. On the deploying machine: `kamal deploy -c .kamal/deploy.yml` on the clean `main`, so awaitio.com shows the release (`.claude/guidelines/deploy.md`).
