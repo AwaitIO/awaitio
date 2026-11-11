@@ -1,5 +1,16 @@
 # awaitio
 
+## 1.4.0
+
+### Minor Changes
+
+- 4ce5857: `app.defineAction()` and `app.definePage()` take an `order`: actions with one come first in their folder, lower first, and a folder's tab or card takes the `order` of its `index.ts`; everything without an `order` follows alphabetically.
+- 1ac6e58: A table cell's `route` takes a page's `page.route()` next to an action's route and opens the page in the same tab, and `awaitio/ui` exports `routeSchema`, `pageRouteSchema`, `routeHref` and the `Route` and `PageRoute` types for components that link to actions and pages.
+
+### Patch Changes
+
+- 6c335cd: A folder with a page and nothing to list next to it, such as only unlisted actions, no longer shows an empty left column with "No actions here."; the page takes the full width.
+
 ## 1.3.0
 
 ### Minor Changes

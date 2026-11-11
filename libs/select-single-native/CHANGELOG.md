@@ -1,5 +1,11 @@
 # @awaitio/select-single-native
 
+## 1.4.0
+
+### Minor Changes
+
+- Moves to 1.4 with `awaitio`.
+
 ## 1.3.0
 
 ### Minor Changes

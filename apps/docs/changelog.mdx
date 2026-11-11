@@ -6,6 +6,51 @@ rss: true
 
 What changed in each release, grouped by part of AwaitIO. Every package has its own version and its own `CHANGELOG.md` on npm.
 
+<Update label="1.4.0" description="November 11, 2026" tags={["Core", "Components", "Theme"]}>
+  <img src="/images/changelog/1.4.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.4.0 release: awaitio with the order option for actions and pages, @awaitio/display-table, @awaitio/layout-basic, @awaitio/display-link, @awaitio/theme-default and every component at 1.4.0" />
+
+  ## Core
+
+  `awaitio@1.4.0`
+
+  - [`order`](/core/routing#order) on `app.defineAction()` puts an action higher in its folder: actions with an `order` come first, lower numbers first, the rest stay alphabetical. On a folder's [`index.ts`](/core/pages#order) it orders the folder's tab or card the same way.
+  - A table cell's `route` takes a page's `page.route()` next to an action's route and opens the page in the same tab.
+  - A folder with a page and nothing to list next to it, such as only unlisted actions, no longer shows an empty column with _No actions here._; the page takes the full width.
+  - `awaitio/ui` exports `routeSchema`, `pageRouteSchema`, `routeHref` and the `Route` and `PageRoute` types, for components of your own that link to actions and pages.
+
+  ## Components
+
+  `@awaitio/*@1.4.0`, every component
+
+  - [`io.display.table`](/io/display-table#row-menu): `rowMenuItems` take a page's `page.route()` next to an action's route.
+  - [`io.layout.basic`](/io/layout-basic#menu-items): `menuItems` take a page's `page.route()` too, so a button next to the title can open a page.
+  - [`io.display.link`](/io/display-link#link-into-the-app) takes a `route` to an action or a page instead of a `url`. It opens in the same tab and says the route's label.
+  - Every other component moves to 1.4.0 with `awaitio`, without changes in behavior.
+
+  ## Theme
+
+  `@awaitio/theme-default@1.4.0`
+
+  - Moves to 1.4.0 with `awaitio`, without changes in look.
+
+  ## Migration guide
+
+  From 1.3.0 to 1.4.0.
+
+  <AccordionGroup>
+    <Accordion title="awaitio">
+      Nothing to change. Update `awaitio` and every `@awaitio/*` package to `^1.4.0` together: the 1.4.0 components use the new `awaitio/ui` exports and do not run with `awaitio@1.3`. Without `order`, actions, tabs and folders stay alphabetical, as before. Code of your own that reads a `TableCell`'s `route` now gets `Route`, an action's or a page's route: check `'action' in route` before reading `route.action`, or it no longer type-checks.
+    </Accordion>
+    <Accordion title="@awaitio/display-table">
+      Nothing to change. `rowMenuItems` now returns `Route[]` instead of `ActionRoute[]`; a function typed as returning `ActionRoute[]` still fits.
+    </Accordion>
+    <Accordion title="@awaitio/layout-basic">Nothing to change. `menuItems` built with `action.route()` work as before.</Accordion>
+    <Accordion title="@awaitio/display-link">Nothing to change. A link with `url` and `text` works as before; `text` is not allowed next to `route`, pass `route({ label })` instead.</Accordion>
+    <Accordion title="@awaitio/*">Nothing to change.</Accordion>
+    <Accordion title="@awaitio/theme-default">Nothing to change.</Accordion>
+  </AccordionGroup>
+</Update>
+
 <Update label="1.3.0" description="November 10, 2026" tags={["Core", "Components", "Theme", "License"]}>
   <img src="/images/changelog/1.3.0.png" style={{ marginTop: 0, borderRadius: 12 }} alt="AwaitIO 1.3.0 release: awaitio with typed page links, unlisted pages and the head option, @awaitio/theme-default and every component at 1.3.0" />
 
