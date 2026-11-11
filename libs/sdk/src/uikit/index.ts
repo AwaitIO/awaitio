@@ -3,6 +3,8 @@
 // can restyle every one of them.
 export { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 export { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
+export { pageRouteSchema } from '../shared/schemas/pageRouteSchema';
+export { routeSchema } from '../shared/schemas/routeSchema';
 export { tableCellSchema } from '../shared/schemas/tableCellSchema';
 export { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
 export { actionHref } from './actionHref';
@@ -26,6 +28,7 @@ export { MultiSelect } from './MultiSelect';
 export { NativeSelect } from './NativeSelect';
 export { navigateTo } from './navigateTo';
 export { Prose } from './Prose';
+export { routeHref } from './routeHref';
 export { RowMenu } from './RowMenu';
 export { Select } from './Select';
 export { renderTableRows } from './renderTableRows';
@@ -36,6 +39,8 @@ export { themeBlockNames } from './themeBlockNames';
 export { useFieldId } from './useFieldId';
 export type { ActionRoute } from '../shared/types/ActionRoute';
 export type { HighlightColor } from '../shared/types/HighlightColor';
+export type { PageRoute } from '../shared/types/PageRoute';
+export type { Route } from '../shared/types/Route';
 export type { TableCell } from '../shared/types/TableCell';
 export type { TableCellValue } from '../shared/types/TableCellValue';
 export type { TableColumnDefinition } from '../shared/types/TableColumnDefinition';

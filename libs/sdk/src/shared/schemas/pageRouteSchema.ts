@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-// A link to a folder's page: what page.route() returns and what ctx.redirect() takes besides an action's route.
+// A link to a folder's page: what page.route() returns. It goes wherever an action's route does (routeSchema).
 export const pageRouteSchema = z.object({
   // What a link shows; ctx.redirect() leaves it out.
   label: z.string().optional(),

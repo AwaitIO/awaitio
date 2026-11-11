@@ -38,8 +38,8 @@ export const displayLinkPage: ComponentPage = {
     ],
   },
   headline: 'One link, in the app or out of it.',
-  summary: 'io.display.link shows a link to another action in the app or to a page outside it, on a page or in a step of an action.',
-  intro: '`io.display.link` shows a link on a page or in a step of an action. It can open another action in the app or a page outside it. It only displays and returns nothing.',
+  summary: 'io.display.link shows a link to another action or page in the app or to a page outside it, on a page or in a step of an action.',
+  intro: '`io.display.link` shows a link on a page or in a step of an action. It can open another action or page in the app, or a page outside it. It only displays and returns nothing.',
   options: [
     {
       title: 'Out of the app.',
@@ -48,9 +48,9 @@ export const displayLinkPage: ComponentPage = {
       icon: 'link',
     },
     {
-      title: 'Into another action.',
-      body: 'A path without a scheme stays in the app. It opens that action, here with its id.',
-      code: [t('url', prop), t(': '), t("'/actions/users/change_role?id=2'", string)],
+      title: 'Into another action or page.',
+      body: 'A `route` from `action.route()` or `page.route()` stays in the app and opens it with its params, typed by its schema.',
+      code: [t('route', prop), t(': couponPage.'), t('route', fn), t('({ params: { id } })')],
       icon: 'next',
     },
     {
@@ -100,9 +100,9 @@ export const displayLinkPage: ComponentPage = {
   Output: DisplayLinkOutput,
   outputUrl: 'tools.example.com/actions/users/login_link',
   docs: [
-    { label: 'Display Link', path: '/io/display-link', description: 'Install, setup, the URL and the text, and which links open in a new tab.' },
+    { label: 'Display Link', path: '/io/display-link', description: 'Install, setup, the URL or the route, the text, and which links open in a new tab.' },
     { label: 'Display components', path: '/core/display-components', description: 'Where a link can go: a page, a step of an action or a group next to inputs.' },
     { label: 'Routing', path: '/core/routing', description: 'The URL every action gets from its path, the one a link into the app points at.' },
   ],
-  lastModifiedAt: '2026-10-27',
+  lastModifiedAt: '2026-11-10',
 };

@@ -14,6 +14,8 @@ import { hostGlobalName } from '../client/hostGlobalName';
 import type { AwaitIOHost } from '../client/types/AwaitIOHost';
 import { actionRouteSchema } from '../shared/schemas/actionRouteSchema';
 import { highlightColorSchema } from '../shared/schemas/highlightColorSchema';
+import { pageRouteSchema } from '../shared/schemas/pageRouteSchema';
+import { routeSchema } from '../shared/schemas/routeSchema';
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
 import { tableColumnSchema } from '../shared/schemas/tableColumnSchema';
 import { actionHref } from '../uikit/actionHref';
@@ -21,6 +23,7 @@ import { FieldContext } from '../uikit/FieldContext';
 import { formatCellValue } from '../uikit/formatCellValue';
 import { navigateTo } from '../uikit/navigateTo';
 import { renderTableRows } from '../uikit/renderTableRows';
+import { routeHref } from '../uikit/routeHref';
 import { TableCellView } from '../uikit/TableCellView';
 import { themeBlockNames } from '../uikit/themeBlockNames';
 import { useFieldId } from '../uikit/useFieldId';
@@ -40,7 +43,10 @@ const host: AwaitIOHost = {
     formatCellValue,
     highlightColorSchema,
     navigateTo,
+    pageRouteSchema,
     renderTableRows,
+    routeHref,
+    routeSchema,
     tableCellSchema,
     TableCellView,
     tableColumnSchema,

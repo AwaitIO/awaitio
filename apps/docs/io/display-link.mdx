@@ -41,7 +41,20 @@ The label is the heading above the link; pass `null` for none.
 
 ## Props
 
-| Prop   | Type     | Required | Description                                                                                                                                                            |
-| ------ | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`  | `string` | Required | Where the link goes. An address with a scheme, such as `https://` or `mailto:`, opens in a new tab; a path such as `/actions/users/change_role?id=2` stays in the app. |
-| `text` | `string` | Optional | What the link says. Defaults to the URL.                                                                                                                               |
+| Prop    | Type                       | Required       | Description                                                                                                                                                            |
+| ------- | -------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`   | `string`                   | One of the two | Where the link goes. An address with a scheme, such as `https://` or `mailto:`, opens in a new tab; a path such as `/actions/users/change_role?id=2` stays in the app. |
+| `route` | `ActionRoute \| PageRoute` | One of the two | An action or a folder's page in the app, from `action.route()` or `page.route()`, see [Link into the app](#link-into-the-app).                                         |
+| `text`  | `string`                   | Optional       | What a `url` link says. Defaults to the URL. A `route` link says the route's label.                                                                                    |
+
+## Link into the app
+
+Pass `route` instead of `url` to open an action or a folder's [page](/core/pages) in the same tab, with its params typed by its schema, the same route [`ctx.redirect()`](/ctx/redirect#routes) takes:
+
+```ts {3}
+const coupon = await prisma.coupon.create({ data });
+
+await io.display.link('New coupon', { route: couponDetailPage.route({ params: { id: coupon.id } }) });
+```
+
+The link says the route's label, the page's or action's name unless you pass `route({ label })`, and it keeps working when the app runs under a [`basePath`](/deployment#serve-under-a-path).

@@ -28,7 +28,8 @@ export class Page<TIO, TSchema extends ActionParamsSchema | undefined = ActionPa
     this.handler = handler;
   }
 
-  // A link to this page for ctx.redirect(), with params typed by its schema, like an action's route():
+  // A link to this page for ctx.redirect(), a table cell or menu, or a layout's menu items, with params typed by its
+// schema, like an action's route():
   // usersPage.route({ params: { role: 'admin' } }). Values travel in the query string, so they become strings.
   route(...[args]: ActionRouteArgs<TSchema>): PageRoute & { label: string } {
     if (this.slug === null) {

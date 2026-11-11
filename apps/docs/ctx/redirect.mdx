@@ -50,7 +50,7 @@ The browser opens `/groups/users?role=member`: the Users folder with its page, w
 
 ## Routes
 
-`action.route()` returns the link to that action, an `ActionRoute`. The same object is what a table's [row menu](/io/display-table#row-menu) lists, so one action can be opened from a redirect and from a table alike:
+`action.route()` returns the link to that action, an `ActionRoute`. The same object goes into a [table cell](/io/display-table#columns), a table's [row menu](/io/display-table#row-menu), a layout's [`menuItems`](/io/layout-basic#menu-items) and [`io.display.link`](/io/display-link#link-into-the-app), so one action can be opened from a redirect, a table, a button and a link alike:
 
 ```ts
 changeRoleAction.route({ params: { id: user.id }, label: 'Change role' });
@@ -63,7 +63,7 @@ changeRoleAction.route({ params: { id: user.id }, label: 'Change role' });
 | `action` | `string`                 | The action's slug, its path in the actions folder, see [Routing](/core/routing).                    |
 | `params` | `Record<string, string>` | The query string, which becomes the action's `ctx.params`. Numbers and dates are turned to strings. |
 
-`page.route()` returns a `PageRoute`, the same fields with `page` instead of `action`: the folder the page stands for, `users`. Its `label` defaults to the page's `name`, or the folder's name in words. `ctx.redirect()` takes both; a table's row menu lists only actions.
+`page.route()` returns a `PageRoute`, the same fields with `page` instead of `action`: the folder the page stands for, `users`. Its `label` defaults to the page's `name`, or the folder's name in words. All of them take both, and a page opens in the same tab as an action does.
 
 ```ts
 usersPage.route({ params: { role: 'admin' } });

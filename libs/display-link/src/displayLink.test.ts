@@ -12,3 +12,13 @@ test('Should refuse a link without a URL', () => {
 
   expect(displayLink.props.safeParse({}).success).toBe(false);
 });
+
+test('Should take a route to an action or a page instead of a URL', () => {
+  expect(displayLink.props.parse({ route: { label: 'Coupon', page: 'coupons/coupon_detail', params: { id: '42' } } })).toEqual({
+    route: { label: 'Coupon', page: 'coupons/coupon_detail', params: { id: '42' } },
+  });
+
+  expect(displayLink.props.safeParse({ route: { label: 'Change role', action: 'users/change_role' }, text: 'Change it' }).success).toBe(false);
+
+  expect(displayLink.props.safeParse({ route: { label: 'Nowhere' } }).success).toBe(false);
+});

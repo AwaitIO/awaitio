@@ -1,5 +1,5 @@
 import { defineLayout } from 'awaitio';
-import { actionHref, actionRouteSchema, Button, navigateTo } from 'awaitio/ui';
+import { actionRouteSchema, Button, navigateTo, pageRouteSchema, routeHref } from 'awaitio/ui';
 import { z } from 'zod/v4';
 
 // Registered as layouts: { basic: layoutBasic } it becomes io.layout.basic({ title, description?, menuItems?, children }).
@@ -8,8 +8,8 @@ export const layoutBasic = defineLayout({
   props: z.object({
     title: z.string(),
     description: z.string().optional(),
-    // Buttons next to the title that open an action, e.g. createUser.route(); the first is the page's main one.
-    menuItems: z.array(actionRouteSchema.extend({ label: z.string() })).optional(),
+    // Buttons next to the title that open an action or a page, e.g. createUser.route(); the first is the page's main one.
+    menuItems: z.array(z.union([actionRouteSchema.extend({ label: z.string() }), pageRouteSchema.extend({ label: z.string() })])).optional(),
   }),
   component: ({ props, children }) => {
     return (
@@ -28,7 +28,7 @@ export const layoutBasic = defineLayout({
                     type="button"
                     variant={index === 0 ? 'primary' : 'secondary'}
                     onClick={() => {
-                      navigateTo(actionHref(item));
+                      navigateTo(routeHref(item));
                     }}
                   >
                     {item.label}

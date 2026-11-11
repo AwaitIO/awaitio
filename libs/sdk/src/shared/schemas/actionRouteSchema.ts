@@ -1,6 +1,7 @@
 import { z } from 'zod/v4';
 
-// A link to an action: what action.route() returns, what ctx.redirect() takes and what a table's row menu lists.
+// A link to an action: what action.route() returns. ctx.redirect(), table cells, a table's row menu and a layout's menu
+// items take it, or a page's route (routeSchema).
 export const actionRouteSchema = z.object({
   // What a link or menu item shows; ctx.redirect() leaves it out.
   label: z.string().optional(),

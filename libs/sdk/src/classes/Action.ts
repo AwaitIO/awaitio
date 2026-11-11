@@ -27,7 +27,7 @@ export class Action<TIO, TSchema extends ActionParamsSchema | undefined = Action
     this.handler = handler;
   }
 
-  // A link to this action for ctx.redirect() or a table's row menu, with params typed by its schema:
+  // A link to this action for ctx.redirect(), a table cell or menu, or a layout's menu items, with params typed by its schema:
   // changeRole.route({ params: { id: user.id } }). Values travel in the query string, so they become strings.
   route(...[args]: ActionRouteArgs<TSchema>): ActionRoute & { label: string } {
     if (this.slug === null) {

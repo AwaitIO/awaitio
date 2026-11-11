@@ -55,7 +55,7 @@ export const displayTablePage: ComponentPage = {
   headline: 'Rows from your database, as a table.',
   summary: 'io.display.table shows records as a table, with links, colored badges, a menu on every row, a filter and paging.',
   intro:
-    '`io.display.table` shows records as a table, on a page or in a step of an action. Pass the rows as they come from the database and say which columns to show. A name can link to the action that handles it. Every row can have a menu of its own.',
+    '`io.display.table` shows records as a table, on a page or in a step of an action. Pass the rows as they come from the database and say which columns to show. A name can link to the action or page that handles it. Every row can have a menu of its own.',
   options: [
     {
       title: 'Straight from the database.',
@@ -83,13 +83,13 @@ export const displayTablePage: ComponentPage = {
     },
     {
       title: 'Links.',
-      body: 'A cell can open another action with its parameters filled in, or a page outside the app in a new tab.',
+      body: 'A cell can open another action or page of the app with its parameters filled in, or a site outside the app in a new tab.',
       code: [t('{ label, '), t('route', prop), t(': storeAction.'), t('route', fn), t('() }')],
       icon: 'link',
     },
     {
       title: 'A menu on every row.',
-      body: 'The … at the end of a row lists the actions for that record. Each row can get a different set.',
+      body: 'The … at the end of a row lists the actions and pages for that record. Each row can get a different set.',
       code: [t('rowMenuItems', fn), t(': (row) => [roleAction.'), t('route', fn), t('()]')],
       icon: 'menu',
     },
@@ -137,5 +137,5 @@ export const displayTablePage: ComponentPage = {
     { label: 'Display components', path: '/core/display-components', description: 'Where a table can go: a page, a step of an action or a group next to inputs.' },
     { label: 'Pages and layouts', path: '/core/pages', description: 'Give a folder a page with its table and the buttons of its actions.' },
   ],
-  lastModifiedAt: '2026-10-27',
+  lastModifiedAt: '2026-11-10',
 };

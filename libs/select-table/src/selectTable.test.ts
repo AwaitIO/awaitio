@@ -63,3 +63,17 @@ test('Should take an empty table and let it be answered with no row', () => {
 test('Should require the columns', () => {
   expect(selectTable.props.safeParse({ data }).success).toBe(false);
 });
+
+test('Should keep a cell route to an action or a page', () => {
+  const props = parse({
+    columns: [
+      { label: 'Name', renderCell: (row: (typeof data)[number]) => ({ label: row.name, route: { label: 'User', page: 'users/user_detail', params: { id: String(row.id) } } }) },
+      { label: 'Role', renderCell: (row: (typeof data)[number]) => ({ label: 'Change role', route: { action: 'users/change_role', params: { id: String(row.id) } } }) },
+    ],
+  });
+
+  expect(props.rows[0]).toEqual([
+    { label: 'Ada', route: { label: 'User', page: 'users/user_detail', params: { id: '1' } } },
+    { label: 'Change role', route: { action: 'users/change_role', params: { id: '1' } } },
+  ]);
+});

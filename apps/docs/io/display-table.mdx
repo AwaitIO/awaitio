@@ -52,7 +52,7 @@ The label is the heading above the table; pass `null` for none. `row` has the ty
 | -------------- | ------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------- |
 | `data`         | `TRow[]`                                          | Required | The records, e.g. straight from the database. None is fine.                               |
 | `columns`      | `(key \| { label, accessorKey?, renderCell? })[]` | Required | The columns, see [Columns](#columns). Required, as an empty table has no records to read. |
-| `rowMenuItems` | `(row) => ActionRoute[]`                          | Optional | The links in the _…_ menu at the end of a row, see [Row menu](#row-menu).                 |
+| `rowMenuItems` | `(row) => (ActionRoute \| PageRoute)[]`           | Optional | The links in the _…_ menu at the end of a row, see [Row menu](#row-menu).                 |
 | `pageSize`     | `number`                                          | Optional | Rows per page. Defaults to 20; the pager shows only when there are more.                  |
 | `filterable`   | `boolean`                                         | Optional | Shows the filter above the table. Defaults to `true`.                                     |
 | `emptyText`    | `string`                                          | Optional | Shown when there are no rows. Defaults to _Nothing to show._                              |
@@ -69,11 +69,11 @@ A column is written as in Interval:
 
 `renderCell` runs on the server, once per row. It returns a plain value or a cell object:
 
-| Cell                        | Shows                                                                |
-| --------------------------- | -------------------------------------------------------------------- |
-| `{ label, highlightColor }` | The label in a colored badge.                                        |
-| `{ label, url }`            | A link to a page outside AwaitIO, opened in a new tab.               |
-| `{ label, route }`          | A link to an action, `route` from [`action.route()`](/ctx/redirect). |
+| Cell                        | Shows                                                                                                                                    |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `{ label, highlightColor }` | The label in a colored badge.                                                                                                            |
+| `{ label, url }`            | A link to a page outside AwaitIO, opened in a new tab.                                                                                   |
+| `{ label, route }`          | A link to an action or a folder's page, opened in the same tab, `route` from [`action.route()` or `page.route()`](/ctx/redirect#routes). |
 
 They can be combined, e.g. a colored label that links to an action:
 
@@ -94,12 +94,13 @@ io.display.table('Devices', {
 </Frame>
 
 - `highlightColor` is one of `red`, `orange`, `yellow`, `green`, `blue`, `purple`, `pink` and `gray`.
+- A `route` can open a [page](/core/pages) too, such as an [unlisted](/core/pages#unlisted-pages) detail of the record: `{ label: coupon.code, route: couponDetailPage.route({ params: { id: coupon.id } }) }`.
 - The filter searches the label. With both `url` and `route`, the `url` wins.
 - A `renderCell` that throws, an unknown color or a `url` that is not a full address fails like any other props that do not fit: the page shows an error, and an action fails at that step.
 
 ## Row menu
 
-`rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()`: the same routes [`ctx.redirect()`](/ctx/redirect) takes, labelled with the action's name unless you pass one. An empty array leaves the row without a menu:
+`rowMenuItems` gets each record and returns the links of its _…_ menu, routes from `action.route()` or `page.route()`: the same routes [`ctx.redirect()`](/ctx/redirect) takes, labelled with the action's or page's name unless you pass one. An empty array leaves the row without a menu:
 
 ```ts {4-8}
 io.display.table('Versions', {
@@ -110,6 +111,16 @@ io.display.table('Versions', {
       ? [unfreezeModuleAction.route({ params: { id: module.id }, label: 'Unfreeze' })]
       : [freezeToVersionAction.route({ params: { id: module.id, versionId: row.id }, label: 'Freeze to this version' })];
   },
+});
+```
+
+A page's route goes in the same list and opens the page in the same tab, e.g. the detail of the record next to the actions that change it:
+
+```ts {4}
+io.display.table('Coupons', {
+  data: coupons,
+  columns: ['code', 'discount'],
+  rowMenuItems: (row) => [couponDetailPage.route({ params: { id: row.id }, label: 'Detail' }), disableCouponAction.route({ params: { id: row.id } })],
 });
 ```
 

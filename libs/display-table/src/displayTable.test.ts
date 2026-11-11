@@ -46,6 +46,35 @@ test('Should keep cell objects with a color, an outside link or an action route'
   ]);
 });
 
+test('Should keep a cell route to a page', () => {
+  const parsed = displayTable.props.safeParse({
+    data,
+    columns: [{ label: 'Name', renderCell: (row: (typeof data)[number]) => ({ label: row.name, route: { label: 'User', page: 'users/user_detail', params: { id: String(row.id) } } }) }],
+  });
+
+  expect(parsed.success && parsed.data.rows[0]?.cells).toEqual([{ label: 'Ada', route: { label: 'User', page: 'users/user_detail', params: { id: '1' } } }]);
+});
+
+test('Should take menu items that open a page next to ones that open an action', () => {
+  const parsed = displayTable.props.safeParse({
+    data,
+    columns: ['name'],
+    rowMenuItems: (row: (typeof data)[number]) => {
+      return [
+        { label: 'Detail', page: 'users/user_detail', params: { id: String(row.id) } },
+        { label: 'Freeze', action: 'users/freeze', params: { id: String(row.id) } },
+      ];
+    },
+  });
+
+  expect(parsed.success && parsed.data.rows[0]?.menu).toEqual([
+    { label: 'Detail', page: 'users/user_detail', params: { id: '1' } },
+    { label: 'Freeze', action: 'users/freeze', params: { id: '1' } },
+  ]);
+
+  expect(displayTable.props.safeParse({ data, columns: ['name'], rowMenuItems: () => [{ page: 'users/user_detail' }] }).success).toBe(false);
+});
+
 test('Should build each row its own menu, [] for none', () => {
   const parsed = displayTable.props.safeParse({
     data,

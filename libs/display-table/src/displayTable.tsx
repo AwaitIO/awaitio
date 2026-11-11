@@ -1,5 +1,5 @@
 import { defineDisplay, withSignature } from 'awaitio';
-import { actionHref, formatCellValue, renderTableRows, Table, TableCellView, tableColumnSchema } from 'awaitio/ui';
+import { formatCellValue, renderTableRows, routeHref, Table, TableCellView, tableColumnSchema } from 'awaitio/ui';
 import { z } from 'zod/v4';
 import { rowMenuItemSchema } from './schemas/rowMenuItemSchema';
 import type { DisplayTableSignature } from './types/DisplayTableSignature';
@@ -69,7 +69,7 @@ export const displayTable = withSignature<DisplayTableSignature>()(
             })
             .join(' '),
           menu: row.menu.map((item) => {
-            return { label: item.label, href: actionHref(item) };
+            return { label: item.label, href: routeHref(item) };
           }),
         };
       });

@@ -16,3 +16,9 @@ test('Should take menu items that link to actions, each with a label', () => {
 
   expect(layoutBasic.props.safeParse({ title: 'Integrators', menuItems: [{ action: 'integrators/create_integrator' }] }).success).toBe(false);
 });
+
+test('Should take menu items that link to pages, each with a label', () => {
+  expect(layoutBasic.props.safeParse({ title: 'Coupons', menuItems: [{ label: 'Archive', page: 'coupons/archive', params: { year: '2026' } }] }).success).toBe(true);
+
+  expect(layoutBasic.props.safeParse({ title: 'Coupons', menuItems: [{ page: 'coupons/archive' }] }).success).toBe(false);
+});

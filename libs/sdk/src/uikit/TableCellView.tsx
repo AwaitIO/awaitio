@@ -1,7 +1,7 @@
-import { actionHref } from './actionHref';
 import { Badge } from './Badge';
 import { formatCellValue } from './formatCellValue';
 import { Link } from './Link';
+import { routeHref } from './routeHref';
 import { tableCellSchema } from '../shared/schemas/tableCellSchema';
 import type { FC } from 'react';
 
@@ -10,7 +10,7 @@ export type TableCellViewProps = {
 };
 
 // One cell of a table in the browser: the value as people read it, a cell object as a colored label and/or a link,
-// to a page outside AwaitIO (url) or to an action (route).
+// to a page outside AwaitIO (url) or to an action or a folder's page (route).
 export const TableCellView: FC<TableCellViewProps> = ({ value }) => {
   const text = formatCellValue(value);
   const cell = tableCellSchema.safeParse(value);
@@ -29,5 +29,5 @@ export const TableCellView: FC<TableCellViewProps> = ({ value }) => {
     );
   }
 
-  return cell.data.route ? <Link href={actionHref(cell.data.route)}>{content}</Link> : content;
+  return cell.data.route ? <Link href={routeHref(cell.data.route)}>{content}</Link> : content;
 };

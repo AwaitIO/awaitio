@@ -48,16 +48,16 @@ export const usersPage = app.definePage({
 
 ## Props
 
-| Prop          | Type                | Required | Description                                                                   |
-| ------------- | ------------------- | -------- | ----------------------------------------------------------------------------- |
-| `title`       | `string`            | Required | The heading of the page.                                                      |
-| `description` | `string`            | Optional | One line under the title.                                                     |
-| `menuItems`   | `ActionRoute[]`     | Optional | Buttons next to the title that open an action, see [Menu items](#menu-items). |
-| `children`    | `io.display.*(…)[]` | Required | The display components, top to bottom.                                        |
+| Prop          | Type                           | Required | Description                                                                             |
+| ------------- | ------------------------------ | -------- | --------------------------------------------------------------------------------------- |
+| `title`       | `string`                       | Required | The heading of the page.                                                                |
+| `description` | `string`                       | Optional | One line under the title.                                                               |
+| `menuItems`   | `(ActionRoute \| PageRoute)[]` | Optional | Buttons next to the title that open an action or a page, see [Menu items](#menu-items). |
+| `children`    | `io.display.*(…)[]`            | Required | The display components, top to bottom.                                                  |
 
 ## Menu items
 
-`menuItems` puts buttons next to the title, each opening an action. Build them with the action's `route()`, the same link a table's [row menu](/io/display-table#row-menu) or [`ctx.redirect`](/ctx/redirect) takes; the label is the action's name unless you pass one:
+`menuItems` puts buttons next to the title, each opening an action or a folder's [page](/core/pages) in the same tab. Build them with the action's or page's `route()`, the same link a table's [row menu](/io/display-table#row-menu) or [`ctx.redirect`](/ctx/redirect#routes) takes; the label is the action's or page's name unless you pass one:
 
 ```ts actions/integrators/index.ts {7}
 import { upsertIntegratorAction } from './upsertIntegratorAction';
